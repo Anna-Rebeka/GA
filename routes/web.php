@@ -32,8 +32,9 @@ Route::middleware('auth')->group(function() {
     Route::patch('/profile/{user:username}', [ProfilesController::class, 'update']);
 
     
-    Route::get('/invite-member', [InviteMemberController::class, 'show']);
-    Route::post('/invite-member', [InviteMemberController::class, 'store']);
+    Route::get('/invite-member', [InviteMemberController::class, 'show'])->name('invite');
+    Route::post('/invite-member', [InviteMemberController::class, 'process'])->name('process');
+    Route::get('/invite-member/{token}', [InviteMemberController::class, 'accept'])->name('accept');
         
 });
 

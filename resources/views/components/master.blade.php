@@ -36,7 +36,7 @@
                         <group-panel :user="{{ auth()->user() }}"></group-panel>
                     </div>
                     
-                    <div class="lg:flex-1 lg:w-4/6 lg:mx-5" style="max-width: 700px;">
+                    <div class="lg:flex-1 lg:w-4/6 lg:mx-5 mb-6" style="max-width: 700px;">
                         
                         {{ $slot }}
 
