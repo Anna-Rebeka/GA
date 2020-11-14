@@ -25,8 +25,8 @@ class InviteMemberController extends Controller
         
         //if the user is already in the group inform and do nothing
         if ($user != null && $group->hasUser($user)){
-            echo "user is already in the group";
-            return;
+            $userExists = true;
+            return view('invite-member', ['userExists' => $userExists]);
         }
 
         do {
@@ -73,8 +73,5 @@ class InviteMemberController extends Controller
             'email' => $invite->email, 
             'token' => $token
         ]);
-
-        //User::create(['email' => $invite->email, 'active_group' => $invite->group]);
-        //    $invite->delete();
-        }
+    }
 }

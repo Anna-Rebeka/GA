@@ -27,6 +27,10 @@
                         </p>
                     </div>
                 @endif
+
+                @if (isset($userExists) && $userExists)
+                  <p class="mt-4">A user with that address is already in this group.</p>
+                @endif
           </div>
       </form>
     </div>
