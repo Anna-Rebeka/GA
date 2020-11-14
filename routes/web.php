@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfilesController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\InviteMemberController;
 use App\Http\Controllers\Auth\InvitedRegisterController;
+use App\Http\Controllers\GroupsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,9 @@ Route::middleware('auth')->group(function() {
 
     Route::get('/invite-member', [InviteMemberController::class, 'show'])->name('invite');
     Route::post('/invite-member', [InviteMemberController::class, 'process'])->name('process');
+
+    Route::get('/create-group', [GroupsController::class, 'create']);
+    Route::post('/create-group', [GroupsController::class, 'store']);
 });
 
 Route::get('/invite-member/{token}', [InviteMemberController::class, 'accept'])->name('accept');
