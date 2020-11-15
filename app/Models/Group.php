@@ -9,6 +9,16 @@ class Group extends Model
 {
     use HasFactory;
 
+     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name',
+        'admin_id'
+    ];
+
     public function users(){
         return $this->belongsToMany(User::class);
     }

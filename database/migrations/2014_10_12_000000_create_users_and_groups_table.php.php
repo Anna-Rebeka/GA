@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersTable extends Migration
+class CreateUsersAndGroupsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,6 +13,7 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -26,10 +27,22 @@ class CreateUsersTable extends Migration
             $table->timestamps();
 
             $table->foreign('active_group')
-                ->references('id')
-                ->on('groups');
-
+            ->references('id')
+            ->on('groups');
         });
+
+        Schema::create('groups', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->foreignId('admin_id');
+            $table->timestamps();
+
+            $table->foreign('admin_id')
+            ->references('id')
+            ->on('users');
+        });
+
+        Schema::enableForeignKeyConstraints();
     }
 
     /**
@@ -40,5 +53,6 @@ class CreateUsersTable extends Migration
     public function down()
     {
         Schema::dropIfExists('users');
+        Schema::dropIfExists('groups');
     }
 }
