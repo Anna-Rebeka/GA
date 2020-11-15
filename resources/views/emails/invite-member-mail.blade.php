@@ -5,7 +5,7 @@ Hello, {{ $user }} invites you to join a "{{ $group }}" group.
 
 Click on the "Join!" button below if you wish to become a member.
 
-@component('mail::button', ['url' => ''])
+@component('mail::button', ['url' => $url])
 Join!
 @endcomponent
 

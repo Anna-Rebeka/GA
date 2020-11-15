@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use App\Models\Invite;
 
 class InviteMemberMail extends Mailable
 {
@@ -13,16 +14,20 @@ class InviteMemberMail extends Mailable
 
     public $group;
     public $user;
+    public $invite;
+    public $url;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($group, $user)
+    public function __construct($group, $user, Invite $invite)
     {
         $this->group = $group;
         $this->user = $user;
+        $this->invite = $invite;
+        $this->url = 'http://127.0.0.1:8000/invite-member/' . $invite->token;
     }
 
     /**

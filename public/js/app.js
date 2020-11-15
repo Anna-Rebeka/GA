@@ -1973,6 +1973,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
   data: function data() {
@@ -19777,14 +19784,28 @@ var render = function() {
       }),
       _vm._v(" "),
       _vm.user.group
-        ? _c("h2", { staticClass: "font-bold text-2xl" }, [
-            _vm._v(" " + _vm._s(_vm.user.group.name) + " ")
+        ? _c("div", [
+            _c("h2", { staticClass: "font-bold text-2xl" }, [
+              _vm._v(" " + _vm._s(_vm.user.group.name) + " ")
+            ]),
+            _vm._v(" "),
+            _c("p", { staticClass: "text-sm text-gray-500" }, [_vm._v("group")])
           ])
-        : _c("h2", { staticClass: "font-bold text-2xl" }, [
-            _vm._v(" No Group ")
-          ]),
-      _vm._v(" "),
-      _c("p", { staticClass: "text-sm text-gray-500" }, [_vm._v("group")])
+        : _c("div", [
+            _c("h2", { staticClass: "font-bold text-2xl mb-6" }, [
+              _vm._v(" No Group ")
+            ]),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass:
+                  "top-6 rounded-full border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+                attrs: { href: "/create-group" }
+              },
+              [_vm._v("Create a group\n      ")]
+            )
+          ])
     ])
   ])
 }

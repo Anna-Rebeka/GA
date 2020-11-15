@@ -32,6 +32,7 @@ class User extends Authenticatable
         'avatar',
         'email',
         'password',
+        'active_group'
     ];
 
     /**
@@ -80,5 +81,9 @@ class User extends Authenticatable
 
     public function group(){
         return $this->belongsTo(Group::class,'active_group');
+    }
+
+    public function inGroup($group){
+        return $this->groups->contains($group);
     }
 }

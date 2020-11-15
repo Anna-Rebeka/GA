@@ -5,7 +5,7 @@
             The more the merrier!
         </div>
         <p class="mb-4">Invite a new member by e-mail.</p>
-        <form method="POST" action="/invite-member">
+        <form method="POST" action="{{ route('invite') }}">
           @csrf
           <div class="mb-4">
             <label for="email" class="mb-2">E-Mail Address: </label>
@@ -26,6 +26,10 @@
                             {{ session('message') }}
                         </p>
                     </div>
+                @endif
+
+                @if (isset($userExists) && $userExists)
+                  <p class="mt-4">A user with that address is already in this group.</p>
                 @endif
           </div>
       </form>
