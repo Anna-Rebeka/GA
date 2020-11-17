@@ -1950,6 +1950,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user', 'groups', 'gusers'],
   data: function data() {
@@ -19744,7 +19749,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
+  return _c("div", { staticClass: "mb-6" }, [
     _c(
       "ul",
       { attrs: { id: "example-1" } },
@@ -19755,9 +19760,7 @@ var render = function() {
           [
             _c(
               "div",
-              {
-                staticClass: "max-w-xs rounded overflow-hidden shadow-lg mb-4"
-              },
+              { staticClass: "max-w-xs rounded overflow-hidden shadow-lg" },
               [
                 _c("img", {
                   staticClass: "w-full",
@@ -19794,7 +19797,23 @@ var render = function() {
                   ])
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "px-6 pt-4 pb-2" })
+                _c("div", { staticClass: "px-6 pt-4 pb-2 mb-6 float-right" }, [
+                  group.id != _vm.user.active_group
+                    ? _c(
+                        "a",
+                        {
+                          staticClass:
+                            "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100",
+                          attrs: { href: "/activate-group/" + group.id }
+                        },
+                        [
+                          _vm._v(
+                            "\n                            Watch group\n                        "
+                          )
+                        ]
+                      )
+                    : _vm._e()
+                ])
               ]
             )
           ]

@@ -130,4 +130,13 @@ class UsersController extends Controller
     {
         //
     }
+
+    public function activateGroup($id){
+        $user = auth()->user();
+        if($user->groups->contains($id)){
+            $user->active_group = $id;
+            $user->save();
+        }
+        return redirect(auth()->user()->path());
+    }
 }

@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function() {
     Route::post('/create-group', [GroupsController::class, 'store']);
 
     Route::get('/change-group', [GroupsController::class, 'index']);
+    Route::get('/activate-group/{token}', [UsersController::class, 'activateGroup']);
 
 });
 
