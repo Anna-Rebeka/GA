@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Group;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -14,9 +15,12 @@ class UsersController extends Controller
      * @return \Illuminate\Http\Response
      */
     
-     public function index()
+     public function index(Group $group)
     {
-        
+        $users = $group->users->except(auth()->user()->id);
+        return view('profile.index', [
+            'users' => $users
+        ]);
     }
 
     /**

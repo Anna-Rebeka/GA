@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container text-center">
-      <img src="/storage/groups/default.jpg" alt="group-avatar" class="mx-auto mb-2 object-cover w-32 h-32 rounded-full">
+      <img src="/storage/groups/default.jpg" alt="group-avatar" class="rounded shadow-lg mx-auto mb-2 object-cover w-32 h-32">
       
       <div v-if="user.group"> 
         <h2  class="font-bold text-2xl"> {{ user.group.name }} </h2> 

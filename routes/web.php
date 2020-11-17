@@ -31,6 +31,7 @@ Route::middleware('auth')->group(function() {
     Route::get('/profile/{user:username}', [UsersController::class, 'show'])->name('profile');
     Route::get('/profile/{user:username}/edit', [UsersController::class, 'edit']);
     Route::patch('/profile/{user:username}', [UsersController::class, 'update']);
+    Route::get('/all-members/{group:id}', [UsersController::class, 'index']);
 
     Route::get('/invite-member', [InviteMemberController::class, 'show'])->name('invite');
     Route::post('/invite-member', [InviteMemberController::class, 'process'])->name('process');
@@ -39,7 +40,7 @@ Route::middleware('auth')->group(function() {
     Route::post('/create-group', [GroupsController::class, 'store']);
 
     Route::get('/change-group', [GroupsController::class, 'index']);
-    Route::get('/activate-group/{token}', [UsersController::class, 'activateGroup']);
+    Route::get('/activate-group/{id}', [UsersController::class, 'activateGroup']);
 
 });
 
