@@ -19736,7 +19736,9 @@ var render = function() {
           [
             _c(
               "div",
-              { staticClass: "max-w-xs rounded overflow-hidden shadow-lg" },
+              {
+                staticClass: "max-w-xs rounded overflow-hidden shadow-lg mb-4"
+              },
               [
                 _c("img", {
                   staticClass: "w-full",
