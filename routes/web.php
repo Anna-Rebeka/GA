@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\ProfilesController;
+use App\Http\Controllers\UsersController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\InviteMemberController;
 use App\Http\Controllers\Auth\InvitedRegisterController;
@@ -28,15 +28,19 @@ Route::middleware('auth')->group(function() {
         return redirect('/profile/' . auth()->user()->username);
     })->name('dashboard');
 
-    Route::get('/profile/{user:username}', [ProfilesController::class, 'show'])->name('profile');
-    Route::get('/profile/{user:username}/edit', [ProfilesController::class, 'edit']);
-    Route::patch('/profile/{user:username}', [ProfilesController::class, 'update']);
+    Route::get('/profile/{user:username}', [UsersController::class, 'show'])->name('profile');
+    Route::get('/profile/{user:username}/edit', [UsersController::class, 'edit']);
+    Route::patch('/profile/{user:username}', [UsersController::class, 'update']);
 
     Route::get('/invite-member', [InviteMemberController::class, 'show'])->name('invite');
     Route::post('/invite-member', [InviteMemberController::class, 'process'])->name('process');
 
     Route::get('/create-group', [GroupsController::class, 'create']);
     Route::post('/create-group', [GroupsController::class, 'store']);
+
+    Route::get('/change-group', [GroupsController::class, 'index']);
+    Route::get('/activate-group/{token}', [UsersController::class, 'activateGroup']);
+
 });
 
 Route::get('/invite-member/{token}', [InviteMemberController::class, 'accept'])->name('accept');

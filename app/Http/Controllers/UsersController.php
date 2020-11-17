@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class ProfilesController extends Controller
+class UsersController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -73,7 +73,10 @@ class ProfilesController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
+
+     
     public function update(User $user){
+        //TODO -> FORMREQUEST 
         $attributes = request()->validate([
             'username' => [
                 'string', 
@@ -126,5 +129,14 @@ class ProfilesController extends Controller
     public function destroy(User $user)
     {
         //
+    }
+
+    public function activateGroup($id){
+        $user = auth()->user();
+        if($user->groups->contains($id)){
+            $user->active_group = $id;
+            $user->save();
+        }
+        return redirect(auth()->user()->path());
     }
 }

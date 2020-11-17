@@ -36,14 +36,13 @@
                         <group-panel :user="{{ auth()->user() }}"></group-panel>
                     </div>
                     
-                    <div class="lg:flex-1 lg:w-4/6 lg:mx-5 mb-6" style="max-width: 700px;">
+                    <div class="lg:flex-1 lg:w-4/6 lg:mx-5 mb-2 h-screen" style="max-width: 700px;">
                         
                         {{ $slot }}
 
                     </div>
                     
                     <div class="lg:w-1/6 ml-2 mb-6" style="max-width: 700px;">
-                        
                         @if(auth()->user()->group != null)
                             <members-panel :user="{{ auth()->user() }}" :members="{{ auth()->user()->group->users->except(auth()->user()->id) }}"></members-panel>
                         @endif
