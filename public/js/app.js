@@ -1940,32 +1940,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user', 'groups', 'gusers'],
-  data: function data() {
-    return {
-      users: null
-    };
-  },
-  mounted: function mounted() {
-    console.log(this.groups);
-    console.log(this.gusers);
-  }
+  props: ['user', 'groups', 'gusers']
 });
 
 /***/ }),
@@ -19773,9 +19749,9 @@ var render = function() {
                 _c("div", { staticClass: "px-6 py-4" }, [
                   _c("div", { staticClass: "font-bold text-xl mb-2" }, [
                     _vm._v(
-                      "\n                            " +
+                      "\n                        " +
                         _vm._s(group.name) +
-                        "\n                        "
+                        "\n                    "
                     )
                   ]),
                   _vm._v(" "),
@@ -19786,9 +19762,9 @@ var render = function() {
                       _vm._l(_vm.gusers[group.id], function(user) {
                         return _c("li", { key: user.name }, [
                           _vm._v(
-                            "\n                                    " +
+                            "\n                                " +
                               _vm._s(user.name) +
-                              "\n                                "
+                              "\n                            "
                           )
                         ])
                       }),
@@ -19808,7 +19784,7 @@ var render = function() {
                         },
                         [
                           _vm._v(
-                            "\n                            Watch group\n                        "
+                            "\n                        Watch group\n                    "
                           )
                         ]
                       )

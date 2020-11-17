@@ -27,41 +27,11 @@
                 </div>
             </li>
         </ul>
-        
-
-        
-
-<!--
-
-
-        <ul class="px-2" id="example-1">
-            <li class="flex -mx-2" v-for="g in groups" :key="g.name">
-                <div class="w-1/3 px-2 mb-2">
-                    <div class="bg-gray-500 h-12"></div>
-                </div>
-            </li>
-        </ul>
--->
     </div>
 </template>
 
 <script>
 export default {
   props: ['user', 'groups', 'gusers'],
-
-  data(){
-    return {
-      users: null
-    }
-  },
-  mounted(){
-    console.log(this.groups);
-    console.log(this.gusers);
-  }
-
 }
 </script>
-
-<style>
-
-</style>
