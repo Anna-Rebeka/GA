@@ -1,7 +1,7 @@
 <template>
-    <div class="mb-6">
+    <div class="mb-6 relative">
         <ul>
-            <li v-for="user in users" :key="user.id" class="inline float-left mr-4">
+            <li v-for="user in pageOfItems" :key="user.id" class="inline float-left mr-4">
                 <a :href="'/profile/' + user.username">
                     <div class="max-w-xs lg:w-40 lg:h-60 w-20 h-30 rounded overflow-hidden shadow-lg mb-4">
                         <img class="lg:w-40 lg:h-40 w-20 h-20" :src="user.avatar" :alt="user.username">
@@ -17,21 +17,25 @@
                 </a>
             </li>
         </ul>
+        
+        <div class="mt-10 clear-both w-full text-center lg:absolute bottom-0 left-0">
+            <jw-pagination :items="users" @changePage="onChangePage" :pageSize="6"></jw-pagination>
+        </div>
     </div>
-  
 </template>
 
 <script>
 export default {
     props: ['users'],
-
-    mounted() {
-        console.log(this.users);
+    data() {
+        return {
+            pageOfItems: []
+        };
+    },
+    methods: {
+        onChangePage(pageOfItems) {
+            this.pageOfItems = pageOfItems;
+        }
     }
-
-}
+};
 </script>
-
-<style>
-
-</style>

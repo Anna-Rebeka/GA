@@ -16,7 +16,7 @@ class UsersController extends Controller
      */
     
      public function index(Group $group)
-    {
+    {   
         $users = $group->users->except(auth()->user()->id);
         return view('profile.index', [
             'users' => $users

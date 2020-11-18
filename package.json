@@ -21,6 +21,7 @@
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
+        "jw-vue-pagination": "^1.0.3",
         "vue": "^2.6.12"
     }
 }
