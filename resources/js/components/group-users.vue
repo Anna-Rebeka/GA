@@ -1,5 +1,5 @@
 <template>
-    <div class="mb-6 relative">
+    <div class="mb-6">
         <ul>
             <li v-for="user in pageOfItems" :key="user.id" class="inline float-left mr-4">
                 <a :href="'/profile/' + user.username">
@@ -18,7 +18,7 @@
             </li>
         </ul>
         
-        <div class="mt-10 clear-both w-full text-center lg:absolute bottom-0 left-0">
+        <div class="mt-10 clear-both w-full text-center">
             <jw-pagination :items="users" @changePage="onChangePage" :pageSize="6"></jw-pagination>
         </div>
     </div>

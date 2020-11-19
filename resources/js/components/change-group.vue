@@ -1,7 +1,7 @@
 <template>
     <div class="mb-6">
         <ul>
-            <li v-for="group in groups" :key="group.id" class="inline float-left mr-4">
+            <li v-for="group in pageOfItems" :key="group.id" class="inline float-left mr-4">
                 <div class="max-w-xs rounded overflow-hidden shadow-lg mb-4">
                     <img class="w-full" src="/img/default-banner.png" :alt="group.name">
                     <div class="px-6 py-4">
@@ -27,11 +27,25 @@
                 </div>
             </li>
         </ul>
+
+        <div class="mt-10 clear-both w-full text-center">
+            <jw-pagination :items="groups" @changePage="onChangePage" :pageSize="6"></jw-pagination>
+        </div>
     </div>
 </template>
 
 <script>
 export default {
   props: ['user', 'groups', 'gusers'],
+  data() {
+        return {
+            pageOfItems: []
+        };
+    },
+    methods: {
+        onChangePage(pageOfItems) {
+            this.pageOfItems = pageOfItems;
+        }
+    }
 }
 </script>
