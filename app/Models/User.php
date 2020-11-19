@@ -30,6 +30,7 @@ class User extends Authenticatable
         'name',
         'username',
         'avatar',
+        'banner',
         'email',
         'password',
         'active_group'
@@ -72,7 +73,11 @@ class User extends Authenticatable
     }
 
     public function getAvatarAttribute($value){
-        return asset($value ? 'storage/'.$value : 'storage/avatars/default.jpg');
+        return asset($value ? 'storage/'.$value : 'storage/users/avatars/default.jpg');
+    }
+
+    public function getBannerAttribute($value){
+        return asset($value ? 'storage/'.$value : 'storage/users/banners/default.png');
     }
 
     public function groups(){

@@ -2,10 +2,11 @@
     <div class="mb-6 relative">
         <div class="relative">
             <img 
-                src="/img/default-banner.png" 
-                alt=""
-                class="mb-2 rounded shadow-lg"
+                src="{{ $user->banner }}" 
+                alt="{{ $user->username }}"
+                class="h-40 w-full mb-2 rounded shadow-lg object-cover overflow-hidden"
             >
+            
             <img 
                 src="{{ $user->avatar }}"
                 alt="avatar"
