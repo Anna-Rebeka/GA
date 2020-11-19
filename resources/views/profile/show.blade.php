@@ -4,7 +4,7 @@
             <img 
                 src="/img/default-banner.png" 
                 alt=""
-                class="mb-2"
+                class="mb-2 rounded shadow-lg"
             >
             <img 
                 src="{{ $user->avatar }}"
@@ -26,7 +26,7 @@
                     <a 
                         href="{{ $user->path('edit') }}"
                         class="rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
-                        Edit Profile
+                        Edit profile
                     </a>
                 </div>
             @endif

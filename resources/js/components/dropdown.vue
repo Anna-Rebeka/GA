@@ -5,7 +5,7 @@
     </button>
     <button v-if="isOpen" @click="isOpen = false" tabindex="-1" class="fixed inset-0 h-full w-full cursor-default z-20 outline-none border-none"></button>
     <div v-if="isOpen" class="absolute right-0 mt-1 py-2 w-48 bg-gray-300 rounded-lg z-20">
-      <a href="/change-group" class="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white">Change Group</a>
+      <a href="/change-group" class="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white">Change group</a>
       <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white">Account settings</a>
       <form action="/logout" method="post">
           <input type="hidden" name="_token" :value="csrf" /> 

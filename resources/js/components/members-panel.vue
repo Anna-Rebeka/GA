@@ -1,21 +1,35 @@
 <template>
-  <div class="container text-center">
-       
-            <h2 class="font-bold text-2xl mb-2"> Group Members </h2> 
-
-            <ul v-if="members" id="example-1">
-              <li v-for="member in members" :key="member.name">
-                <a :href="'/profile/' + member.username">{{ member.name }}</a>
+  <div class="container text-center bg-white shadow rounded-lg py-4">
+            <h2 class="font-bold text-2xl mb-4"> Group members </h2> 
+            <ul v-if="members" class="w-full max-w-md mb-4">
+              <li v-for="member in visibleMembers" :key="member.name"
+                  class="p-4 mb-1 flex justify-between items-center">
+                  <a :href="'/profile/' + member.username">
+                      <div class="flex items-center">
+                          <img class="w-10 h-10 rounded-full" :src="member.avatar" :alt="member.name">
+                          <p class="ml-2 text-gray-700 font-semibold font-sans tracking-wide">{{ member.name }}</p>
+                      </div>
+                  </a>
               </li>
             </ul>
             <p v-else> No members </p>
 
-     
-            <a
-                href="/invite-member" 
-                class="relative top-6 rounded-full border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100"
-                >Ivite Members
-            </a>
+            <div class="flex w-full justify-between">
+                <a
+                    href="/invite-member" 
+                    class="w-20 float-left m-2 rounded-full border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100"
+                    >Ivite
+                </a>
+
+                <a  
+                    v-if="members.length > 0"
+                    :href="'/all-members/' + groupid"
+                    class="w-20 float-right m-2 rounded-full border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100"
+                    >Show all
+                </a>
+            </div>
+            
+
 
         
   </div>
@@ -23,12 +37,20 @@
 
 <script>
 export default {
-  props: ['user', 'members'],
+  props: ['user', 'members', 'groupid'],
 
   data(){
     return {
+      visibleMembers: null
     }
   },
+
+  mounted(){
+    this.visibleMembers = this.members.sort(() => Math.random() - 0.5);
+    if (this.visibleMembers.length > 4){
+      this.visibleMembers = this.visibleMembers.slice(0,5);
+    }
+  }
 }
 </script>
 

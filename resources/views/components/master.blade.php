@@ -44,7 +44,7 @@
                     
                     <div class="lg:w-1/6 ml-2 mb-6" style="max-width: 700px;">
                         @if(auth()->user()->group != null)
-                            <members-panel :user="{{ auth()->user() }}" :members="{{ auth()->user()->group->users->except(auth()->user()->id) }}"></members-panel>
+                            <members-panel :user="{{ auth()->user() }}" :members="{{ auth()->user()->group->users->except(auth()->user()->id) }}" :groupid="{{ auth()->user()->group->id }}"></members-panel>
                         @endif
                         
                     </div>
