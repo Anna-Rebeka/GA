@@ -1940,8 +1940,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user', 'groups', 'gusers']
+  props: ['user', 'groups', 'gusers'],
+  data: function data() {
+    return {
+      pageOfItems: []
+    };
+  },
+  methods: {
+    onChangePage: function onChangePage(pageOfItems) {
+      this.pageOfItems = pageOfItems;
+    }
+  }
 });
 
 /***/ }),
@@ -19815,7 +19829,7 @@ var render = function() {
   return _c("div", { staticClass: "mb-6" }, [
     _c(
       "ul",
-      _vm._l(_vm.groups, function(group) {
+      _vm._l(_vm.pageOfItems, function(group) {
         return _c(
           "li",
           { key: group.id, staticClass: "inline float-left mr-4" },
@@ -19880,6 +19894,18 @@ var render = function() {
         )
       }),
       0
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "mt-10 clear-both w-full text-center" },
+      [
+        _c("jw-pagination", {
+          attrs: { items: _vm.groups, pageSize: 6 },
+          on: { changePage: _vm.onChangePage }
+        })
+      ],
+      1
     )
   ])
 }
@@ -20058,7 +20084,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "mb-6 relative" }, [
+  return _c("div", { staticClass: "mb-6" }, [
     _c(
       "ul",
       _vm._l(_vm.pageOfItems, function(user) {
@@ -20114,10 +20140,7 @@ var render = function() {
     _vm._v(" "),
     _c(
       "div",
-      {
-        staticClass:
-          "mt-10 clear-both w-full text-center lg:absolute bottom-0 left-0"
-      },
+      { staticClass: "mt-10 clear-both w-full text-center" },
       [
         _c("jw-pagination", {
           attrs: { items: _vm.users, pageSize: 6 },
