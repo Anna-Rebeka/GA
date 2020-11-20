@@ -104,6 +104,14 @@ class UsersController extends Controller
             'avatar' => [
                 'file'
             ],
+            'banner' => [
+                'file'
+            ],
+            'bio' => [
+                'string', 
+                'nullable', 
+                'max:150', 
+            ],
             'password' => [
                 'nullable',
                 'string', 
@@ -115,6 +123,10 @@ class UsersController extends Controller
         
         if(request('avatar')){
             $attributes['avatar'] = request('avatar')->store('avatars');
+        }
+
+        if(request('banner')){
+            $attributes['banner'] = request('banner')->store('banners');
         }
         
         if(!request('password')){

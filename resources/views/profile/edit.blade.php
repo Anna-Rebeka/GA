@@ -33,7 +33,6 @@
             @error('username')
                 <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
             @enderror
-
         </div>
         
         <div>
@@ -71,6 +70,39 @@
             @enderror
         </div>
 
+        <div>
+            <label class="mt-4 block mb-2 uppercase font-bold text-xs text-grey-700" 
+                for="banner"
+            >
+                Banner
+            </label>
+            
+            <div class="flex">
+                <input class="border border-grey-400 p-2 w-full" type="file" name="banner" id="banner" 
+                    value="{{ $user->banner }}">
+
+                <img src="{{ $user->banner }}" alt="banner" width="50">
+            </div>
+            
+            @error('banner')
+                <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <div>
+            <label class="mt-4 block mb-2 uppercase font-bold text-xs text-grey-700" 
+                for="bio"
+            >
+                Bio
+            </label>
+
+            <input class="border border-grey-400 p-2 w-full" type="text" name="bio" id="bio" 
+            value="{{ $user->bio }}">
+
+            @error('bio')
+                <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
+            @enderror
+        </div>
 
         <div>
             <label class="mt-4 block mb-2 uppercase font-bold text-xs text-grey-700" 
