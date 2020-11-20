@@ -107,6 +107,11 @@ class UsersController extends Controller
             'banner' => [
                 'file'
             ],
+            'bio' => [
+                'string', 
+                'nullable', 
+                'max:150', 
+            ],
             'password' => [
                 'nullable',
                 'string', 

@@ -20,6 +20,7 @@ class CreateUsersAndGroupsTable extends Migration
             $table->string('username')->unique();
             $table->text('avatar')->nullable();
             $table->text('banner')->nullable();
+            $table->string('bio');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

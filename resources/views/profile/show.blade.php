@@ -34,9 +34,7 @@
         </div>
 
         <p class="text-sm">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. 
-            Placeat maiores assumenda hic vel architecto quis dolorum rem officia quidem, 
-            repellendus quo, eligendi aliquam, culpa ratione unde eum magni libero laborum.
+            {{ $user->bio }}
         </p>
 
 
