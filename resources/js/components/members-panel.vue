@@ -17,14 +17,14 @@
             <div class="flex w-full justify-between">
                 <a
                     href="/invite-member" 
-                    class="w-20 float-left m-2 rounded-full border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100"
+                    class="w-24 float-left m-2 rounded-full shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100"
                     >Ivite
                 </a>
 
                 <a  
                     v-if="members.length > 0"
                     :href="'/all-members/' + groupid"
-                    class="w-20 float-right m-2 rounded-full border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100"
+                    class="w-24 float-right m-2 rounded-full shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100"
                     >Show all
                 </a>
             </div>

@@ -72,7 +72,11 @@ class User extends Authenticatable
     }
 
     public function getAvatarAttribute($value){
-        return asset($value ? 'storage/'.$value : 'storage/avatars/default.jpg');
+        return asset($value ? 'storage/'.$value : 'storage/users/avatars/default.jpg');
+    }
+
+    public function notes(){
+        return $this->hasMany(Note::class);
     }
 
     public function groups(){
