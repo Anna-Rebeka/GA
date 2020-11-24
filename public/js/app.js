@@ -20110,7 +20110,10 @@ var render = function() {
     _c("div", { staticClass: "container text-center" }, [
       _c("img", {
         staticClass: "rounded shadow-lg mx-auto mb-2 object-cover w-32 h-32",
-        attrs: { src: "/storage/groups/default.jpg", alt: "group-avatar" }
+        attrs: {
+          src: "/storage/groups/avatars/default.jpg",
+          alt: "group-avatar"
+        }
       }),
       _vm._v(" "),
       _vm.user.group
