@@ -26,7 +26,7 @@
                 <div class="flex">
                     <a 
                         href="{{ $user->path('edit') }}"
-                        class="rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
+                        class="rounded-full shadow border border-gray-300 py-2 px-4 mr-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
                         Edit profile
                     </a>
                 </div>
