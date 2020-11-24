@@ -30,6 +30,8 @@ class User extends Authenticatable
         'name',
         'username',
         'avatar',
+        'banner',
+        'bio',
         'email',
         'password',
         'active_group'
@@ -67,16 +69,15 @@ class User extends Authenticatable
 
     public function path($append = ''){
         $path = route('profile', $this->username);
-
         return $append ? "{$path}/{$append}" : $path;
     }
 
     public function getAvatarAttribute($value){
         return asset($value ? 'storage/'.$value : 'storage/users/avatars/default.jpg');
     }
-
-    public function notes(){
-        return $this->hasMany(Note::class);
+  
+    public function getBannerAttribute($value){
+        return asset($value ? 'storage/'.$value : 'storage/users/banners/default.png');
     }
 
     public function groups(){
@@ -89,5 +90,9 @@ class User extends Authenticatable
 
     public function inGroup($group){
         return $this->groups->contains($group);
+    }
+  
+    public function notes(){
+        return $this->hasMany(Note::class);
     }
 }

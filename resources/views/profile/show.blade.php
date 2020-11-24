@@ -2,10 +2,11 @@
     <div class="mb-6 relative">
         <div class="relative">
             <img 
-                src="/img/default-banner.png" 
-                alt=""
-                class="mb-2 rounded shadow-lg"
+                src="{{ $user->banner }}" 
+                alt="{{ $user->username }}"
+                class="h-40 w-full mb-2 rounded shadow-lg object-cover overflow-hidden"
             >
+            
             <img 
                 src="{{ $user->avatar }}"
                 alt="avatar"
@@ -33,9 +34,7 @@
         </div>
 
         <p class="text-sm">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. 
-            Placeat maiores assumenda hic vel architecto quis dolorum rem officia quidem, 
-            repellendus quo, eligendi aliquam, culpa ratione unde eum magni libero laborum.
+            {{ $user->bio }}
         </p>
 
 
