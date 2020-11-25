@@ -2217,13 +2217,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['notes'],
   data: function data() {
     return {
       savedNotes: this.notes,
       csrf: document.head.querySelector('meta[name="csrf-token"]').content,
-      pageOfItems: []
+      pageOfItems: [],
+      fields: {},
+      errors: {}
     };
   },
   methods: {
@@ -2237,6 +2244,22 @@ __webpack_require__.r(__webpack_exports__);
         _this.savedNotes = _this.savedNotes.filter(function (e) {
           return e !== note;
         });
+      });
+    },
+    submit: function submit() {
+      var _this2 = this;
+
+      axios.post('notes', this.fields).then(function (response) {
+        _this2.fields = {};
+
+        _this2.savedNotes.push(response.data);
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this2.errors = error.response.data.errors;
+          console.log(_this2.errors);
+        }
+
+        console.log(error.message);
       });
     }
   }
@@ -20346,74 +20369,134 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "mb-6" }, [
-    _c("form", { attrs: { action: "notes", method: "POST" } }, [
-      _c(
-        "div",
-        { staticClass: "bg-white shadow border rounded-lg py-6 px-8 mb-8" },
-        [
-          _c("input", {
-            attrs: { type: "hidden", name: "_token" },
-            domProps: { value: _vm.csrf }
-          }),
-          _vm._v(" "),
-          _c("textarea", {
-            staticClass: "w-full h-24 resize-none focus:outline-none",
-            attrs: { name: "text", placeholder: "something to remember..." }
-          })
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass:
-            "shadow float-right -mt-4 rounded-full border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
-          attrs: { type: "submit" }
-        },
-        [_vm._v("\n            Make a note\n        ")]
-      )
-    ]),
+    _c(
+      "form",
+      {
+        on: {
+          submit: function($event) {
+            $event.preventDefault()
+            return _vm.submit($event)
+          }
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "bg-white shadow border rounded-lg py-6 px-8 mb-8" },
+          [
+            _c("input", {
+              attrs: { type: "hidden", name: "_token" },
+              domProps: { value: _vm.csrf }
+            }),
+            _vm._v(" "),
+            _vm.errors.text
+              ? _c(
+                  "div",
+                  {
+                    staticClass:
+                      "flex items-center justify-between w-full mb-4 p-2 bg-red-500 shadow text-white"
+                  },
+                  [
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(_vm.errors.text[0]) +
+                        "\n            "
+                    )
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _c("textarea", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.fields.text,
+                  expression: "fields.text"
+                }
+              ],
+              staticClass: "w-full h-24 resize-none focus:outline-none",
+              attrs: { name: "text", placeholder: "something to remember..." },
+              domProps: { value: _vm.fields.text },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.fields, "text", $event.target.value)
+                }
+              }
+            })
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass:
+              "shadow float-right -mt-4 rounded-full border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+            attrs: { type: "submit" }
+          },
+          [_vm._v("\n            Make a note\n        ")]
+        )
+      ]
+    ),
     _vm._v(" "),
     _c(
       "ul",
+      { staticClass: "mt-20" },
       _vm._l(_vm.pageOfItems, function(note) {
-        return _c("li", { key: note.id }, [
-          _c(
-            "div",
-            {
-              staticClass:
-                "max-w-xs rounded overflow-hidden shadow-lg mb-4 border border-gray-100"
-            },
-            [
-              _c("div", { staticClass: "px-6 py-4" }, [
-                _c("p", { staticClass: "text-gray-700 text-base" }, [
-                  _vm._v(
-                    "\n                        " +
-                      _vm._s(note.text) +
-                      "\n                    "
+        return _c(
+          "li",
+          { key: note.id, staticClass: "max-w-full inline float-left mr-4" },
+          [
+            _c(
+              "div",
+              {
+                staticClass:
+                  "rounded overflow-hidden shadow-lg mb-4 border border-gray-100"
+              },
+              [
+                _c("div", { staticClass: "px-6 pt-4 break-words" }, [
+                  _c("p", { staticClass: "text-gray-700 text-base" }, [
+                    _vm._v(
+                      "\n                        " +
+                        _vm._s(note.text) +
+                        "\n                    "
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "px-6 pt-4 pb-2 mb-6 float-right" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "w-4 h-4",
+                      staticStyle: {
+                        background: "url(/storage/icons/bin.png)"
+                      },
+                      attrs: { type: "button", "data-toggle": "modal" },
+                      on: {
+                        submit: function($event) {
+                          $event.preventDefault()
+                          return _vm.deleteData(note)
+                        },
+                        click: function($event) {
+                          return _vm.deleteData(note)
+                        }
+                      }
+                    },
+                    [
+                      _vm._v(
+                        "\n                            -\n                        "
+                      )
+                    ]
                   )
                 ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "px-6 pt-4 pb-2 mb-6 float-right" }, [
-                _c("button", {
-                  staticClass: "w-4 h-4",
-                  staticStyle: { background: "url(/storage/icons/bin.png)" },
-                  attrs: { type: "button", "data-toggle": "modal" },
-                  on: {
-                    submit: function($event) {
-                      $event.preventDefault()
-                      return _vm.deleteData(note)
-                    },
-                    click: function($event) {
-                      return _vm.deleteData(note)
-                    }
-                  }
-                })
-              ])
-            ]
-          )
-        ])
+              ]
+            )
+          ]
+        )
       }),
       0
     ),
@@ -20423,7 +20506,7 @@ var render = function() {
       { staticClass: "mt-10 clear-both w-full text-center" },
       [
         _c("jw-pagination", {
-          attrs: { items: _vm.savedNotes, pageSize: 2 },
+          attrs: { items: _vm.savedNotes, pageSize: 6 },
           on: { changePage: _vm.onChangePage }
         })
       ],
