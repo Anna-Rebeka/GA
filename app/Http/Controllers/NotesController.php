@@ -14,13 +14,13 @@ class NotesController extends Controller
         ]);
     }
 
-    public function store(User $user){
-        $attributes = request()->validate(['text' => 'required']);
-        Note::create([
-            'user_id' => $user->id,
+    public function store(Request $fields){
+        $attributes = $fields->validate(['text' => ['required', 'max:1000']]);
+        $note = Note::create([
+            'user_id' => auth()->user()->id,
             'text' => $attributes['text'],
         ]);
-        return back();
+        return $note;
     }
 
     public function destroy($user, int $id) {

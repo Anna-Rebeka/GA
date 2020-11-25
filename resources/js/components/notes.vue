@@ -1,11 +1,15 @@
 <template>
-    <!-- TODO process all through VUE -->
     <div class="mb-6">
-        <form action="notes" method="POST">
+        <form @submit.prevent="submit">
             <div class="bg-white shadow border rounded-lg py-6 px-8 mb-8">
                 <input type="hidden" name="_token" :value="csrf" /> 
+                <div class="flex items-center justify-between w-full mb-4 p-2 bg-red-500 shadow text-white" v-if="errors.text">
+                    {{ errors.text[0] }}
+                </div>
                 <textarea name="text" placeholder="something to remember..."
-                    class="w-full h-24 resize-none focus:outline-none">
+                    class="w-full h-24 resize-none focus:outline-none"
+                    v-model="fields.text"
+                >
                 </textarea>
             </div>    
             <button type="submit" class="shadow float-right -mt-4 rounded-full border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
@@ -14,10 +18,10 @@
         </form>
         
         
-        <ul>
-            <li v-for="note in pageOfItems" v-bind:key="note.id">
-                <div class="max-w-xs rounded overflow-hidden shadow-lg mb-4 border border-gray-100">
-                    <div class="px-6 py-4">
+        <ul class="mt-20">
+            <li v-for="note in pageOfItems" v-bind:key="note.id" class="max-w-full inline float-left mr-4">
+                <div class="rounded overflow-hidden shadow-lg mb-4 border border-gray-100">
+                    <div class="px-6 pt-4 break-words">
                         <p class="text-gray-700 text-base">
                             {{ note.text }}
                         </p>
@@ -27,6 +31,7 @@
                                 class="w-4 h-4" style="background: url(/storage/icons/bin.png)" 
                                 type="button" data-toggle="modal" 
                                 v-on:submit.prevent="deleteData(note)" @click="deleteData(note)">
+                                -
                             </button>
                     </div>
                 </div>
@@ -34,7 +39,7 @@
         </ul>
         
         <div class="mt-10 clear-both w-full text-center">
-            <jw-pagination :items="savedNotes" @changePage="onChangePage" :pageSize="2"></jw-pagination>
+            <jw-pagination :items="savedNotes" @changePage="onChangePage" :pageSize="6"></jw-pagination>
         </div>
     </div>
 </template>
@@ -46,7 +51,9 @@ export default {
         return {
             savedNotes: this.notes,
             csrf: document.head.querySelector('meta[name="csrf-token"]').content,
-            pageOfItems: []
+            pageOfItems: [],
+            fields: {},
+            errors: {}
         };
     },
     methods: {
@@ -60,6 +67,19 @@ export default {
                 this.savedNotes = this.savedNotes.filter(function(e) { return e !== note })
             });
         },
+
+        submit() {
+            axios.post('notes', this.fields).then(response => {
+                this.fields = {};
+                this.savedNotes.push(response.data);
+            }).catch(error => {
+                if (error.response.status == 422){
+                    this.errors = error.response.data.errors;
+                    console.log(this.errors);
+                }
+                console.log(error.message);
+            });
+        }
     }
 };
 </script>
