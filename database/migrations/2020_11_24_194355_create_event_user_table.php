@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMeetingUserTable extends Migration
+class CreateEventUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,15 @@ class CreateMeetingUserTable extends Migration
      */
     public function up()
     {
-        Schema::create('meeting_user', function (Blueprint $table) {
+        Schema::create('event_user', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('meeting_id');
+            $table->foreignId('event_id');
             $table->foreignId('user_id');
             $table->timestamps();
 
-            $table->foreign('meeting_id')
+            $table->foreign('event_id')
                 ->references('id')
-                ->on('meetings');
+                ->on('events');
 
             $table->foreign('user_id')
                 ->references('id')
