@@ -62,8 +62,7 @@ export default {
         },
         
         deleteData: function(note) {
-            axios.delete('notes/' + note.id)
-            .then(response => {
+            axios.delete('notes/' + note.id).then(response => {
                 this.savedNotes = this.savedNotes.filter(function(e) { return e !== note })
             });
         },

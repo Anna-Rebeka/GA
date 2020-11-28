@@ -95,4 +95,8 @@ class User extends Authenticatable
     public function notes(){
         return $this->hasMany(Note::class);
     }
+
+    public function events(){
+        return $this->belongsToMany(Event::class);
+    }
 }

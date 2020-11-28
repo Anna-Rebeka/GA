@@ -15,16 +15,13 @@ class GroupsController extends Controller
     public function index()
     {
         $groups =  auth()->user()->groups;
-        $gusers = [];
 
         foreach ($groups as $group){
-            $gusers[$group->id] = $group->users;
+            $group->users;
         }
-        
         
         return view('groups/change-group', [
             'groups' => $groups,
-            'gusers' => $gusers
             ]);
     }
 

@@ -26,5 +26,9 @@ class Group extends Model
     public function hasUser($user) {
         return $this->users->contains($user);
     }
+
+    public function events(){
+        return $this->hasMany(Event::class);
+    }
 }
 

@@ -25,7 +25,7 @@
                 <a href="{{ route('dashboard') }}">
                     <img src="/img/logo.png" width="60px" alt="logo">
                 </a>
-                <a href="/{{ auth()->user()->username }}/notes" class="shadow w-22 h-10 text-center relative inline-flex justify-center rounded-full border border-gray-300 px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
+                <a href="/{{ auth()->user()->username }}/notes" class="shadow w-22 h-10 text-center relative inline-flex justify-center rounded-full border border-gray-300 lg:-ml-2 md:-ml-12 px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
                     Notes
                 </a>
                 <dropdown></dropdown>
@@ -44,7 +44,7 @@
                         {{ $slot }}
 
                     </div>
-                    
+                  
                     <div class="lg:w-1/6 ml-2 mb-6" style="max-width: 700px;">
                         @if(auth()->user()->group != null)
                             <members-panel :user="{{ auth()->user() }}" :members="{{ auth()->user()->group->users->except(auth()->user()->id) }}" :groupid="{{ auth()->user()->group->id }}"></members-panel>

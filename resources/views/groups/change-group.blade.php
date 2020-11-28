@@ -1,3 +1,3 @@
 <x-master>
-    <change-group :user="{{ auth()->user() }}" :groups="{{ $groups }}" :gusers="{{ json_encode($gusers) }}"></change-group>
+    <change-group :user="{{ auth()->user() }}" :groups="{{ $groups }}"></change-group>
 </x-master>
