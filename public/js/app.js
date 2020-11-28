@@ -2133,6 +2133,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['events'],
   data: function data() {
@@ -20511,7 +20518,7 @@ var render = function() {
       _vm._l(_vm.pageOfItems, function(event) {
         return _c(
           "li",
-          { key: event.id, staticClass: "inline float-left mr-4 mb-12 h-72" },
+          { key: event.id, staticClass: "inline float-left mr-4 mb-12 h-80" },
           [
             _c(
               "div",
@@ -20542,6 +20549,19 @@ var render = function() {
                       )
                     ]),
                     _vm._v(" "),
+                    event.author
+                      ? _c("div", [
+                          _c("p", { staticClass: "text-sm" }, [
+                            _vm._v(
+                              "\n                                created by : "
+                            ),
+                            _c("strong", [
+                              _vm._v(" " + _vm._s(event.author.name) + " ")
+                            ])
+                          ])
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
                     _c("p", { staticClass: "font-bold float-right text-sm" }, [
                       _vm._v(
                         "\n                            " +
@@ -20563,24 +20583,27 @@ var render = function() {
                     _vm._v(
                       "\n                        \n                        Going :\n                        "
                     ),
-                    _c(
-                      "ul",
-                      { staticClass: "text-base" },
-                      _vm._l(event.users, function(user) {
-                        return _c(
-                          "li",
-                          { key: user.name, staticClass: "text-sm" },
-                          [
-                            _vm._v(
-                              "\n                                " +
-                                _vm._s(user.name) +
-                                "\n                            "
-                            )
-                          ]
-                        )
-                      }),
-                      0
-                    )
+                    _c("ul", { staticClass: "text-base" }, [
+                      event.users
+                        ? _c(
+                            "div",
+                            _vm._l(event.users, function(user) {
+                              return _c(
+                                "li",
+                                { key: user.name, staticClass: "text-sm" },
+                                [
+                                  _vm._v(
+                                    "\n                                    " +
+                                      _vm._s(user.name) +
+                                      "\n                                "
+                                  )
+                                ]
+                              )
+                            }),
+                            0
+                          )
+                        : _vm._e()
+                    ])
                   ])
                 ]),
                 _vm._v(" "),

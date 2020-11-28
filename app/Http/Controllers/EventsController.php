@@ -21,6 +21,7 @@ class EventsController extends Controller
 
         foreach ($events as $event){
             $event->users;
+            $event->author;
         }
 
         return view('groups.events', [

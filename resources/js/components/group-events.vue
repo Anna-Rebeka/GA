@@ -63,7 +63,7 @@
         </form>
 
         <ul class="mt-20 mb-16">
-            <li v-for="event in pageOfItems" :key="event.id" class="inline float-left mr-4 mb-12 h-72">
+            <li v-for="event in pageOfItems" :key="event.id" class="inline float-left mr-4 mb-12 h-80">
                 <div class="max-w-xs rounded overflow-hidden shadow-lg mb-4">
                     <img class="w-full" src="/img/event-banner.jpg" :alt="event.name">
                     <div class="px-6 py-4">
@@ -74,6 +74,11 @@
                             <p class="font-bold text-sm">
                                 {{ event.event_time }}
                             </p>
+                            <div v-if="event.author">
+                                <p class="text-sm">
+                                    created by : <strong> {{ event.author.name }} </strong>
+                                </p>
+                            </div>
                             <p class="font-bold float-right text-sm">
                                 {{ event.event_place }}
                             </p>
@@ -85,9 +90,11 @@
                             
                             Going :
                             <ul class="text-base">
-                                <li class="text-sm" v-for="user in event.users" :key="user.name">
-                                    {{ user.name }}
-                                </li>
+                                <div v-if="event.users">
+                                    <li class="text-sm" v-for="user in event.users" :key="user.name">
+                                        {{ user.name }}
+                                    </li>
+                                </div>
                             </ul>    
                              
                         </p>
