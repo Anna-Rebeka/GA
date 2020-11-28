@@ -62,8 +62,8 @@
             </div>    
         </form>
 
-        <ul class="mt-20">
-            <li v-for="event in pageOfItems" :key="event.id" class="inline float-left mr-4">
+        <ul class="mt-20 mb-16">
+            <li v-for="event in pageOfItems" :key="event.id" class="inline float-left mr-4 mb-12 h-72">
                 <div class="max-w-xs rounded overflow-hidden shadow-lg mb-4">
                     <img class="w-full" src="/img/event-banner.jpg" :alt="event.name">
                     <div class="px-6 py-4">
@@ -137,6 +137,7 @@ export default {
         submit() {
             axios.post('/events', this.fields).then(response => {
                 this.fields = {};
+                this.savedEvents.push(response.data);
                 
             }).catch(error => {
                 if (error.response.status == 422){

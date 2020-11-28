@@ -2162,6 +2162,8 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.post('/events', this.fields).then(function (response) {
         _this2.fields = {};
+
+        _this2.savedEvents.push(response.data);
       })["catch"](function (error) {
         if (error.response.status == 422) {
           _this2.errors = error.response.data.errors;
@@ -20505,11 +20507,11 @@ var render = function() {
     _vm._v(" "),
     _c(
       "ul",
-      { staticClass: "mt-20" },
+      { staticClass: "mt-20 mb-16" },
       _vm._l(_vm.pageOfItems, function(event) {
         return _c(
           "li",
-          { key: event.id, staticClass: "inline float-left mr-4" },
+          { key: event.id, staticClass: "inline float-left mr-4 mb-12 h-72" },
           [
             _c(
               "div",
