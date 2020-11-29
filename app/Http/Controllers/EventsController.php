@@ -117,7 +117,7 @@ class EventsController extends Controller
      * @param  \App\Models\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function destroy($user, int $id)
+    public function destroy($group, int $id)
     {
         $event = Event::findOrFail($id);
         $event->users()->detach();
