@@ -25,7 +25,7 @@ class EventsController extends Controller
             $eusers[$event->id] = $event->users->pluck('id');
             $event->author;
         }
-        
+
         return view('groups.events', [
             'user' => auth()->user(),
             'events' => $events,
@@ -117,8 +117,10 @@ class EventsController extends Controller
      * @param  \App\Models\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Event $event)
+    public function destroy($user, int $id)
     {
-        //
+        $event = Event::findOrFail($id);
+        $event->users()->detach();
+        $event->delete();
     }
 }

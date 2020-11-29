@@ -50,6 +50,7 @@ Route::middleware('auth')->group(function() {
 
     Route::get('/{group:id}/events', [EventsController::class, 'index']);
     Route::post('/events', [EventsController::class, 'store']);
+    Route::delete('/{user}/events/{id}', [EventsController::class, 'destroy']);
 
 });
 

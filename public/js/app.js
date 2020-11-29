@@ -2162,6 +2162,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user', 'eusers', 'events'],
   data: function data() {
@@ -2171,6 +2183,7 @@ __webpack_require__.r(__webpack_exports__);
       pageOfItems: [],
       fields: {},
       errors: {},
+      createNewEvent: false,
       newEventCreated: false
     };
   },
@@ -2178,27 +2191,18 @@ __webpack_require__.r(__webpack_exports__);
     onChangePage: function onChangePage(pageOfItems) {
       this.pageOfItems = pageOfItems;
     },
-    deleteData: function deleteData(note) {
+    submit: function submit() {
       var _this = this;
 
-      axios["delete"]('events/' + event.id).then(function (response) {
-        _this.savedEvents = _this.savedEvents.filter(function (e) {
-          return e !== note;
-        });
-      });
-    },
-    submit: function submit() {
-      var _this2 = this;
-
       axios.post('/events', this.fields).then(function (response) {
-        _this2.fields = {};
-        _this2.newEventCreated = true;
+        _this.fields = {};
+        _this.newEventCreated = true;
 
-        _this2.savedEvents.unshift(response.data);
+        _this.savedEvents.unshift(response.data);
       })["catch"](function (error) {
         if (error.response.status == 422) {
-          _this2.errors = error.response.data.errors;
-          console.log(_this2.errors);
+          _this.errors = error.response.data.errors;
+          console.log(_this.errors);
         }
 
         console.log(error.message);
@@ -2209,6 +2213,15 @@ __webpack_require__.r(__webpack_exports__);
     },
     leaveEvent: function leaveEvent($event) {
       console.log($event.id);
+    },
+    destroyEvent: function destroyEvent($event) {
+      var _this2 = this;
+
+      axios["delete"]('events/' + $event.id).then(function (response) {
+        _this2.savedEvents = _this2.savedEvents.filter(function (e) {
+          return e !== $event;
+        });
+      });
     }
   }
 });
@@ -22702,221 +22715,249 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "mb-6" }, [
-    _c(
-      "form",
-      {
-        on: {
-          submit: function($event) {
-            $event.preventDefault()
-            return _vm.submit($event)
+    _c("div", { staticClass: "h-12" }, [
+      _c(
+        "button",
+        {
+          staticClass:
+            "shadow absolute r-0 w-min rounded-lg border border-gray-300 px-4 py-2 mb-8 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none",
+          on: {
+            click: function($event) {
+              _vm.createNewEvent = !_vm.createNewEvent
+            }
           }
-        }
-      },
-      [
-        _c(
-          "div",
+        },
+        [_vm._v("\n            New Event\n        ")]
+      )
+    ]),
+    _vm._v(" "),
+    _vm.createNewEvent
+      ? _c(
+          "form",
           {
-            staticClass:
-              "md:w-3/4 m-auto bg-white shadow border rounded-lg py-6 px-8 mb-8"
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                return _vm.submit($event)
+              }
+            }
           },
           [
-            _c("input", {
-              attrs: { type: "hidden", name: "_token" },
-              domProps: { value: _vm.csrf }
-            }),
-            _vm._v(" "),
-            _vm.errors.text
-              ? _c(
-                  "div",
-                  {
-                    staticClass:
-                      "flex items-center justify-between w-full mb-4 p-2 bg-red-500 shadow text-white"
-                  },
-                  [
-                    _vm._v(
-                      "\n                " +
-                        _vm._s(_vm.errors.text[0]) +
-                        "\n            "
-                    )
-                  ]
-                )
-              : _vm._e(),
-            _vm._v(" "),
-            _c("div", { staticClass: "mx-auto w-full mb-10" }, [
-              _c("p", { staticClass: "mb-4" }, [
-                _c("label", { staticClass: "mb-2", attrs: { for: "name" } }, [
-                  _vm._v("Name")
-                ]),
-                _vm._v(" "),
-                _c("br"),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.fields.name,
-                      expression: "fields.name"
-                    }
-                  ],
-                  staticClass: "border w-full p-2",
-                  attrs: {
-                    id: "name",
-                    type: "text",
-                    name: "name",
-                    required: ""
-                  },
-                  domProps: { value: _vm.fields.name },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(_vm.fields, "name", $event.target.value)
-                    }
-                  }
-                })
-              ]),
-              _vm._v(" "),
-              _c("p", { staticClass: "mb-4" }, [
-                _c(
-                  "label",
-                  { staticClass: "mb-2", attrs: { for: "description" } },
-                  [_vm._v("Description (optional)")]
-                ),
-                _vm._v(" "),
-                _c("br"),
-                _vm._v(" "),
-                _c("textarea", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.fields.description,
-                      expression: "fields.description"
-                    }
-                  ],
-                  staticClass:
-                    "w-full border p-2 h-24 resize-none focus:outline-none",
-                  attrs: {
-                    name: "description",
-                    placeholder: "tell your group about this event..."
-                  },
-                  domProps: { value: _vm.fields.description },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(_vm.fields, "description", $event.target.value)
-                    }
-                  }
-                })
-              ]),
-              _vm._v(" "),
-              _c("p", { staticClass: "mb-4" }, [
-                _c(
-                  "label",
-                  { staticClass: "mb-2", attrs: { for: "event_time" } },
-                  [_vm._v("When")]
-                ),
-                _vm._v(" "),
-                _c("br"),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.fields.eventTime,
-                      expression: "fields.eventTime"
-                    }
-                  ],
-                  staticClass: "border p-2",
-                  attrs: {
-                    id: "event_time",
-                    type: "datetime-local",
-                    name: "event_time",
-                    required: ""
-                  },
-                  domProps: { value: _vm.fields.eventTime },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(_vm.fields, "eventTime", $event.target.value)
-                    }
-                  }
-                })
-              ]),
-              _vm._v(" "),
-              _c("p", { staticClass: "mb-4" }, [
-                _c(
-                  "label",
-                  { staticClass: "mb-2", attrs: { for: "event_place" } },
-                  [_vm._v("Place")]
-                ),
-                _vm._v(" "),
-                _c("br"),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.fields.eventPlace,
-                      expression: "fields.eventPlace"
-                    }
-                  ],
-                  staticClass: "border w-full p-2",
-                  attrs: {
-                    id: "event_place",
-                    type: "text",
-                    name: "event_place",
-                    required: ""
-                  },
-                  domProps: { value: _vm.fields.eventPlace },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(_vm.fields, "eventPlace", $event.target.value)
-                    }
-                  }
-                })
-              ])
-            ]),
-            _vm._v(" "),
-            _vm.newEventCreated
-              ? _c(
-                  "div",
-                  {
-                    staticClass:
-                      "flex items-center justify-between w-full mb-10 p-2 bg-green-500 shadow text-white"
-                  },
-                  [
-                    _vm._v(
-                      "\n                Your event was created! Check it out down below.\n            "
-                    )
-                  ]
-                )
-              : _vm._e(),
-            _vm._v(" "),
             _c(
-              "button",
+              "div",
               {
                 staticClass:
-                  "shadow float-right -mt-6 rounded-lg border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
-                attrs: { type: "submit" }
+                  "md:w-3/4 m-auto bg-white shadow border rounded-lg py-6 px-8 mb-8"
               },
-              [_vm._v("\n                Make an event\n            ")]
+              [
+                _c("input", {
+                  attrs: { type: "hidden", name: "_token" },
+                  domProps: { value: _vm.csrf }
+                }),
+                _vm._v(" "),
+                _vm.errors.text
+                  ? _c(
+                      "div",
+                      {
+                        staticClass:
+                          "flex items-center justify-between w-full mb-4 p-2 bg-red-500 shadow text-white"
+                      },
+                      [
+                        _vm._v(
+                          "\n                " +
+                            _vm._s(_vm.errors.text[0]) +
+                            "\n            "
+                        )
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("div", { staticClass: "mx-auto w-full mb-10" }, [
+                  _c("p", { staticClass: "mb-4" }, [
+                    _c(
+                      "label",
+                      { staticClass: "mb-2", attrs: { for: "name" } },
+                      [_vm._v("Name")]
+                    ),
+                    _vm._v(" "),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.fields.name,
+                          expression: "fields.name"
+                        }
+                      ],
+                      staticClass: "border w-full p-2",
+                      attrs: {
+                        id: "name",
+                        type: "text",
+                        name: "name",
+                        required: ""
+                      },
+                      domProps: { value: _vm.fields.name },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.fields, "name", $event.target.value)
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "mb-4" }, [
+                    _c(
+                      "label",
+                      { staticClass: "mb-2", attrs: { for: "description" } },
+                      [_vm._v("Description (optional)")]
+                    ),
+                    _vm._v(" "),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.fields.description,
+                          expression: "fields.description"
+                        }
+                      ],
+                      staticClass:
+                        "w-full border p-2 h-24 resize-none focus:outline-none",
+                      attrs: {
+                        name: "description",
+                        placeholder: "tell your group about this event..."
+                      },
+                      domProps: { value: _vm.fields.description },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.fields,
+                            "description",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "mb-4" }, [
+                    _c(
+                      "label",
+                      { staticClass: "mb-2", attrs: { for: "event_time" } },
+                      [_vm._v("When")]
+                    ),
+                    _vm._v(" "),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.fields.eventTime,
+                          expression: "fields.eventTime"
+                        }
+                      ],
+                      staticClass: "border p-2",
+                      attrs: {
+                        id: "event_time",
+                        type: "datetime-local",
+                        name: "event_time",
+                        required: ""
+                      },
+                      domProps: { value: _vm.fields.eventTime },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.fields, "eventTime", $event.target.value)
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "mb-4" }, [
+                    _c(
+                      "label",
+                      { staticClass: "mb-2", attrs: { for: "event_place" } },
+                      [_vm._v("Place")]
+                    ),
+                    _vm._v(" "),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.fields.eventPlace,
+                          expression: "fields.eventPlace"
+                        }
+                      ],
+                      staticClass: "border w-full p-2",
+                      attrs: {
+                        id: "event_place",
+                        type: "text",
+                        name: "event_place",
+                        required: ""
+                      },
+                      domProps: { value: _vm.fields.eventPlace },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.fields,
+                            "eventPlace",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm.newEventCreated
+                  ? _c(
+                      "div",
+                      {
+                        staticClass:
+                          "flex items-center justify-between w-full mb-10 p-2 bg-green-500 shadow text-white"
+                      },
+                      [
+                        _vm._v(
+                          "\n                Your event was created! Check it out down below.\n            "
+                        )
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass:
+                      "shadow float-right -mt-6 rounded-lg border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+                    attrs: { type: "submit" }
+                  },
+                  [_vm._v("\n                Create an event\n            ")]
+                )
+              ]
             )
           ]
         )
-      ]
-    ),
+      : _vm._e(),
     _vm._v(" "),
     _c("div", { staticClass: "flex flex-col" }, [
       _c("div", { staticClass: "-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8" }, [
@@ -23009,12 +23050,13 @@ var render = function() {
                           _vm._v(" "),
                           _c("td", [
                             _c("div", { staticClass: "ml-4" }, [
+                              _vm.eusers[event.id] &&
                               !_vm.eusers[event.id].includes(_vm.user.id)
                                 ? _c(
                                     "button",
                                     {
                                       staticClass:
-                                        "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100",
+                                        "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none",
                                       on: {
                                         click: function($event) {
                                           return _vm.joinEvent(event)
@@ -23027,11 +23069,29 @@ var render = function() {
                                       )
                                     ]
                                   )
+                                : event.author_id == _vm.user.id
+                                ? _c(
+                                    "button",
+                                    {
+                                      staticClass:
+                                        "rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-red-500 hover:text-gray-500 hover:bg-red-200 focus:outline-none",
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.destroyEvent(event)
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                Delete\n                            "
+                                      )
+                                    ]
+                                  )
                                 : _c(
                                     "button",
                                     {
                                       staticClass:
-                                        "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-red-200 hover:text-gray-500 hover:bg-red-100",
+                                        "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-red-200 hover:text-gray-500 hover:bg-red-100 focus:outline-none",
                                       on: {
                                         click: function($event) {
                                           return _vm.leaveEvent(event)
@@ -23480,7 +23540,7 @@ var render = function() {
           "button",
           {
             staticClass:
-              "shadow float-right -mt-4 rounded-full border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+              "shadow float-right -mt-4 rounded-full border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 focus:outline-none",
             attrs: { type: "submit" }
           },
           [_vm._v("\n            Make a note\n        ")]
@@ -23519,7 +23579,8 @@ var render = function() {
                     {
                       staticClass: "w-4 h-4",
                       staticStyle: {
-                        background: "url(/storage/icons/bin.png)"
+                        background:
+                          "url(/storage/icons/bin.png) focus:outline-none"
                       },
                       attrs: { type: "button", "data-toggle": "modal" },
                       on: {

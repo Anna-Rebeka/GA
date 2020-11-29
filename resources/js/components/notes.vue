@@ -12,7 +12,7 @@
                 >
                 </textarea>
             </div>    
-            <button type="submit" class="shadow float-right -mt-4 rounded-full border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
+            <button type="submit" class="shadow float-right -mt-4 rounded-full border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
                 Make a note
             </button>
         </form>
@@ -28,7 +28,7 @@
                     </div>
                     <div class="px-6 pt-4 pb-2 mb-6 float-right">
                             <button 
-                                class="w-4 h-4" style="background: url(/storage/icons/bin.png)" 
+                                class="w-4 h-4" style="background: url(/storage/icons/bin.png) focus:outline-none" 
                                 type="button" data-toggle="modal" 
                                 v-on:submit.prevent="deleteData(note)" @click="deleteData(note)">
                                 -
