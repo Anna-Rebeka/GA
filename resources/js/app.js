@@ -8,6 +8,7 @@ import notes from './components/notes.vue';
 import events from './components/group-events.vue';
 import JwPagination from 'jw-vue-pagination';
 
+require('masonry-layout');
 require('./bootstrap');
 
 Vue.component('dropdown', dropdown);

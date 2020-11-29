@@ -16,16 +16,20 @@ class EventsController extends Controller
      */
     public function index(Group $group)
     {
-        $events = $group->events;
+
+        $events = $group->events()->orderBy('event_time')->get();
         $eusers = [];
 
         foreach ($events as $event){
             $event->users;
+            $eusers[$event->id] = $event->users->pluck('id');
             $event->author;
         }
-
+        
         return view('groups.events', [
+            'user' => auth()->user(),
             'events' => $events,
+            'eusers' => $eusers,
         ]);
     }
 

@@ -55,79 +55,102 @@
                         >
                     </p>
                 </div>
-
+                <div class="flex items-center justify-between w-full mb-10 p-2 bg-green-500 shadow text-white" v-if="newEventCreated">
+                    Your event was created! Check it out down below.
+                </div>
                 <button type="submit" class="shadow float-right -mt-6 rounded-lg border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
                     Make an event
                 </button>
             </div>    
         </form>
 
-        <ul class="mt-20 mb-16">
-            <li v-for="event in pageOfItems" :key="event.id" class="inline float-left mr-4 mb-12 h-80">
-                <div class="max-w-xs rounded overflow-hidden shadow-lg mb-4">
-                    <img class="w-full" src="/img/event-banner.jpg" :alt="event.name">
-                    <div class="px-6 py-4">
-                        <div class="mb-2">
-                            <p class="font-bold text-xl">
-                                {{ event.name }}
-                            </p>
-                            <p class="font-bold text-sm">
+        <div class="flex flex-col">
+        <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+        <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead>
+                    <tr>
+                        <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            When
+                        </th>
+                        <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            What
+                        </th>
+                        <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Where
+                        </th>
+                        <th scope="col" class="px-6 py-3 bg-gray-50">
+                        </th>
+                        <th scope="col" class="px-6 py-3 bg-gray-50">
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr v-for="event in pageOfItems" :key="event.id">
+                        <td class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">
                                 {{ event.event_time }}
-                            </p>
-                            <div v-if="event.author">
-                                <p class="text-sm">
-                                    created by : <strong> {{ event.author.name }} </strong>
-                                </p>
                             </div>
-                            <p class="font-bold float-right text-sm">
-                                {{ event.event_place }}
-                            </p>
-                        </div>
-                        <p class="mb-4">
-                            {{ event.description }}
-                        </p>
-                        <p class="text-gray-700 text-base">
-                            
-                            Going :
-                            <ul class="text-base">
-                                <div v-if="event.users">
-                                    <li class="text-sm" v-for="user in event.users" :key="user.name">
-                                        {{ user.name }}
-                                    </li>
-                                </div>
-                            </ul>    
-                             
-                        </p>
-                    </div>
-                    <div class="px-6 pt-4 pb-2 mb-6 float-right">
-                        <button 
-                            @click="joinEvent(event)"
-                            class="rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100">
-                            Join
-                        </button>
-                    </div>
-                </div>
-            </li>
-        </ul>
-        
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">
+                                    {{ event.name }}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">
+                                    {{ event.event_place }}
+                            </div>
+                        </td>
+                        <td> 
+                            <a 
+                                href="/"
+                                class="shadow border border-gray-300 rounded-lg py-2 px-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
+                                About
+                            </a> 
+                        </td>
+                        <td> 
+                            <div class="ml-4">
+                                <button 
+                                    v-if="!eusers[event.id].includes(user.id)"
+                                    @click="joinEvent(event)"
+                                    class="rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100">
+                                    Join
+                                </button> 
+                                <button 
+                                    v-else
+                                    @click="leaveEvent(event)"
+                                    class="rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-red-200 hover:text-gray-500 hover:bg-red-100">
+                                    Leave
+                                </button> 
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        </div>
+        </div>
+        </div>
         <div class="mt-10 clear-both w-full text-center">
             <jw-pagination :items="savedEvents" @changePage="onChangePage" :pageSize="4"></jw-pagination>
         </div>
-
     </div>
   
 </template>
 
 <script>
 export default {
-    props: ['events'],
+    props: ['user', 'eusers', 'events'],
     data() {
         return {
             savedEvents: this.events,
             csrf: document.head.querySelector('meta[name="csrf-token"]').content,
             pageOfItems: [],
             fields: {},
-            errors: {}
+            errors: {},
+            newEventCreated: false,
         };
     },
     methods: {
@@ -144,7 +167,8 @@ export default {
         submit() {
             axios.post('/events', this.fields).then(response => {
                 this.fields = {};
-                this.savedEvents.push(response.data);
+                this.newEventCreated = true;
+                this.savedEvents.unshift(response.data);
                 
             }).catch(error => {
                 if (error.response.status == 422){
@@ -156,6 +180,10 @@ export default {
         },
 
         joinEvent($event) {
+            console.log($event.id);
+        },
+
+        leaveEvent($event) {
             console.log($event.id);
         }
     },
