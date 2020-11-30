@@ -118,24 +118,28 @@
                         </td>
                         <td> 
                             <div class="ml-4">
-                                <button 
-                                    v-if="eusers[event.id] && !eusers[event.id].includes(user.id)"
-                                    @click="joinEvent(event)"
-                                    class="rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none">
-                                    Join
-                                </button> 
-                                <button 
-                                    v-else-if="event.author_id == user.id"
-                                    @click="destroyEvent(event)"
-                                    class="rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-red-500 hover:text-gray-500 hover:bg-red-200 focus:outline-none">
-                                    Delete
-                                </button> 
-                                <button 
-                                    v-else
-                                    @click="leaveEvent(event)"
-                                    class="rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-red-200 hover:text-gray-500 hover:bg-red-100 focus:outline-none">
-                                    Leave
-                                </button> 
+                                
+                                <div v-if="eusers[event.id] && !eusers[event.id].includes(user.id)">
+                                    <button 
+                                        @click="joinEvent(event)"
+                                        class="rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none">
+                                        Join
+                                    </button> 
+                                </div>
+                                <div  v-else-if="event.author_id == user.id">
+                                    <button 
+                                        @click="destroyEvent(event)"
+                                        class="rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none">
+                                        Delete
+                                    </button> 
+                                </div>
+                                <div v-else>
+                                    <button 
+                                        @click="leaveEvent(event)"
+                                        class="rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-red-200 hover:text-gray-500 hover:bg-red-100 focus:outline-none">
+                                        Leave
+                                    </button> 
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -166,11 +170,17 @@ export default {
             newEventCreated: false,
         };
     },
+    mounted(){
+        
+    },
     methods: {
+        reload() {
+            this.$forceUpdate();
+         },
+
         onChangePage(pageOfItems) {
             this.pageOfItems = pageOfItems;
         },
-        
 
         submit() {
             axios.post('/events', this.fields).then(response => {
@@ -187,11 +197,30 @@ export default {
         },
 
         joinEvent($event) {
-            console.log($event.id);
+            axios.post('/events/' + $event.id + '/join').then(response => {
+                this.eusers[$event.id].push(this.user.id);
+                this.reload();
+            }).catch(error => {
+                if (error.response.status == 422){
+                    this.errors = error.response.data.errors;
+                    console.log(this.errors);
+                }
+                console.log(error.message);
+            });
         },
 
         leaveEvent($event) {
-            console.log($event.id);
+            axios.post('/events/' + $event.id + '/leave').then(response => {
+                var index = this.user.id;
+                this.eusers[$event.id].splice(index, 1);
+                this.reload();
+            }).catch(error => {
+                if (error.response.status == 422){
+                    this.errors = error.response.data.errors;
+                    console.log(this.errors);
+                }
+                console.log(error.message);
+            });
         },
 
         destroyEvent($event) {

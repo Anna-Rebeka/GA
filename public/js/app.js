@@ -2174,6 +2174,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user', 'eusers', 'events'],
   data: function data() {
@@ -2187,7 +2191,11 @@ __webpack_require__.r(__webpack_exports__);
       newEventCreated: false
     };
   },
+  mounted: function mounted() {},
   methods: {
+    reload: function reload() {
+      this.$forceUpdate();
+    },
     onChangePage: function onChangePage(pageOfItems) {
       this.pageOfItems = pageOfItems;
     },
@@ -2209,16 +2217,44 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     joinEvent: function joinEvent($event) {
-      console.log($event.id);
-    },
-    leaveEvent: function leaveEvent($event) {
-      console.log($event.id);
-    },
-    destroyEvent: function destroyEvent($event) {
       var _this2 = this;
 
+      axios.post('/events/' + $event.id + '/join').then(function (response) {
+        _this2.eusers[$event.id].push(_this2.user.id);
+
+        _this2.reload();
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this2.errors = error.response.data.errors;
+          console.log(_this2.errors);
+        }
+
+        console.log(error.message);
+      });
+    },
+    leaveEvent: function leaveEvent($event) {
+      var _this3 = this;
+
+      axios.post('/events/' + $event.id + '/leave').then(function (response) {
+        var index = _this3.user.id;
+
+        _this3.eusers[$event.id].splice(index, 1);
+
+        _this3.reload();
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this3.errors = error.response.data.errors;
+          console.log(_this3.errors);
+        }
+
+        console.log(error.message);
+      });
+    },
+    destroyEvent: function destroyEvent($event) {
+      var _this4 = this;
+
       axios["delete"]('events/' + $event.id).then(function (response) {
-        _this2.savedEvents = _this2.savedEvents.filter(function (e) {
+        _this4.savedEvents = _this4.savedEvents.filter(function (e) {
           return e !== $event;
         });
       });
@@ -23052,58 +23088,64 @@ var render = function() {
                             _c("div", { staticClass: "ml-4" }, [
                               _vm.eusers[event.id] &&
                               !_vm.eusers[event.id].includes(_vm.user.id)
-                                ? _c(
-                                    "button",
-                                    {
-                                      staticClass:
-                                        "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none",
-                                      on: {
-                                        click: function($event) {
-                                          return _vm.joinEvent(event)
+                                ? _c("div", [
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass:
+                                          "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none",
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.joinEvent(event)
+                                          }
                                         }
-                                      }
-                                    },
-                                    [
-                                      _vm._v(
-                                        "\n                                Join\n                            "
-                                      )
-                                    ]
-                                  )
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                    Join\n                                "
+                                        )
+                                      ]
+                                    )
+                                  ])
                                 : event.author_id == _vm.user.id
-                                ? _c(
-                                    "button",
-                                    {
-                                      staticClass:
-                                        "rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-red-500 hover:text-gray-500 hover:bg-red-200 focus:outline-none",
-                                      on: {
-                                        click: function($event) {
-                                          return _vm.destroyEvent(event)
+                                ? _c("div", [
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass:
+                                          "rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none",
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.destroyEvent(event)
+                                          }
                                         }
-                                      }
-                                    },
-                                    [
-                                      _vm._v(
-                                        "\n                                Delete\n                            "
-                                      )
-                                    ]
-                                  )
-                                : _c(
-                                    "button",
-                                    {
-                                      staticClass:
-                                        "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-red-200 hover:text-gray-500 hover:bg-red-100 focus:outline-none",
-                                      on: {
-                                        click: function($event) {
-                                          return _vm.leaveEvent(event)
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                    Delete\n                                "
+                                        )
+                                      ]
+                                    )
+                                  ])
+                                : _c("div", [
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass:
+                                          "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-red-200 hover:text-gray-500 hover:bg-red-100 focus:outline-none",
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.leaveEvent(event)
+                                          }
                                         }
-                                      }
-                                    },
-                                    [
-                                      _vm._v(
-                                        "\n                                Leave\n                            "
-                                      )
-                                    ]
-                                  )
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                    Leave\n                                "
+                                        )
+                                      ]
+                                    )
+                                  ])
                             ])
                           ])
                         ])

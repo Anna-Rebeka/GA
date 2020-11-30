@@ -51,7 +51,8 @@ Route::middleware('auth')->group(function() {
     Route::get('/{group:id}/events', [EventsController::class, 'index']);
     Route::post('/events', [EventsController::class, 'store']);
     Route::delete('/{group}/events/{id}', [EventsController::class, 'destroy']);
-
+    Route::post('/events/{event:id}/join', [EventsController::class, 'join']);
+    Route::post('/events/{event:id}/leave', [EventsController::class, 'leave']);
 });
 
 Route::get('/invite-member/{token}', [InviteMemberController::class, 'accept'])->name('accept');

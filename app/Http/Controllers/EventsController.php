@@ -123,4 +123,14 @@ class EventsController extends Controller
         $event->users()->detach();
         $event->delete();
     }
+
+    public function join(Event $event)
+    {
+        $event->users()->attach(auth()->user()->id);
+    }
+
+    public function leave(Event $event)
+    {
+        $event->users()->detach(auth()->user()->id);
+    }
 }
