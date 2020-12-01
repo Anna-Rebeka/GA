@@ -1,3 +1,3 @@
 <x-master>
-    <notes :notes="{{ $user->notes }}"></notes>
+    <note-index :notes="{{ $user->notes }}"></note-index>
 </x-master>
