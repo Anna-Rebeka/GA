@@ -2059,6 +2059,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user', 'going', 'event'],
   methods: {
@@ -22866,88 +22872,131 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("h2", { staticClass: "font-bold text-2xl mb-4" }, [
-      _vm._v(" " + _vm._s(_vm.event.name) + " ")
-    ]),
-    _vm._v(" "),
-    _vm.event.description
-      ? _c("p", { staticClass: "text-sm" }, [
-          _vm._v("What about: " + _vm._s(_vm.event.description))
-        ])
-      : _vm._e(),
-    _vm._v(" "),
-    _c("div", { staticClass: "mr-4 float-right" }, [
-      _vm.going && !_vm.going.includes(_vm.user.id)
-        ? _c(
-            "button",
-            {
-              staticClass:
-                "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none",
-              on: {
-                click: function($event) {
-                  return _vm.joinEvent()
+  return _c(
+    "div",
+    { staticClass: "rounded-lg border border-gray-100 shadow-lg p-8 mr-2" },
+    [
+      _c("div", { staticClass: "mr-4 float-right" }, [
+        _vm.going && !_vm.going.includes(_vm.user.id)
+          ? _c(
+              "button",
+              {
+                staticClass:
+                  "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none",
+                on: {
+                  click: function($event) {
+                    return _vm.joinEvent()
+                  }
                 }
-              }
-            },
-            [_vm._v("\n            Join\n        ")]
-          )
-        : _vm.event.author_id == _vm.user.id
-        ? _c(
-            "button",
-            {
-              staticClass:
-                "rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none",
-              on: {
-                click: function($event) {
-                  return _vm.checkWithUser()
+              },
+              [_vm._v("\n            Join\n        ")]
+            )
+          : _vm.event.author_id == _vm.user.id
+          ? _c(
+              "button",
+              {
+                staticClass:
+                  "rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none",
+                on: {
+                  click: function($event) {
+                    return _vm.checkWithUser()
+                  }
                 }
-              }
-            },
-            [_vm._v("\n            Delete\n        ")]
-          )
-        : _c(
-            "button",
-            {
-              staticClass:
-                "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-red-200 hover:text-gray-500 hover:bg-red-100 focus:outline-none",
-              on: {
-                click: function($event) {
-                  return _vm.leaveEvent()
+              },
+              [_vm._v("\n            Delete\n        ")]
+            )
+          : _c(
+              "button",
+              {
+                staticClass:
+                  "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-red-200 hover:text-gray-500 hover:bg-red-100 focus:outline-none",
+                on: {
+                  click: function($event) {
+                    return _vm.leaveEvent()
+                  }
                 }
-              }
-            },
-            [_vm._v("\n            Leave\n        ")]
-          )
-    ]),
-    _vm._v(" "),
-    _c("p", [_vm._v("When : " + _vm._s(_vm.event.event_time))]),
-    _vm._v(" "),
-    _c("p", [_vm._v("Where : " + _vm._s(_vm.event.event_place))]),
-    _vm._v(" "),
-    _c(
-      "p",
-      [
-        _vm._v("Who's coming : \n        "),
-        _vm._l(_vm.event.users, function(goingUser) {
-          return _c("ul", { key: goingUser.name }, [
-            _c("li", { staticClass: "flex items-center mb-2" }, [
-              _c("img", {
-                staticClass: "w-12 object-cover rounded-full mr-2",
-                attrs: { src: goingUser.avatar, alt: "" }
-              }),
-              _vm._v(
-                "\n                " + _vm._s(goingUser.name) + "\n            "
-              )
-            ])
+              },
+              [_vm._v("\n            Leave\n        ")]
+            )
+      ]),
+      _vm._v(" "),
+      _c("h2", { staticClass: "font-bold text-2xl mb-4" }, [
+        _vm._v(" " + _vm._s(_vm.event.name) + " ")
+      ]),
+      _vm._v(" "),
+      _vm.event.description
+        ? _c("p", { staticClass: "text-sm mb-2" }, [
+            _vm._v("What about: " + _vm._s(_vm.event.description))
           ])
-        })
-      ],
-      2
-    )
-  ])
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "mb-2 rounded bg-gray-100 p-6 w-2/5 inline-block" },
+        [
+          _c("strong", [_vm._v("When")]),
+          _c("p", { staticClass: "bg-white p-2 rounded" }, [
+            _vm._v(_vm._s(_vm.event.event_time))
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "mb-2 rounded bg-gray-100 p-6 w-2/5 inline-block" },
+        [
+          _c("strong", [_vm._v("Where")]),
+          _c("p", { staticClass: "bg-white p-2 rounded" }, [
+            _vm._v(_vm._s(_vm.event.event_place))
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "py-6 px-6 mr-2 bg-gray-100 rounded" }, [
+        _c(
+          "div",
+          [
+            _vm._m(0),
+            _vm._v(" "),
+            _vm._l(_vm.event.users, function(goingUser) {
+              return _c(
+                "ul",
+                {
+                  key: goingUser.name,
+                  staticClass: "bg-white pt-2 pb-8 rounded"
+                },
+                [
+                  _c("li", { staticClass: "flex items-center -mb-5" }, [
+                    _c("img", {
+                      staticClass: "w-10 object-cover rounded-full mr-2",
+                      attrs: { src: goingUser.avatar, alt: "" }
+                    }),
+                    _vm._v(
+                      "\n                        " +
+                        _vm._s(goingUser.name) +
+                        "\n                    "
+                    )
+                  ])
+                ]
+              )
+            })
+          ],
+          2
+        )
+      ])
+    ]
+  )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", { staticClass: "mb-2" }, [
+      _c("strong", [_vm._v("Who's coming")])
+    ])
+  }
+]
 render._withStripped = true
 
 
