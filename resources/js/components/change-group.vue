@@ -10,7 +10,7 @@
                         </div>
                         <p class="text-gray-700 text-base">
                             <ul>
-                                <li v-for="user in gusers[group.id]" :key="user.name">
+                                <li v-for="user in group.users" :key="user.name">
                                     {{ user.name }}
                                 </li>
                             </ul>       
@@ -36,7 +36,7 @@
 
 <script>
 export default {
-  props: ['user', 'groups', 'gusers'],
+  props: ['user', 'groups'],
   data() {
         return {
             pageOfItems: []

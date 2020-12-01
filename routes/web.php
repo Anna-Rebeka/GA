@@ -8,6 +8,7 @@ use App\Http\Controllers\InviteMemberController;
 use App\Http\Controllers\Auth\InvitedRegisterController;
 use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\NotesController;
+use App\Http\Controllers\EventsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,12 +34,11 @@ Route::middleware('auth')->group(function() {
     Route::get('/profile/{user:username}/edit', [UsersController::class, 'edit']);
     Route::patch('/profile/{user:username}', [UsersController::class, 'update']);
     Route::get('/all-members/{group:id}', [UsersController::class, 'index']);
+    
     Route::get('/{user:username}/notes', [NotesController::class, 'index']);
     Route::post('/{user:username}/notes', [NotesController::class, 'store']);
     Route::delete('/{user}/notes/{id}', [NotesController::class, 'destroy']);
-
-
-
+    
     Route::get('/invite-member', [InviteMemberController::class, 'show'])->name('invite');
     Route::post('/invite-member', [InviteMemberController::class, 'process'])->name('process');
 
@@ -48,6 +48,12 @@ Route::middleware('auth')->group(function() {
     Route::get('/change-group', [GroupsController::class, 'index']);
     Route::get('/activate-group/{id}', [UsersController::class, 'activateGroup']);
 
+    Route::get('/{group:id}/events', [EventsController::class, 'index']);
+    Route::get('/{group:id}/events/{event:id}', [EventsController::class, 'show']);
+    Route::post('/events', [EventsController::class, 'store']);
+    Route::delete('/events/{event:id}', [EventsController::class, 'destroy']);
+    Route::post('/events/{event:id}/join', [EventsController::class, 'join']);
+    Route::post('/events/{event:id}/leave', [EventsController::class, 'leave']);
 });
 
 Route::get('/invite-member/{token}', [InviteMemberController::class, 'accept'])->name('accept');

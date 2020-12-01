@@ -18,8 +18,9 @@ class CreateEventsTable extends Migration
             $table->string('name');
             $table->foreignId('author_id');
             $table->foreignId('group_id');
-            $table->text('description');
-            $table->dateTime('when');
+            $table->string('description');
+            $table->dateTime('event_time');
+            $table->string('event_place', 255);
             $table->timestamps();
 
             $table->foreign('author_id')
