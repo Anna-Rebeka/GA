@@ -16,7 +16,6 @@ class EventsController extends Controller
      */
     public function index(Group $group)
     {
-
         $events = $group->events()->orderBy('event_time')->get();
         $eusers = [];
 
@@ -83,9 +82,15 @@ class EventsController extends Controller
      * @param  \App\Models\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function show(Event $event)
+    public function show(Group $group, Event $event)
     {
-        //
+        $event->users;
+        $event->group;
+        return view('events.show', [
+            'user' => auth()->user(),
+            'going' => $event->users()->pluck('users.id'),
+            'event' => $event
+        ]);
     }
 
     /**
@@ -117,9 +122,8 @@ class EventsController extends Controller
      * @param  \App\Models\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function destroy($group, int $id)
+    public function destroy(Event $event)
     {
-        $event = Event::findOrFail($id);
         $event->users()->detach();
         $event->delete();
     }

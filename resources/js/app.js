@@ -6,6 +6,7 @@ import changeGroup from './components/change-group.vue';
 import groupUsers from './components/group-users.vue';
 import notes from './components/notes.vue';
 import events from './components/group-events.vue';
+import eventShow from './components/event-show.vue';
 import JwPagination from 'jw-vue-pagination';
 
 require('masonry-layout');
@@ -18,6 +19,7 @@ Vue.component('change-group', changeGroup);
 Vue.component('group-users', groupUsers);
 Vue.component('notes', notes);
 Vue.component('events', events);
+Vue.component('event-show', eventShow);
 Vue.component('jw-pagination', JwPagination);
 
 var app = new Vue({

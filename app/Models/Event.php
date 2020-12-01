@@ -17,6 +17,10 @@ class Event extends Model
         'event_time',
         'event_place'
     ];
+    
+    public function group(){
+        return $this->belongsTo(Group::class);
+    }
 
     public function users(){
         return $this->belongsToMany(User::class);

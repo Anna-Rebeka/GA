@@ -49,8 +49,9 @@ Route::middleware('auth')->group(function() {
     Route::get('/activate-group/{id}', [UsersController::class, 'activateGroup']);
 
     Route::get('/{group:id}/events', [EventsController::class, 'index']);
+    Route::get('/{group:id}/events/{event:id}', [EventsController::class, 'show']);
     Route::post('/events', [EventsController::class, 'store']);
-    Route::delete('/{group}/events/{id}', [EventsController::class, 'destroy']);
+    Route::delete('/events/{event:id}', [EventsController::class, 'destroy']);
     Route::post('/events/{event:id}/join', [EventsController::class, 'join']);
     Route::post('/events/{event:id}/leave', [EventsController::class, 'leave']);
 });

@@ -61,15 +61,16 @@
                         >
                     </p>
                 </div>
-                <div class="flex items-center justify-between w-full mb-10 p-2 bg-green-500 shadow text-white" v-if="newEventCreated">
-                    Your event was created! Check it out down below.
-                </div>
                 <button type="submit" class="shadow float-right -mt-6 rounded-lg border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
                     Create an event
                 </button>
             </div>    
         </form>
 
+        <div class="flex items-center justify-between w-full mb-10 p-2 bg-green-500 shadow text-white" v-if="newEventCreated">
+                    Your event was created! Check it out down below.
+        </div>
+        
         <div class="flex flex-col">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -111,14 +112,13 @@
                         </td>
                         <td> 
                             <a 
-                                href="/"
+                                :href="'events/' + event.id"
                                 class="shadow border border-gray-300 rounded-lg py-2 px-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
                                 About
                             </a> 
                         </td>
                         <td> 
                             <div class="ml-4">
-                                
                                 <div v-if="eusers[event.id] && !eusers[event.id].includes(user.id)">
                                     <button 
                                         @click="joinEvent(event)"
@@ -128,7 +128,7 @@
                                 </div>
                                 <div  v-else-if="event.author_id == user.id">
                                     <button 
-                                        @click="destroyEvent(event)"
+                                        @click="checkWithUser(event)"
                                         class="rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none">
                                         Delete
                                     </button> 
@@ -170,9 +170,6 @@ export default {
             newEventCreated: false,
         };
     },
-    mounted(){
-        
-    },
     methods: {
         reload() {
             this.$forceUpdate();
@@ -185,8 +182,9 @@ export default {
         submit() {
             axios.post('/events', this.fields).then(response => {
                 this.fields = {};
+                this.createNewEvent = false;
                 this.newEventCreated = true;
-                this.savedEvents.unshift(response.data);                
+                this.savedEvents.unshift(response.data);      
             }).catch(error => {
                 if (error.response.status == 422){
                     this.errors = error.response.data.errors;
@@ -211,7 +209,7 @@ export default {
 
         leaveEvent($event) {
             axios.post('/events/' + $event.id + '/leave').then(response => {
-                var index = this.user.id;
+                var index = this.eusers[$event.id].indexOf(this.user.id);
                 this.eusers[$event.id].splice(index, 1);
                 this.reload();
             }).catch(error => {
@@ -223,8 +221,14 @@ export default {
             });
         },
 
+        checkWithUser($event) {
+            if (confirm("Are you sure? This action is irreversible.")) {
+                this.destroyEvent($event);
+            }
+        },
+
         destroyEvent($event) {
-            axios.delete('events/' + $event.id).then(response => {
+            axios.delete('/events/' + $event.id).then(response => {
                 this.savedEvents = this.savedEvents.filter(function(e) { return e !== $event })
             });
         }
