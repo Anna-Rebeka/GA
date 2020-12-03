@@ -1912,7 +1912,98 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['user', 'event'],
+  data: function data() {
+    return {
+      comments: [],
+      pageOfItems: [],
+      csrf: document.head.querySelector('meta[name="csrf-token"]').content
+    };
+  },
+  mounted: function mounted() {
+    this.getComments();
+    document.getElementById("commentArea").addEventListener("keypress", this.submitOnEnter);
+  },
+  methods: {
+    getComments: function getComments() {
+      var _this = this;
+
+      axios.get('/events/' + this.event.id + '/comments').then(function (response) {
+        _this.comments = response.data;
+        console.log(_this.comments);
+      })["catch"](function (error) {
+        console.log(error.message);
+      });
+    },
+    onChangePage: function onChangePage(pageOfItems) {
+      this.pageOfItems = pageOfItems;
+    },
+    submitOnEnter: function submitOnEnter(event) {
+      if (event.which === 13) {
+        event.target.form.dispatchEvent(new Event("submit", {
+          cancelable: true
+        }));
+        event.preventDefault();
+      }
+    },
+    submit: function submit() {
+      var _this2 = this;
+
+      var commentArea = document.getElementById("commentArea").value;
+      document.getElementById("commentArea").value = "";
+      console.log(this.event.id);
+      axios.post('/events/' + this.event.id + '/comments', {
+        event_id: this.event.id,
+        text: commentArea
+      }).then(function (response) {
+        response.data['user'] = _this2.user;
+
+        _this2.comments.unshift(response.data);
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this2.errors = error.response.data.errors;
+          console.log(_this2.errors);
+        }
+
+        console.log(error.message);
+      });
+    }
+  }
+});
 
 /***/ }),
 
@@ -1942,6 +2033,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1953,14 +2067,14 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     var handleEscape = function handleEscape(e) {
-      if (e.key === 'Esc' || e.key === 'Escape') {
+      if (e.key === "Esc" || e.key === "Escape") {
         _this.isOpen = false;
       }
     };
 
-    document.addEventListener('keydown', handleEscape);
-    this.$once('hook:beforeDestroy', function () {
-      document.removeEventListener('keydown', handleEscape);
+    document.addEventListener("keydown", handleEscape);
+    this.$once("hook:beforeDestroy", function () {
+      document.removeEventListener("keydown", handleEscape);
     });
   }
 });
@@ -22698,7 +22812,98 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("welcome")])
+  return _c("div", { staticClass: "mx-8" }, [
+    _c("h3", { staticClass: "font-bold mb-4 text-underlined" }, [
+      _vm._v(" Comments section ")
+    ]),
+    _vm._v(" "),
+    _c(
+      "form",
+      {
+        staticClass: "mb-4",
+        on: {
+          submit: function($event) {
+            $event.preventDefault()
+            return _vm.submit($event)
+          }
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "bg-white shadow border rounded-lg h-20 py-3 px-8" },
+          [
+            _c("input", {
+              attrs: { type: "hidden", name: "_token" },
+              domProps: { value: _vm.csrf }
+            }),
+            _vm._v(" "),
+            _c("textarea", {
+              staticClass: "w-full resize-none focus:outline-none",
+              attrs: {
+                id: "commentArea",
+                name: "text",
+                placeholder: "Write a comment..."
+              }
+            })
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "border border-gray-300 rounded-lg mb-2" },
+      _vm._l(_vm.pageOfItems, function(comment) {
+        return _c(
+          "div",
+          {
+            key: comment.id,
+            staticClass: "flex p-4 border-b border-b-grey-400"
+          },
+          [
+            _c("div", { staticClass: "mr-2" }, [
+              _c("img", {
+                staticClass: "rounded-full object-cover h-15 w-15 mr-2",
+                attrs: { src: comment.user.avatar, alt: "avatar" }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "w-full" }, [
+              _c("h5", { staticClass: "font-bold mb-2" }, [
+                _vm._v(" " + _vm._s(comment.user.name) + " ")
+              ]),
+              _vm._v(" "),
+              _c("p", { staticClass: "text-sm mb-3 break-words" }, [
+                _vm._v(
+                  "\n                        " +
+                    _vm._s(comment.text) +
+                    "\n                    "
+                )
+              ]),
+              _vm._v(" "),
+              _c("p", { staticClass: "text-xs float-right" }, [
+                _vm._v(" " + _vm._s(comment.created_at) + " ")
+              ])
+            ])
+          ]
+        )
+      }),
+      0
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "text-center" },
+      [
+        _c("jw-pagination", {
+          attrs: { items: _vm.comments, pageSize: 10 },
+          on: { changePage: _vm.onChangePage }
+        })
+      ],
+      1
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -22773,9 +22978,9 @@ var render = function() {
               {
                 staticClass:
                   "block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white",
-                attrs: { href: "#" }
+                attrs: { href: "/create-group" }
               },
-              [_vm._v("Account settings")]
+              [_vm._v("Create a new group")]
             ),
             _vm._v(" "),
             _c("form", { attrs: { action: "/logout", method: "post" } }, [
@@ -22790,7 +22995,7 @@ var render = function() {
                   staticClass:
                     "text-left block px-4 py-2 text-gray-800 h-full w-full outline-none border-none hover:bg-indigo-500 hover:text-white"
                 },
-                [_vm._v("Logout")]
+                [_vm._v("\n        Logout\n      ")]
               )
             ])
           ]
@@ -22916,7 +23121,7 @@ var render = function() {
                 return _c("ul", { key: goingUser.name }, [
                   _c("li", { staticClass: "flex items-center ml-2 mb-2" }, [
                     _c("img", {
-                      staticClass: "w-10 object-cover rounded-full mr-2",
+                      staticClass: "w-10 h-10 object-cover rounded-full mr-2",
                       attrs: { src: goingUser.avatar, alt: "" }
                     }),
                     _vm._v(
@@ -22946,7 +23151,7 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
-      _c("event-comments")
+      _c("event-comments", { attrs: { user: this.user, event: this.event } })
     ],
     1
   )
@@ -23689,7 +23894,7 @@ var render = function() {
                   _c("a", { attrs: { href: "/profile/" + member.username } }, [
                     _c("div", { staticClass: "flex items-center" }, [
                       _c("img", {
-                        staticClass: "w-10 h-10 rounded-full",
+                        staticClass: "w-10 h-10 object-cover rounded-full",
                         attrs: { src: member.avatar, alt: member.name }
                       }),
                       _vm._v(" "),
@@ -23944,7 +24149,7 @@ var render = function() {
                 },
                 [
                   _c("img", {
-                    staticClass: "lg:w-40 lg:h-40 w-20 h-20",
+                    staticClass: "lg:w-40 lg:h-40 w-20 h-20 object-cover",
                     attrs: { src: user.avatar, alt: user.username }
                   }),
                   _vm._v(" "),

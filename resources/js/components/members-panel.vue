@@ -6,7 +6,7 @@
                   class="p-4 mb-1 flex justify-between items-center">
                   <a :href="'/profile/' + member.username">
                       <div class="flex items-center">
-                          <img class="w-10 h-10 rounded-full" :src="member.avatar" :alt="member.name">
+                          <img class="w-10 h-10 object-cover rounded-full" :src="member.avatar" :alt="member.name">
                           <p class="ml-2 text-gray-700 font-semibold font-sans tracking-wide">{{ member.name }}</p>
                       </div>
                   </a>

@@ -31,7 +31,7 @@
             <div class="bg-white rounded mb-4 pt-4 pb-2" >
                 <ul v-for="goingUser in pageOfItems" :key="goingUser.name">
                     <li class="flex items-center ml-2 mb-2">
-                        <img class="w-10 object-cover rounded-full mr-2" :src="goingUser.avatar" alt="">
+                        <img class="w-10 h-10 object-cover rounded-full mr-2" :src="goingUser.avatar" alt="">
                         {{ goingUser.name }}
                     </li>
                 </ul>
@@ -41,7 +41,7 @@
             </div>
         </div>
     </div>
-    <event-comments></event-comments>
+    <event-comments :user ="this.user" :event="this.event"></event-comments>
 </div>
     
 </template>
@@ -84,7 +84,7 @@ export default {
                     }
                     console.log(error.message);
                 });
-            },
+        },
 
         leaveEvent() {
             axios.post('/events/' + this.event.id + '/leave').then(response => {
