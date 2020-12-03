@@ -25,7 +25,7 @@
                         <p class="text-sm mb-3 break-words">
                             {{ comment.text }}
                         </p>
-                        <p class="text-xs float-right"> {{ comment.created_at }} </p>
+                        <p class="text-xs float-right"> {{ new Date(comment.created_at) | dateFormat('HH:mm , DD.MM.YYYY') }} </p>
                     </div>
                 </div>
             </div>
@@ -56,7 +56,6 @@ export default {
         getComments(){
             axios.get('/events/' + this.event.id + '/comments').then(response => {
                 this.comments = response.data;
-                console.log(this.comments);
             }).catch(error => {
                 console.log(error.message);
             });
@@ -76,15 +75,15 @@ export default {
         submit(){
             var commentArea = document.getElementById("commentArea").value;
             document.getElementById("commentArea").value = "";
-            console.log(this.event.id);
             axios.post('/events/' + this.event.id + '/comments', {event_id: this.event.id, text: commentArea}).then(response => {
-                response.data['user'] = this.user;
+                response.data['user'] = this.user;    
                 this.comments.unshift(response.data);
             }).catch(error => {
+                /*
                 if (error.response.status == 422){
                     this.errors = error.response.data.errors;
                     console.log(this.errors);
-                }
+                }*/
                 console.log(error.message);
             });
         }

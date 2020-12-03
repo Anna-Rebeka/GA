@@ -13,6 +13,7 @@ class EventComments extends Model
         'user_id',
         'event_id',
         'text',
+        'created_at'
     ];
 
     public function event(){

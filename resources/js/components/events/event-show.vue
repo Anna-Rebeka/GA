@@ -23,7 +23,7 @@
         </div>
         <h2 class="font-bold text-2xl mb-4"> {{ event.name }} </h2>
         <p v-if="event.description" class="text-sm mb-2">What about: {{ event.description }}</p>
-            <div class="mb-2 rounded bg-gray-100 p-6 w-2/5 inline-block"> <strong>When</strong><p class="bg-white p-2 rounded">{{ event.event_time }}</p></div>   
+            <div class="mb-2 rounded bg-gray-100 p-6 w-2/5 inline-block"> <strong>When</strong><p class="bg-white p-2 rounded">{{  new Date(event.event_time) | dateFormat('DD.MM.YYYY , HH:mm') }}</p></div>   
             <div class="mb-2 rounded bg-gray-100 p-6 w-2/5 inline-block"> <strong>Where</strong><p class="bg-white p-2 rounded">{{ event.event_place }}</p></div>   
         
         <div class="pt-6 px-6 mr-2 bg-gray-100 rounded">

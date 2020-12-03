@@ -11,8 +11,12 @@ import eventComments from './components/comments/event-comments.vue';
 
 import JwPagination from 'jw-vue-pagination';
 
+import VueFilterDateFormat from 'vue-filter-date-format';
+
 require('masonry-layout');
 require('./bootstrap');
+
+Vue.use(VueFilterDateFormat);
 
 Vue.component('dropdown', dropdown);
 Vue.component('group-panel', groupPanel);
