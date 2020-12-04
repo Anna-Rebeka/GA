@@ -97,7 +97,7 @@
                     <tr v-for="event in pageOfItems" :key="event.id">
                         <td class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">
                             <div class="text-sm font-medium text-gray-900">
-                                {{ event.event_time }}
+                                {{  new Date(event.event_time) | dateFormat('DD.MM.YYYY , HH:mm') }}
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">

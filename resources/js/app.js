@@ -7,10 +7,16 @@ import groupUsers from './components/users/group-members.vue';
 import notes from './components/notes/note-index.vue';
 import events from './components/events/group-events.vue';
 import eventShow from './components/events/event-show.vue';
+import eventComments from './components/comments/event-comments.vue';
+
 import JwPagination from 'jw-vue-pagination';
+
+import VueFilterDateFormat from 'vue-filter-date-format';
 
 require('masonry-layout');
 require('./bootstrap');
+
+Vue.use(VueFilterDateFormat);
 
 Vue.component('dropdown', dropdown);
 Vue.component('group-panel', groupPanel);
@@ -20,6 +26,7 @@ Vue.component('group-members', groupUsers);
 Vue.component('note-index', notes);
 Vue.component('group-events', events);
 Vue.component('event-show', eventShow);
+Vue.component('event-comments', eventComments);
 Vue.component('jw-pagination', JwPagination);
 
 var app = new Vue({

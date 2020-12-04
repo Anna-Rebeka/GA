@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\InvitedRegisterController;
 use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\NotesController;
 use App\Http\Controllers\EventsController;
+use App\Http\Controllers\EventCommentsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,6 +55,10 @@ Route::middleware('auth')->group(function() {
     Route::delete('/events/{event:id}', [EventsController::class, 'destroy']);
     Route::post('/events/{event:id}/join', [EventsController::class, 'join']);
     Route::post('/events/{event:id}/leave', [EventsController::class, 'leave']);
+
+    Route::get('/events/{event:id}/comments', [EventCommentsController::class, 'index']);
+    Route::post('/events/{event:id}/comments', [EventCommentsController::class, 'store']);
+
 });
 
 Route::get('/invite-member/{token}', [InviteMemberController::class, 'accept'])->name('accept');

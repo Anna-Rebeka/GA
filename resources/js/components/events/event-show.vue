@@ -1,5 +1,6 @@
 <template>
-    <div class="rounded-lg border border-gray-100 shadow-lg p-8 mr-2">
+<div>
+    <div class="rounded-lg border border-gray-100 shadow-lg p-8 mr-2 mb-8">
         <div class="mr-4 float-right">
             <button 
                 v-if="going && !going.includes(user.id)"
@@ -22,34 +23,47 @@
         </div>
         <h2 class="font-bold text-2xl mb-4"> {{ event.name }} </h2>
         <p v-if="event.description" class="text-sm mb-2">What about: {{ event.description }}</p>
-            <div class="mb-2 rounded bg-gray-100 p-6 w-2/5 inline-block"> <strong>When</strong><p class="bg-white p-2 rounded">{{ event.event_time }}</p></div>   
+            <div class="mb-2 rounded bg-gray-100 p-6 w-2/5 inline-block"> <strong>When</strong><p class="bg-white p-2 rounded">{{  new Date(event.event_time) | dateFormat('DD.MM.YYYY , HH:mm') }}</p></div>   
             <div class="mb-2 rounded bg-gray-100 p-6 w-2/5 inline-block"> <strong>Where</strong><p class="bg-white p-2 rounded">{{ event.event_place }}</p></div>   
         
-        <div class="py-6 px-6 mr-2 bg-gray-100 rounded">
-            <div>
-                <p class="mb-2"> <strong>Who's coming</strong></p>
-                    <ul class="bg-white pt-2 pb-8 rounded" v-for="goingUser in event.users" :key="goingUser.name">
-                        <li class="flex items-center -mb-5">
-                            <img class="w-10 object-cover rounded-full mr-2" :src="goingUser.avatar" alt="">
-                            {{ goingUser.name }}
-                        </li>
-                    </ul>
+        <div class="pt-6 px-6 mr-2 bg-gray-100 rounded">
+            <p class="mb-2"> <strong>Who's coming</strong></p>
+            <div class="bg-white rounded mb-4 pt-4 pb-2" >
+                <ul v-for="goingUser in pageOfItems" :key="goingUser.name">
+                    <li class="flex items-center ml-2 mb-2">
+                        <img class="w-10 h-10 object-cover rounded-full mr-2" :src="goingUser.avatar" alt="">
+                        {{ goingUser.name }}
+                    </li>
+                </ul>
+            </div>
+            <div class="text-center">
+                <jw-pagination class="text-center" :items="savedUsers" @changePage="onChangePage" :pageSize="10"></jw-pagination>
             </div>
         </div>
-        
-        
-        
-        
     </div>
+    <event-comments :user ="this.user" :event="this.event"></event-comments>
+</div>
+    
 </template>
 
 <script>
 export default {
     props: ['user', 'going','event'],
+
+     data() {
+        return {
+            savedUsers: this.event.users,
+            pageOfItems: [],
+        };
+    },
     
     methods: {
         reload() {
             this.$forceUpdate();
+        },
+
+        onChangePage(pageOfItems) {
+            this.pageOfItems = pageOfItems;
         },
 
         checkWithUser() {
@@ -70,7 +84,7 @@ export default {
                     }
                     console.log(error.message);
                 });
-            },
+        },
 
         leaveEvent() {
             axios.post('/events/' + this.event.id + '/leave').then(response => {
