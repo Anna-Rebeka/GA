@@ -1,13 +1,23 @@
 <template>
     <div>
-        <select
-            id="filter"
-            class="rounded-lg bg-white border border-gray-300 text-gray-700 px-4 pr-8 mb-2 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
-            <option value="all">All</option>
-            <option value="created">Created by me</option>
-            <option value="joined">Joined</option>
-            <option value="pending">Pending</option>
-        </select>
+        <div class="space-x-2 w-full mb-4">
+            <select
+                id="filter"
+                class="inline-block rounded-lg bg-white border border-gray-300 text-gray-700 px-4 pr-8 h-8 mr-2 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
+                <option value="all">All</option>
+                <option value="created">Created by me</option>
+                <option value="joined">Joined</option>
+                <option value="pending">Pending</option>
+            </select>
+            <div class="inline-block relative text-gray-600 w-1/3">
+                <input class="rounded-lg bg-white border border-gray-300 text-gray-500 w-full h-8 px-5 pr-10 rounded-lg text-sm focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500"
+                    id="searchBar" type="search" name="searchBar" placeholder="Search by name">
+                <button id="searchButton" type="submit" class="absolute right-0 top-2 mr-4 bg-transparent focus:outline-none">
+                    <img src="/img/search.png" width="20" height="20" alt="submit" />
+                </button>
+            </div>
+        </div>
+        
         <div class="flex flex-col">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -105,18 +115,46 @@ export default {
             newEventCreated: false,
             filtered: "all",
             select: null,
+            searchBar: null,
         };
     },
 
     mounted(){
         this.select = document.getElementById("filter");
         this.select.addEventListener("click", this.selected);
+        document.getElementById("searchButton").addEventListener("click", this.findEventByName);
+        this.searchBar = document.getElementById("searchBar");
+        this.searchBar.addEventListener("keypress", this.searchOnEnter);
     },
 
     methods: {
+        searchOnEnter(event){
+            if(event.which === 13){
+                this.findEventByName();
+                event.preventDefault();     
+            }
+        },
+
+        findEventByName(){
+            if(this.searchBar.value == ""){
+                this.savedEvents = this.allEvents;
+                return;
+            }
+            var findBy = this.searchBar.value;
+            this.savedEvents = this.savedEvents.filter(function(e) {
+                return e.name.toLowerCase().includes(findBy.toLowerCase());
+            });
+        },
+
         selected(){
+            if(this.searchBar.value != ""){
+                this.savedEvents = this.allEvents;
+                this.searchBar.value = "";
+                return;
+            }
             if(this.select.value != this.filtered){
                 this.savedEvents = this.allEvents;
+                this.searchBar.value = "";
                 if(this.select.value === "created"){
                     this.filterCreated();
                 }

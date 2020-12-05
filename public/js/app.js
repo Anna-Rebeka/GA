@@ -2312,6 +2312,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user', 'eusers', 'events'],
   data: function data() {
@@ -2322,17 +2332,45 @@ __webpack_require__.r(__webpack_exports__);
       createNewEvent: false,
       newEventCreated: false,
       filtered: "all",
-      select: null
+      select: null,
+      searchBar: null
     };
   },
   mounted: function mounted() {
     this.select = document.getElementById("filter");
     this.select.addEventListener("click", this.selected);
+    document.getElementById("searchButton").addEventListener("click", this.findEventByName);
+    this.searchBar = document.getElementById("searchBar");
+    this.searchBar.addEventListener("keypress", this.searchOnEnter);
   },
   methods: {
+    searchOnEnter: function searchOnEnter(event) {
+      if (event.which === 13) {
+        this.findEventByName();
+        event.preventDefault();
+      }
+    },
+    findEventByName: function findEventByName() {
+      if (this.searchBar.value == "") {
+        this.savedEvents = this.allEvents;
+        return;
+      }
+
+      var findBy = this.searchBar.value;
+      this.savedEvents = this.savedEvents.filter(function (e) {
+        return e.name.toLowerCase().includes(findBy.toLowerCase());
+      });
+    },
     selected: function selected() {
+      if (this.searchBar.value != "") {
+        this.savedEvents = this.allEvents;
+        this.searchBar.value = "";
+        return;
+      }
+
       if (this.select.value != this.filtered) {
         this.savedEvents = this.allEvents;
+        this.searchBar.value = "";
 
         if (this.select.value === "created") {
           this.filterCreated();
@@ -23632,25 +23670,59 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "select",
-      {
-        staticClass:
-          "rounded-lg bg-white border border-gray-300 text-gray-700 px-4 pr-8 mb-2 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500",
-        attrs: { id: "filter" }
-      },
-      [
-        _c("option", { attrs: { value: "all" } }, [_vm._v("All")]),
+    return _c("div", { staticClass: "space-x-2 w-full mb-4" }, [
+      _c(
+        "select",
+        {
+          staticClass:
+            "inline-block rounded-lg bg-white border border-gray-300 text-gray-700 px-4 pr-8 h-8 mr-2 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500",
+          attrs: { id: "filter" }
+        },
+        [
+          _c("option", { attrs: { value: "all" } }, [_vm._v("All")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "created" } }, [
+            _vm._v("Created by me")
+          ]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "joined" } }, [_vm._v("Joined")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "pending" } }, [_vm._v("Pending")])
+        ]
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "inline-block relative text-gray-600 w-1/3" }, [
+        _c("input", {
+          staticClass:
+            "rounded-lg bg-white border border-gray-300 text-gray-500 w-full h-8 px-5 pr-10 rounded-lg text-sm focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500",
+          attrs: {
+            id: "searchBar",
+            type: "search",
+            name: "searchBar",
+            placeholder: "Search by name"
+          }
+        }),
         _vm._v(" "),
-        _c("option", { attrs: { value: "created" } }, [
-          _vm._v("Created by me")
-        ]),
-        _vm._v(" "),
-        _c("option", { attrs: { value: "joined" } }, [_vm._v("Joined")]),
-        _vm._v(" "),
-        _c("option", { attrs: { value: "pending" } }, [_vm._v("Pending")])
-      ]
-    )
+        _c(
+          "button",
+          {
+            staticClass:
+              "absolute right-0 top-2 mr-4 bg-transparent focus:outline-none",
+            attrs: { id: "searchButton", type: "submit" }
+          },
+          [
+            _c("img", {
+              attrs: {
+                src: "/img/search.png",
+                width: "20",
+                height: "20",
+                alt: "submit"
+              }
+            })
+          ]
+        )
+      ])
+    ])
   },
   function() {
     var _vm = this
