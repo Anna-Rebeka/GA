@@ -1,5 +1,14 @@
 <template>
-    <div class="flex flex-col">
+    <div>
+        <select
+            id="filter"
+            class="rounded-lg bg-white border border-gray-300 text-gray-700 px-4 pr-8 mb-2 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
+            <option value="all">All</option>
+            <option value="created">Created by me</option>
+            <option value="joined">Joined</option>
+            <option value="pending">Pending</option>
+        </select>
+        <div class="flex flex-col">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
         <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
@@ -79,7 +88,9 @@
         </div>
         </div>
         </div>
+        </div>
     </div>
+    
 </template>
 
 <script>
@@ -87,13 +98,72 @@ export default {
     props: ['user', 'eusers', 'events'],
     data() {
         return {
+            allEvents: this.events,
             savedEvents: this.events,
             pageOfItems: [],
             createNewEvent: false,
             newEventCreated: false,
+            filtered: "all",
+            select: null,
         };
     },
+
+    mounted(){
+        this.select = document.getElementById("filter");
+        this.select.addEventListener("click", this.selected);
+    },
+
     methods: {
+        selected(){
+            if(this.select.value != this.filtered){
+                this.savedEvents = this.allEvents;
+                if(this.select.value === "created"){
+                    this.filterCreated();
+                }
+                else if(this.select.value === "joined"){
+                    this.filterJoined();
+                }
+                else if(this.select.value === "pending"){
+                    this.filterPending();
+                }
+                this.filtered = this.select.value;
+            }
+        },
+
+        filterCreated(){
+            var uid = this.user.id;
+            this.savedEvents = this.savedEvents.filter(function(e) {
+                return e.author_id == uid;
+            });
+        },
+
+        filterJoined(){
+            var uid = this.user.id;
+            var eventUsers = [];
+            if(this.eusers){
+                eventUsers = this.eusers;
+            }
+            this.savedEvents = this.savedEvents.filter(function(e) {
+                if(eventUsers[e.id]){
+                    return eventUsers[e.id].includes(uid) || e.author_id == uid;
+                }
+            });
+        },
+
+        filterPending(){
+            var uid = this.user.id;
+            var eventUsers = [];
+            if(this.eusers){
+                eventUsers = this.eusers;
+            }
+            this.savedEvents = this.savedEvents.filter(function(e) {
+                if(eventUsers[e.id]){
+                    return !eventUsers[e.id].includes(uid) && e.author_id != uid;
+                }
+                
+            });
+        },
+
         reload() {
             this.$forceUpdate();
          },
@@ -137,7 +207,8 @@ export default {
 
         destroyEvent($event) {
             axios.delete('/events/' + $event.id).then(response => {
-                this.savedEvents = this.savedEvents.filter(function(e) { return e !== $event })
+                this.allEvents = this.allEvents.filter(function(e) { return e != $event })
+                this.savedEvents = this.allEvents;
             });
         }
     },

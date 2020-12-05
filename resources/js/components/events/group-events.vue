@@ -71,7 +71,7 @@
                     Your event was created! Check it out down below.
         </div>
         
-        <events-table :user="this.user" :eusers="this.eusers" :events="this.events"></events-table>
+        <events-table :user="user" :eusers="eusers" :events="events"></events-table>
     </div>
 </template>
 
@@ -93,12 +93,10 @@ export default {
                 this.fields = {};
                 this.createNewEvent = false;
                 this.newEventCreated = true;
-                this.events.unshift(response.data);      
+                this.events.unshift(response.data);    
+                this.eusers[response.data.id] = [response.data.author_id];
+
             }).catch(error => {
-                if (error.response.status == 422){
-                    this.errors = error.response.data.errors;
-                    console.log(this.errors);
-                }
                 console.log(error.message);
             });
         },
