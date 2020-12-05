@@ -2301,17 +2301,122 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user', 'eusers', 'events'],
   data: function data() {
     return {
+      allEvents: this.events,
       savedEvents: this.events,
       pageOfItems: [],
       createNewEvent: false,
-      newEventCreated: false
+      newEventCreated: false,
+      filtered: "all",
+      select: null,
+      searchBar: null
     };
   },
+  mounted: function mounted() {
+    this.select = document.getElementById("filter");
+    this.select.addEventListener("click", this.selected);
+    document.getElementById("searchButton").addEventListener("click", this.findEventByName);
+    this.searchBar = document.getElementById("searchBar");
+    this.searchBar.addEventListener("keypress", this.searchOnEnter);
+  },
   methods: {
+    searchOnEnter: function searchOnEnter(event) {
+      if (event.which === 13) {
+        this.findEventByName();
+        event.preventDefault();
+      }
+    },
+    findEventByName: function findEventByName() {
+      if (this.searchBar.value == "") {
+        this.savedEvents = this.allEvents;
+        return;
+      }
+
+      var findBy = this.searchBar.value;
+      this.savedEvents = this.savedEvents.filter(function (e) {
+        return e.name.toLowerCase().includes(findBy.toLowerCase());
+      });
+    },
+    selected: function selected() {
+      if (this.searchBar.value != "") {
+        this.savedEvents = this.allEvents;
+        this.searchBar.value = "";
+        return;
+      }
+
+      if (this.select.value != this.filtered) {
+        this.savedEvents = this.allEvents;
+        this.searchBar.value = "";
+
+        if (this.select.value === "created") {
+          this.filterCreated();
+        } else if (this.select.value === "joined") {
+          this.filterJoined();
+        } else if (this.select.value === "pending") {
+          this.filterPending();
+        }
+
+        this.filtered = this.select.value;
+      }
+    },
+    filterCreated: function filterCreated() {
+      var uid = this.user.id;
+      this.savedEvents = this.savedEvents.filter(function (e) {
+        return e.author_id == uid;
+      });
+    },
+    filterJoined: function filterJoined() {
+      var uid = this.user.id;
+      var eventUsers = [];
+
+      if (this.eusers) {
+        eventUsers = this.eusers;
+      }
+
+      this.savedEvents = this.savedEvents.filter(function (e) {
+        if (eventUsers[e.id]) {
+          return eventUsers[e.id].includes(uid) || e.author_id == uid;
+        }
+      });
+    },
+    filterPending: function filterPending() {
+      var uid = this.user.id;
+      var eventUsers = [];
+
+      if (this.eusers) {
+        eventUsers = this.eusers;
+      }
+
+      this.savedEvents = this.savedEvents.filter(function (e) {
+        if (eventUsers[e.id]) {
+          return !eventUsers[e.id].includes(uid) && e.author_id != uid;
+        }
+      });
+    },
     reload: function reload() {
       this.$forceUpdate();
     },
@@ -2361,9 +2466,10 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       axios["delete"]('/events/' + $event.id).then(function (response) {
-        _this3.savedEvents = _this3.savedEvents.filter(function (e) {
-          return e !== $event;
+        _this3.allEvents = _this3.allEvents.filter(function (e) {
+          return e != $event;
         });
+        _this3.savedEvents = _this3.allEvents;
       });
     }
   }
@@ -2478,12 +2584,9 @@ __webpack_require__.r(__webpack_exports__);
         _this.newEventCreated = true;
 
         _this.events.unshift(response.data);
-      })["catch"](function (error) {
-        if (error.response.status == 422) {
-          _this.errors = error.response.data.errors;
-          console.log(_this.errors);
-        }
 
+        _this.eusers[response.data.id] = [response.data.author_id];
+      })["catch"](function (error) {
         console.log(error.message);
       });
     }
@@ -23361,203 +23464,266 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "flex flex-col" }, [
-    _c("div", { staticClass: "-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8" }, [
-      _c(
-        "div",
-        {
-          staticClass:
-            "py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8"
-        },
-        [
-          _c(
-            "div",
-            {
-              staticClass:
-                "shadow overflow-hidden border-b border-gray-200 sm:rounded-lg"
-            },
-            [
-              _c(
-                "table",
-                { staticClass: "min-w-full divide-y divide-gray-200" },
-                [
-                  _vm._m(0),
-                  _vm._v(" "),
-                  _c(
-                    "tbody",
-                    { staticClass: "bg-white divide-y divide-gray-200" },
-                    _vm._l(_vm.pageOfItems, function(event) {
-                      return _c("tr", { key: event.id }, [
-                        _c(
-                          "td",
-                          {
-                            staticClass:
-                              "px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
-                          },
-                          [
+  return _c("div", [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "flex flex-col" }, [
+      _c("div", { staticClass: "-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8" }, [
+        _c(
+          "div",
+          {
+            staticClass:
+              "py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8"
+          },
+          [
+            _c(
+              "div",
+              {
+                staticClass:
+                  "shadow overflow-hidden border-b border-gray-200 sm:rounded-lg"
+              },
+              [
+                _c(
+                  "table",
+                  { staticClass: "min-w-full divide-y divide-gray-200" },
+                  [
+                    _vm._m(1),
+                    _vm._v(" "),
+                    _c(
+                      "tbody",
+                      { staticClass: "bg-white divide-y divide-gray-200" },
+                      _vm._l(_vm.pageOfItems, function(event) {
+                        return _c("tr", { key: event.id }, [
+                          _c(
+                            "td",
+                            {
+                              staticClass:
+                                "px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
+                            },
+                            [
+                              _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "text-sm font-medium text-gray-900"
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                            " +
+                                      _vm._s(
+                                        _vm._f("dateFormat")(
+                                          new Date(event.event_time),
+                                          "DD.MM.YYYY , HH:mm"
+                                        )
+                                      ) +
+                                      "\n                        "
+                                  )
+                                ]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "td",
+                            { staticClass: "px-6 py-4 whitespace-nowrap" },
+                            [
+                              _c(
+                                "div",
+                                { staticClass: "text-sm text-gray-900" },
+                                [
+                                  _vm._v(
+                                    "\n                                " +
+                                      _vm._s(event.name) +
+                                      "\n                        "
+                                  )
+                                ]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "td",
+                            { staticClass: "px-6 py-4 whitespace-nowrap" },
+                            [
+                              _c(
+                                "div",
+                                { staticClass: "text-sm text-gray-900" },
+                                [
+                                  _vm._v(
+                                    "\n                                " +
+                                      _vm._s(event.event_place) +
+                                      "\n                        "
+                                  )
+                                ]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c("td", [
                             _c(
-                              "div",
+                              "a",
                               {
-                                staticClass: "text-sm font-medium text-gray-900"
+                                staticClass:
+                                  "shadow border border-gray-300 rounded-lg py-2 px-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+                                attrs: { href: "events/" + event.id }
                               },
                               [
                                 _vm._v(
-                                  "\n                            " +
-                                    _vm._s(
-                                      _vm._f("dateFormat")(
-                                        new Date(event.event_time),
-                                        "DD.MM.YYYY , HH:mm"
-                                      )
-                                    ) +
-                                    "\n                        "
+                                  "\n                            About\n                        "
                                 )
                               ]
                             )
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "td",
-                          { staticClass: "px-6 py-4 whitespace-nowrap" },
-                          [
-                            _c(
-                              "div",
-                              { staticClass: "text-sm text-gray-900" },
-                              [
-                                _vm._v(
-                                  "\n                                " +
-                                    _vm._s(event.name) +
-                                    "\n                        "
-                                )
-                              ]
-                            )
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "td",
-                          { staticClass: "px-6 py-4 whitespace-nowrap" },
-                          [
-                            _c(
-                              "div",
-                              { staticClass: "text-sm text-gray-900" },
-                              [
-                                _vm._v(
-                                  "\n                                " +
-                                    _vm._s(event.event_place) +
-                                    "\n                        "
-                                )
-                              ]
-                            )
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c("td", [
-                          _c(
-                            "a",
-                            {
-                              staticClass:
-                                "shadow border border-gray-300 rounded-lg py-2 px-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
-                              attrs: { href: "events/" + event.id }
-                            },
-                            [
-                              _vm._v(
-                                "\n                            About\n                        "
-                              )
-                            ]
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("td", [
-                          _c("div", { staticClass: "ml-4" }, [
-                            _vm.eusers[event.id] &&
-                            !_vm.eusers[event.id].includes(_vm.user.id)
-                              ? _c("div", [
-                                  _c(
-                                    "button",
-                                    {
-                                      staticClass:
-                                        "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none",
-                                      on: {
-                                        click: function($event) {
-                                          return _vm.joinEvent(event)
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _c("div", { staticClass: "ml-4" }, [
+                              _vm.eusers[event.id] &&
+                              !_vm.eusers[event.id].includes(_vm.user.id)
+                                ? _c("div", [
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass:
+                                          "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none",
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.joinEvent(event)
+                                          }
                                         }
-                                      }
-                                    },
-                                    [
-                                      _vm._v(
-                                        "\n                                    Join\n                                "
-                                      )
-                                    ]
-                                  )
-                                ])
-                              : event.author_id == _vm.user.id
-                              ? _c("div", [
-                                  _c(
-                                    "button",
-                                    {
-                                      staticClass:
-                                        "rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none",
-                                      on: {
-                                        click: function($event) {
-                                          return _vm.checkWithUser(event)
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                    Join\n                                "
+                                        )
+                                      ]
+                                    )
+                                  ])
+                                : event.author_id == _vm.user.id
+                                ? _c("div", [
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass:
+                                          "rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none",
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.checkWithUser(event)
+                                          }
                                         }
-                                      }
-                                    },
-                                    [
-                                      _vm._v(
-                                        "\n                                    Delete\n                                "
-                                      )
-                                    ]
-                                  )
-                                ])
-                              : _c("div", [
-                                  _c(
-                                    "button",
-                                    {
-                                      staticClass:
-                                        "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-red-200 hover:text-gray-500 hover:bg-red-100 focus:outline-none",
-                                      on: {
-                                        click: function($event) {
-                                          return _vm.leaveEvent(event)
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                    Delete\n                                "
+                                        )
+                                      ]
+                                    )
+                                  ])
+                                : _c("div", [
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass:
+                                          "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-red-200 hover:text-gray-500 hover:bg-red-100 focus:outline-none",
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.leaveEvent(event)
+                                          }
                                         }
-                                      }
-                                    },
-                                    [
-                                      _vm._v(
-                                        "\n                                    Leave\n                                "
-                                      )
-                                    ]
-                                  )
-                                ])
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                    Leave\n                                "
+                                        )
+                                      ]
+                                    )
+                                  ])
+                            ])
                           ])
                         ])
-                      ])
-                    }),
-                    0
-                  )
-                ]
-              )
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "mt-10 clear-both w-full text-center" },
-            [
-              _c("jw-pagination", {
-                attrs: { items: _vm.savedEvents, pageSize: 4 },
-                on: { changePage: _vm.onChangePage }
-              })
-            ],
-            1
-          )
-        ]
-      )
+                      }),
+                      0
+                    )
+                  ]
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "mt-10 clear-both w-full text-center" },
+              [
+                _c("jw-pagination", {
+                  attrs: { items: _vm.savedEvents, pageSize: 4 },
+                  on: { changePage: _vm.onChangePage }
+                })
+              ],
+              1
+            )
+          ]
+        )
+      ])
     ])
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "space-x-2 w-full mb-4" }, [
+      _c(
+        "select",
+        {
+          staticClass:
+            "inline-block rounded-lg bg-white border border-gray-300 text-gray-700 px-4 pr-8 h-8 mr-2 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500",
+          attrs: { id: "filter" }
+        },
+        [
+          _c("option", { attrs: { value: "all" } }, [_vm._v("All")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "created" } }, [
+            _vm._v("Created by me")
+          ]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "joined" } }, [_vm._v("Joined")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "pending" } }, [_vm._v("Pending")])
+        ]
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "inline-block relative text-gray-600 w-1/3" }, [
+        _c("input", {
+          staticClass:
+            "rounded-lg bg-white border border-gray-300 text-gray-500 w-full h-8 px-5 pr-10 rounded-lg text-sm focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500",
+          attrs: {
+            id: "searchBar",
+            type: "search",
+            name: "searchBar",
+            placeholder: "Search by name"
+          }
+        }),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass:
+              "absolute right-0 top-2 mr-4 bg-transparent focus:outline-none",
+            attrs: { id: "searchButton", type: "submit" }
+          },
+          [
+            _c("img", {
+              attrs: {
+                src: "/img/search.png",
+                width: "20",
+                height: "20",
+                alt: "submit"
+              }
+            })
+          ]
+        )
+      ])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -23881,7 +24047,7 @@ var render = function() {
         : _vm._e(),
       _vm._v(" "),
       _c("events-table", {
-        attrs: { user: this.user, eusers: this.eusers, events: this.events }
+        attrs: { user: _vm.user, eusers: _vm.eusers, events: _vm.events }
       })
     ],
     1

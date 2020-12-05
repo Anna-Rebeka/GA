@@ -58,11 +58,11 @@ class EventsController extends Controller
             ]);
         
         $user = auth()->user();
-
+        
         if($fields['description'] == null){
             $attributes['description'] = null;
         }
-        
+
         $event = Event::create([
             'name' => $attributes['name'],
             'author_id' => $user->id,
