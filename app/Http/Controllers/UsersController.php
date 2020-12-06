@@ -52,8 +52,12 @@ class UsersController extends Controller
      */
     public function show(User $user)
     {
+        
         return view('profile.show', [
-            'user' => $user
+            'auth_user' => auth()->user(),
+            'user' => $user,
+            'user_created_at' => $user->created_at->diffForHumans(),
+            'user_edit_path' => $user->path('edit')
         ]);
     }
 
