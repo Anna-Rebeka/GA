@@ -82,7 +82,7 @@
             </table>
         </div>
         <div class="mt-10 clear-both w-full text-center">
-            <jw-pagination :items="events" @changePage="onChangePage" :pageSize="4"></jw-pagination>
+            <jw-pagination :items="filteredEvents" @changePage="onChangePage" :pageSize="4"></jw-pagination>
         </div>
         </div>
         </div>
@@ -98,8 +98,10 @@ export default {
     data() {
         return {
             events: [],
+            filteredEvents: [],
             pageOfItems: [],
             filtered: "joined",
+            searchBar: null,
         };
     },
 
@@ -107,11 +109,37 @@ export default {
         this.getUserJoinedEvents();
         this.select = document.getElementById("filter");
         this.select.addEventListener("click", this.selected);
+        document.getElementById("searchButton").addEventListener("click", this.findEventByName);
+        this.searchBar = document.getElementById("searchBar");
+        this.searchBar.addEventListener("keypress", this.searchOnEnter);
+        
     },
 
     methods: {
+        searchOnEnter(event){
+            if(event.which === 13){
+                this.findEventByName();
+                event.preventDefault();     
+            }
+        },
+
+        findEventByName(){
+            if(this.searchBar.value == ""){
+                this.filteredEvents = this.events;
+                return;
+            }
+            var findBy = this.searchBar.value;
+            this.filteredEvents = this.events.filter(function(e) {
+                return e.name.toLowerCase().includes(findBy.toLowerCase());
+            });
+        },
 
         selected(){
+            if(this.searchBar.value != ""){
+                this.filteredEvents = this.events;
+                this.searchBar.value = "";
+                return;
+            }
             if(this.select.value != this.filtered){
                 if(this.select.value === "joined"){
                     this.getUserJoinedEvents();
@@ -126,6 +154,7 @@ export default {
         getUserJoinedEvents() {
             axios.get(this.authUser.username + '/events/joined').then(response => {
                 this.events = response.data;
+                this.filteredEvents = this.events;
                 console.log(response);
 
             }).catch(error => {
@@ -140,6 +169,7 @@ export default {
         getAllUserEvents() {
             axios.get(this.authUser.username + '/events/all').then(response => {
                 this.events = response.data;
+                this.filteredEvents = this.events;
             }).catch(error => {
                 if (error.response.status == 422){
                     this.errors = error.response.data.errors;

@@ -3023,17 +3023,45 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       events: [],
+      filteredEvents: [],
       pageOfItems: [],
-      filtered: "joined"
+      filtered: "joined",
+      searchBar: null
     };
   },
   mounted: function mounted() {
     this.getUserJoinedEvents();
     this.select = document.getElementById("filter");
     this.select.addEventListener("click", this.selected);
+    document.getElementById("searchButton").addEventListener("click", this.findEventByName);
+    this.searchBar = document.getElementById("searchBar");
+    this.searchBar.addEventListener("keypress", this.searchOnEnter);
   },
   methods: {
+    searchOnEnter: function searchOnEnter(event) {
+      if (event.which === 13) {
+        this.findEventByName();
+        event.preventDefault();
+      }
+    },
+    findEventByName: function findEventByName() {
+      if (this.searchBar.value == "") {
+        this.filteredEvents = this.events;
+        return;
+      }
+
+      var findBy = this.searchBar.value;
+      this.filteredEvents = this.events.filter(function (e) {
+        return e.name.toLowerCase().includes(findBy.toLowerCase());
+      });
+    },
     selected: function selected() {
+      if (this.searchBar.value != "") {
+        this.filteredEvents = this.events;
+        this.searchBar.value = "";
+        return;
+      }
+
       if (this.select.value != this.filtered) {
         if (this.select.value === "joined") {
           this.getUserJoinedEvents();
@@ -3049,6 +3077,7 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get(this.authUser.username + '/events/joined').then(function (response) {
         _this.events = response.data;
+        _this.filteredEvents = _this.events;
         console.log(response);
       })["catch"](function (error) {
         if (error.response.status == 422) {
@@ -3064,6 +3093,7 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get(this.authUser.username + '/events/all').then(function (response) {
         _this2.events = response.data;
+        _this2.filteredEvents = _this2.events;
       })["catch"](function (error) {
         if (error.response.status == 422) {
           _this2.errors = error.response.data.errors;
@@ -24989,7 +25019,7 @@ var render = function() {
               { staticClass: "mt-10 clear-both w-full text-center" },
               [
                 _c("jw-pagination", {
-                  attrs: { items: _vm.events, pageSize: 4 },
+                  attrs: { items: _vm.filteredEvents, pageSize: 4 },
                   on: { changePage: _vm.onChangePage }
                 })
               ],
