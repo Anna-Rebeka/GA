@@ -29,16 +29,22 @@
                 </div>
         </div>
 
-        <p class="text-sm">
+        <p class="text-sm mb-4">
             {{ user.bio }}
         </p>
+
+        <hr class="w-full h-1 bg-gray-100 border-none mb-10 rounded-full"/>
+
+        <div v-if="authUser.id == user.id" class="mx-auto">
+            <user-events :authUser="authUser"></user-events>
+        </div>
     </div>
 </template>
 
 <script>
 export default {
     props: ['authUser', 'user', 'userCreatedAt', 'userEditPath'],
-
+    
     mounted(){
     },
 }

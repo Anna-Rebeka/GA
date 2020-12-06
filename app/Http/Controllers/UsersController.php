@@ -159,4 +159,28 @@ class UsersController extends Controller
         }
         return redirect(auth()->user()->path());
     }
+
+    public function getAllUserEvents(User $user){
+        $user_with_events = User::where('users.id', $user->id)
+            ->join('group_user', 'users.id', '=', 'group_user.user_id')
+            ->join('groups', 'group_user.group_id', '=', 'groups.id')
+            ->join('events', 'groups.id', '=', 'events.group_id')
+            ->select('events.*', 'groups.name as gname')
+            ->where('events.event_time', '>=', now())
+            ->orderBy('events.event_time')
+            ->get();
+        return $user_with_events;
+    }
+
+    public function getUserJoinedEvents(User $user){
+        $user_with_joined_events = User::where('users.id', $user->id)
+            ->join('event_user', 'users.id', '=', 'event_user.user_id')
+            ->join('events', 'event_user.event_id', '=', 'events.id')
+            ->Leftjoin('groups', 'events.group_id', '=', 'groups.id')
+            ->select('events.*', 'groups.name as gname')
+            ->where('events.event_time', '>=', now())
+            ->orderBy('events.event_time')
+            ->get();
+        return $user_with_joined_events;
+    }
 }
