@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="container text-center">
+    <div class="container text-center bg-white shadow-lg rounded-lg py-4">
       <img src="/storage/groups/avatars/default.jpg" alt="group-avatar" class="rounded shadow-lg mx-auto mb-2 object-cover w-32 h-32">
       
       <div v-if="user.group"> 

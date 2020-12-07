@@ -7,7 +7,7 @@
                   <a :href="'/profile/' + member.username">
                       <div class="flex items-center">
                           <img class="w-10 h-10 object-cover rounded-full" :src="member.avatar" :alt="member.name">
-                          <p class="ml-2 text-gray-700 font-semibold font-sans tracking-wide">{{ member.name }}</p>
+                          <p class="ml-2 text-left text-gray-700 font-semibold font-sans tracking-wide">{{ member.name }}</p>
                       </div>
                   </a>
               </li>

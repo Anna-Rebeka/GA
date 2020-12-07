@@ -70,7 +70,8 @@ class UsersController extends Controller
     public function edit(User $user)
     {
         return view('profile.edit', [
-            'user' => $user
+            'user' => $user,
+            'user_path' => $user->path(),
         ]);
     }
 
