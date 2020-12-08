@@ -35,17 +35,17 @@
         <section class="px-8">
             <main class="container mx-auto">
                 <div class="lg:flex lg:justify-between">
-                    <div class="lg:w-1/6 mb-6 sm:w-1/3 lg:mx-0 sm:mx-auto" style="max-width: 700px;">
+                    <div class="lg:w-1/6 mb-6 sm:w-2/5 lg:mx-0 sm:mx-auto" style="max-width: 700px;">
                         <group-panel :user="{{ auth()->user() }}"></group-panel>
                     </div>
                     
-                    <div class="lg:w-4/6 xl:mx-auto mx-10 mb-2 sm:mb-12" style="max-width: 700px;">
+                    <div class="lg:w-4/6 mx-8 mb-2 sm:mb-12 bg-white shadow-lg rounded-lg pb-4 px-8 border border-gray-200" >
                         
                         {{ $slot }}
 
                     </div>
                   
-                    <div class="lg:w-1/6 mb-6 sm:w-1/3 md:mx-auto lg:mx-0 sm:mx-auto" style="max-width: 700px;">
+                    <div class="lg:w-1/6 mb-6 sm:w-2/5 md:mx-auto lg:mx-0 sm:mx-auto" style="max-width: 700px;">
                         @if(auth()->user()->group != null)
                             <members-panel :user="{{ auth()->user() }}" :members="{{ auth()->user()->group->users->except(auth()->user()->id) }}" :groupid="{{ auth()->user()->group->id }}"></members-panel>
                         @endif

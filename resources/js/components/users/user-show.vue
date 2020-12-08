@@ -1,15 +1,15 @@
 <template>
     <div class="mb-6 relative">
-        <div class="relative">
+        <div class="relative -mx-8 mb-4">
             <img 
                 :src="user.banner" 
                 :alt="user.username"
-                class="h-40 w-full mb-2 rounded shadow-lg object-cover overflow-hidden"
+                class="h-40 w-full mb-2 rounded-t shadow-lg object-cover overflow-hidden"
             >
             <img 
                 :src="user.avatar"
                 alt="avatar"
-                class="object-cover w-32 h-32 mr-2 rounded-full absolute bottom-0 transform -translate-x-1/2 translate-y-1/2"
+                class="object-cover w-32 h-32 mr-2 rounded-full border-4 border-white absolute bottom-0 transform -translate-x-1/2 translate-y-1/2"
                 style="left: 50%"
             >
         </div>

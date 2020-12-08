@@ -24515,7 +24515,8 @@ var render = function() {
     _c(
       "div",
       {
-        staticClass: "container text-center bg-white shadow-lg rounded-lg py-4"
+        staticClass:
+          "container text-center bg-white shadow rounded-lg pt-4 pb-8"
       },
       [
         _c("img", {
@@ -25388,16 +25389,16 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "mb-6 relative" }, [
-    _c("div", { staticClass: "relative" }, [
+    _c("div", { staticClass: "relative -mx-8 mb-4" }, [
       _c("img", {
         staticClass:
-          "h-40 w-full mb-2 rounded shadow-lg object-cover overflow-hidden",
+          "h-40 w-full mb-2 rounded-t shadow-lg object-cover overflow-hidden",
         attrs: { src: _vm.user.banner, alt: _vm.user.username }
       }),
       _vm._v(" "),
       _c("img", {
         staticClass:
-          "object-cover w-32 h-32 mr-2 rounded-full absolute bottom-0 transform -translate-x-1/2 translate-y-1/2",
+          "object-cover w-32 h-32 mr-2 rounded-full border-4 border-white absolute bottom-0 transform -translate-x-1/2 translate-y-1/2",
         staticStyle: { left: "50%" },
         attrs: { src: _vm.user.avatar, alt: "avatar" }
       })
