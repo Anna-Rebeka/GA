@@ -16,18 +16,18 @@ class CreateAssignmentsTable extends Migration
         Schema::create('assignments', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('responsible_id')->nullable();
-            $table->foreignId('host_id');
+            $table->foreignId('assignee_id')->nullable();
+            $table->foreignId('author_id');
             $table->foreignId('group_id');
             $table->dateTime('due');
             $table->text('description');
             $table->timestamps();
 
-            $table->foreign('responsible_id')
+            $table->foreign('assignee_id')
                 ->references('id')
                 ->on('users');
             
-            $table->foreign('host_id')
+            $table->foreign('author_id')
                 ->references('id')
                 ->on('users');
             
