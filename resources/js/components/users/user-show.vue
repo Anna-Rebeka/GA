@@ -1,5 +1,5 @@
 <template>
-    <div class="mb-6 relative">
+    <div class="-mt-8 mb-6 relative">
         <div class="relative -mx-8 mb-4">
             <img 
                 :src="user.banner" 

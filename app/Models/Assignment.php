@@ -17,7 +17,7 @@ class Assignment extends Model
     protected $fillable = [
         'name',
         'responsible_id',
-        'author_id',
+        'host_id',
         'group_id',
         'due',
         'description',

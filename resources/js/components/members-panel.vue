@@ -1,5 +1,5 @@
 <template>
-  <div class="container text-center bg-white shadow rounded-lg py-4">
+  <div class="container text-center py-4">
             <h2 class="font-bold text-2xl mb-4"> Group members </h2> 
             <ul v-if="members" class="w-full max-w-md mb-4">
               <li v-for="member in visibleMembers" :key="member.name"

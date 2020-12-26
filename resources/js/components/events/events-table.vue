@@ -73,7 +73,7 @@
                                         Join
                                     </button> 
                                 </div>
-                                <div  v-else-if="event.author_id == user.id">
+                                <div  v-else-if="event.host_id == user.id">
                                     <button 
                                         @click="checkWithUser(event)"
                                         class="rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none">
@@ -171,7 +171,7 @@ export default {
         filterCreated(){
             var uid = this.user.id;
             this.savedEvents = this.savedEvents.filter(function(e) {
-                return e.author_id == uid;
+                return e.host_id == uid;
             });
         },
 
@@ -183,7 +183,7 @@ export default {
             }
             this.savedEvents = this.savedEvents.filter(function(e) {
                 if(eventUsers[e.id]){
-                    return eventUsers[e.id].includes(uid) || e.author_id == uid;
+                    return eventUsers[e.id].includes(uid) || e.host_id == uid;
                 }
             });
         },
@@ -196,7 +196,7 @@ export default {
             }
             this.savedEvents = this.savedEvents.filter(function(e) {
                 if(eventUsers[e.id]){
-                    return !eventUsers[e.id].includes(uid) && e.author_id != uid;
+                    return !eventUsers[e.id].includes(uid) && e.host_id != uid;
                 }
                 
             });

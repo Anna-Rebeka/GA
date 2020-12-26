@@ -11,7 +11,7 @@ class Event extends Model
 
     protected $fillable = [
         'name',
-        'author_id',
+        'host_id',
         'group_id',
         'description',
         'event_time',
@@ -26,7 +26,7 @@ class Event extends Model
         return $this->belongsToMany(User::class);
     }
 
-    public function author(){
+    public function host(){
         return $this->belongsTo(User::class);
     }
     
