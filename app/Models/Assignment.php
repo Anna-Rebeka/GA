@@ -29,7 +29,7 @@ class Assignment extends Model
     }
 
     public function author(){
-        return $this->belongsToMany(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function assignee(){
