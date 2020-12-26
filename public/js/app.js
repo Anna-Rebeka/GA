@@ -2142,6 +2142,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user', 'going', 'event', 'host'],
   data: function data() {
@@ -23741,7 +23745,7 @@ var render = function() {
     "div",
     [
       _c("div", { staticClass: "p-8 mr-2 mb-8" }, [
-        _c("div", { staticClass: "mr-4 float-right" }, [
+        _c("div", { staticClass: "float-right" }, [
           _vm.going && !_vm.going.includes(_vm.user.id)
             ? _c(
                 "button",
@@ -23799,15 +23803,11 @@ var render = function() {
           ])
         ]),
         _vm._v(" "),
-        _vm.event.description
-          ? _c("p", { staticClass: "text-sm mb-2" }, [
-              _vm._v("What about: " + _vm._s(_vm.event.description))
-            ])
-          : _vm._e(),
-        _vm._v(" "),
         _c(
           "div",
-          { staticClass: "mb-2 rounded bg-gray-100 p-4 w-2/5 inline-block" },
+          {
+            staticClass: "mb-2 rounded bg-gray-100 px-6 p-4 w-2/5 inline-block"
+          },
           [
             _c("strong", [_vm._v("When")]),
             _c("p", { staticClass: "bg-white p-2 rounded" }, [
@@ -23825,7 +23825,9 @@ var render = function() {
         _vm._v(" "),
         _c(
           "div",
-          { staticClass: "mb-2 rounded bg-gray-100 p-4 w-2/5 inline-block" },
+          {
+            staticClass: "mb-2 rounded bg-gray-100 px-6 p-4 w-2/5 inline-block"
+          },
           [
             _c("strong", [_vm._v("Where")]),
             _c("p", { staticClass: "bg-white p-2 rounded" }, [
@@ -23834,8 +23836,30 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
+        _vm.event.description
+          ? _c(
+              "div",
+              { staticClass: "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded" },
+              [
+                _vm._m(1),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" },
+                  [
+                    _vm._v(
+                      "\r\n                " +
+                        _vm._s(_vm.event.description) +
+                        "\r\n            "
+                    )
+                  ]
+                )
+              ]
+            )
+          : _vm._e(),
+        _vm._v(" "),
         _c("div", { staticClass: "pt-6 px-6 mr-2 bg-gray-100 rounded" }, [
-          _vm._m(1),
+          _vm._m(2),
           _vm._v(" "),
           _c(
             "div",
@@ -23883,7 +23907,15 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("p", { staticClass: "mb-2" }, [_c("strong", [_vm._v("Host: ")])])
+    return _c("p", { staticClass: "mb-2" }, [_c("strong", [_vm._v("Host")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", { staticClass: "mb-2" }, [
+      _c("strong", [_vm._v("What about")])
+    ])
   },
   function() {
     var _vm = this

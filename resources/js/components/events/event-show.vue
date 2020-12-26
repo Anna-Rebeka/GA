@@ -1,7 +1,7 @@
 <template>
 <div>
     <div class="p-8 mr-2 mb-8">
-        <div class="mr-4 float-right">
+        <div class="float-right">
             <button 
                 v-if="going && !going.includes(user.id)"
                 @click="joinEvent()"
@@ -23,15 +23,19 @@
         </div>
         <h2 class="font-bold text-2xl mb-4"> {{ event.name }} </h2>
         <div class="py-2 px-6 mb-2 mr-2 bg-gray-100 rounded">
-            <p class="mb-2"> <strong>Host: </strong></p>
+            <p class="mb-2"> <strong>Host</strong></p>
             <div class="bg-white rounded mb-2 pl-2 pt-2 pb-2" >
                 {{ host }}
             </div>
         </div>
-        <p v-if="event.description" class="text-sm mb-2">What about: {{ event.description }}</p>
-            <div class="mb-2 rounded bg-gray-100 p-4 w-2/5 inline-block"> <strong>When</strong><p class="bg-white p-2 rounded">{{  new Date(event.event_time) | dateFormat('DD.MM.YYYY , HH:mm') }}</p></div>   
-            <div class="mb-2 rounded bg-gray-100 p-4 w-2/5 inline-block"> <strong>Where</strong><p class="bg-white p-2 rounded">{{ event.event_place }}</p></div>   
-
+            <div class="mb-2 rounded bg-gray-100 px-6 p-4 w-2/5 inline-block"> <strong>When</strong><p class="bg-white p-2 rounded">{{  new Date(event.event_time) | dateFormat('DD.MM.YYYY , HH:mm') }}</p></div>   
+            <div class="mb-2 rounded bg-gray-100 px-6 p-4 w-2/5 inline-block"> <strong>Where</strong><p class="bg-white p-2 rounded">{{ event.event_place }}</p></div>   
+        <div v-if="event.description" class="py-2 px-6 mb-2 mr-2 bg-gray-100 rounded">
+            <p class="mb-2"> <strong>What about</strong></p>
+            <div class="bg-white rounded mb-2 pl-2 pt-2 pb-2" >
+                {{ event.description }}
+            </div>
+        </div>
         <div class="pt-6 px-6 mr-2 bg-gray-100 rounded">
             <p class="mb-2"> <strong>Who's coming</strong></p>
             <div class="bg-white rounded mb-4 pt-4 pb-2" >
