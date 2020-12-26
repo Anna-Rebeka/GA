@@ -23,4 +23,16 @@ class Assignment extends Model
         'description',
         'created_at'
     ];
+
+    public function group(){
+        return $this->belongsTo(Group::class);
+    }
+
+    public function author(){
+        return $this->belongsToMany(User::class);
+    }
+
+    public function assignee(){
+        return $this->belongsTo(User::class);
+    }
 }

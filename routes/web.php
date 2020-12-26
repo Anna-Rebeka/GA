@@ -10,6 +10,7 @@ use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\NotesController;
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\EventCommentsController;
+use App\Http\Controllers\AssignmentsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,6 +58,9 @@ Route::middleware('auth')->group(function() {
     Route::delete('/events/{event:id}', [EventsController::class, 'destroy']);
     Route::post('/events/{event:id}/join', [EventsController::class, 'join']);
     Route::post('/events/{event:id}/leave', [EventsController::class, 'leave']);
+
+    Route::get('/{group:id}/assignments', [AssignmentsController::class, 'index']);
+    Route::post('/assignments', [AssignmentsController::class, 'store']);
 
     Route::get('/events/{event:id}/comments', [EventCommentsController::class, 'index']);
     Route::post('/events/{event:id}/comments', [EventCommentsController::class, 'store']);
