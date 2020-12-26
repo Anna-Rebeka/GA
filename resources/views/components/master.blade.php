@@ -39,7 +39,7 @@
                         <group-panel :user="{{ auth()->user() }}"></group-panel>
                     </div>
                     
-                    <div class="lg:w-4/6 mx-8 mb-2 sm:mb-12 bg-white shadow-lg rounded-lg pb-4 px-8 border border-gray-200" >
+                    <div class="lg:w-4/6 pt-8 mx-8 mb-2 sm:mb-12 bg-white shadow-lg rounded-lg pb-4 px-8 border border-gray-200" >
                         
                         {{ $slot }}
 

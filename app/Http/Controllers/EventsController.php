@@ -22,7 +22,7 @@ class EventsController extends Controller
         foreach ($events as $event){
             $event->users;
             $eusers[$event->id] = $event->users->pluck('id');
-            $event->author;
+            $event->host;
         }
 
         return view('groups.events', [
@@ -65,7 +65,7 @@ class EventsController extends Controller
 
         $event = Event::create([
             'name' => $attributes['name'],
-            'author_id' => $user->id,
+            'host_id' => $user->id,
             'group_id' => $user->group->id,
             'description' => $attributes['description'],
             'event_time' => $attributes['eventTime'],
@@ -89,7 +89,8 @@ class EventsController extends Controller
         return view('events.show', [
             'user' => auth()->user(),
             'going' => $event->users()->pluck('users.id'),
-            'event' => $event
+            'event' => $event,
+            'host' => $event->host->name
         ]);
     }
 

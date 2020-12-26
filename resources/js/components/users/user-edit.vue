@@ -159,7 +159,7 @@ export default {
                 this.createNewEvent = false;
                 this.newEventCreated = true;
                 this.events.unshift(response.data);    
-                this.eusers[response.data.id] = [response.data.author_id];
+                this.eusers[response.data.id] = [response.data.host_id];
 
             }).catch(error => {
                 console.log(error.message);

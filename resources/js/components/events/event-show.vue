@@ -1,6 +1,6 @@
 <template>
 <div>
-    <div class="rounded-lg border border-gray-100 shadow-lg p-8 mr-2 mb-8">
+    <div class="p-8 mr-2 mb-8">
         <div class="mr-4 float-right">
             <button 
                 v-if="going && !going.includes(user.id)"
@@ -9,23 +9,29 @@
                 Join
             </button> 
             <button 
-                v-else-if="event.author_id == user.id"
+                v-else-if="event.host_id == user.id"
                 @click="checkWithUser()"
                 class="rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none">
                 Delete
             </button> 
             <button 
                 v-else
-                @click="leaveEvent()"
+                @click="leaveEvent()" 
                 class="rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-red-200 hover:text-gray-500 hover:bg-red-100 focus:outline-none">
                 Leave
             </button> 
         </div>
         <h2 class="font-bold text-2xl mb-4"> {{ event.name }} </h2>
+        <div class="py-2 px-6 mb-2 mr-2 bg-gray-100 rounded">
+            <p class="mb-2"> <strong>Host: </strong></p>
+            <div class="bg-white rounded mb-2 pl-2 pt-2 pb-2" >
+                {{ host }}
+            </div>
+        </div>
         <p v-if="event.description" class="text-sm mb-2">What about: {{ event.description }}</p>
-            <div class="mb-2 rounded bg-gray-100 p-6 w-2/5 inline-block"> <strong>When</strong><p class="bg-white p-2 rounded">{{  new Date(event.event_time) | dateFormat('DD.MM.YYYY , HH:mm') }}</p></div>   
-            <div class="mb-2 rounded bg-gray-100 p-6 w-2/5 inline-block"> <strong>Where</strong><p class="bg-white p-2 rounded">{{ event.event_place }}</p></div>   
-        
+            <div class="mb-2 rounded bg-gray-100 p-4 w-2/5 inline-block"> <strong>When</strong><p class="bg-white p-2 rounded">{{  new Date(event.event_time) | dateFormat('DD.MM.YYYY , HH:mm') }}</p></div>   
+            <div class="mb-2 rounded bg-gray-100 p-4 w-2/5 inline-block"> <strong>Where</strong><p class="bg-white p-2 rounded">{{ event.event_place }}</p></div>   
+
         <div class="pt-6 px-6 mr-2 bg-gray-100 rounded">
             <p class="mb-2"> <strong>Who's coming</strong></p>
             <div class="bg-white rounded mb-4 pt-4 pb-2" >
@@ -48,7 +54,7 @@
 
 <script>
 export default {
-    props: ['user', 'going','event'],
+    props: ['user', 'going','event', 'host'],
 
      data() {
         return {

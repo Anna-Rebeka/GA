@@ -17,7 +17,7 @@ class CreateAssignmentsTable extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('responsible_id')->nullable();
-            $table->foreignId('author_id');
+            $table->foreignId('host_id');
             $table->foreignId('group_id');
             $table->dateTime('due');
             $table->text('description');
@@ -27,7 +27,7 @@ class CreateAssignmentsTable extends Migration
                 ->references('id')
                 ->on('users');
             
-            $table->foreign('author_id')
+            $table->foreign('host_id')
                 ->references('id')
                 ->on('users');
             

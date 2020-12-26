@@ -28,7 +28,7 @@
             </li>
         </ul>
 
-        <div class="mt-10 clear-both w-full text-center">
+        <div class="clear-both w-full text-center">
             <jw-pagination :items="groups" @changePage="onChangePage" :pageSize="6"></jw-pagination>
         </div>
     </div>
