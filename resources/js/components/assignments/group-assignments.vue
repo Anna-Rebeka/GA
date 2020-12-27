@@ -94,7 +94,12 @@ export default {
                 this.createNewAssignment = false;
                 this.newAssignmentCreated = true;
                 response.data.author = this.user;
-                this.assignments.unshift(response.data);    
+                if(this.assignments.length > 0){
+                    this.assignments.unshift(response.data);
+                }
+                else {
+                    this.assignments.push(response.data);
+                }
             }).catch(error => {
                 console.log(error.message);
             });

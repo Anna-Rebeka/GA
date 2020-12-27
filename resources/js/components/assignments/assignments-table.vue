@@ -76,25 +76,22 @@
                             <div class="ml-4">
                                 <div v-if="assignment.assignee_id == null">
                                     <button 
-                                        @click="takeAssignment(assignment)"
+                                        @click="checkWithUser(assignment, 'take')"
                                         class="rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none">
                                         Take
                                     </button> 
                                 </div>
+                                <!--
                                 <div  v-else-if="assignment.author_id == user.id">
+                                    
                                     <button 
-                                        @click="checkWithUser(assignment)"
+                                        @click="checkWithUser(assignment, 'delete')"
                                         class="rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none">
                                         Delete
                                     </button> 
+                                    
                                 </div>
-                                <div v-else>
-                                    <button 
-                                        @click="abandonAssignment(assignment)"
-                                        class="rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-red-200 hover:text-gray-500 hover:bg-red-100 focus:outline-none">
-                                        Leave
-                                    </button> 
-                                </div>
+                                -->
                             </div>
                         </td>
                     </tr>
@@ -212,7 +209,11 @@ export default {
         },
 
         takeAssignment($assignment) {
-            axios.post('/assignments/' + $assignment.id + '/join').then(response => {
+            axios.patch('/assignments/' + $assignment.id + '/take').then(response => {    
+                var index = this.savedAssignments.indexOf($assignment);
+                this.allAssignments[index].assignee = this.user;
+                this.allAssignments[index].assignee_id = this.user.id;
+                this.savedAssignments = this.allAssignments;
                 this.reload();
             }).catch(error => {
                 if (error.response.status == 422){
@@ -235,9 +236,14 @@ export default {
             });
         },
 
-        checkWithUser($assignment) {
+        checkWithUser($assignment, $whatToDo){
             if (confirm("Are you sure? This action is irreversible.")) {
-                this.deleteAssignment($assignment);
+                if ($whatToDo == "delete"){
+                    this.deleteAssignment($assignment);
+                }
+                else if ($whatToDo == "take"){
+                    this.takeAssignment($assignment);
+                }
             }
         },
 

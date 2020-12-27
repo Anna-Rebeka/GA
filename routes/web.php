@@ -62,8 +62,10 @@ Route::middleware('auth')->group(function() {
     Route::post('/events/{event:id}/leave', [EventsController::class, 'leave']);
 
     Route::get('/{group:id}/assignments', [AssignmentsController::class, 'index']);
+    Route::get('/{group:id}/assignments/{assignment:id}', [AssignmentsController::class, 'show']);
     Route::post('/assignments', [AssignmentsController::class, 'store']);
     Route::delete('/assignments/{assignment:id}', [AssignmentsController::class, 'destroy']);
+    Route::patch('/assignments/{assignment:id}/take', [AssignmentsController::class, 'take']);
 
 
     Route::get('/events/{event:id}/comments', [EventCommentsController::class, 'index']);

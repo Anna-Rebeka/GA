@@ -14,6 +14,7 @@ import eventShow from './components/events/event-show.vue';
 import eventsTable from './components/events/events-table.vue';
 import eventComments from './components/comments/event-comments.vue';
 import assignments from './components/assignments/group-assignments.vue';
+import assignmentShow from './components/assignments/assignment-show.vue';
 import assignmentsTable from './components/assignments/assignments-table.vue';
 
 
@@ -41,6 +42,7 @@ Vue.component('event-show', eventShow);
 Vue.component('event-comments', eventComments);
 Vue.component('events-table', eventsTable);
 Vue.component('group-assignments', assignments);
+Vue.component('assignment-show', assignmentShow);
 Vue.component('assignments-table', assignmentsTable);
 Vue.component('jw-pagination', JwPagination);
 

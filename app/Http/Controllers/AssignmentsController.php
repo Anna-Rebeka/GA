@@ -81,9 +81,14 @@ class AssignmentsController extends Controller
      * @param  \App\Models\Assignment  $assignment
      * @return \Illuminate\Http\Response
      */
-    public function show(Assignment $assignment)
+    public function show(Group $group, Assignment $assignment)
     {
-        //
+        $assignment->author;
+        $assignment->assignee;
+        return view('assignments.show', [
+            'user' => auth()->user(),
+            'assignment' => $assignment
+        ]);
     }
 
     /**
@@ -119,4 +124,10 @@ class AssignmentsController extends Controller
     {
         $assignment->delete();
     }
+    
+    public function take(Assignment $assignment)
+    {
+        $assignment->update(array('assignee_id' => auth()->user()->id));
+    }
 }
+

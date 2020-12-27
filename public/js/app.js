@@ -1899,6 +1899,66 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/assignments/assignment-show.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/assignments/assignment-show.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['user', 'assignment']
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/assignments/assignments-table.vue?vue&type=script&lang=js&":
 /*!****************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/assignments/assignments-table.vue?vue&type=script&lang=js& ***!
@@ -1908,9 +1968,6 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
 //
 //
 //
@@ -2117,7 +2174,13 @@ __webpack_require__.r(__webpack_exports__);
     takeAssignment: function takeAssignment($assignment) {
       var _this = this;
 
-      axios.post('/assignments/' + $assignment.id + '/join').then(function (response) {
+      axios.patch('/assignments/' + $assignment.id + '/take').then(function (response) {
+        var index = _this.savedAssignments.indexOf($assignment);
+
+        _this.allAssignments[index].assignee = _this.user;
+        _this.allAssignments[index].assignee_id = _this.user.id;
+        _this.savedAssignments = _this.allAssignments;
+
         _this.reload();
       })["catch"](function (error) {
         if (error.response.status == 422) {
@@ -2142,9 +2205,13 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error.message);
       });
     },
-    checkWithUser: function checkWithUser($assignment) {
+    checkWithUser: function checkWithUser($assignment, $whatToDo) {
       if (confirm("Are you sure? This action is irreversible.")) {
-        this.deleteAssignment($assignment);
+        if ($whatToDo == "delete") {
+          this.deleteAssignment($assignment);
+        } else if ($whatToDo == "take") {
+          this.takeAssignment($assignment);
+        }
       }
     },
     deleteAssignment: function deleteAssignment($assignment) {
@@ -2269,7 +2336,11 @@ __webpack_require__.r(__webpack_exports__);
         _this.newAssignmentCreated = true;
         response.data.author = _this.user;
 
-        _this.assignments.unshift(response.data);
+        if (_this.assignments.length > 0) {
+          _this.assignments.unshift(response.data);
+        } else {
+          _this.assignments.push(response.data);
+        }
       })["catch"](function (error) {
         console.log(error.message);
       });
@@ -24095,6 +24166,109 @@ var main = {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/assignments/assignment-show.vue?vue&type=template&id=4c338039&":
+/*!******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/assignments/assignment-show.vue?vue&type=template&id=4c338039& ***!
+  \******************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "p-8 mr-2 mb-8" }, [
+      _c("div", { staticClass: "float-right" }),
+      _vm._v(" "),
+      _c("h2", { staticClass: "font-bold text-2xl mb-4" }, [
+        _vm._v(" " + _vm._s(_vm.assignment.name) + " ")
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
+          _vm._v(
+            "\r\n                " +
+              _vm._s(
+                _vm._f("dateFormat")(
+                  new Date(_vm.assignment.due),
+                  "DD.MM.YYYY , HH:mm"
+                )
+              ) +
+              "\r\n            "
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "mb-2 rounded bg-gray-100 px-6 p-4 w-2/5 inline-block" },
+        [
+          _c("strong", [_vm._v("By Who")]),
+          _c("p", { staticClass: "bg-white p-2 rounded" }, [
+            _vm._v(_vm._s(_vm.assignment.author.name))
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _vm.assignment.assignee
+        ? _c(
+            "div",
+            {
+              staticClass:
+                "mb-2 rounded bg-gray-100 px-6 p-4 w-2/5 inline-block"
+            },
+            [
+              _c("strong", [_vm._v("For Who")]),
+              _c("p", { staticClass: "bg-white p-2 rounded" }, [
+                _vm._v(_vm._s(_vm.assignment.assignee.name))
+              ])
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _c("div", { staticClass: "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded" }, [
+        _vm._m(1),
+        _vm._v(" "),
+        _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
+          _vm._v(
+            "\r\n                " +
+              _vm._s(_vm.assignment.description) +
+              "\r\n            "
+          )
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", { staticClass: "mb-2" }, [_c("strong", [_vm._v("Due")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", { staticClass: "mb-2" }, [
+      _c("strong", [_vm._v("What about")])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/assignments/assignments-table.vue?vue&type=template&id=4e871ac3&":
 /*!********************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/assignments/assignments-table.vue?vue&type=template&id=4e871ac3& ***!
@@ -24252,8 +24426,9 @@ var render = function() {
                                           "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none",
                                         on: {
                                           click: function($event) {
-                                            return _vm.takeAssignment(
-                                              assignment
+                                            return _vm.checkWithUser(
+                                              assignment,
+                                              "take"
                                             )
                                           }
                                         }
@@ -24265,47 +24440,7 @@ var render = function() {
                                       ]
                                     )
                                   ])
-                                : assignment.author_id == _vm.user.id
-                                ? _c("div", [
-                                    _c(
-                                      "button",
-                                      {
-                                        staticClass:
-                                          "rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none",
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.checkWithUser(assignment)
-                                          }
-                                        }
-                                      },
-                                      [
-                                        _vm._v(
-                                          "\n                                    Delete\n                                "
-                                        )
-                                      ]
-                                    )
-                                  ])
-                                : _c("div", [
-                                    _c(
-                                      "button",
-                                      {
-                                        staticClass:
-                                          "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-red-200 hover:text-gray-500 hover:bg-red-100 focus:outline-none",
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.abandonAssignment(
-                                              assignment
-                                            )
-                                          }
-                                        }
-                                      },
-                                      [
-                                        _vm._v(
-                                          "\n                                    Leave\n                                "
-                                        )
-                                      ]
-                                    )
-                                  ])
+                                : _vm._e()
                             ])
                           ])
                         ])
@@ -39318,10 +39453,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_events_events_table_vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/events/events-table.vue */ "./resources/js/components/events/events-table.vue");
 /* harmony import */ var _components_comments_event_comments_vue__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/comments/event-comments.vue */ "./resources/js/components/comments/event-comments.vue");
 /* harmony import */ var _components_assignments_group_assignments_vue__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/assignments/group-assignments.vue */ "./resources/js/components/assignments/group-assignments.vue");
-/* harmony import */ var _components_assignments_assignments_table_vue__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/assignments/assignments-table.vue */ "./resources/js/components/assignments/assignments-table.vue");
-/* harmony import */ var jw_vue_pagination__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! jw-vue-pagination */ "./node_modules/jw-vue-pagination/lib/JwPagination.js");
-/* harmony import */ var jw_vue_pagination__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(jw_vue_pagination__WEBPACK_IMPORTED_MODULE_17__);
-/* harmony import */ var vue_filter_date_format__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! vue-filter-date-format */ "./node_modules/vue-filter-date-format/dist/vue-filter-date-format.esm.js");
+/* harmony import */ var _components_assignments_assignment_show_vue__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/assignments/assignment-show.vue */ "./resources/js/components/assignments/assignment-show.vue");
+/* harmony import */ var _components_assignments_assignments_table_vue__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/assignments/assignments-table.vue */ "./resources/js/components/assignments/assignments-table.vue");
+/* harmony import */ var jw_vue_pagination__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! jw-vue-pagination */ "./node_modules/jw-vue-pagination/lib/JwPagination.js");
+/* harmony import */ var jw_vue_pagination__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(jw_vue_pagination__WEBPACK_IMPORTED_MODULE_18__);
+/* harmony import */ var vue_filter_date_format__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! vue-filter-date-format */ "./node_modules/vue-filter-date-format/dist/vue-filter-date-format.esm.js");
+
 
 
 
@@ -39346,7 +39483,7 @@ __webpack_require__(/*! masonry-layout */ "./node_modules/masonry-layout/masonry
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_filter_date_format__WEBPACK_IMPORTED_MODULE_18__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_filter_date_format__WEBPACK_IMPORTED_MODULE_19__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('dropdown', _components_dropdown_vue__WEBPACK_IMPORTED_MODULE_1__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('group-panel', _components_group_panel_vue__WEBPACK_IMPORTED_MODULE_2__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('members-panel', _components_members_panel_vue__WEBPACK_IMPORTED_MODULE_3__["default"]);
@@ -39362,8 +39499,9 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('event-show', _components_e
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('event-comments', _components_comments_event_comments_vue__WEBPACK_IMPORTED_MODULE_14__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('events-table', _components_events_events_table_vue__WEBPACK_IMPORTED_MODULE_13__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('group-assignments', _components_assignments_group_assignments_vue__WEBPACK_IMPORTED_MODULE_15__["default"]);
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('assignments-table', _components_assignments_assignments_table_vue__WEBPACK_IMPORTED_MODULE_16__["default"]);
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('jw-pagination', jw_vue_pagination__WEBPACK_IMPORTED_MODULE_17___default.a);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('assignment-show', _components_assignments_assignment_show_vue__WEBPACK_IMPORTED_MODULE_20__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('assignments-table', _components_assignments_assignments_table_vue__WEBPACK_IMPORTED_MODULE_17__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('jw-pagination', jw_vue_pagination__WEBPACK_IMPORTED_MODULE_18___default.a);
 var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#app'
 });
@@ -39399,6 +39537,75 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/components/assignments/assignment-show.vue":
+/*!*****************************************************************!*\
+  !*** ./resources/js/components/assignments/assignment-show.vue ***!
+  \*****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _assignment_show_vue_vue_type_template_id_4c338039___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./assignment-show.vue?vue&type=template&id=4c338039& */ "./resources/js/components/assignments/assignment-show.vue?vue&type=template&id=4c338039&");
+/* harmony import */ var _assignment_show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./assignment-show.vue?vue&type=script&lang=js& */ "./resources/js/components/assignments/assignment-show.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _assignment_show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _assignment_show_vue_vue_type_template_id_4c338039___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _assignment_show_vue_vue_type_template_id_4c338039___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/assignments/assignment-show.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/assignments/assignment-show.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************!*\
+  !*** ./resources/js/components/assignments/assignment-show.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_assignment_show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./assignment-show.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/assignments/assignment-show.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_assignment_show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/assignments/assignment-show.vue?vue&type=template&id=4c338039&":
+/*!************************************************************************************************!*\
+  !*** ./resources/js/components/assignments/assignment-show.vue?vue&type=template&id=4c338039& ***!
+  \************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_assignment_show_vue_vue_type_template_id_4c338039___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./assignment-show.vue?vue&type=template&id=4c338039& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/assignments/assignment-show.vue?vue&type=template&id=4c338039&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_assignment_show_vue_vue_type_template_id_4c338039___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_assignment_show_vue_vue_type_template_id_4c338039___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
 
 /***/ }),
 
