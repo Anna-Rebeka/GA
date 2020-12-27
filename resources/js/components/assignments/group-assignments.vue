@@ -71,7 +71,7 @@
                     Your assignment was created! Check it out down below.
         </div>
         
-        <!--<assignments-table :user="user" :assignments="assignments"></assignments-table>-->
+        <assignments-table :user="user" :assignments="assignments"></assignments-table>
     </div>
 </template>
 
@@ -91,8 +91,9 @@ export default {
         submit() {
             axios.post('/assignments', this.fields).then(response => {
                 this.fields = {};
-                this.newAssignmentCreated = false;
+                this.createNewAssignment = false;
                 this.newAssignmentCreated = true;
+                response.data.author = this.user;
                 this.assignments.unshift(response.data);    
             }).catch(error => {
                 console.log(error.message);

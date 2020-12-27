@@ -18,7 +18,7 @@ class AssignmentsController extends Controller
      */
     public function index(Group $group)
     {
-        $assignments = $group->assignments()->orderBy('due', 'DESC')->get();
+        $assignments = $group->assignments()->orderBy('due')->get();
 
         foreach ($assignments as $assignment){
             $assignment->assignee;
