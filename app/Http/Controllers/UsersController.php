@@ -166,7 +166,7 @@ class UsersController extends Controller
             ->join('group_user', 'users.id', '=', 'group_user.user_id')
             ->join('groups', 'group_user.group_id', '=', 'groups.id')
             ->join('events', 'groups.id', '=', 'events.group_id')
-            ->select('events.*', 'groups.name as gname')
+            ->select('events.*', 'groups.name as group_name')
             ->where('events.event_time', '>=', now())
             ->orderBy('events.event_time')
             ->get();
@@ -178,7 +178,7 @@ class UsersController extends Controller
             ->join('event_user', 'users.id', '=', 'event_user.user_id')
             ->join('events', 'event_user.event_id', '=', 'events.id')
             ->Leftjoin('groups', 'events.group_id', '=', 'groups.id')
-            ->select('events.*', 'groups.name as gname')
+            ->select('events.*', 'groups.name as group_name')
             ->where('events.event_time', '>=', now())
             ->orderBy('events.event_time')
             ->get();

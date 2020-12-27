@@ -26852,7 +26852,7 @@ var render = function() {
                                 [
                                   _vm._v(
                                     "\r\n                                    " +
-                                      _vm._s(event.gname) +
+                                      _vm._s(event.group_name) +
                                       "\r\n                            "
                                   )
                                 ]
