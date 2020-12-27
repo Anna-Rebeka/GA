@@ -3436,7 +3436,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.getUsersAssignments();
-    this.select = document.getElementById("filter");
+    this.select = document.getElementById("filterAssignments");
     this.select.addEventListener("click", this.selected);
     document.getElementById("searchButton").addEventListener("click", this.findAssignmentByName);
     this.searchBar = document.getElementById("searchBar");
@@ -3813,7 +3813,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.getUserJoinedEvents();
-    this.select = document.getElementById("filter");
+    this.select = document.getElementById("filterEvents");
     this.select.addEventListener("click", this.selected);
     document.getElementById("searchButton").addEventListener("click", this.findEventByName);
     this.searchBar = document.getElementById("searchBar");
@@ -26556,7 +26556,7 @@ var staticRenderFns = [
         {
           staticClass:
             "inline-block rounded-lg bg-white border border-gray-300 text-gray-700 px-4 pr-8 h-8 mr-2 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500",
-          attrs: { id: "filter" }
+          attrs: { id: "filterAssignments" }
         },
         [
           _c("option", { attrs: { value: "mine" } }, [_vm._v("Mine")]),
@@ -26915,7 +26915,7 @@ var staticRenderFns = [
         {
           staticClass:
             "inline-block rounded-lg bg-white border border-gray-300 text-gray-700 px-4 pr-8 h-8 mr-2 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500",
-          attrs: { id: "filter" }
+          attrs: { id: "filterEvents" }
         },
         [
           _c("option", { attrs: { value: "joined" } }, [_vm._v("Joined")]),

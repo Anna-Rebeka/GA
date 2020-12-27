@@ -11,7 +11,7 @@
     
     <div class="space-x-2 w-full mb-4">
             <select
-                id="filter"
+                id="filterEvents"
                 class="inline-block rounded-lg bg-white border border-gray-300 text-gray-700 px-4 pr-8 h-8 mr-2 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
                 <option value="joined">Joined</option>
                 <option value="all">All</option>
@@ -107,7 +107,7 @@ export default {
 
     mounted(){
         this.getUserJoinedEvents();
-        this.select = document.getElementById("filter");
+        this.select = document.getElementById("filterEvents");
         this.select.addEventListener("click", this.selected);
         document.getElementById("searchButton").addEventListener("click", this.findEventByName);
         this.searchBar = document.getElementById("searchBar");
