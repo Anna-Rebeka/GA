@@ -2128,7 +2128,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error.message);
       });
     },
-    leaveEvent: function leaveEvent($assignment) {
+    abandonAssignment: function abandonAssignment($assignment) {
       var _this2 = this;
 
       axios.post('/assignments/' + $assignment.id + '/leave').then(function (response) {
@@ -2144,10 +2144,10 @@ __webpack_require__.r(__webpack_exports__);
     },
     checkWithUser: function checkWithUser($assignment) {
       if (confirm("Are you sure? This action is irreversible.")) {
-        this.abandonAssignment($assignment);
+        this.deleteAssignment($assignment);
       }
     },
-    abandonAssignment: function abandonAssignment($assignment) {
+    deleteAssignment: function deleteAssignment($assignment) {
       var _this3 = this;
 
       axios["delete"]('/assignments/' + $assignment.id).then(function (response) {

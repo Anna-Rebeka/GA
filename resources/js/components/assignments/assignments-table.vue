@@ -223,7 +223,7 @@ export default {
             });
         },
 
-        leaveEvent($assignment) {
+        abandonAssignment($assignment) {
             axios.post('/assignments/' + $assignment.id + '/leave').then(response => {
                 this.reload();
             }).catch(error => {
@@ -237,11 +237,11 @@ export default {
 
         checkWithUser($assignment) {
             if (confirm("Are you sure? This action is irreversible.")) {
-                this.abandonAssignment($assignment);
+                this.deleteAssignment($assignment);
             }
         },
 
-        abandonAssignment($assignment) {
+        deleteAssignment($assignment) {
             axios.delete('/assignments/' + $assignment.id).then(response => {
                 this.allAssignments = this.allAssignments.filter(function(e) { return e != $assignment })
                 this.savedAssignments = this.allAssignments;
