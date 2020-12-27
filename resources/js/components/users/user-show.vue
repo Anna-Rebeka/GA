@@ -36,7 +36,9 @@
         <hr class="w-full h-1 bg-gray-100 border-none mb-10 rounded-full"/>
 
         <div v-if="authUser.id == user.id" class="mx-auto">
+            <user-assignments :authUser="authUser"></user-assignments>
             <user-events :authUser="authUser"></user-events>
+            
         </div>
     </div>
 </template>

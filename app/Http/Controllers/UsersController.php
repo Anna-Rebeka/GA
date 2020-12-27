@@ -184,4 +184,33 @@ class UsersController extends Controller
             ->get();
         return $user_with_joined_events;
     }
+
+    public function getAllUsersAssignments(User $user){
+        $user_with_assignments = User::where('users.id', $user->id)
+            ->join('group_user', 'users.id', '=', 'group_user.user_id')
+            ->join('groups', 'group_user.group_id', '=', 'groups.id')
+            ->join('assignments', 'groups.id', '=', 'assignments.group_id')
+            ->join('users as author', 'assignments.author_id', '=', 'author.id')
+            ->Leftjoin('users as assignee', 'assignments.assignee_id', '=', 'assignee.id')
+            ->select('assignments.*', 'groups.name as group_name', 'author.id as author_id', 'author.name as author_name', 'assignee.id as assignee_id', 'assignee.name as assignee_name')
+            ->where('assignments.due', '>=', now())
+            ->orderBy('assignments.due')
+            ->get();
+        return $user_with_assignments;
+    }
+
+    public function getUsersAssignments(User $user){
+        $user_with_his_assignments = User::where('users.id', $user->id)
+            ->join('assignments', 'users.id', '=', 'assignments.assignee_id')
+            ->Leftjoin('groups', 'assignments.group_id', '=', 'groups.id')
+            ->join('users as author', 'assignments.author_id', '=', 'author.id')
+            ->Leftjoin('users as assignee', 'assignments.assignee_id', '=', 'assignee.id')
+            ->select('assignments.*', 'groups.name as group_name', 'author.id as author_id', 'author.name as author_name', 'assignee.id as assignee_id', 'assignee.name as assignee_name')
+            ->where('assignments.due', '>=', now())
+            ->orderBy('assignments.due')
+            ->get();
+        return $user_with_his_assignments;
+    }
+
+    
 }

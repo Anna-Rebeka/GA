@@ -36,6 +36,8 @@ Route::middleware('auth')->group(function() {
     Route::get('/profile/{user:username}/edit', [UsersController::class, 'edit']);
     Route::get('/profile/{user:username}/events/all', [UsersController::class, 'getAllUserEvents']);
     Route::get('/profile/{user:username}/events/joined', [UsersController::class, 'getUserJoinedEvents']);
+    Route::get('/profile/{user:username}/assignments/all', [UsersController::class, 'getAllUsersAssignments']);
+    Route::get('/profile/{user:username}/assignments/mine', [UsersController::class, 'getUsersAssignments']);
     Route::patch('/profile/{user:username}', [UsersController::class, 'update']);
     Route::get('/all-members/{group:id}', [UsersController::class, 'index']);
     

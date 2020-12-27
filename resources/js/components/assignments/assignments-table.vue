@@ -151,7 +151,6 @@ export default {
             }
             var findBy = this.searchBar.value;
             this.savedAssignments = this.savedAssignments.filter(function(e) {
-                console.log(e.name.toLowerCase().includes(findBy.toLowerCase()));
                 return e.name.toLowerCase().includes(findBy.toLowerCase());
             });
         },
