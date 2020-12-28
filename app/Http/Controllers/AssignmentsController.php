@@ -71,6 +71,10 @@ class AssignmentsController extends Controller
             'due' => $attributes['due'],
             'assignee_id' => $attributes['assignee']
         ]);
+
+        if($assignment->assignee_id){
+            $assignment->assignee;
+        }
         
         return $assignment;
     }
