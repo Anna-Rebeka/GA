@@ -2116,7 +2116,6 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
-    console.log(this.savedAssignments);
     this.select = document.getElementById("filter");
     this.select.addEventListener("click", this.selected);
     document.getElementById("searchButton").addEventListener("click", this.findAssignmentByName);

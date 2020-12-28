@@ -114,7 +114,6 @@ export default {
     },
 
     mounted(){
-        console.log(this.savedAssignments);
         this.select = document.getElementById("filter");
         this.select.addEventListener("click", this.selected);
         document.getElementById("searchButton").addEventListener("click", this.findAssignmentByName);
