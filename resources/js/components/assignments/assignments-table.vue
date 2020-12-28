@@ -76,22 +76,11 @@
                             <div class="ml-4">
                                 <div v-if="assignment.assignee_id == null">
                                     <button 
-                                        @click="checkWithUser(assignment, 'take')"
+                                        @click="checkTakeWithUser(assignment)"
                                         class="rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none">
                                         Take
                                     </button> 
                                 </div>
-                                <!--
-                                <div  v-else-if="assignment.author_id == user.id">
-                                    
-                                    <button 
-                                        @click="checkWithUser(assignment, 'delete')"
-                                        class="rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none">
-                                        Delete
-                                    </button> 
-                                    
-                                </div>
-                                -->
                             </div>
                         </td>
                     </tr>
@@ -236,23 +225,11 @@ export default {
             });
         },
 
-        checkWithUser($assignment, $whatToDo){
+        checkTakeWithUser($assignment, $whatToDo){
             if (confirm("Are you sure? This action is irreversible.")) {
-                if ($whatToDo == "delete"){
-                    this.deleteAssignment($assignment);
-                }
-                else if ($whatToDo == "take"){
-                    this.takeAssignment($assignment);
-                }
+                this.takeAssignment($assignment);
             }
         },
-
-        deleteAssignment($assignment) {
-            axios.delete('/assignments/' + $assignment.id).then(response => {
-                this.allAssignments = this.allAssignments.filter(function(e) { return e != $assignment })
-                this.savedAssignments = this.allAssignments;
-            });
-        }
     },
 }
 </script>

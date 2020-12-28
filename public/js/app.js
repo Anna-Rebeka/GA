@@ -1949,12 +1949,46 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user', 'assignment']
+  props: ['user', 'assignment'],
+  data: function data() {
+    return {
+      showedAssignment: this.assignment
+    };
+  },
+  methods: {
+    checkWithUser: function checkWithUser($assignment, $whatToDo) {
+      if (confirm("Are you sure? This action is irreversible.")) {
+        if ($whatToDo == "delete") {
+          this.deleteAssignment($assignment);
+        } else if ($whatToDo == "take") {
+          this.takeAssignment($assignment);
+        }
+      }
+    },
+    takeAssignment: function takeAssignment($assignment) {
+      var _this = this;
+
+      axios.patch('/assignments/' + $assignment.id + '/take').then(function (response) {
+        _this.showedAssignment.assignee = _this.user;
+        _this.showedAssignment.assignee_id = _this.user.id;
+
+        _this.reload();
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this.errors = error.response.data.errors;
+          console.log(_this.errors);
+        }
+
+        console.log(error.message);
+      });
+    },
+    deleteAssignment: function deleteAssignment($assignment) {
+      axios["delete"]('/assignments/' + $assignment.id).then(function (response) {
+        window.location.href = '/' + $assignment.group_id + '/assignments';
+      });
+    }
+  }
 });
 
 /***/ }),
@@ -1968,17 +2002,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -2205,24 +2228,10 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error.message);
       });
     },
-    checkWithUser: function checkWithUser($assignment, $whatToDo) {
+    checkTakeWithUser: function checkTakeWithUser($assignment, $whatToDo) {
       if (confirm("Are you sure? This action is irreversible.")) {
-        if ($whatToDo == "delete") {
-          this.deleteAssignment($assignment);
-        } else if ($whatToDo == "take") {
-          this.takeAssignment($assignment);
-        }
+        this.takeAssignment($assignment);
       }
-    },
-    deleteAssignment: function deleteAssignment($assignment) {
-      var _this3 = this;
-
-      axios["delete"]('/assignments/' + $assignment.id).then(function (response) {
-        _this3.allAssignments = _this3.allAssignments.filter(function (e) {
-          return e != $assignment;
-        });
-        _this3.savedAssignments = _this3.allAssignments;
-      });
     }
   }
 });
@@ -24183,10 +24192,48 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("div", { staticClass: "p-8 mr-2 mb-8" }, [
-      _c("div", { staticClass: "float-right" }),
+      _c("div", { staticClass: "float-right" }, [
+        _vm.showedAssignment.author_id == _vm.user.id
+          ? _c("div", [
+              _c(
+                "button",
+                {
+                  staticClass:
+                    "rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none",
+                  on: {
+                    click: function($event) {
+                      return _vm.checkWithUser(_vm.showedAssignment, "delete")
+                    }
+                  }
+                },
+                [_vm._v("\r\n                    Delete\r\n                ")]
+              )
+            ])
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "float-right" }, [
+        _vm.showedAssignment.assignee_id == null
+          ? _c("div", [
+              _c(
+                "button",
+                {
+                  staticClass:
+                    "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none",
+                  on: {
+                    click: function($event) {
+                      return _vm.checkWithUser(_vm.showedAssignment, "take")
+                    }
+                  }
+                },
+                [_vm._v("\r\n                    Take\r\n                ")]
+              )
+            ])
+          : _vm._e()
+      ]),
       _vm._v(" "),
       _c("h2", { staticClass: "font-bold text-2xl mb-4" }, [
-        _vm._v(" " + _vm._s(_vm.assignment.name) + " ")
+        _vm._v(" " + _vm._s(_vm.showedAssignment.name) + " ")
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded" }, [
@@ -24197,7 +24244,7 @@ var render = function() {
             "\r\n                " +
               _vm._s(
                 _vm._f("dateFormat")(
-                  new Date(_vm.assignment.due),
+                  new Date(_vm.showedAssignment.due),
                   "DD.MM.YYYY , HH:mm"
                 )
               ) +
@@ -24212,12 +24259,12 @@ var render = function() {
         [
           _c("strong", [_vm._v("By Who")]),
           _c("p", { staticClass: "bg-white p-2 rounded" }, [
-            _vm._v(_vm._s(_vm.assignment.author.name))
+            _vm._v(_vm._s(_vm.showedAssignment.author.name))
           ])
         ]
       ),
       _vm._v(" "),
-      _vm.assignment.assignee
+      _vm.showedAssignment.assignee
         ? _c(
             "div",
             {
@@ -24227,7 +24274,7 @@ var render = function() {
             [
               _c("strong", [_vm._v("For Who")]),
               _c("p", { staticClass: "bg-white p-2 rounded" }, [
-                _vm._v(_vm._s(_vm.assignment.assignee.name))
+                _vm._v(_vm._s(_vm.showedAssignment.assignee.name))
               ])
             ]
           )
@@ -24239,7 +24286,7 @@ var render = function() {
         _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
           _vm._v(
             "\r\n                " +
-              _vm._s(_vm.assignment.description) +
+              _vm._s(_vm.showedAssignment.description) +
               "\r\n            "
           )
         ])
@@ -24426,9 +24473,8 @@ var render = function() {
                                           "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none",
                                         on: {
                                           click: function($event) {
-                                            return _vm.checkWithUser(
-                                              assignment,
-                                              "take"
+                                            return _vm.checkTakeWithUser(
+                                              assignment
                                             )
                                           }
                                         }
@@ -39453,7 +39499,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_events_events_table_vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/events/events-table.vue */ "./resources/js/components/events/events-table.vue");
 /* harmony import */ var _components_comments_event_comments_vue__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/comments/event-comments.vue */ "./resources/js/components/comments/event-comments.vue");
 /* harmony import */ var _components_assignments_group_assignments_vue__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/assignments/group-assignments.vue */ "./resources/js/components/assignments/group-assignments.vue");
-/* harmony import */ var _components_assignments_assignment_show_vue__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/assignments/assignment-show.vue */ "./resources/js/components/assignments/assignment-show.vue");
+/* harmony import */ var _components_assignments_assignment_show_vue__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/assignments/assignment-show.vue */ "./resources/js/components/assignments/assignment-show.vue");
 /* harmony import */ var _components_assignments_assignments_table_vue__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/assignments/assignments-table.vue */ "./resources/js/components/assignments/assignments-table.vue");
 /* harmony import */ var jw_vue_pagination__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! jw-vue-pagination */ "./node_modules/jw-vue-pagination/lib/JwPagination.js");
 /* harmony import */ var jw_vue_pagination__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(jw_vue_pagination__WEBPACK_IMPORTED_MODULE_18__);
@@ -39499,7 +39545,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('event-show', _components_e
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('event-comments', _components_comments_event_comments_vue__WEBPACK_IMPORTED_MODULE_14__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('events-table', _components_events_events_table_vue__WEBPACK_IMPORTED_MODULE_13__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('group-assignments', _components_assignments_group_assignments_vue__WEBPACK_IMPORTED_MODULE_15__["default"]);
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('assignment-show', _components_assignments_assignment_show_vue__WEBPACK_IMPORTED_MODULE_20__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('assignment-show', _components_assignments_assignment_show_vue__WEBPACK_IMPORTED_MODULE_16__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('assignments-table', _components_assignments_assignments_table_vue__WEBPACK_IMPORTED_MODULE_17__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('jw-pagination', jw_vue_pagination__WEBPACK_IMPORTED_MODULE_18___default.a);
 var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
