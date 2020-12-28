@@ -10,6 +10,7 @@ use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\NotesController;
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\EventCommentsController;
+use App\Http\Controllers\AssignmentsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +36,8 @@ Route::middleware('auth')->group(function() {
     Route::get('/profile/{user:username}/edit', [UsersController::class, 'edit']);
     Route::get('/profile/{user:username}/events/all', [UsersController::class, 'getAllUserEvents']);
     Route::get('/profile/{user:username}/events/joined', [UsersController::class, 'getUserJoinedEvents']);
+    Route::get('/profile/{user:username}/assignments/all', [UsersController::class, 'getAllUsersAssignments']);
+    Route::get('/profile/{user:username}/assignments/mine', [UsersController::class, 'getUsersAssignments']);
     Route::patch('/profile/{user:username}', [UsersController::class, 'update']);
     Route::get('/all-members/{group:id}', [UsersController::class, 'index']);
     
@@ -57,6 +60,13 @@ Route::middleware('auth')->group(function() {
     Route::delete('/events/{event:id}', [EventsController::class, 'destroy']);
     Route::post('/events/{event:id}/join', [EventsController::class, 'join']);
     Route::post('/events/{event:id}/leave', [EventsController::class, 'leave']);
+
+    Route::get('/{group:id}/assignments', [AssignmentsController::class, 'index']);
+    Route::get('/{group:id}/assignments/{assignment:id}', [AssignmentsController::class, 'show']);
+    Route::post('/assignments', [AssignmentsController::class, 'store']);
+    Route::delete('/assignments/{assignment:id}', [AssignmentsController::class, 'destroy']);
+    Route::patch('/assignments/{assignment:id}/take', [AssignmentsController::class, 'take']);
+
 
     Route::get('/events/{event:id}/comments', [EventCommentsController::class, 'index']);
     Route::post('/events/{event:id}/comments', [EventCommentsController::class, 'store']);

@@ -7,11 +7,16 @@ import userShow from './components/users/user-show.vue';
 import userEdit from './components/users/user-edit.vue';
 import groupUsers from './components/users/group-members.vue';
 import userEvents from './components/users/user-events.vue';
+import userAssignments from './components/users/user-assignments.vue';
 import notes from './components/notes/note-index.vue';
 import events from './components/events/group-events.vue';
 import eventShow from './components/events/event-show.vue';
 import eventsTable from './components/events/events-table.vue';
 import eventComments from './components/comments/event-comments.vue';
+import assignments from './components/assignments/group-assignments.vue';
+import assignmentShow from './components/assignments/assignment-show.vue';
+import assignmentsTable from './components/assignments/assignments-table.vue';
+
 
 import JwPagination from 'jw-vue-pagination';
 
@@ -30,11 +35,15 @@ Vue.component('user-show', userShow);
 Vue.component('user-edit', userEdit);
 Vue.component('group-members', groupUsers);
 Vue.component('user-events', userEvents);
+Vue.component('user-assignments', userAssignments);
 Vue.component('note-index', notes);
 Vue.component('group-events', events);
 Vue.component('event-show', eventShow);
 Vue.component('event-comments', eventComments);
 Vue.component('events-table', eventsTable);
+Vue.component('group-assignments', assignments);
+Vue.component('assignment-show', assignmentShow);
+Vue.component('assignments-table', assignmentsTable);
 Vue.component('jw-pagination', JwPagination);
 
 var app = new Vue({
