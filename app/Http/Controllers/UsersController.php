@@ -211,6 +211,4 @@ class UsersController extends Controller
             ->get();
         return $user_with_his_assignments;
     }
-
-    
 }

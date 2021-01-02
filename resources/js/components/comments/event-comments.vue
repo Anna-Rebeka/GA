@@ -12,7 +12,7 @@
             </form> 
 
             <div class="border border-gray-300 rounded-lg mb-2">
-                <div v-for="comment in pageOfItems" :key="comment.id" class="flex p-4 border-b border-b-grey-400">
+                <div v-for="comment in pageOfItems" :key="comment.id" class="flex p-4 border-b border-b-gray-400">
                     <div class="mr-2">
                         <img 
                             :src="comment.user.avatar" 
