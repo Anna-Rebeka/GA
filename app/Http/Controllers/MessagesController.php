@@ -87,13 +87,19 @@ class MessagesController extends Controller
     }
 
     public function getUsersChats(){
+        //TODO
+        //create a ChatRoom model with a table and work with that
+
+        /*
         $chats = User::where('users.id', auth()->user()->id)
         ->join('messages', 'users.id', '=', 'messages.to_user_id')
         ->join('users as senders', 'messages.from_user_id', '=', 'senders.id')
         ->select('senders.id', 'senders.name', 'senders.avatar', 'messages.text', 'messages.created_at')
         ->orderBy('messages.created_at', 'DESC')
-        ->distinct('messages.from_user_id')->get();
+        ->distinct('users.id')->get();
+        */
 
-        return $chats;
+        return [];
+        
     }
 }
