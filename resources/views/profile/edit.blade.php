@@ -10,7 +10,7 @@
                 Name
             </label>
 
-            <input class="border border-gray-400 p-2 w-full" type="text" name="name" id="name" 
+            <input class="border-b border-gray-400 p-2 w-full" type="text" name="name" id="name" 
                 value="{{ $user->name }}">
 
             @error('name')
@@ -27,7 +27,7 @@
                 Username
             </label>
 
-            <input class="border border-gray-400 p-2 w-full" type="text" name="username" id="username" 
+            <input class="border-b border-gray-400 p-2 w-full" type="text" name="username" id="username" 
             value="{{ $user->username }}">
 
             @error('username')
@@ -42,7 +42,7 @@
                 Email
             </label>
 
-            <input class="border border-gray-400 p-2 w-full" type="email" name="email" id="email" 
+            <input class="border-b border-gray-400 p-2 w-full" type="email" name="email" id="email" 
                 value="{{ $user->email }}">
 
             @error('email')
@@ -59,7 +59,7 @@
             </label>
             
             <div class="flex">
-                <input class="border border-gray-400 p-2 my-auto w-full" type="file" name="avatar" id="avatar" 
+                <input class="p-2 my-auto w-full" type="file" name="avatar" id="avatar" 
                     value="{{ $user->avatar }}">
 
                 <img src="{{ $user->avatar }}" alt="avatar" class="w-16 h-16 object-cover border-2 border-gray-400">
@@ -78,7 +78,7 @@
             </label>
             
             <div class="flex">
-                <input class="border border-gray-400 p-2 my-auto w-full" type="file" name="banner" id="banner" 
+                <input class="p-2 my-auto w-full" type="file" name="banner" id="banner" 
                     value="{{ $user->banner }}">
 
                 <img src="{{ $user->banner }}" alt="banner" class="w-32 h-16 object-cover border-2 border-gray-400">
@@ -96,7 +96,7 @@
                 Bio
             </label>
 
-            <input class="border border-gray-400 p-2 w-full" type="text" name="bio" id="bio" 
+            <input class="border-b border-gray-400 p-2 w-full" type="text" name="bio" id="bio" 
             value="{{ $user->bio }}">
 
             @error('bio')
@@ -111,7 +111,7 @@
                 Password
             </label>
 
-            <input class="border border-gray-400 p-2 w-full" type="password" name="password" id="password">
+            <input class="border-b border-gray-400 p-2 w-full" type="password" name="password" id="password">
 
             @error('password')
                 <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
@@ -125,7 +125,7 @@
                 Password Confirmation
             </label>
 
-            <input class="border border-gray-400 p-2 w-full" type="password" name="password_confirmation" id="password_confirmation">
+            <input class="border-b border-gray-400 p-2 w-full" type="password" name="password_confirmation" id="password_confirmation">
 
             @error('password_confirmation')
                 <p class="text-red-500 text-xs mt-2">{{ $message }}</p>

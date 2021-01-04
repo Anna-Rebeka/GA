@@ -11,7 +11,7 @@ use App\Http\Controllers\NotesController;
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\EventCommentsController;
 use App\Http\Controllers\AssignmentsController;
-use App\Http\Controllers\MessagesController;
+use App\Http\Controllers\ChatroomsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,10 +70,7 @@ Route::middleware('auth')->group(function() {
     Route::delete('/assignments/{assignment:id}', [AssignmentsController::class, 'destroy']);
     Route::patch('/assignments/{assignment:id}/take', [AssignmentsController::class, 'take']);
 
-    Route::get('/messages', [MessagesController::class, 'index']);
-    Route::get('/messages/all', [MessagesController::class, 'getUsersChats']);
-
-
+    Route::get('/chats', [ChatroomsController::class, 'index']);
 });
 
 Route::get('/invite-member/{token}', [InviteMemberController::class, 'accept'])->name('accept');

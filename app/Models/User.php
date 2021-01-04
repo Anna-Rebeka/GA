@@ -98,4 +98,16 @@ class User extends Authenticatable
     public function toMessages(){
         return $this->hasMany(Message::class, 'to_user_id');
     }
+
+    public function chatroomsA() {
+        return $this->hasMany(Chatroom::class, 'user_a_id');
+    }
+    
+    public function chatroomsB() {
+        return $this->hasMany(Chatroom::class, 'user_b_id');
+    }
+    
+    public function chatrooms() {
+        return $this->chatroomsA->merge($this->chatroomsB);
+    }
 }
