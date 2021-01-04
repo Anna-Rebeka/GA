@@ -31142,8 +31142,8 @@ var render = function() {
     "div",
     { staticClass: "border-bottom border-gray-300 rounded-lg mb-2" },
     _vm._l(_vm.chats, function(chat) {
-      return _c("div", { key: chat.user_id }, [
-        _c("a", { attrs: { href: "/chats/" + chat.id } }, [
+      return _c("div", { key: chat.chatroom_id }, [
+        _c("a", { attrs: { href: "/chats/" + chat.chatroom_id } }, [
           _c(
             "div",
             {

@@ -1,8 +1,8 @@
 <template>
     <div class="border-bottom border-gray-300 rounded-lg mb-2">
         
-        <div v-for="chat in chats" :key="chat.user_id" >
-            <a :href="'/chats/' + chat.id">
+        <div v-for="chat in chats" :key="chat.chatroom_id" >
+            <a :href="'/chats/' + chat.chatroom_id">
                 <div class="flex p-4 border-b border-b-gray-400 hover:bg-gray-200">
                     <div class="mr-2">
                         <img 
