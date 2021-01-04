@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chatroom;
+use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -16,43 +17,22 @@ class ChatroomsController extends Controller
     public function index()
     {
         $user = auth()->user();
+        $chatrooms = $user->chatrooms;
         $messages = [];
 
-
-        //TODO make a table user <---> chatroom 
-        /*
-        foreach ($user->chatrooms() as $chatroom){
-            $messages[$chatroom->id] = $chatroom->latestMessage;
+        foreach ($chatrooms as $chatroom){
+            $chatroom['users'] = $chatroom->users()->where('users.id', '!=', $user->id)->get();
+            $chatroom->latestMessage;
         }
-        */
-
-        foreach ($user->chatroomsA as $chatroomA){
-            $messages[$chatroomA->id] = $chatroomA->latestMessage;
-        }
-
-        foreach ($user->chatroomsB as $chatroomB){
-            $messages[$chatroomB->id] = $chatroomB->latestMessage;
-        }
-
-        
-
-        $first = DB::table('chatrooms')
-            ->join('users', 'chatrooms.user_b_id', '=', 'users.id')
-            ->where('chatrooms.user_a_id', '=', auth()->user()->id)
-            ->select('chatrooms.id as chatroom_id', 'users.id as user_id', 'users.name', 'users.avatar');
-        
-        $chatrooms = DB::table('chatrooms')
-            ->join('users', 'chatrooms.user_a_id', '=', 'users.id')
-            ->where('chatrooms.user_b_id', '=', auth()->user()->id)
-            ->select('chatrooms.id as chatroom_id', 'users.id as user_id', 'users.name', 'users.avatar')
-            ->union($first)
-            ->get();
 
         return view('chatrooms.index', [
             'user' => auth()->user(),
             'chatrooms' => $chatrooms,
-            'messages' => $messages
         ]);
+    }
+
+    public function fetchMessages(Chatroom $chatroom){
+        return Message::with('sender')->where('chatroom_id', $chatroom->id)->orderBy('created_at')->get();
     }
 
         
@@ -87,7 +67,10 @@ class ChatroomsController extends Controller
      */
     public function show(Chatroom $chatroom)
     {
-        //
+        return view('chatrooms.show', [
+            'user' => auth()->user(),
+            'chatroom' => $chatroom
+        ]);
     }
 
     /**

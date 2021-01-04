@@ -71,6 +71,8 @@ Route::middleware('auth')->group(function() {
     Route::patch('/assignments/{assignment:id}/take', [AssignmentsController::class, 'take']);
 
     Route::get('/chats', [ChatroomsController::class, 'index']);
+    Route::get('/chats/{chatroom:id}', [ChatroomsController::class, 'show']);
+
 });
 
 Route::get('/invite-member/{token}', [InviteMemberController::class, 'accept'])->name('accept');

@@ -1,3 +1,3 @@
 <x-master>
-    <chatrooms-index user="{{ $user }}" chatrooms="{{ json_encode($chatrooms) }}" messages="{{ json_encode($messages) }}"></chatrooms-index>
+    <chatrooms-index :user="{{ $user }}" :chatrooms="{{ $chatrooms }}"></chatrooms-index>
 </x-master>

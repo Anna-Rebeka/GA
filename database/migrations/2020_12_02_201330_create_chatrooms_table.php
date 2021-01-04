@@ -15,17 +15,8 @@ class CreateChatroomsTable extends Migration
     {
         Schema::create('chatrooms', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_a_id');
-            $table->foreignId('user_b_id');
+            $table->string('name')->nullable();
             $table->timestamps();
-
-            $table->foreign('user_a_id')
-                ->references('id')
-                ->on('users');
-
-            $table->foreign('user_b_id')
-                ->references('id')
-                ->on('users');
         });
     }
 

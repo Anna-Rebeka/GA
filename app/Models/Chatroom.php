@@ -9,17 +9,9 @@ class Chatroom extends Model
 {
     use HasFactory;
 
-    
-    public function userA(){
-        return $this->belongsTo(User::class,'user_a_id');
-    }
-
-    public function userB(){
-        return $this->belongsTo(User::class,'user_b_id');
-    }
 
     public function users(){
-        return $this->userA->merge($this->userB);
+        return $this->belongsToMany(User::class);
     }
 
     public function messages(){
@@ -27,7 +19,7 @@ class Chatroom extends Model
     }
 
     public function latestMessage(){
-        return $this->messages()->orderBy('created_at', 'DESC')->limit(1);
+        return $this->hasOne(Message::class)->latest();
     }
 
 

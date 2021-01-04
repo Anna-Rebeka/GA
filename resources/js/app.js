@@ -17,6 +17,7 @@ import assignments from './components/assignments/group-assignments.vue';
 import assignmentShow from './components/assignments/assignment-show.vue';
 import assignmentsTable from './components/assignments/assignments-table.vue';
 import chatroomsIndex from './components/chatrooms/chatrooms-index.vue';
+import chatroomsShow from './components/chatrooms/chatrooms-show.vue';
 
 
 import JwPagination from 'jw-vue-pagination';
@@ -47,6 +48,8 @@ Vue.component('assignment-show', assignmentShow);
 Vue.component('assignments-table', assignmentsTable);
 Vue.component('jw-pagination', JwPagination);
 Vue.component('chatrooms-index', chatroomsIndex);
+Vue.component('chatrooms-show', chatroomsShow);
+
 
 var app = new Vue({
    el: '#app',
