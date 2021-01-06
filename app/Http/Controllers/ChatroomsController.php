@@ -31,12 +31,6 @@ class ChatroomsController extends Controller
         ]);
     }
 
-    public function fetchMessages(Chatroom $chatroom){
-        return Message::with('sender')->where('chatroom_id', $chatroom->id)->orderBy('created_at')->get();
-    }
-
-        
-
 
     /**
      * Show the form for creating a new resource.
@@ -66,10 +60,11 @@ class ChatroomsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Chatroom $chatroom)
-    {
+    {   
+        $chatroom->users;
         return view('chatrooms.show', [
             'user' => auth()->user(),
-            'chatroom' => $chatroom
+            'chatroom' => $chatroom,
         ]);
     }
 

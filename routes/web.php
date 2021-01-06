@@ -12,6 +12,8 @@ use App\Http\Controllers\EventsController;
 use App\Http\Controllers\EventCommentsController;
 use App\Http\Controllers\AssignmentsController;
 use App\Http\Controllers\ChatroomsController;
+use App\Http\Controllers\MessagesController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -72,6 +74,7 @@ Route::middleware('auth')->group(function() {
 
     Route::get('/chats', [ChatroomsController::class, 'index']);
     Route::get('/chats/{chatroom:id}', [ChatroomsController::class, 'show']);
+    Route::get('/chats/{chatroom:id}/messages', [MessagesController::class, 'index']);
 
 });
 

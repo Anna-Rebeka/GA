@@ -2424,12 +2424,59 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user', 'chatroom'],
   data: function data() {
     return {
-      showedChatroom: this.chatrooms
+      showedChatroom: this.chatroom,
+      messages: []
     };
+  },
+  mounted: function mounted() {
+    console.log(this.chatroom);
+    this.getMessages();
+    console.log(this.messages);
+  },
+  //make message text a long text type
+  methods: {
+    getMessages: function getMessages() {
+      var _this = this;
+
+      axios.get('/chats/' + this.chatroom.id + '/messages').then(function (response) {
+        _this.messages = response.data;
+        console.log(_this.messages);
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this.errors = error.response.data.errors;
+          console.log(_this.errors);
+        }
+
+        console.log(error.message);
+      });
+    }
   }
 });
 
@@ -31257,7 +31304,66 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("\n    huh\n")])
+  return _c("div", [
+    _c(
+      "div",
+      { staticClass: "container flow-root mb-2" },
+      _vm._l(_vm.messages, function(message) {
+        return _c(
+          "div",
+          {
+            key: message.id,
+            staticClass:
+              "bg-white relative clear-both w-1/2 px-4 pt-4 mb-2 border border-gray-300 rounded-lg",
+            class: {
+              "float-right bg-purple-100": message.sender.id == _vm.user.id,
+              "pb-6": message.sender.id != _vm.user.id
+            }
+          },
+          [
+            _c("div", [
+              _c(
+                "h5",
+                { staticClass: "text-xs text-gray-500 absolute bottom-0" },
+                [_vm._v(_vm._s(message.sender.name))]
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "float-left mr-2" }, [
+                _c("img", {
+                  staticClass: "rounded-full object-cover h-15 w-15 mr-2",
+                  attrs: { src: message.sender.avatar, alt: "avatar" }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", [
+                _c("p", { staticClass: "text-sm mb-3 break-words p-4" }, [
+                  _vm._v(
+                    "\n                            " +
+                      _vm._s(message.text) +
+                      "\n                        "
+                  )
+                ]),
+                _vm._v(" "),
+                _c("p", { staticClass: "text-xs float-right mb-2" }, [
+                  _vm._v(
+                    " " +
+                      _vm._s(
+                        _vm._f("dateFormat")(
+                          new Date(message.created_at),
+                          "HH:mm , DD.MM.YYYY"
+                        )
+                      ) +
+                      " "
+                  )
+                ])
+              ])
+            ])
+          ]
+        )
+      }),
+      0
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -46260,7 +46366,7 @@ __webpack_require__.r(__webpack_exports__);
 /*!*********************************************************************************************!*\
   !*** ./resources/js/components/chatrooms/chatrooms-show.vue?vue&type=template&id=e6f70fb8& ***!
   \*********************************************************************************************/
-/*! exports provided: render, staticRenderFns */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

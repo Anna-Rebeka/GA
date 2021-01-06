@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Message;
 use App\Models\User;
+use App\Models\Chatroom;
 use Illuminate\Http\Request;
 
 class MessagesController extends Controller
@@ -13,11 +14,9 @@ class MessagesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Chatroom $chatroom)
     {
-        return view('messages.index', [
-            'user' => auth()->user(),
-        ]);
+        return Message::where('chatroom_id', $chatroom->id)->with('sender')->get();
     }
 
     /**
