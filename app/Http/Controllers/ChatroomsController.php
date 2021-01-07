@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Chatroom;
 use App\Models\Message;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -31,6 +32,13 @@ class ChatroomsController extends Controller
         ]);
     }
 
+    public function getMessages(Chatroom $chatroom){
+        return Message::where('chatroom_id', $chatroom->id)->with('sender')->get();
+    }
+
+    public function getUsers(Chatroom $chatroom, User $user){
+        return $chatroom->users()->where('users.id', '!=', $user->id)->get();
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -50,7 +58,7 @@ class ChatroomsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       //
     }
 
     /**

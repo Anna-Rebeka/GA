@@ -2447,31 +2447,101 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user', 'chatroom'],
   data: function data() {
     return {
       showedChatroom: this.chatroom,
-      messages: []
+      messages: [],
+      users: [],
+      newMessage: ''
     };
   },
   mounted: function mounted() {
-    console.log(this.chatroom);
     this.getMessages();
-    console.log(this.messages);
+    this.getUsers();
+    document.getElementById("messageArea").addEventListener("keypress", this.submitOnEnter);
   },
-  //make message text a long text type
+  //TODO : make message text a long text type
   methods: {
-    getMessages: function getMessages() {
+    getUsers: function getUsers() {
       var _this = this;
 
-      axios.get('/chats/' + this.chatroom.id + '/messages').then(function (response) {
-        _this.messages = response.data;
-        console.log(_this.messages);
+      axios.get('/chats/' + this.chatroom.id + '/users/' + this.user.id).then(function (response) {
+        _this.users = response.data;
       })["catch"](function (error) {
         if (error.response.status == 422) {
           _this.errors = error.response.data.errors;
           console.log(_this.errors);
+        }
+
+        console.log(error.message);
+      });
+    },
+    getMessages: function getMessages() {
+      var _this2 = this;
+
+      var div = this.chatWindow;
+      axios.get('/chats/' + this.chatroom.id + '/messages').then(function (response) {
+        _this2.messages = response.data;
+
+        _this2.$nextTick(function () {
+          _this2.$refs.chat.scrollTop = 9999;
+        });
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this2.errors = error.response.data.errors;
+          console.log(_this2.errors);
+        }
+
+        console.log(error.message);
+      });
+    },
+    submitOnEnter: function submitOnEnter(event) {
+      if (event.which === 13) {
+        event.target.form.dispatchEvent(new Event("submit", {
+          cancelable: true
+        }));
+        event.preventDefault();
+      }
+    },
+    submit: function submit() {
+      var _this3 = this;
+
+      var messageArea = document.getElementById("messageArea").value;
+      document.getElementById("messageArea").value = "";
+      console.log(this.chatroom.id);
+      axios.post('/chats/' + this.chatroom.id + '/send', {
+        chatroom_id: this.chatroom.id,
+        text: messageArea
+      }).then(function (response) {
+        response.data['sender'] = _this3.user;
+
+        _this3.messages.push(response.data);
+
+        _this3.$nextTick(function () {
+          _this3.$refs.chat.scrollTop = 9999;
+        });
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this3.errors = error.response.data.errors;
+          console.log(_this3.errors);
         }
 
         console.log(error.message);
@@ -31304,68 +31374,124 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c(
-      "div",
-      { staticClass: "container flow-root mb-2" },
-      _vm._l(_vm.messages, function(message) {
+  return _c(
+    "div",
+    [
+      _vm._l(_vm.users, function(chatUser) {
         return _c(
-          "div",
+          "h5",
           {
-            key: message.id,
-            staticClass:
-              "bg-white relative clear-both w-1/2 px-4 pt-4 mb-2 border border-gray-300 rounded-lg",
-            class: {
-              "float-right bg-purple-100": message.sender.id == _vm.user.id,
-              "pb-6": message.sender.id != _vm.user.id
-            }
+            key: chatUser.id,
+            staticClass: "text-lg font-bold text-center h-14 w-full -mt-4 mb-6"
           },
-          [
-            _c("div", [
-              _c(
-                "h5",
-                { staticClass: "text-xs text-gray-500 absolute bottom-0" },
-                [_vm._v(_vm._s(message.sender.name))]
-              ),
-              _vm._v(" "),
-              _c("div", { staticClass: "float-left mr-2" }, [
-                _c("img", {
-                  staticClass: "rounded-full object-cover h-15 w-15 mr-2",
-                  attrs: { src: message.sender.avatar, alt: "avatar" }
-                })
-              ]),
-              _vm._v(" "),
-              _c("div", [
-                _c("p", { staticClass: "text-sm mb-3 break-words p-4" }, [
-                  _vm._v(
-                    "\n                            " +
-                      _vm._s(message.text) +
-                      "\n                        "
-                  )
-                ]),
-                _vm._v(" "),
-                _c("p", { staticClass: "text-xs float-right mb-2" }, [
-                  _vm._v(
-                    " " +
-                      _vm._s(
-                        _vm._f("dateFormat")(
-                          new Date(message.created_at),
-                          "HH:mm , DD.MM.YYYY"
-                        )
-                      ) +
-                      " "
-                  )
-                ])
-              ])
-            ])
-          ]
+          [_vm._v("\n        " + _vm._s(chatUser.name) + "\n\n    ")]
         )
       }),
-      0
-    )
-  ])
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          ref: "chat",
+          staticClass: "container mb-2 pr-4 h-80 overflow-y-scroll",
+          attrs: { id: "chatWindow" }
+        },
+        _vm._l(_vm.messages, function(message) {
+          return _c(
+            "div",
+            {
+              key: message.id,
+              staticClass:
+                "bg-white relative clear-both w-1/2 px-4 pt-4 mb-2 border border-gray-300 rounded-lg",
+              class: {
+                "float-right bg-purple-100": message.sender.id == _vm.user.id,
+                "pb-6": message.sender.id != _vm.user.id
+              }
+            },
+            [
+              _c("div", [
+                _c(
+                  "h5",
+                  { staticClass: "text-xs text-gray-500 absolute bottom-0" },
+                  [_vm._v(_vm._s(message.sender.name))]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "float-left mr-2" }, [
+                  _c("img", {
+                    staticClass: "rounded-full object-cover h-15 w-15 mr-2",
+                    attrs: { src: message.sender.avatar, alt: "avatar" }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", [
+                  _c("p", { staticClass: "text-sm mb-3 break-words p-4" }, [
+                    _vm._v(
+                      "\n                            " +
+                        _vm._s(message.text) +
+                        "\n                        "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "text-xs float-right mb-2" }, [
+                    _vm._v(
+                      " " +
+                        _vm._s(
+                          _vm._f("dateFormat")(
+                            new Date(message.created_at),
+                            "HH:mm , DD.MM.YYYY"
+                          )
+                        ) +
+                        " "
+                    )
+                  ])
+                ])
+              ])
+            ]
+          )
+        }),
+        0
+      ),
+      _vm._v(" "),
+      _c(
+        "form",
+        {
+          staticClass: "mb-4",
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              return _vm.submit($event)
+            }
+          }
+        },
+        [_vm._m(0)]
+      )
+    ],
+    2
+  )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass:
+          "bg-white relative h-24 w-full px-4 pt-4 mt-4 mb-2 border border-gray-300 rounded-lg"
+      },
+      [
+        _c("textarea", {
+          staticClass: "w-full resize-none focus:outline-none",
+          attrs: {
+            id: "messageArea",
+            name: "text",
+            placeholder: "New message..."
+          }
+        })
+      ]
+    )
+  }
+]
 render._withStripped = true
 
 
@@ -46366,7 +46492,7 @@ __webpack_require__.r(__webpack_exports__);
 /*!*********************************************************************************************!*\
   !*** ./resources/js/components/chatrooms/chatrooms-show.vue?vue&type=template&id=e6f70fb8& ***!
   \*********************************************************************************************/
-/*! no static exports found */
+/*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

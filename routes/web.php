@@ -74,7 +74,10 @@ Route::middleware('auth')->group(function() {
 
     Route::get('/chats', [ChatroomsController::class, 'index']);
     Route::get('/chats/{chatroom:id}', [ChatroomsController::class, 'show']);
-    Route::get('/chats/{chatroom:id}/messages', [MessagesController::class, 'index']);
+    Route::get('/chats/{chatroom:id}/messages', [ChatroomsController::class, 'getMessages']);
+    Route::get('/chats/{chatroom:id}/users/{user:id}', [ChatroomsController::class, 'getUsers']);
+    Route::post('/chats/{chatroom:id}/send', [MessagesController::class, 'store']);
+
 
 });
 

@@ -16,7 +16,7 @@ class MessagesController extends Controller
      */
     public function index(Chatroom $chatroom)
     {
-        return Message::where('chatroom_id', $chatroom->id)->with('sender')->get();
+        //
     }
 
     /**
@@ -35,9 +35,20 @@ class MessagesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $fields)
     {
-        //
+        $attributes = $fields->validate([
+            'chatroom_id' => ['required'],
+            'text' => ['required', 'max:300'],
+            ]);
+        $message = Message::create([
+            'sender_id' => auth()->user()->id,
+            'chatroom_id' => $attributes['chatroom_id'],
+            'text' => $attributes['text'],
+            'read' => false,
+        ]);
+        
+        return $message;
     }
 
     /**
