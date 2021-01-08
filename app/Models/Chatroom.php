@@ -22,6 +22,10 @@ class Chatroom extends Model
         return $this->hasOne(Message::class)->latest();
     }
 
+    public function hasUser($user){
+        return $this->users->contains($user);
+    }
+
 
     
 

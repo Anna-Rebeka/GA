@@ -6,6 +6,7 @@ use App\Models\Message;
 use App\Models\User;
 use App\Models\Chatroom;
 use Illuminate\Http\Request;
+use App\Events\MessageSent;
 
 class MessagesController extends Controller
 {
@@ -47,6 +48,11 @@ class MessagesController extends Controller
             'text' => $attributes['text'],
             'read' => false,
         ]);
+        
+        
+
+        broadcast(new MessageSent($message, Chatroom::find($message->chatroom_id), auth()->user()))->toOthers();
+
         
         return $message;
     }
