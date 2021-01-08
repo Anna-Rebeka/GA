@@ -78,7 +78,6 @@ Route::middleware('auth')->group(function() {
     Route::get('/chats/{chatroom:id}/users/{user:id}', [ChatroomsController::class, 'getUsers']);
     Route::post('/chats/{chatroom:id}/send', [MessagesController::class, 'store']);
 
-
 });
 
 Route::get('/invite-member/{token}', [InviteMemberController::class, 'accept'])->name('accept');

@@ -2474,40 +2474,54 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
+    var _this = this;
+
     this.getMessages();
     this.getUsers();
     document.getElementById("messageArea").addEventListener("keypress", this.submitOnEnter);
+    window.Echo["private"]('chatrooms.' + this.chatroom.id).listen('MessageSent', function (e) {
+      e.message.sender = e.sender;
+
+      _this.messages.push(e.message);
+
+      _this.scrollChat();
+    });
   },
   //TODO : make message text a long text type
   methods: {
+    scrollChat: function scrollChat() {
+      var _this2 = this;
+
+      this.$nextTick(function () {
+        _this2.$refs.chat.scrollTop = 9999;
+      });
+    },
     getUsers: function getUsers() {
-      var _this = this;
+      var _this3 = this;
 
       axios.get('/chats/' + this.chatroom.id + '/users/' + this.user.id).then(function (response) {
-        _this.users = response.data;
+        _this3.users = response.data;
       })["catch"](function (error) {
         if (error.response.status == 422) {
-          _this.errors = error.response.data.errors;
-          console.log(_this.errors);
+          _this3.errors = error.response.data.errors;
+          console.log(_this3.errors);
         }
 
         console.log(error.message);
       });
     },
     getMessages: function getMessages() {
-      var _this2 = this;
+      var _this4 = this;
 
       var div = this.chatWindow;
       axios.get('/chats/' + this.chatroom.id + '/messages').then(function (response) {
-        _this2.messages = response.data;
+        _this4.messages = response.data;
 
-        _this2.$nextTick(function () {
-          _this2.$refs.chat.scrollTop = 9999;
-        });
+        _this4.scrollChat();
       })["catch"](function (error) {
         if (error.response.status == 422) {
-          _this2.errors = error.response.data.errors;
-          console.log(_this2.errors);
+          _this4.errors = error.response.data.errors;
+          console.log(_this4.errors);
         }
 
         console.log(error.message);
@@ -2522,26 +2536,26 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     submit: function submit() {
-      var _this3 = this;
+      var _this5 = this;
 
       var messageArea = document.getElementById("messageArea").value;
       document.getElementById("messageArea").value = "";
-      console.log(this.chatroom.id);
       axios.post('/chats/' + this.chatroom.id + '/send', {
         chatroom_id: this.chatroom.id,
-        text: messageArea
+        text: messageArea,
+        chatroom: this.chatroom
       }).then(function (response) {
-        response.data['sender'] = _this3.user;
+        response.data['sender'] = _this5.user;
 
-        _this3.messages.push(response.data);
+        _this5.messages.push(response.data);
 
-        _this3.$nextTick(function () {
-          _this3.$refs.chat.scrollTop = 9999;
+        _this5.$nextTick(function () {
+          _this5.$refs.chat.scrollTop = 9999;
         });
       })["catch"](function (error) {
         if (error.response.status == 422) {
-          _this3.errors = error.response.data.errors;
-          console.log(_this3.errors);
+          _this5.errors = error.response.data.errors;
+          console.log(_this5.errors);
         }
 
         console.log(error.message);
@@ -46152,11 +46166,12 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 
 
+window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   broadcaster: 'pusher',
   key: '70409345b2848a8df018',
   cluster: 'eu',
-  encrypted: true
+  forceTLS: true
 });
 
 /***/ }),

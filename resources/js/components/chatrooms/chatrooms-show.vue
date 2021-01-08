@@ -59,10 +59,25 @@ export default {
         this.getMessages();
         this.getUsers();
         document.getElementById("messageArea").addEventListener("keypress", this.submitOnEnter);
+        
+        window.Echo.private('chatrooms.' + this.chatroom.id)
+        .listen('MessageSent', (e) => {
+            e.message.sender = e.sender;
+            this.messages.push(e.message);
+            this.scrollChat();
+        });
     },
 
     //TODO : make message text a long text type
     methods: {
+        scrollChat() {
+            this.$nextTick(
+                () => {
+                    this.$refs.chat.scrollTop=9999;
+                }
+            )
+        },
+
         getUsers() {
             axios.get('/chats/' + this.chatroom.id + '/users/' + this.user.id).then(response => {
                 this.users = response.data;
@@ -79,11 +94,7 @@ export default {
             var div = this.chatWindow;
             axios.get('/chats/' + this.chatroom.id + '/messages').then(response => {
                 this.messages = response.data;
-                this.$nextTick(
-                    () => {
-                        this.$refs.chat.scrollTop=9999;
-                    }
-                )
+                this.scrollChat();
             }).catch(error => {
                 if (error.response.status == 422){
                     this.errors = error.response.data.errors;
@@ -103,8 +114,7 @@ export default {
         submit(){
             var messageArea = document.getElementById("messageArea").value;
             document.getElementById("messageArea").value = "";
-            console.log(this.chatroom.id);
-            axios.post('/chats/' + this.chatroom.id + '/send', {chatroom_id: this.chatroom.id, text: messageArea}).then(response => {
+            axios.post('/chats/' + this.chatroom.id + '/send', {chatroom_id: this.chatroom.id, text: messageArea, chatroom: this.chatroom}).then(response => {
                 response.data['sender'] = this.user;    
                 this.messages.push(response.data);
                 this.$nextTick(
