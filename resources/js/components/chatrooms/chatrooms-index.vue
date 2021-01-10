@@ -1,8 +1,12 @@
 <template>
-    <div class="border-bottom border-gray-300 rounded-lg mb-2">
-        
+    <div class="border-bottom relative border-gray-300 rounded-lg mb-2">
+        <div class="relative inline-block w-44 h-10 mb-10" >
+            <input id="memberInput" type="text" name="memberInput" placeholder="New message to..."
+                class="rounded-lg bg-white border border-gray-300 text-gray-500 w-full h-full px-5 pr-10 rounded-lg text-sm focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500"
+            >
+        </div>
         <div v-for="chat in chatrooms" :key="chat.id" >
-            <a :href="'/chats/' + chat.id">
+            <a v-if="chat.latest_message" :href="'/chats/' + chat.id">
                 <div class="flex p-4 border-b border-b-gray-400 hover:bg-gray-200">
                     <div class="mr-2">
                         <img 
@@ -35,9 +39,67 @@
 <script>
 export default {
     props: ['user', 'chatrooms'],
+    
+    data() {
+        return {
+            members: [],
+            lettersCounter: 0,
+        };
+    },
 
+    mounted () {
+        this.getGroupMembers();
+    },
     methods: {
-        
+        getGroupMembers(){
+            axios.get('/group/' + this.user.active_group + '/members/get').then(response => {
+                this.members = response.data;
+                this.autocomplete(document.getElementById("memberInput"), this.members, this.lettersCounter);
+            }).catch(error => {
+                if (error.response.status == 422){
+                    this.errors = error.response.data.errors;
+                    console.log(this.errors);
+                }
+                console.log(error.message);
+            });
+        },
+
+        autocomplete(inp, members, counter) {            
+            inp.addEventListener("input", function(e) {
+                if (counter < 2){
+                    counter += 1;
+                    return false;
+                }
+                counter = 0;
+                var a, b, i, val = this.value;
+                closeAllLists();
+                if (!val) { return false;}
+                a = document.createElement("DIV");
+                a.setAttribute("id", this.id + "autocomplete-list");
+                a.setAttribute("class", "autocomplete-items");
+                this.parentNode.appendChild(a);
+                for (i = 0; i < members.length; i++) {
+                    if (members[i].name.toLowerCase().includes(val.toLowerCase())){
+                        b = document.createElement("DIV");
+                        b.setAttribute("class", "w-full h-full");
+                        b.innerHTML += "<a class='block border-none w-full' href='/chats/find/" + members[i].id + "'>" + members[i].name + "</a>";
+                        a.appendChild(b);
+                    }
+                }
+            });
+           
+            function closeAllLists(elmnt) {
+                var x = document.getElementsByClassName("autocomplete-items");
+                for (var i = 0; i < x.length; i++) {
+                    if (elmnt != x[i] && elmnt != inp) {
+                        x[i].parentNode.removeChild(x[i]);
+                    }
+                }
+            }
+            document.addEventListener("click", function (e) {
+                closeAllLists(e.target);
+            });
+        }   
     }
 
 }
@@ -45,4 +107,27 @@ export default {
 
 <style>
 
+.autocomplete-items {
+  position: absolute;
+  z-index: 99;
+  top: 100%;
+  left: 0;
+  right: 0;
+  font-size: 14px;
+  border: solid #d1d5db 0.5px;
+  border-radius: 8px;
+  background-color: #d1d5db
+}
+.autocomplete-items div {
+  padding: 8px;
+  cursor: pointer;
+}
+.autocomplete-items div:hover {
+  background-color:#6366f1;
+  color: white;
+}
+.autocomplete-active {
+  background-color: #6366f1 !important;
+  color: white;
+}
 </style>

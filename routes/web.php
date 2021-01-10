@@ -55,6 +55,8 @@ Route::middleware('auth')->group(function() {
     Route::get('/create-group', [GroupsController::class, 'create']);
     Route::post('/create-group', [GroupsController::class, 'store']);
     Route::get('/change-group', [GroupsController::class, 'index']);
+    Route::get('/group/{group:id}/members/get', [GroupsController::class, 'getMembers']);
+
 
     Route::get('/{group:id}/events', [EventsController::class, 'index']);
     Route::get('/{group:id}/events/{event:id}', [EventsController::class, 'show']);
@@ -73,9 +75,12 @@ Route::middleware('auth')->group(function() {
     Route::patch('/assignments/{assignment:id}/take', [AssignmentsController::class, 'take']);
 
     Route::get('/chats', [ChatroomsController::class, 'index']);
-    Route::get('/chats/{chatroom:id}', [ChatroomsController::class, 'show']);
+    Route::get('/chats/{chatroom:id}', [ChatroomsController::class, 'show'])->name('showchat');
     Route::get('/chats/{chatroom:id}/messages', [ChatroomsController::class, 'getMessages']);
     Route::get('/chats/{chatroom:id}/users/{user:id}', [ChatroomsController::class, 'getUsers']);
+    Route::get('/chats/find/{user:id}', [ChatroomsController::class, 'findOrCreateChatroom']);
+
+
     Route::post('/chats/{chatroom:id}/send', [MessagesController::class, 'store']);
 
 });
