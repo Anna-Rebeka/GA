@@ -17,7 +17,7 @@ class CreateMessagesTable extends Migration
             $table->id();
             $table->foreignId('sender_id');
             $table->foreignId('chatroom_id');
-            $table->string('text', 300);
+            $table->string('text', 1000);
             $table->boolean('read')->default(false);
             $table->timestamps();
 

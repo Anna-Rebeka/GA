@@ -126,4 +126,15 @@ class ChatroomsController extends Controller
         $new_chatroom->users()->attach($user->id);
         return redirect()->route('showchat', ['chatroom' => $new_chatroom->id]);
     }
+
+
+    public function markAsReadMessages(Chatroom $chatroom){
+        $user = auth()->user();
+        $affected = DB::table('messages')->where('chatroom_id', $chatroom->id)->where('sender_id', '!=', $user->id)->update(['read' => 1]);
+        return $affected;
+    }
+
+    public function getLatestMessage(Chatroom $chatroom){
+        return $chatroom->messages()->with('sender')->latest()->first();
+    }
 }

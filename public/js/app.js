@@ -2406,29 +2406,55 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user', 'chatrooms'],
   data: function data() {
     return {
       members: [],
-      lettersCounter: 0
+      lettersCounter: 0,
+      showedChatroom: this.chatrooms
     };
   },
   mounted: function mounted() {
+    var _this = this;
+
     this.getGroupMembers();
+    this.showedChatroom.forEach(function (chatroom) {
+      window.Echo["private"]('chatrooms.' + chatroom.id).listen('MessageSent', function (e) {
+        _this.getLatestMessage(chatroom);
+      });
+    });
   },
   methods: {
-    getGroupMembers: function getGroupMembers() {
-      var _this = this;
+    getLatestMessage: function getLatestMessage(chatroom) {
+      var _this2 = this;
 
-      axios.get('/group/' + this.user.active_group + '/members/get').then(function (response) {
-        _this.members = response.data;
-
-        _this.autocomplete(document.getElementById("memberInput"), _this.members, _this.lettersCounter);
+      axios.get('/chats/' + chatroom.id + '/latestMessage').then(function (response) {
+        chatroom.latest_message = response.data;
+        chatroom.latest_message.sender_id = chatroom.latest_message.sender.id;
       })["catch"](function (error) {
         if (error.response.status == 422) {
-          _this.errors = error.response.data.errors;
-          console.log(_this.errors);
+          _this2.errors = error.response.data.errors;
+          console.log(_this2.errors);
+        }
+
+        console.log(error.message);
+      });
+    },
+    getGroupMembers: function getGroupMembers() {
+      var _this3 = this;
+
+      axios.get('/group/' + this.user.active_group + '/members/get').then(function (response) {
+        _this3.members = response.data;
+
+        _this3.autocomplete(document.getElementById("memberInput"), _this3.members, _this3.lettersCounter);
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this3.errors = error.response.data.errors;
+          console.log(_this3.errors);
         }
 
         console.log(error.message);
@@ -2539,12 +2565,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user', 'chatroom'],
   data: function data() {
     return {
-      showedChatroom: this.chatroom,
       messages: [],
       users: [],
       newMessage: ''
@@ -2564,7 +2588,7 @@ __webpack_require__.r(__webpack_exports__);
       _this.scrollChat();
     });
   },
-  //TODO : make message text a long text type, (un)read, loading older messages - pagination
+  //TODO : loading older messages - pagination 
   methods: {
     scrollChat: function scrollChat() {
       var _this2 = this;
@@ -2595,12 +2619,19 @@ __webpack_require__.r(__webpack_exports__);
         _this4.messages = response.data;
 
         _this4.scrollChat();
+
+        _this4.markAsReadMessages();
       })["catch"](function (error) {
         if (error.response.status == 422) {
           _this4.errors = error.response.data.errors;
           console.log(_this4.errors);
         }
 
+        console.log(error.message);
+      });
+    },
+    markAsReadMessages: function markAsReadMessages() {
+      axios.patch('/chats/' + this.chatroom.id + '/readAll').then(function (response) {})["catch"](function (error) {
         console.log(error.message);
       });
     },
@@ -32060,24 +32091,46 @@ var render = function() {
                             ]
                           ),
                       _vm._v(" "),
-                      _c(
-                        "p",
-                        {
-                          staticClass: "text-sm mb-3 ml-4 break-words",
-                          class: {
-                            "font-bold":
-                              !chat.latest_message.read &&
-                              chat.latest_message.sender_id != _vm.user.id
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n                        " +
-                              _vm._s(chat.latest_message.text) +
-                              "\n                    "
+                      chat.latest_message.text.length > 30
+                        ? _c(
+                            "p",
+                            {
+                              staticClass: "text-sm mb-3 ml-4 break-words",
+                              class: {
+                                "font-bold":
+                                  !chat.latest_message.read &&
+                                  chat.latest_message.sender_id != _vm.user.id
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        " +
+                                  _vm._s(
+                                    chat.latest_message.text.substring(0, 30) +
+                                      "..."
+                                  ) +
+                                  "\n                    "
+                              )
+                            ]
                           )
-                        ]
-                      ),
+                        : _c(
+                            "p",
+                            {
+                              staticClass: "text-sm mb-3 ml-4 break-words",
+                              class: {
+                                "font-bold":
+                                  !chat.latest_message.read &&
+                                  chat.latest_message.sender_id != _vm.user.id
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        " +
+                                  _vm._s(chat.latest_message.text) +
+                                  "\n                    "
+                              )
+                            ]
+                          ),
                       _vm._v(" "),
                       _c("p", { staticClass: "text-xs float-right" }, [
                         _vm._v(
@@ -32253,7 +32306,8 @@ var staticRenderFns = [
           attrs: {
             id: "messageArea",
             name: "text",
-            placeholder: "New message..."
+            placeholder: "New message...",
+            maxlength: "1000"
           }
         })
       ]

@@ -23,7 +23,10 @@
                         <div v-else class="text-sm mb-3 mx-4 float-left">
                             You:
                         </div>
-                        <p class="text-sm mb-3 ml-4 break-words" v-bind:class="{ 'font-bold': !chat.latest_message.read && chat.latest_message.sender_id != user.id}">
+                        <p v-if="chat.latest_message.text.length > 30" class="text-sm mb-3 ml-4 break-words" v-bind:class="{ 'font-bold': !chat.latest_message.read && chat.latest_message.sender_id != user.id}">
+                            {{ chat.latest_message.text.substring(0, 30) + "..." }}
+                        </p>
+                        <p v-else class="text-sm mb-3 ml-4 break-words" v-bind:class="{ 'font-bold': !chat.latest_message.read && chat.latest_message.sender_id != user.id}">
                             {{ chat.latest_message.text }}
                         </p>
                         <p class="text-xs float-right"> {{ new Date(chat.latest_message.created_at) | dateFormat('HH:mm , DD.MM.YYYY') }} </p>
@@ -44,13 +47,34 @@ export default {
         return {
             members: [],
             lettersCounter: 0,
+            showedChatroom: this.chatrooms,
         };
     },
 
     mounted () {
         this.getGroupMembers();
+        this.showedChatroom.forEach(chatroom => {
+            window.Echo.private('chatrooms.' + chatroom.id)
+            .listen('MessageSent', (e) => {
+                this.getLatestMessage(chatroom);
+            });
+        });
     },
+
     methods: {
+        getLatestMessage(chatroom){
+            axios.get('/chats/' + chatroom.id + '/latestMessage').then(response => {
+                chatroom.latest_message = response.data;
+                chatroom.latest_message.sender_id = chatroom.latest_message.sender.id;
+            }).catch(error => {
+                if (error.response.status == 422){
+                    this.errors = error.response.data.errors;
+                    console.log(this.errors);
+                }
+                console.log(error.message);
+            });
+        },
+
         getGroupMembers(){
             axios.get('/group/' + this.user.active_group + '/members/get').then(response => {
                 this.members = response.data;

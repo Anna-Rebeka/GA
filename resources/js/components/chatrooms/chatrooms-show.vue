@@ -33,8 +33,7 @@
             </div>
             <form class="mb-4" @submit.prevent="submit">
                 <div class="bg-white relative h-24 w-full px-4 pt-4 mt-4 mb-2 border border-gray-300 rounded-lg">
-                    <!--<input type="hidden" name="_token" :value="csrf" /> -->
-                    <textarea id="messageArea" name="text" placeholder="New message..."
+                    <textarea id="messageArea" name="text" placeholder="New message..." maxlength="1000"
                         class="w-full resize-none focus:outline-none"
                     >
                     </textarea>
@@ -48,10 +47,9 @@ export default {
     props: ['user', 'chatroom'],
     data() {
         return {
-            showedChatroom: this.chatroom,
             messages: [],
             users: [],
-            newMessage: '',
+            newMessage: ''
         };
     },
 
@@ -59,7 +57,7 @@ export default {
         this.getMessages();
         this.getUsers();
         document.getElementById("messageArea").addEventListener("keypress", this.submitOnEnter);
-        
+
         window.Echo.private('chatrooms.' + this.chatroom.id)
         .listen('MessageSent', (e) => {
             e.message.sender = e.sender;
@@ -68,7 +66,8 @@ export default {
         });
     },
 
-    //TODO : make message text a long text type, (un)read, loading older messages - pagination
+    //TODO : loading older messages - pagination 
+    
     methods: {
         scrollChat() {
             this.$nextTick(
@@ -95,6 +94,7 @@ export default {
             axios.get('/chats/' + this.chatroom.id + '/messages').then(response => {
                 this.messages = response.data;
                 this.scrollChat();
+                this.markAsReadMessages();
             }).catch(error => {
                 if (error.response.status == 422){
                     this.errors = error.response.data.errors;
@@ -103,6 +103,15 @@ export default {
                 console.log(error.message);
             });
         },
+
+
+        markAsReadMessages() {
+            axios.patch('/chats/' + this.chatroom.id + '/readAll').then(response => {
+            }).catch(error => {
+                console.log(error.message);
+            });
+        },
+
 
         submitOnEnter(event){
             if(event.which === 13){

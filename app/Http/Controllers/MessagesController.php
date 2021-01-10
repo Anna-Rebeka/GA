@@ -40,7 +40,7 @@ class MessagesController extends Controller
     {
         $attributes = $fields->validate([
             'chatroom_id' => ['required'],
-            'text' => ['required', 'max:300'],
+            'text' => ['required', 'max:1000'],
             ]);
         $message = Message::create([
             'sender_id' => auth()->user()->id,

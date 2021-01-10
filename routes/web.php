@@ -75,10 +75,13 @@ Route::middleware('auth')->group(function() {
     Route::patch('/assignments/{assignment:id}/take', [AssignmentsController::class, 'take']);
 
     Route::get('/chats', [ChatroomsController::class, 'index']);
+    Route::get('/chats/{chatroom:id}/latestMessage', [ChatroomsController::class, 'getLatestMessage']);
     Route::get('/chats/{chatroom:id}', [ChatroomsController::class, 'show'])->name('showchat');
     Route::get('/chats/{chatroom:id}/messages', [ChatroomsController::class, 'getMessages']);
     Route::get('/chats/{chatroom:id}/users/{user:id}', [ChatroomsController::class, 'getUsers']);
+    Route::patch('/chats/{chatroom:id}/readAll', [ChatroomsController::class, 'markAsReadMessages']);
     Route::get('/chats/find/{user:id}', [ChatroomsController::class, 'findOrCreateChatroom']);
+
 
 
     Route::post('/chats/{chatroom:id}/send', [MessagesController::class, 'store']);
