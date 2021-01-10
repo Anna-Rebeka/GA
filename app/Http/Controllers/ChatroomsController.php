@@ -109,4 +109,21 @@ class ChatroomsController extends Controller
     {
         //
     }
+
+    public function findOrCreateChatroom(User $user){
+        $authed = auth()->user();
+        $chatrooms = $authed->chatrooms()->with('users')->get();
+        foreach($chatrooms as $chatroom){
+            if( count($chatroom->users) == 2 
+                && $chatroom->users->contains($authed) 
+                && $chatroom->users->contains($user)){
+                    return redirect()->route('showchat', ['chatroom' => $chatroom->id]);
+                }
+        }
+        $new_chatroom = Chatroom::create([
+        ]);
+        $new_chatroom->users()->attach($authed->id);
+        $new_chatroom->users()->attach($user->id);
+        return redirect()->route('showchat', ['chatroom' => $new_chatroom->id]);
+    }
 }

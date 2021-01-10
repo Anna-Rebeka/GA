@@ -22,11 +22,15 @@ class Chatroom extends Model
         return $this->hasOne(Message::class)->latest();
     }
 
+    public function betweenTwoUsers(User $user1, User $user2){
+        if(count($this->users) != 2){ return null; }
+        if ($this->users->contains($user1) && $this->users->contains($user2)){ return $this; }
+        return null;
+    }
+    
     public function hasUser($user){
         return $this->users->contains($user);
     }
-
-
     
 
 }

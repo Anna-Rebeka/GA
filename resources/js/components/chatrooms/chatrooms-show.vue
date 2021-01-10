@@ -68,7 +68,7 @@ export default {
         });
     },
 
-    //TODO : make message text a long text type
+    //TODO : make message text a long text type, (un)read, loading older messages - pagination
     methods: {
         scrollChat() {
             this.$nextTick(
