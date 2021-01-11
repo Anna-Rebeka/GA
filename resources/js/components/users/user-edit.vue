@@ -6,13 +6,13 @@
         <input type="hidden" name="_token" :value="csrf" /> 
 
         <div>
-            <label class="mt-4 block mb-2 uppercase font-bold text-xs text-grey-700" 
+            <label class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700" 
                 for="name"
             >
                 Name
             </label>
 
-            <input class="border border-grey-400 p-2 w-full" type="text" name="name" id="name" 
+            <input class="border border-gray-400 p-2 w-full" type="text" name="name" id="name" 
                 :value="user.name"
                 v-model="fields.name"
             >
@@ -23,13 +23,13 @@
 
 
         <div>
-            <label class="mt-4 block mb-2 uppercase font-bold text-xs text-grey-700" 
+            <label class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700" 
                 for="username"
             >
                 Username
             </label>
 
-            <input class="border border-grey-400 p-2 w-full" type="text" name="username" id="username" 
+            <input class="border border-gray-400 p-2 w-full" type="text" name="username" id="username" 
                 :value="user.username"
                 v-model="fields.username"
             >
@@ -39,13 +39,13 @@
         </div>
         
         <div>
-            <label class="mt-4 block mb-2 uppercase font-bold text-xs text-grey-700" 
+            <label class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700" 
                 for="email"
             >
                 Email
             </label>
 
-            <input class="border border-grey-400 p-2 w-full" type="email" name="email" id="email" 
+            <input class="border border-gray-400 p-2 w-full" type="email" name="email" id="email" 
                 :value="user.email"
                 v-model="fields.email"
             >
@@ -55,17 +55,17 @@
 
 
         <div>
-            <label class="mt-4 block mb-2 uppercase font-bold text-xs text-grey-700" 
+            <label class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700" 
                 for="avatar"
             >
                 Avatar
             </label>
             
             <div class="flex">
-                <input class="border border-grey-400 p-2 my-auto w-full" type="file" name="avatar" id="avatar"
+                <input class="border border-gray-400 p-2 my-auto w-full" type="file" name="avatar" id="avatar"
                 >
 
-                <img :src="user.avatar" alt="avatar" class="w-16 h-16 object-cover border-2 border-grey-400">
+                <img :src="user.avatar" alt="avatar" class="w-16 h-16 object-cover border-2 border-gray-400">
             </div>
             
             <p class="text-red-500 text-xs mt-2">error message</p>
@@ -73,16 +73,16 @@
         </div>
 
         <div>
-            <label class="mt-4 block mb-2 uppercase font-bold text-xs text-grey-700" 
+            <label class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700" 
                 for="banner"
             >
                 Banner
             </label>
             
             <div class="flex">
-                <input class="border border-grey-400 p-2 my-auto w-full" type="file" name="banner" id="banner">
+                <input class="border border-gray-400 p-2 my-auto w-full" type="file" name="banner" id="banner">
 
-                <img :src="user.banner" alt="banner" class="w-32 h-16 object-cover border-2 border-grey-400">
+                <img :src="user.banner" alt="banner" class="w-32 h-16 object-cover border-2 border-gray-400">
             </div>
             
             <p class="text-red-500 text-xs mt-2">error message</p>
@@ -90,13 +90,13 @@
         </div>
 
         <div>
-            <label class="mt-4 block mb-2 uppercase font-bold text-xs text-grey-700" 
+            <label class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700" 
                 for="bio"
             >
                 Bio
             </label>
 
-            <input class="border border-grey-400 p-2 w-full" type="text" name="bio" id="bio" 
+            <input class="border border-gray-400 p-2 w-full" type="text" name="bio" id="bio" 
                 :value="user.bio">
 
             <p class="text-red-500 text-xs mt-2">error message</p>
@@ -104,26 +104,26 @@
         </div>
 
         <div>
-            <label class="mt-4 block mb-2 uppercase font-bold text-xs text-grey-700" 
+            <label class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700" 
                 for="password"
             >
                 Password
             </label>
 
-            <input class="border border-grey-400 p-2 w-full" type="password" name="password" id="password">
+            <input class="border border-gray-400 p-2 w-full" type="password" name="password" id="password">
 
             <p class="text-red-500 text-xs mt-2">error message</p>
 
         </div>
 
         <div class="mb-6">
-            <label class="mt-4 block mb-2 uppercase font-bold text-xs text-grey-700" 
+            <label class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700" 
                 for="password_confirmation"
             >
                 Password Confirmation
             </label>
 
-            <input class="border border-grey-400 p-2 w-full" type="password" name="password_confirmation" id="password_confirmation">
+            <input class="border border-gray-400 p-2 w-full" type="password" name="password_confirmation" id="password_confirmation">
 
             <p class="text-red-500 text-xs mt-2">error message</p>
 

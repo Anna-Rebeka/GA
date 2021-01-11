@@ -109,4 +109,8 @@ class GroupsController extends Controller
     {
         //
     }
+
+    public function getMembers(Group $group){
+        return $group->users->except(auth()->user()->id);
+    }
 }

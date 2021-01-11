@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -58,15 +59,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = [
-        'profile_photo_url',
-    ];
-
     public function path($append = ''){
         $path = route('profile', $this->username);
         return $append ? "{$path}/{$append}" : $path;
@@ -98,5 +90,17 @@ class User extends Authenticatable
 
     public function events(){
         return $this->belongsToMany(Event::class);
+    }
+
+    public function fromMessages(){
+        return $this->hasMany(Message::class, 'from_user_id');
+    }
+
+    public function toMessages(){
+        return $this->hasMany(Message::class, 'to_user_id');
+    }
+    
+    public function chatrooms() {
+        return $this->belongsToMany(Chatroom::class);
     }
 }

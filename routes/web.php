@@ -11,6 +11,9 @@ use App\Http\Controllers\NotesController;
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\EventCommentsController;
 use App\Http\Controllers\AssignmentsController;
+use App\Http\Controllers\ChatroomsController;
+use App\Http\Controllers\MessagesController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +43,7 @@ Route::middleware('auth')->group(function() {
     Route::get('/profile/{user:username}/assignments/mine', [UsersController::class, 'getUsersAssignments']);
     Route::patch('/profile/{user:username}', [UsersController::class, 'update']);
     Route::get('/all-members/{group:id}', [UsersController::class, 'index']);
+    Route::get('/activate-group/{id}', [UsersController::class, 'activateGroup']);
     
     Route::get('/{user:username}/notes', [NotesController::class, 'index']);
     Route::post('/{user:username}/notes', [NotesController::class, 'store']);
@@ -50,9 +54,9 @@ Route::middleware('auth')->group(function() {
 
     Route::get('/create-group', [GroupsController::class, 'create']);
     Route::post('/create-group', [GroupsController::class, 'store']);
-
     Route::get('/change-group', [GroupsController::class, 'index']);
-    Route::get('/activate-group/{id}', [UsersController::class, 'activateGroup']);
+    Route::get('/group/{group:id}/members/get', [GroupsController::class, 'getMembers']);
+
 
     Route::get('/{group:id}/events', [EventsController::class, 'index']);
     Route::get('/{group:id}/events/{event:id}', [EventsController::class, 'show']);
@@ -61,15 +65,28 @@ Route::middleware('auth')->group(function() {
     Route::post('/events/{event:id}/join', [EventsController::class, 'join']);
     Route::post('/events/{event:id}/leave', [EventsController::class, 'leave']);
 
+    Route::get('/events/{event:id}/comments', [EventCommentsController::class, 'index']);
+    Route::post('/events/{event:id}/comments', [EventCommentsController::class, 'store']);
+
     Route::get('/{group:id}/assignments', [AssignmentsController::class, 'index']);
     Route::get('/{group:id}/assignments/{assignment:id}', [AssignmentsController::class, 'show']);
     Route::post('/assignments', [AssignmentsController::class, 'store']);
     Route::delete('/assignments/{assignment:id}', [AssignmentsController::class, 'destroy']);
     Route::patch('/assignments/{assignment:id}/take', [AssignmentsController::class, 'take']);
 
+    Route::get('/chats', [ChatroomsController::class, 'index']);
+    Route::get('/chats/{chatroom:id}/latestMessage', [ChatroomsController::class, 'getLatestMessage']);
+    Route::get('/chats/{chatroom:id}', [ChatroomsController::class, 'show'])->name('showchat');
+    Route::get('/chats/{chatroom:id}/messages', [ChatroomsController::class, 'getMessages']);
+    Route::get('/chats/{chatroom:id}/loadOlderMessages/{howManyDisplayed}', [ChatroomsController::class, 'loadOlderMessages']);
 
-    Route::get('/events/{event:id}/comments', [EventCommentsController::class, 'index']);
-    Route::post('/events/{event:id}/comments', [EventCommentsController::class, 'store']);
+    Route::get('/chats/{chatroom:id}/users/{user:id}', [ChatroomsController::class, 'getUsers']);
+    Route::patch('/chats/{chatroom:id}/readAll', [ChatroomsController::class, 'markAsReadMessages']);
+    Route::get('/chats/find/{user:id}', [ChatroomsController::class, 'findOrCreateChatroom']);
+
+
+
+    Route::post('/chats/{chatroom:id}/send', [MessagesController::class, 'store']);
 
 });
 
