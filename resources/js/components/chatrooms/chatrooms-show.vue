@@ -7,7 +7,10 @@
             {{ chatUser.name }}
 
         </h5>
-        <div id="chatWindow" ref="chat" class="container mb-2 pr-4 h-80 overflow-y-scroll">                
+        <div id="chatWindow" ref="chat" class="container mb-2 pr-4 h-80 overflow-y-scroll">      
+                <button v-on:click="loadOlderMessages()" class="bg-white text-sm text-center relative clear-both w-full h-8 px-4 pt-1 mb-4 border border-gray-300 hover:bg-purple-100">
+                    Load older messages  
+                </button>          
                 <div v-for="message in messages" 
                     :key="message.id" 
                     class="bg-white relative clear-both w-1/2 px-4 pt-4 mb-2 border border-gray-300 rounded-lg"
@@ -65,8 +68,6 @@ export default {
             this.scrollChat();
         });
     },
-
-    //TODO : loading older messages - pagination 
     
     methods: {
         scrollChat() {
@@ -92,7 +93,7 @@ export default {
         getMessages() {
             var div = this.chatWindow;
             axios.get('/chats/' + this.chatroom.id + '/messages').then(response => {
-                this.messages = response.data;
+                this.messages = response.data.reverse();
                 this.scrollChat();
                 this.markAsReadMessages();
             }).catch(error => {
@@ -104,6 +105,18 @@ export default {
             });
         },
 
+        loadOlderMessages() {
+            axios.get('/chats/' + this.chatroom.id + '/loadOlderMessages/' + this.messages.length, {
+            }).then(response => {
+                this.messages = response.data.reverse().concat(this.messages);
+            }).catch(error => {
+                if (error.response.status == 422){
+                    this.errors = error.response.data.errors;
+                    console.log(this.errors);
+                }
+                console.log(error.message);
+            });
+        },
 
         markAsReadMessages() {
             axios.patch('/chats/' + this.chatroom.id + '/readAll').then(response => {

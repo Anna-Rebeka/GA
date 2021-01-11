@@ -2565,6 +2565,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user', 'chatroom'],
   data: function data() {
@@ -2588,7 +2591,6 @@ __webpack_require__.r(__webpack_exports__);
       _this.scrollChat();
     });
   },
-  //TODO : loading older messages - pagination 
   methods: {
     scrollChat: function scrollChat() {
       var _this2 = this;
@@ -2616,7 +2618,7 @@ __webpack_require__.r(__webpack_exports__);
 
       var div = this.chatWindow;
       axios.get('/chats/' + this.chatroom.id + '/messages').then(function (response) {
-        _this4.messages = response.data;
+        _this4.messages = response.data.reverse();
 
         _this4.scrollChat();
 
@@ -2625,6 +2627,20 @@ __webpack_require__.r(__webpack_exports__);
         if (error.response.status == 422) {
           _this4.errors = error.response.data.errors;
           console.log(_this4.errors);
+        }
+
+        console.log(error.message);
+      });
+    },
+    loadOlderMessages: function loadOlderMessages() {
+      var _this5 = this;
+
+      axios.get('/chats/' + this.chatroom.id + '/loadOlderMessages/' + this.messages.length, {}).then(function (response) {
+        _this5.messages = response.data.reverse().concat(_this5.messages);
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this5.errors = error.response.data.errors;
+          console.log(_this5.errors);
         }
 
         console.log(error.message);
@@ -2644,7 +2660,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     submit: function submit() {
-      var _this5 = this;
+      var _this6 = this;
 
       var messageArea = document.getElementById("messageArea").value;
       document.getElementById("messageArea").value = "";
@@ -2653,17 +2669,17 @@ __webpack_require__.r(__webpack_exports__);
         text: messageArea,
         chatroom: this.chatroom
       }).then(function (response) {
-        response.data['sender'] = _this5.user;
+        response.data['sender'] = _this6.user;
 
-        _this5.messages.push(response.data);
+        _this6.messages.push(response.data);
 
-        _this5.$nextTick(function () {
-          _this5.$refs.chat.scrollTop = 9999;
+        _this6.$nextTick(function () {
+          _this6.$refs.chat.scrollTop = 9999;
         });
       })["catch"](function (error) {
         if (error.response.status == 422) {
-          _this5.errors = error.response.data.errors;
-          console.log(_this5.errors);
+          _this6.errors = error.response.data.errors;
+          console.log(_this6.errors);
         }
 
         console.log(error.message);
@@ -32216,60 +32232,76 @@ var render = function() {
           staticClass: "container mb-2 pr-4 h-80 overflow-y-scroll",
           attrs: { id: "chatWindow" }
         },
-        _vm._l(_vm.messages, function(message) {
-          return _c(
-            "div",
+        [
+          _c(
+            "button",
             {
-              key: message.id,
               staticClass:
-                "bg-white relative clear-both w-1/2 px-4 pt-4 mb-2 border border-gray-300 rounded-lg",
-              class: {
-                "float-right bg-purple-100": message.sender.id == _vm.user.id,
-                "pb-6": message.sender.id != _vm.user.id
+                "bg-white text-sm text-center relative clear-both w-full h-8 px-4 pt-1 mb-4 border border-gray-300 hover:bg-purple-100",
+              on: {
+                click: function($event) {
+                  return _vm.loadOlderMessages()
+                }
               }
             },
-            [
-              _c("div", [
-                _c(
-                  "h5",
-                  { staticClass: "text-xs text-gray-500 absolute bottom-0" },
-                  [_vm._v(_vm._s(message.sender.name))]
-                ),
-                _vm._v(" "),
-                _c("div", { staticClass: "float-left mr-2" }, [
-                  _c("img", {
-                    staticClass: "rounded-full object-cover h-15 w-15 mr-2",
-                    attrs: { src: message.sender.avatar, alt: "avatar" }
-                  })
-                ]),
-                _vm._v(" "),
+            [_vm._v("\n                Load older messages  \n            ")]
+          ),
+          _vm._v(" "),
+          _vm._l(_vm.messages, function(message) {
+            return _c(
+              "div",
+              {
+                key: message.id,
+                staticClass:
+                  "bg-white relative clear-both w-1/2 px-4 pt-4 mb-2 border border-gray-300 rounded-lg",
+                class: {
+                  "float-right bg-purple-100": message.sender.id == _vm.user.id,
+                  "pb-6": message.sender.id != _vm.user.id
+                }
+              },
+              [
                 _c("div", [
-                  _c("p", { staticClass: "text-sm mb-3 break-words p-4" }, [
-                    _vm._v(
-                      "\n                            " +
-                        _vm._s(message.text) +
-                        "\n                        "
-                    )
+                  _c(
+                    "h5",
+                    { staticClass: "text-xs text-gray-500 absolute bottom-0" },
+                    [_vm._v(_vm._s(message.sender.name))]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "float-left mr-2" }, [
+                    _c("img", {
+                      staticClass: "rounded-full object-cover h-15 w-15 mr-2",
+                      attrs: { src: message.sender.avatar, alt: "avatar" }
+                    })
                   ]),
                   _vm._v(" "),
-                  _c("p", { staticClass: "text-xs float-right mb-2" }, [
-                    _vm._v(
-                      " " +
-                        _vm._s(
-                          _vm._f("dateFormat")(
-                            new Date(message.created_at),
-                            "HH:mm , DD.MM.YYYY"
-                          )
-                        ) +
-                        " "
-                    )
+                  _c("div", [
+                    _c("p", { staticClass: "text-sm mb-3 break-words p-4" }, [
+                      _vm._v(
+                        "\n                            " +
+                          _vm._s(message.text) +
+                          "\n                        "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "text-xs float-right mb-2" }, [
+                      _vm._v(
+                        " " +
+                          _vm._s(
+                            _vm._f("dateFormat")(
+                              new Date(message.created_at),
+                              "HH:mm , DD.MM.YYYY"
+                            )
+                          ) +
+                          " "
+                      )
+                    ])
                   ])
                 ])
-              ])
-            ]
-          )
-        }),
-        0
+              ]
+            )
+          })
+        ],
+        2
       ),
       _vm._v(" "),
       _c(

@@ -33,8 +33,22 @@ class ChatroomsController extends Controller
     }
 
     public function getMessages(Chatroom $chatroom){
-        return Message::where('chatroom_id', $chatroom->id)->with('sender')->get();
+        return Message::where('chatroom_id', $chatroom->id)
+            ->with('sender')
+            ->orderBy('created_at', 'DESC')
+            ->limit(30)
+            ->get();
     }
+
+    public function loadOlderMessages(Chatroom $chatroom, $howManyDisplayed){
+        return Message::where('chatroom_id', $chatroom->id)
+            ->with('sender')
+            ->orderBy('created_at', 'DESC')
+            ->limit(10)
+            ->offset($howManyDisplayed)
+            ->get();
+    }
+
 
     public function getUsers(Chatroom $chatroom, User $user){
         return $chatroom->users()->where('users.id', '!=', $user->id)->get();
@@ -126,7 +140,6 @@ class ChatroomsController extends Controller
         $new_chatroom->users()->attach($user->id);
         return redirect()->route('showchat', ['chatroom' => $new_chatroom->id]);
     }
-
 
     public function markAsReadMessages(Chatroom $chatroom){
         $user = auth()->user();
