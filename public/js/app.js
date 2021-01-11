@@ -34115,7 +34115,13 @@ var render = function() {
                               {
                                 staticClass:
                                   "shadow border border-gray-300 rounded-lg py-2 px-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
-                                attrs: { href: "assignments/" + assignment.id }
+                                attrs: {
+                                  href:
+                                    "/" +
+                                    assignment.group_id +
+                                    "/assignments/" +
+                                    assignment.id
+                                }
                               },
                               [
                                 _vm._v(
