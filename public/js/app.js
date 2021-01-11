@@ -4360,6 +4360,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['authUser', 'user', 'userCreatedAt', 'userEditPath'],
   mounted: function mounted() {}
@@ -34685,7 +34692,15 @@ var render = function() {
               [_vm._v("\n                    Edit profile\n                ")]
             )
           ])
-        : _vm._e()
+        : _c(
+            "a",
+            {
+              staticClass:
+                "rounded-full shadow border border-gray-300 py-2 px-4 mr-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+              attrs: { href: "/chats/find/" + _vm.user.id }
+            },
+            [_vm._v("  \n                chat \n            ")]
+          )
     ]),
     _vm._v(" "),
     _c("p", { staticClass: "text-sm mb-4" }, [
