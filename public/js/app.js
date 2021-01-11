@@ -34115,7 +34115,13 @@ var render = function() {
                               {
                                 staticClass:
                                   "shadow border border-gray-300 rounded-lg py-2 px-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
-                                attrs: { href: "assignments/" + assignment.id }
+                                attrs: {
+                                  href:
+                                    "/" +
+                                    assignment.group_id +
+                                    "/assignments/" +
+                                    assignment.id
+                                }
                               },
                               [
                                 _vm._v(
@@ -34699,7 +34705,7 @@ var render = function() {
                 "rounded-full shadow border border-gray-300 py-2 px-4 mr-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
               attrs: { href: "/chats/find/" + _vm.user.id }
             },
-            [_vm._v("  \n                chat \n            ")]
+            [_vm._v("  \n                Chat \n            ")]
           )
     ]),
     _vm._v(" "),
