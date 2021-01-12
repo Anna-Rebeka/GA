@@ -3440,10 +3440,76 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user'],
+  props: ["user"],
   data: function data() {
-    return {};
+    return {
+      newMessage: false,
+      howMany: 0,
+      chatrooms: []
+    };
+  },
+  mounted: function mounted() {
+    this.checkForNewMessages();
+    this.getAllChatrooms();
+  },
+  methods: {
+    getAllChatrooms: function getAllChatrooms() {
+      var _this = this;
+
+      axios.get('/group-panel/' + this.user.group.id + '/getAllUserChatrooms', {}).then(function (response) {
+        _this.chatrooms = response.data;
+
+        _this.chatrooms.forEach(function (chatroom) {
+          window.Echo["private"]('chatrooms.' + chatroom.id).listen('MessageSent', function (e) {
+            _this.newMessage = true;
+            _this.howMany += 1;
+          });
+        });
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this.errors = error.response.data.errors;
+          console.log(_this.errors);
+        }
+
+        console.log(error.message);
+      });
+    },
+    checkForNewMessages: function checkForNewMessages() {
+      var _this2 = this;
+
+      axios.get('/group-panel/' + this.user.group.id + '/checkForNewMessages', {}).then(function (response) {
+        _this2.howMany = response.data[0].count;
+
+        if (_this2.howMany > 0) {
+          _this2.newMessage = true;
+        } else {
+          _this2.newMessage = false;
+        }
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this2.errors = error.response.data.errors;
+          console.log(_this2.errors);
+        }
+
+        console.log(error.message);
+      });
+    }
   }
 });
 
@@ -3897,7 +3963,6 @@ __webpack_require__.r(__webpack_exports__);
       axios.get(this.authUser.username + '/assignments/mine').then(function (response) {
         _this.assignments = response.data;
         _this.filteredAssignments = _this.assignments;
-        console.log(response);
       })["catch"](function (error) {
         if (error.response.status == 422) {
           _this.errors = error.response.data.errors;
@@ -33426,7 +33491,7 @@ var render = function() {
       _vm.user.group
         ? _c("div", [
             _c("h2", { staticClass: "font-bold text-2xl" }, [
-              _vm._v(" " + _vm._s(_vm.user.group.name) + " ")
+              _vm._v(_vm._s(_vm.user.group.name))
             ]),
             _vm._v(" "),
             _c("p", { staticClass: "text-sm text-gray-500 mb-6" }, [
@@ -33437,10 +33502,23 @@ var render = function() {
               "a",
               {
                 staticClass:
-                  "block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+                  "relative block w-32 h-8 shadow border border-gray-300 rounded-lg text-black mx-auto mb-2 py-2 px-6 text-xs",
+                class: {
+                  "bg-purple-200 hover:text-white hover:bg-purple-400":
+                    _vm.newMessage,
+                  "hover:text-gray-500 hover:bg-gray-100": !_vm.newMessage
+                },
                 attrs: { href: "/chats" }
               },
-              [_vm._v("Messages\n          ")]
+              [
+                _vm.newMessage
+                  ? _c("div", {
+                      staticClass:
+                        "absolute t-0 l-0 -mt-3 -ml-8 border rounded-lg bg-red-500 w-3 h-3"
+                    })
+                  : _vm._e(),
+                _vm._v("\n                Messages\n            ")
+              ]
             ),
             _vm._v(" "),
             _c(
@@ -33450,7 +33528,7 @@ var render = function() {
                   "block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
                 attrs: { href: "/" + _vm.user.group.id + "/assignments" }
               },
-              [_vm._v("Assignments\n          ")]
+              [_vm._v("Assignments\n            ")]
             ),
             _vm._v(" "),
             _c(
@@ -33460,12 +33538,12 @@ var render = function() {
                   "block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
                 attrs: { href: "/" + _vm.user.group.id + "/events" }
               },
-              [_vm._v("Events\n          ")]
+              [_vm._v("Events\n            ")]
             )
           ])
         : _c("div", [
             _c("h2", { staticClass: "font-bold text-2xl mb-6" }, [
-              _vm._v(" No Group ")
+              _vm._v("No Group")
             ]),
             _vm._v(" "),
             _c(
@@ -33475,7 +33553,7 @@ var render = function() {
                   "top-6 rounded-full border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
                 attrs: { href: "/create-group" }
               },
-              [_vm._v("Create a group\n      ")]
+              [_vm._v("Create a group\n            ")]
             )
           ])
     ])
