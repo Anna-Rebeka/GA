@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MessagesRead;
+
 use App\Models\Chatroom;
 use App\Models\Message;
 use App\Models\User;
+use App\Models\Group;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -144,10 +147,29 @@ class ChatroomsController extends Controller
     public function markAsReadMessages(Chatroom $chatroom){
         $user = auth()->user();
         $affected = DB::table('messages')->where('chatroom_id', $chatroom->id)->where('sender_id', '!=', $user->id)->update(['read' => 1]);
+        MessagesRead::dispatch($user);
+        return $affected;
+    }
+
+    public function markAsReadMessage(Chatroom $chatroom, Message $message){
+        $user = auth()->user();
+        $affected = DB::table('messages')->where('id', $message->id)->where('chatroom_id', $chatroom->id)->where('sender_id', '!=', $user->id)->update(['read' => 1]);
+        MessagesRead::dispatch($user);
         return $affected;
     }
 
     public function getLatestMessage(Chatroom $chatroom){
         return $chatroom->messages()->with('sender')->latest()->first();
+    }
+
+    public function checkForNewMessages(Group $group){
+        $user = auth()->user();
+        $chatrooms = $user->chatrooms()->pluck('chatrooms.id');
+        $howManyMessages = DB::table('messages')->whereIn('chatroom_id', $chatrooms)->where('read', 0)->where('sender_id', '!=', $user->id)->selectRaw('count(*) as count')->get();
+        return $howManyMessages;
+    }
+
+    public function getAllUserChatrooms(Group $group){
+        return auth()->user()->chatrooms;
     }
 }

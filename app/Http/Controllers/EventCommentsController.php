@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
-use App\Models\EventComments;
+use App\Models\EventComment;
 use Illuminate\Http\Request;
+
+use App\Events\EventCommented;
+
 
 class EventCommentsController extends Controller
 {
@@ -43,11 +46,15 @@ class EventCommentsController extends Controller
             'text' => ['required', 'max:300'],
             'event_id' => ['required'],
             ]);
-        $comment = EventComments::create([
+        $comment = EventComment::create([
             'user_id' => auth()->user()->id,
             'event_id' => $attributes['event_id'],
             'text' => $attributes['text'],
         ]);
+
+        $event = Event::find($comment->event_id);
+        broadcast(new EventCommented(auth()->user(), $comment, $event, $event->group))->toOthers();
+
         return $comment;
     }
 
@@ -55,10 +62,10 @@ class EventCommentsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\EventComments  $eventComments
+     * @param  \App\Models\EventComment  $eventComments
      * @return \Illuminate\Http\Response
      */
-    public function show(EventComments $eventComments)
+    public function show(EventComment $eventComments)
     {
         //
     }
@@ -66,10 +73,10 @@ class EventCommentsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\EventComments  $eventComments
+     * @param  \App\Models\EventComment  $eventComments
      * @return \Illuminate\Http\Response
      */
-    public function edit(EventComments $eventComments)
+    public function edit(EventComment $eventComments)
     {
         //
     }
@@ -78,10 +85,10 @@ class EventCommentsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\EventComments  $eventComments
+     * @param  \App\Models\EventComment  $eventComments
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, EventComments $eventComments)
+    public function update(Request $request, EventComment $eventComments)
     {
         //
     }
@@ -89,10 +96,10 @@ class EventCommentsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\EventComments  $eventComments
+     * @param  \App\Models\EventComment  $eventComments
      * @return \Illuminate\Http\Response
      */
-    public function destroy(EventComments $eventComments)
+    public function destroy(EventComment $eventComments)
     {
         //
     }

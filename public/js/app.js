@@ -2586,6 +2586,8 @@ __webpack_require__.r(__webpack_exports__);
     window.Echo["private"]('chatrooms.' + this.chatroom.id).listen('MessageSent', function (e) {
       e.message.sender = e.sender;
 
+      _this.markAsReadMessage(e.message.id);
+
       _this.messages.push(e.message);
 
       _this.scrollChat();
@@ -2648,6 +2650,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     markAsReadMessages: function markAsReadMessages() {
       axios.patch('/chats/' + this.chatroom.id + '/readAll').then(function (response) {})["catch"](function (error) {
+        console.log(error.message);
+      });
+    },
+    markAsReadMessage: function markAsReadMessage(messageId) {
+      axios.patch('/chats/' + this.chatroom.id + '/readMessage/' + messageId).then(function (response) {})["catch"](function (error) {
         console.log(error.message);
       });
     },
@@ -2746,15 +2753,22 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
+    var _this = this;
+
     this.getComments();
     document.getElementById("commentArea").addEventListener("keypress", this.submitOnEnter);
+    window.Echo["private"]('commented_event.' + this.event.id + '.group.' + this.event.group_id).listen('EventCommented', function (e) {
+      e.event_comment.user = e.user;
+
+      _this.comments.unshift(e.event_comment);
+    });
   },
   methods: {
     getComments: function getComments() {
-      var _this = this;
+      var _this2 = this;
 
       axios.get('/events/' + this.event.id + '/comments').then(function (response) {
-        _this.comments = response.data;
+        _this2.comments = response.data;
       })["catch"](function (error) {
         console.log(error.message);
       });
@@ -2771,7 +2785,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     submit: function submit() {
-      var _this2 = this;
+      var _this3 = this;
 
       var commentArea = document.getElementById("commentArea").value;
       document.getElementById("commentArea").value = "";
@@ -2779,15 +2793,15 @@ __webpack_require__.r(__webpack_exports__);
         event_id: this.event.id,
         text: commentArea
       }).then(function (response) {
-        response.data['user'] = _this2.user;
+        response.data['user'] = _this3.user;
 
-        _this2.comments.unshift(response.data);
+        _this3.comments.unshift(response.data);
       })["catch"](function (error) {
-        /*
-        if (error.response.status == 422){
-            this.errors = error.response.data.errors;
-            console.log(this.errors);
-        }*/
+        if (error.response.status == 422) {
+          _this3.errors = error.response.data.errors;
+          console.log(_this3.errors);
+        }
+
         console.log(error.message);
       });
     }
@@ -3440,10 +3454,80 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user'],
+  props: ["user"],
   data: function data() {
-    return {};
+    return {
+      newMessage: false,
+      howMany: 0,
+      chatrooms: []
+    };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    this.checkForNewMessages();
+    this.getAllChatrooms();
+    window.Echo["private"]('user.' + this.user.id + '.readMessages').listen('MessagesRead', function (e) {
+      _this.checkForNewMessages();
+    });
+  },
+  methods: {
+    getAllChatrooms: function getAllChatrooms() {
+      var _this2 = this;
+
+      axios.get('/group-panel/' + this.user.group.id + '/getAllUserChatrooms', {}).then(function (response) {
+        _this2.chatrooms = response.data;
+
+        _this2.chatrooms.forEach(function (chatroom) {
+          window.Echo["private"]('chatrooms.' + chatroom.id).listen('MessageSent', function (e) {
+            _this2.checkForNewMessages();
+          });
+        });
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this2.errors = error.response.data.errors;
+          console.log(_this2.errors);
+        }
+
+        console.log(error.message);
+      });
+    },
+    checkForNewMessages: function checkForNewMessages() {
+      var _this3 = this;
+
+      axios.get('/group-panel/' + this.user.group.id + '/checkForNewMessages', {}).then(function (response) {
+        _this3.howMany = response.data[0].count;
+
+        if (_this3.howMany > 0) {
+          _this3.newMessage = true;
+        } else {
+          _this3.newMessage = false;
+        }
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this3.errors = error.response.data.errors;
+          console.log(_this3.errors);
+        }
+
+        console.log(error.message);
+      });
+    }
   }
 });
 
@@ -3897,7 +3981,6 @@ __webpack_require__.r(__webpack_exports__);
       axios.get(this.authUser.username + '/assignments/mine').then(function (response) {
         _this.assignments = response.data;
         _this.filteredAssignments = _this.assignments;
-        console.log(response);
       })["catch"](function (error) {
         if (error.response.status == 422) {
           _this.errors = error.response.data.errors;
@@ -33426,7 +33509,7 @@ var render = function() {
       _vm.user.group
         ? _c("div", [
             _c("h2", { staticClass: "font-bold text-2xl" }, [
-              _vm._v(" " + _vm._s(_vm.user.group.name) + " ")
+              _vm._v(_vm._s(_vm.user.group.name))
             ]),
             _vm._v(" "),
             _c("p", { staticClass: "text-sm text-gray-500 mb-6" }, [
@@ -33437,10 +33520,23 @@ var render = function() {
               "a",
               {
                 staticClass:
-                  "block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+                  "relative block w-32 h-8 shadow border border-gray-300 rounded-lg text-black mx-auto mb-2 py-2 px-6 text-xs",
+                class: {
+                  "bg-purple-200 hover:text-white hover:bg-purple-400":
+                    _vm.newMessage,
+                  "hover:text-gray-500 hover:bg-gray-100": !_vm.newMessage
+                },
                 attrs: { href: "/chats" }
               },
-              [_vm._v("Messages\n          ")]
+              [
+                _vm.newMessage
+                  ? _c("div", {
+                      staticClass:
+                        "absolute t-0 l-0 -mt-3 -ml-8 border rounded-lg bg-red-500 w-3 h-3"
+                    })
+                  : _vm._e(),
+                _vm._v("\n                Messages\n            ")
+              ]
             ),
             _vm._v(" "),
             _c(
@@ -33450,7 +33546,7 @@ var render = function() {
                   "block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
                 attrs: { href: "/" + _vm.user.group.id + "/assignments" }
               },
-              [_vm._v("Assignments\n          ")]
+              [_vm._v("Assignments\n            ")]
             ),
             _vm._v(" "),
             _c(
@@ -33460,12 +33556,12 @@ var render = function() {
                   "block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
                 attrs: { href: "/" + _vm.user.group.id + "/events" }
               },
-              [_vm._v("Events\n          ")]
+              [_vm._v("Events\n            ")]
             )
           ])
         : _c("div", [
             _c("h2", { staticClass: "font-bold text-2xl mb-6" }, [
-              _vm._v(" No Group ")
+              _vm._v("No Group")
             ]),
             _vm._v(" "),
             _c(
@@ -33475,7 +33571,7 @@ var render = function() {
                   "top-6 rounded-full border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
                 attrs: { href: "/create-group" }
               },
-              [_vm._v("Create a group\n      ")]
+              [_vm._v("Create a group\n            ")]
             )
           ])
     ])
