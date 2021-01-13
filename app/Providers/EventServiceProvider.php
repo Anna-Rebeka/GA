@@ -23,7 +23,11 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\MessagesRead' => [
             'App\Listeners\MessagesReadNotification'
-        ]
+        ],
+        'App\Events\EventCommented' => [
+            'App\Listeners\EventCommentedNotification'
+        ],
+        
     ];
 
     /**

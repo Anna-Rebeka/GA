@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Broadcast;
 use App\Models\Chatroom;
+use App\Models\Group;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,9 @@ Broadcast::channel('user.{id}.readMessages', function ($user, $userId) {
     return $user->id == $userId;
 });
 
+Broadcast::channel('commented_event.{id}.group.{gid}', function ($user, $eId, $gId) {
+    return Group::find($gId)->hasUser($user);
+});
 
 Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;

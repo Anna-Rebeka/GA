@@ -31,6 +31,6 @@ class Event extends Model
     }
     
     public function comments(){
-        return $this->hasMany(EventComments::class);
+        return $this->hasMany(EventComment::class);
     }
 }

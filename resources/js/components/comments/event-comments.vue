@@ -50,6 +50,12 @@ export default {
     mounted(){
         this.getComments();
         document.getElementById("commentArea").addEventListener("keypress", this.submitOnEnter);
+
+        window.Echo.private('commented_event.' + this.event.id + '.group.' + this.event.group_id)
+        .listen('EventCommented', (e) => {
+            e.event_comment.user = e.user;
+            this.comments.unshift(e.event_comment);
+        });
     },
 
     methods: {
@@ -79,11 +85,10 @@ export default {
                 response.data['user'] = this.user;    
                 this.comments.unshift(response.data);
             }).catch(error => {
-                /*
                 if (error.response.status == 422){
                     this.errors = error.response.data.errors;
                     console.log(this.errors);
-                }*/
+                }
                 console.log(error.message);
             });
         }
