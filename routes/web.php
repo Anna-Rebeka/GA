@@ -82,6 +82,7 @@ Route::middleware('auth')->group(function() {
 
     Route::get('/chats/{chatroom:id}/users/{user:id}', [ChatroomsController::class, 'getUsers']);
     Route::patch('/chats/{chatroom:id}/readAll', [ChatroomsController::class, 'markAsReadMessages']);
+    Route::patch('/chats/{chatroom:id}/readMessage/{message:id}', [ChatroomsController::class, 'markAsReadMessage']);
     Route::get('/chats/find/{user:id}', [ChatroomsController::class, 'findOrCreateChatroom']);
 
     Route::get('group-panel/{group:id}/checkForNewMessages', [ChatroomsController::class, 'checkForNewMessages']);

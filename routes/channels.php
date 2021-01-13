@@ -18,6 +18,10 @@ Broadcast::channel('chatrooms.{id}', function ($user, $chatroomId) {
     return Chatroom::find($chatroomId)->hasUser($user);
 });
 
+Broadcast::channel('user.{id}.readMessages', function ($user, $userId) {
+    return $user->id == $userId;
+});
+
 
 Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;

@@ -64,6 +64,7 @@ export default {
         window.Echo.private('chatrooms.' + this.chatroom.id)
         .listen('MessageSent', (e) => {
             e.message.sender = e.sender;
+            this.markAsReadMessage(e.message.id);
             this.messages.push(e.message);
             this.scrollChat();
         });
@@ -125,6 +126,12 @@ export default {
             });
         },
 
+        markAsReadMessage(messageId) {
+            axios.patch('/chats/' + this.chatroom.id + '/readMessage/' + messageId).then(response => {
+            }).catch(error => {
+                console.log(error.message);
+            });
+        },
 
         submitOnEnter(event){
             if(event.which === 13){

@@ -62,6 +62,11 @@ export default {
     mounted() {
         this.checkForNewMessages();
         this.getAllChatrooms();
+        
+        window.Echo.private('user.' + this.user.id + '.readMessages')
+        .listen('MessagesRead', (e) => {
+            this.checkForNewMessages();
+        });
     },
 
     methods: {
@@ -72,8 +77,7 @@ export default {
                 this.chatrooms.forEach(chatroom => {
                     window.Echo.private('chatrooms.' + chatroom.id)
                     .listen('MessageSent', (e) => {
-                        this.newMessage = true;
-                        this.howMany += 1;
+                        this.checkForNewMessages();
                     });
                 });
             }).catch(error => {

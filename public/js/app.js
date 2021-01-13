@@ -2586,6 +2586,8 @@ __webpack_require__.r(__webpack_exports__);
     window.Echo["private"]('chatrooms.' + this.chatroom.id).listen('MessageSent', function (e) {
       e.message.sender = e.sender;
 
+      _this.markAsReadMessage(e.message.id);
+
       _this.messages.push(e.message);
 
       _this.scrollChat();
@@ -2648,6 +2650,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     markAsReadMessages: function markAsReadMessages() {
       axios.patch('/chats/' + this.chatroom.id + '/readAll').then(function (response) {})["catch"](function (error) {
+        console.log(error.message);
+      });
+    },
+    markAsReadMessage: function markAsReadMessage(messageId) {
+      axios.patch('/chats/' + this.chatroom.id + '/readMessage/' + messageId).then(function (response) {})["catch"](function (error) {
         console.log(error.message);
       });
     },
@@ -3465,46 +3472,50 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
+    var _this = this;
+
     this.checkForNewMessages();
     this.getAllChatrooms();
+    window.Echo["private"]('user.' + this.user.id + '.readMessages').listen('MessagesRead', function (e) {
+      _this.checkForNewMessages();
+    });
   },
   methods: {
     getAllChatrooms: function getAllChatrooms() {
-      var _this = this;
+      var _this2 = this;
 
       axios.get('/group-panel/' + this.user.group.id + '/getAllUserChatrooms', {}).then(function (response) {
-        _this.chatrooms = response.data;
+        _this2.chatrooms = response.data;
 
-        _this.chatrooms.forEach(function (chatroom) {
+        _this2.chatrooms.forEach(function (chatroom) {
           window.Echo["private"]('chatrooms.' + chatroom.id).listen('MessageSent', function (e) {
-            _this.newMessage = true;
-            _this.howMany += 1;
+            _this2.checkForNewMessages();
           });
         });
       })["catch"](function (error) {
         if (error.response.status == 422) {
-          _this.errors = error.response.data.errors;
-          console.log(_this.errors);
+          _this2.errors = error.response.data.errors;
+          console.log(_this2.errors);
         }
 
         console.log(error.message);
       });
     },
     checkForNewMessages: function checkForNewMessages() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get('/group-panel/' + this.user.group.id + '/checkForNewMessages', {}).then(function (response) {
-        _this2.howMany = response.data[0].count;
+        _this3.howMany = response.data[0].count;
 
-        if (_this2.howMany > 0) {
-          _this2.newMessage = true;
+        if (_this3.howMany > 0) {
+          _this3.newMessage = true;
         } else {
-          _this2.newMessage = false;
+          _this3.newMessage = false;
         }
       })["catch"](function (error) {
         if (error.response.status == 422) {
-          _this2.errors = error.response.data.errors;
-          console.log(_this2.errors);
+          _this3.errors = error.response.data.errors;
+          console.log(_this3.errors);
         }
 
         console.log(error.message);

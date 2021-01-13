@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MessagesRead;
+
 use App\Models\Chatroom;
 use App\Models\Message;
 use App\Models\User;
@@ -145,6 +147,14 @@ class ChatroomsController extends Controller
     public function markAsReadMessages(Chatroom $chatroom){
         $user = auth()->user();
         $affected = DB::table('messages')->where('chatroom_id', $chatroom->id)->where('sender_id', '!=', $user->id)->update(['read' => 1]);
+        MessagesRead::dispatch($user);
+        return $affected;
+    }
+
+    public function markAsReadMessage(Chatroom $chatroom, Message $message){
+        $user = auth()->user();
+        $affected = DB::table('messages')->where('id', $message->id)->where('chatroom_id', $chatroom->id)->where('sender_id', '!=', $user->id)->update(['read' => 1]);
+        MessagesRead::dispatch($user);
         return $affected;
     }
 
