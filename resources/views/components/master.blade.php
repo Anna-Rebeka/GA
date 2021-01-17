@@ -21,14 +21,8 @@
 <body>
     <div id="app">
         <header class="p-8">
-            <div class="container mx-auto flex justify-between">
-                <a href="{{ route('dashboard') }}">
-                    <img src="/img/logo.png" width="60px" alt="logo">
-                </a>
-                <a href="/{{ auth()->user()->username }}/notes" class="shadow w-22 h-10 text-center relative inline-flex justify-center rounded-full border border-gray-300 ml-5 px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
-                    Notes
-                </a>
-                <dropdown></dropdown>
+            <div>
+                <navbar :user="{{ auth()->user() }}" route_dashboard="{{ route('dashboard') }}"></navbar>    
             </div>
         
         </header>

@@ -1,5 +1,7 @@
 import Vue from 'vue';
-import dropdown from './components/dropdown.vue';
+import navbar from './components/navbar/navbar.vue';
+import messagesLink from './components/navbar/messages-link.vue';
+import groupSelection from './components/navbar/group-selection.vue';
 import groupPanel from './components/group-panel.vue';
 import membersPanel from './components/members-panel.vue';
 import changeGroup from './components/groups/change-group.vue';
@@ -29,7 +31,9 @@ require('./bootstrap');
 
 Vue.use(VueFilterDateFormat);
 
-Vue.component('dropdown', dropdown);
+Vue.component('navbar', navbar);
+Vue.component('messages-link', messagesLink);
+Vue.component('group-selection', groupSelection);
 Vue.component('group-panel', groupPanel);
 Vue.component('members-panel', membersPanel);
 Vue.component('change-group', changeGroup);
