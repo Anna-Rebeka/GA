@@ -87,7 +87,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="mt-10 clear-both w-full text-center">
+        <div class="mt-10 clear-both w-full text-center text-sm">
             <jw-pagination :items="savedAssignments" @changePage="onChangePage" :pageSize="4"></jw-pagination>
         </div>
         </div>

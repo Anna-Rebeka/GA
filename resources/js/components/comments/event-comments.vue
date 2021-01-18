@@ -29,7 +29,7 @@
                     </div>
                 </div>
             </div>
-        <div class="text-center">
+        <div class="text-center text-sm">
             <jw-pagination :items="comments" @changePage="onChangePage" :pageSize="10"></jw-pagination>
         </div>
     </div>

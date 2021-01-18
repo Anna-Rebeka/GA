@@ -46,8 +46,8 @@
                     </li>
                 </ul>
             </div>
-            <div class="text-center">
-                <jw-pagination class="text-center" :items="savedUsers" @changePage="onChangePage" :pageSize="10"></jw-pagination>
+            <div class="text-center text-sm">
+                <jw-pagination :items="savedUsers" @changePage="onChangePage" :pageSize="10"></jw-pagination>
             </div>
         </div>
     </div>
