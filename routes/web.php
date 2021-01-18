@@ -37,13 +37,14 @@ Route::middleware('auth')->group(function() {
 
     Route::get('/profile/{user:username}', [UsersController::class, 'show'])->name('profile');
     Route::get('/profile/{user:username}/edit', [UsersController::class, 'edit']);
+    Route::patch('/profile/{user:username}', [UsersController::class, 'update']);
     Route::get('/profile/{user:username}/events/all', [UsersController::class, 'getAllUserEvents']);
     Route::get('/profile/{user:username}/events/joined', [UsersController::class, 'getUserJoinedEvents']);
     Route::get('/profile/{user:username}/assignments/all', [UsersController::class, 'getAllUsersAssignments']);
     Route::get('/profile/{user:username}/assignments/mine', [UsersController::class, 'getUsersAssignments']);
-    Route::patch('/profile/{user:username}', [UsersController::class, 'update']);
+    Route::get('/{user:username}/groups', [UsersController::class, 'getAllUsersGroups']);
     Route::get('/all-members/{group:id}', [UsersController::class, 'index']);
-    Route::get('/activate-group/{id}', [UsersController::class, 'activateGroup']);
+    Route::patch('/activate-group/{id}', [UsersController::class, 'activateGroup']);
     
     Route::get('/{user:username}/notes', [NotesController::class, 'index']);
     Route::post('/{user:username}/notes', [NotesController::class, 'store']);
@@ -54,12 +55,11 @@ Route::middleware('auth')->group(function() {
 
     Route::get('/create-group', [GroupsController::class, 'create']);
     Route::post('/create-group', [GroupsController::class, 'store']);
-    Route::get('/change-group', [GroupsController::class, 'index']);
     Route::get('/group/{group:id}/members/get', [GroupsController::class, 'getMembers']);
 
 
-    Route::get('/{group:id}/events', [EventsController::class, 'index']);
-    Route::get('/{group:id}/events/{event:id}', [EventsController::class, 'show']);
+    Route::get('/events', [EventsController::class, 'index']);
+    Route::get('/events/{event:id}', [EventsController::class, 'show']);
     Route::post('/events', [EventsController::class, 'store']);
     Route::delete('/events/{event:id}', [EventsController::class, 'destroy']);
     Route::post('/events/{event:id}/join', [EventsController::class, 'join']);
@@ -68,8 +68,8 @@ Route::middleware('auth')->group(function() {
     Route::get('/events/{event:id}/comments', [EventCommentsController::class, 'index']);
     Route::post('/events/{event:id}/comments', [EventCommentsController::class, 'store']);
 
-    Route::get('/{group:id}/assignments', [AssignmentsController::class, 'index']);
-    Route::get('/{group:id}/assignments/{assignment:id}', [AssignmentsController::class, 'show']);
+    Route::get('/assignments', [AssignmentsController::class, 'index']);
+    Route::get('/assignments/{assignment:id}', [AssignmentsController::class, 'show']);
     Route::post('/assignments', [AssignmentsController::class, 'store']);
     Route::delete('/assignments/{assignment:id}', [AssignmentsController::class, 'destroy']);
     Route::patch('/assignments/{assignment:id}/take', [AssignmentsController::class, 'take']);

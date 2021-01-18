@@ -77,7 +77,7 @@ export default {
 
         deleteAssignment($assignment) {
             axios.delete('/assignments/' + $assignment.id).then(response => {
-                window.location.href = '/' + $assignment.group_id + '/assignments';
+                window.location.href = "/assignments";
             });
         }
     },

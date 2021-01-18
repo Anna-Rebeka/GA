@@ -10,7 +10,7 @@
             <form action="/logout" method="post">
                 <input type="hidden" name="_token" :value="csrf" />
                 <button
-                    class="shadow w-22 h-10 text-center relative inline-flex justify-center rounded-full border border-gray-300 ml-5 px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
+                    class="shadow w-22 h-10 text-center relative inline-flex justify-center rounded-full border border-gray-300 -mt-2 ml-5 px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
                 >
                     Logout
                 </button>
@@ -37,7 +37,10 @@ export default {
         };
     },
 };
+
+//select on click axios get user groups - <a href="redirect to this exact page but set active group to another one">  
 </script>
+
 
 <style>
 </style>

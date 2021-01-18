@@ -1985,7 +1985,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     deleteAssignment: function deleteAssignment($assignment) {
       axios["delete"]('/assignments/' + $assignment.id).then(function (response) {
-        window.location.href = '/' + $assignment.group_id + '/assignments';
+        window.location.href = "/assignments";
       });
     }
   }
@@ -2938,10 +2938,8 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     destroyEvent: function destroyEvent() {
-      var _this3 = this;
-
       axios["delete"]('/events/' + this.event.id).then(function (response) {
-        window.location.href = '/' + _this3.event.group.id + '/events';
+        window.location.href = "/events";
       });
     }
   }
@@ -3596,44 +3594,62 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['user'],
   data: function data() {
     return {
-      isOpen: false,
-      csrf: document.head.querySelector('meta[name="csrf-token"]').content
+      select: null,
+      lastSelectValue: null,
+      groups: []
     };
   },
-  created: function created() {
-    var _this = this;
+  mounted: function mounted() {
+    this.select = document.getElementById("groupSelect");
+    this.lastSelectValue = document.getElementById("groupSelect").value;
+    this.getUserGroups();
+  },
+  methods: {
+    getUserGroups: function getUserGroups() {
+      var _this = this;
 
-    var handleEscape = function handleEscape(e) {
-      if (e.key === "Esc" || e.key === "Escape") {
-        _this.isOpen = false;
+      axios.get('/' + this.user.username + '/groups').then(function (response) {
+        _this.groups = response.data;
+
+        _this.groups.unshift(_this.user.group);
+
+        _this.lastSelectValue = _this.user.group.id;
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this.errors = error.response.data.errors;
+          console.log(_this.errors);
+        }
+
+        console.log(error.message);
+      });
+    },
+    selected: function selected(value) {
+      console.log(this.lastSelectValue);
+      console.log(this.select.value);
+
+      if (this.lastSelectValue != this.select.value) {
+        this.lastSelectValue = this.select.value;
+        this.changeActiveGroup(this.lastSelectValue);
       }
-    };
+    },
+    changeActiveGroup: function changeActiveGroup(groupId) {
+      var _this2 = this;
 
-    document.addEventListener("keydown", handleEscape);
-    this.$once("hook:beforeDestroy", function () {
-      document.removeEventListener("keydown", handleEscape);
-    });
+      axios.patch('/activate-group/' + groupId).then(function (response) {
+        location.reload();
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this2.errors = error.response.data.errors;
+          console.log(_this2.errors);
+        }
+
+        console.log(error.message);
+      });
+    }
   }
 });
 
@@ -3776,7 +3792,7 @@ __webpack_require__.r(__webpack_exports__);
       csrf: document.head.querySelector('meta[name="csrf-token"]').content
     };
   }
-});
+}); //select on click axios get user groups - <a href="redirect to this exact page but set active group to another one">
 
 /***/ }),
 
@@ -33553,7 +33569,7 @@ var render = function() {
               {
                 staticClass:
                   "block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
-                attrs: { href: "/" + _vm.user.group.id + "/assignments" }
+                attrs: { href: "/assignments" }
               },
               [_vm._v("Assignments\n            ")]
             ),
@@ -33563,7 +33579,7 @@ var render = function() {
               {
                 staticClass:
                   "block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
-                attrs: { href: "/" + _vm.user.group.id + "/events" }
+                attrs: { href: "/events" }
               },
               [_vm._v("Events\n            ")]
             )
@@ -33793,62 +33809,24 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "relative" }, [
     _c(
-      "button",
+      "select",
       {
         staticClass:
-          "shadow relative z-10 inline-flex justify-center w-full rounded-full border border-gray-300 px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none",
+          "inline-block rounded-lg bg-white border border-gray-300 text-gray-700 px-4 pr-8 h-8 mr-2 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500",
+        attrs: { id: "groupSelect" },
         on: {
           click: function($event) {
-            _vm.isOpen = !_vm.isOpen
+            return _vm.selected("sheesh")
           }
         }
       },
-      [_vm._v("\n        Options\n    ")]
-    ),
-    _vm._v(" "),
-    _vm.isOpen
-      ? _c("button", {
-          staticClass:
-            "fixed inset-0 h-full w-full cursor-default z-20 outline-none border-none",
-          attrs: { tabindex: "-1" },
-          on: {
-            click: function($event) {
-              _vm.isOpen = false
-            }
-          }
-        })
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.isOpen
-      ? _c(
-          "div",
-          {
-            staticClass:
-              "absolute right-0 mt-1 py-2 w-48 bg-gray-300 rounded-lg z-20"
-          },
-          [
-            _c(
-              "a",
-              {
-                staticClass:
-                  "block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white",
-                attrs: { href: "/change-group" }
-              },
-              [_vm._v("Change group")]
-            ),
-            _vm._v(" "),
-            _c(
-              "a",
-              {
-                staticClass:
-                  "block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white",
-                attrs: { href: "/create-group" }
-              },
-              [_vm._v("Create a new group")]
-            )
-          ]
-        )
-      : _vm._e()
+      _vm._l(_vm.groups, function(group) {
+        return _c("option", { key: group.id, domProps: { value: group.id } }, [
+          _vm._v(_vm._s(group.name) + "\n        ")
+        ])
+      }),
+      0
+    )
   ])
 }
 var staticRenderFns = []
@@ -33954,7 +33932,7 @@ var render = function() {
             "button",
             {
               staticClass:
-                "shadow w-22 h-10 text-center relative inline-flex justify-center rounded-full border border-gray-300 ml-5 px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
+                "shadow w-22 h-10 text-center relative inline-flex justify-center rounded-full border border-gray-300 -mt-2 ml-5 px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
             },
             [_vm._v("\n                Logout\n            ")]
           )
@@ -34418,13 +34396,7 @@ var render = function() {
                               {
                                 staticClass:
                                   "shadow border border-gray-300 rounded-lg py-2 px-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
-                                attrs: {
-                                  href:
-                                    "/" +
-                                    assignment.group_id +
-                                    "/assignments/" +
-                                    assignment.id
-                                }
+                                attrs: { href: "/assignments/" + assignment.id }
                               },
                               [
                                 _vm._v(
@@ -34780,10 +34752,7 @@ var render = function() {
                               {
                                 staticClass:
                                   "shadow border border-gray-300 rounded-lg mr-6 py-2 px-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
-                                attrs: {
-                                  href:
-                                    "/" + event.group_id + "/events/" + event.id
-                                }
+                                attrs: { href: "/events/" + event.id }
                               },
                               [
                                 _vm._v(

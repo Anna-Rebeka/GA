@@ -80,7 +80,7 @@
                         </td>
                         <td class="pr-6 py-4">  
                             <a 
-                                :href="'/' + assignment.group_id + '/assignments/' + assignment.id"
+                                :href="'/assignments/' + assignment.id"
                                 class="shadow border border-gray-300 rounded-lg py-2 px-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
                                 About
                             </a> 

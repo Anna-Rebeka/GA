@@ -114,7 +114,7 @@ export default {
 
         destroyEvent() {
             axios.delete('/events/' + this.event.id).then(response => {
-                window.location.href = '/' + this.event.group.id + '/events';
+                window.location.href = "/events";
             });
         }
     }

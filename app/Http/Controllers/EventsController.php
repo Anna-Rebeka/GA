@@ -14,8 +14,9 @@ class EventsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Group $group)
+    public function index()
     {
+        $group = auth()->user()->group;
         $events = $group->events()->orderBy('event_time')->get();
         $eusers = [];
 
@@ -82,7 +83,7 @@ class EventsController extends Controller
      * @param  \App\Models\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function show(Group $group, Event $event)
+    public function show(Event $event)
     {
         $event->users;
         $event->group;

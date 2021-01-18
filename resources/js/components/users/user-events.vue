@@ -72,7 +72,7 @@
                         </td>
                         <td> 
                             <a 
-                                :href="'/' + event.group_id + '/events/' + event.id"
+                                :href="'/events/' + event.id"
                                 class="shadow border border-gray-300 rounded-lg mr-6 py-2 px-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
                                 About
                             </a> 

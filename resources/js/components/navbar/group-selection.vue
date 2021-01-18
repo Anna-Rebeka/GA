@@ -1,56 +1,70 @@
 <template>
     <div class="relative">
-        <button
-            @click="isOpen = !isOpen"
-            class="shadow relative z-10 inline-flex justify-center w-full rounded-full border border-gray-300 px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
+        <select
+            v-on:click="selected('sheesh')"
+            id="groupSelect"
+            class="inline-block rounded-lg bg-white border border-gray-300 text-gray-700 px-4 pr-8 h-8 mr-2 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500"
         >
-            Options
-        </button>
-        <button
-            v-if="isOpen"
-            @click="isOpen = false"
-            tabindex="-1"
-            class="fixed inset-0 h-full w-full cursor-default z-20 outline-none border-none"
-        ></button>
-        <div
-            v-if="isOpen"
-            class="absolute right-0 mt-1 py-2 w-48 bg-gray-300 rounded-lg z-20"
-        >
-            <a
-                href="/change-group"
-                class="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white"
-                >Change group</a
-            >
-            <a
-                href="/create-group"
-                class="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white"
-                >Create a new group</a
-            >
-            
-        </div>
+            <option 
+                v-for="group in groups" :key="group.id"
+                :value="group.id">{{ group.name }}
+            </option>
+        </select>
     </div>
 </template>
 
 <script>
 export default {
+    props: ['user'],
     data() {
         return {
-            isOpen: false,
-            csrf: document.head.querySelector('meta[name="csrf-token"]')
-                .content,
+            select: null,
+            lastSelectValue: null,
+            groups: [],
         };
     },
 
-    created() {
-        const handleEscape = (e) => {
-            if (e.key === "Esc" || e.key === "Escape") {
-                this.isOpen = false;
-            }
-        };
-        document.addEventListener("keydown", handleEscape);
-        this.$once("hook:beforeDestroy", () => {
-            document.removeEventListener("keydown", handleEscape);
-        });
+    mounted() {
+        this.select = document.getElementById("groupSelect");
+        this.lastSelectValue = document.getElementById("groupSelect").value;
+        this.getUserGroups();
     },
+
+    methods: {
+        getUserGroups(){
+            axios.get('/' + this.user.username + '/groups').then(response => {
+                this.groups = response.data;
+                this.groups.unshift(this.user.group);
+                this.lastSelectValue = this.user.group.id;
+            }).catch(error => {
+                if (error.response.status == 422){
+                    this.errors = error.response.data.errors;
+                    console.log(this.errors);
+                }
+                console.log(error.message);
+            });
+        },
+
+        selected(value){
+            console.log(this.lastSelectValue);
+            console.log(this.select.value);
+            if(this.lastSelectValue != this.select.value){
+                this.lastSelectValue = this.select.value;
+                this.changeActiveGroup(this.lastSelectValue);
+            }
+        },    
+
+        changeActiveGroup(groupId){
+            axios.patch('/activate-group/' + groupId).then(response => {
+                location.reload();
+            }).catch(error => {
+                if (error.response.status == 422){
+                    this.errors = error.response.data.errors;
+                    console.log(this.errors);
+                }
+                console.log(error.message);
+            });
+        }
+    }
 };
 </script>

@@ -14,15 +14,7 @@ class GroupsController extends Controller
      */
     public function index()
     {
-        $groups =  auth()->user()->groups;
-
-        foreach ($groups as $group){
-            $group->users;
-        }
-        
-        return view('groups/change-group', [
-            'groups' => $groups,
-            ]);
+        //
     }
 
     /**
