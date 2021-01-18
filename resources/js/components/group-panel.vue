@@ -60,12 +60,7 @@ export default {
     methods: {
         getAllChatrooms() {
             axios
-                .get(
-                    "/group-panel/" +
-                        this.user.group.id +
-                        "/getAllUserChatrooms",
-                    {}
-                )
+                .get("/group-panel/getAllUserChatrooms", {})
                 .then((response) => {
                     this.chatrooms = response.data;
                     this.chatrooms.forEach((chatroom) => {
@@ -88,12 +83,7 @@ export default {
 
         checkForNewMessages() {
             axios
-                .get(
-                    "/group-panel/" +
-                        this.user.group.id +
-                        "/checkForNewMessages",
-                    {}
-                )
+                .get("/group-panel/checkForNewMessages", {})
                 .then((response) => {
                     this.howMany = response.data[0].count;
                     if (this.howMany > 0) {

@@ -2421,12 +2421,14 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this = this;
 
-    this.getGroupMembers();
-    this.showedChatroom.forEach(function (chatroom) {
-      window.Echo["private"]('chatrooms.' + chatroom.id).listen('MessageSent', function (e) {
-        _this.getLatestMessage(chatroom);
+    if (this.user.group) {
+      this.getGroupMembers();
+      this.showedChatroom.forEach(function (chatroom) {
+        window.Echo["private"]('chatrooms.' + chatroom.id).listen('MessageSent', function (e) {
+          _this.getLatestMessage(chatroom);
+        });
       });
-    });
+    }
   },
   methods: {
     getLatestMessage: function getLatestMessage(chatroom) {
@@ -3401,7 +3403,7 @@ __webpack_require__.r(__webpack_exports__);
     getAllChatrooms: function getAllChatrooms() {
       var _this2 = this;
 
-      axios.get("/group-panel/" + this.user.group.id + "/getAllUserChatrooms", {}).then(function (response) {
+      axios.get("/group-panel/getAllUserChatrooms", {}).then(function (response) {
         _this2.chatrooms = response.data;
 
         _this2.chatrooms.forEach(function (chatroom) {
@@ -3421,7 +3423,7 @@ __webpack_require__.r(__webpack_exports__);
     checkForNewMessages: function checkForNewMessages() {
       var _this3 = this;
 
-      axios.get("/group-panel/" + this.user.group.id + "/checkForNewMessages", {}).then(function (response) {
+      axios.get("/group-panel/checkForNewMessages", {}).then(function (response) {
         _this3.howMany = response.data[0].count;
 
         if (_this3.howMany > 0) {
@@ -3532,31 +3534,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user'],
+  props: ["user"],
   data: function data() {
     return {
       select: null,
       lastSelectValue: null,
-      groups: []
+      groups: null
     };
   },
   mounted: function mounted() {
-    this.select = document.getElementById("groupSelect");
-    this.lastSelectValue = document.getElementById("groupSelect").value;
-    this.getUserGroups();
+    if (this.user.group) {
+      this.select = document.getElementById("groupSelect");
+      this.lastSelectValue = document.getElementById("groupSelect").value;
+      this.getUserGroups();
+    }
   },
   methods: {
     getUserGroups: function getUserGroups() {
       var _this = this;
 
-      axios.get('/' + this.user.username + '/groups').then(function (response) {
+      axios.get("/" + this.user.username + "/groups").then(function (response) {
         _this.groups = response.data;
 
         _this.groups.unshift(_this.user.group);
 
-        _this.lastSelectValue = _this.user.group.id;
+        if (_this.user.group) {
+          _this.lastSelectValue = _this.user.group.id;
+        }
       })["catch"](function (error) {
         if (error.response.status == 422) {
           _this.errors = error.response.data.errors;
@@ -3566,10 +3571,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error.message);
       });
     },
-    selected: function selected(value) {
-      console.log(this.lastSelectValue);
-      console.log(this.select.value);
-
+    selected: function selected() {
       if (this.lastSelectValue != this.select.value) {
         this.lastSelectValue = this.select.value;
         this.changeActiveGroup(this.lastSelectValue);
@@ -3578,7 +3580,7 @@ __webpack_require__.r(__webpack_exports__);
     changeActiveGroup: function changeActiveGroup(groupId) {
       var _this2 = this;
 
-      axios.patch('/activate-group/' + groupId).then(function (response) {
+      axios.patch("/activate-group/" + groupId).then(function (response) {
         location.reload();
       })["catch"](function (error) {
         if (error.response.status == 422) {
@@ -3622,6 +3624,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user"],
   data: function data() {
@@ -3644,7 +3647,7 @@ __webpack_require__.r(__webpack_exports__);
     getAllChatrooms: function getAllChatrooms() {
       var _this2 = this;
 
-      axios.get("/group-panel/" + this.user.group.id + "/getAllUserChatrooms", {}).then(function (response) {
+      axios.get("/group-panel/getAllUserChatrooms", {}).then(function (response) {
         _this2.chatrooms = response.data;
 
         _this2.chatrooms.forEach(function (chatroom) {
@@ -3664,7 +3667,7 @@ __webpack_require__.r(__webpack_exports__);
     checkForNewMessages: function checkForNewMessages() {
       var _this3 = this;
 
-      axios.get("/group-panel/" + this.user.group.id + "/checkForNewMessages", {}).then(function (response) {
+      axios.get("/group-panel/checkForNewMessages", {}).then(function (response) {
         _this3.howMany = response.data[0].count;
 
         if (_this3.howMany > 0) {
@@ -33649,13 +33652,13 @@ var render = function() {
         attrs: { id: "groupSelect" },
         on: {
           click: function($event) {
-            return _vm.selected("sheesh")
+            return _vm.selected()
           }
         }
       },
       _vm._l(_vm.groups, function(group) {
         return _c("option", { key: group.id, domProps: { value: group.id } }, [
-          _vm._v(_vm._s(group.name) + "\n        ")
+          _vm._v("\n            " + _vm._s(group.name) + "\n        ")
         ])
       }),
       0

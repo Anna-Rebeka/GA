@@ -5,14 +5,15 @@
                 'bg-purple-200 hover:text-white hover:bg-purple-400': newMessage,
                 'hover:text-gray-500 hover:bg-gray-100': !newMessage,
             }"
-            class="shadow border border-gray-300 text-black text-xs font-bold text-gray-700 rounded-full bg-white flex items-center justify-center font-mono" style="height: 100px; width: 100px; font-size: 20px;"
+            class="shadow border border-gray-300 text-black text-xs font-bold text-gray-700 rounded-full bg-white flex items-center justify-center font-mono"
+            style="height: 100px; width: 100px; font-size: 20px"
             href="/chats"
         >
             <div
                 v-if="newMessage"
                 class="fixed bottom-24 right-8 rounded-full bg-red-500 w-3 h-3"
             ></div>
-            <img src="/img/messages.png" alt="messages">
+            <img src="/img/messages.png" alt="messages" />
         </a>
     </div>
 </template>
@@ -43,12 +44,7 @@ export default {
     methods: {
         getAllChatrooms() {
             axios
-                .get(
-                    "/group-panel/" +
-                        this.user.group.id +
-                        "/getAllUserChatrooms",
-                    {}
-                )
+                .get("/group-panel/getAllUserChatrooms", {})
                 .then((response) => {
                     this.chatrooms = response.data;
                     this.chatrooms.forEach((chatroom) => {
@@ -71,12 +67,7 @@ export default {
 
         checkForNewMessages() {
             axios
-                .get(
-                    "/group-panel/" +
-                        this.user.group.id +
-                        "/checkForNewMessages",
-                    {}
-                )
+                .get("/group-panel/checkForNewMessages", {})
                 .then((response) => {
                     this.howMany = response.data[0].count;
                     if (this.howMany > 0) {

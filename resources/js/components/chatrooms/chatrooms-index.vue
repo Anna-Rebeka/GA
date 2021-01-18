@@ -52,13 +52,15 @@ export default {
     },
 
     mounted () {
-        this.getGroupMembers();
-        this.showedChatroom.forEach(chatroom => {
-            window.Echo.private('chatrooms.' + chatroom.id)
-            .listen('MessageSent', (e) => {
-                this.getLatestMessage(chatroom);
+        if(this.user.group){
+            this.getGroupMembers();
+            this.showedChatroom.forEach(chatroom => {
+                window.Echo.private('chatrooms.' + chatroom.id)
+                .listen('MessageSent', (e) => {
+                    this.getLatestMessage(chatroom);
+                });
             });
-        });
+        }
     },
 
     methods: {
