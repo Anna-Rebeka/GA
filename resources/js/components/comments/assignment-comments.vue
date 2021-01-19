@@ -37,7 +37,7 @@
 
 <script>
 export default {
-    props: ['user', 'event'],
+    props: ['user', 'assignment'],
 
     data() {
         return {
@@ -51,16 +51,17 @@ export default {
         this.getComments();
         document.getElementById("commentArea").addEventListener("keypress", this.submitOnEnter);
 
-        window.Echo.private('commented_event.' + this.event.id + '.group.' + this.event.group_id)
-        .listen('EventCommented', (e) => {
-            e.event_comment.user = e.user;
-            this.comments.unshift(e.event_comment);
+        window.Echo.private('commented_assignment.' + this.assignment.id + '.group.' + this.assignment.group_id)
+        .listen('AssignmentCommented', (e) => {
+            e.assignment_comment.user = e.user;
+            this.comments.unshift(e.assignment_comment);
         });
+        
     },
 
     methods: {
         getComments(){
-            axios.get('/events/' + this.event.id + '/comments').then(response => {
+            axios.get('/assignments/' + this.assignment.id + '/comments').then(response => {
                 this.comments = response.data;
             }).catch(error => {
                 console.log(error.message);
@@ -71,17 +72,17 @@ export default {
             this.pageOfItems = pageOfItems;
         },
 
-        submitOnEnter(event){
-            if(event.which === 13){
-                event.target.form.dispatchEvent(new Event("submit", {cancelable: true}));
-                event.preventDefault();     
+        submitOnEnter(assignment){
+            if(assignment.which === 13){
+                assignment.target.form.dispatchEvent(new Event("submit", {cancelable: true}));
+                assignment.preventDefault();     
             }
         },
 
         submit(){
             var commentArea = document.getElementById("commentArea").value;
             document.getElementById("commentArea").value = "";
-            axios.post('/events/' + this.event.id + '/comments', {event_id: this.event.id, text: commentArea}).then(response => {
+            axios.post('/assignments/' + this.assignment.id + '/comments', {assignment_id: this.assignment.id, text: commentArea}).then(response => {
                 response.data['user'] = this.user;    
                 this.comments.unshift(response.data);
             }).catch(error => {

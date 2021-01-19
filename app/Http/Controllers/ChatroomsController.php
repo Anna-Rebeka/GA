@@ -162,14 +162,14 @@ class ChatroomsController extends Controller
         return $chatroom->messages()->with('sender')->latest()->first();
     }
 
-    public function checkForNewMessages(Group $group){
+    public function checkForNewMessages(){
         $user = auth()->user();
         $chatrooms = $user->chatrooms()->pluck('chatrooms.id');
         $howManyMessages = DB::table('messages')->whereIn('chatroom_id', $chatrooms)->where('read', 0)->where('sender_id', '!=', $user->id)->selectRaw('count(*) as count')->get();
         return $howManyMessages;
     }
 
-    public function getAllUserChatrooms(Group $group){
+    public function getAllUserChatrooms(){
         return auth()->user()->chatrooms;
     }
 }

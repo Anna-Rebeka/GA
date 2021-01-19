@@ -44,7 +44,7 @@
 
         <div v-if="authUser.id == user.id" class="mx-auto">
             <user-assignments :authUser="authUser"></user-assignments>
-            <user-events :authUser="authUser"></user-events>
+            <user-events class="mt-12" :authUser="authUser"></user-events>
             
         </div>
     </div>

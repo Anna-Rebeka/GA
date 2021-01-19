@@ -72,7 +72,7 @@
                         </td>
                         <td> 
                             <a 
-                                :href="'/' + event.group_id + '/events/' + event.id"
+                                :href="'/events/' + event.id"
                                 class="shadow border border-gray-300 rounded-lg mr-6 py-2 px-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
                                 About
                             </a> 
@@ -81,7 +81,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="mt-10 clear-both w-full text-center">
+        <div class="mt-4 clear-both w-full text-center text-sm">
             <jw-pagination :items="filteredEvents" @changePage="onChangePage" :pageSize="4"></jw-pagination>
         </div>
         </div>

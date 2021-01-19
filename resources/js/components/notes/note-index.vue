@@ -38,7 +38,7 @@
             </li>
         </ul>
         
-        <div class="mt-10 clear-both w-full text-center">
+        <div class="mt-10 clear-both w-full text-center text-sm">
             <jw-pagination :items="savedNotes" @changePage="onChangePage" :pageSize="6"></jw-pagination>
         </div>
     </div>

@@ -46,8 +46,8 @@
                     </li>
                 </ul>
             </div>
-            <div class="text-center">
-                <jw-pagination class="text-center" :items="savedUsers" @changePage="onChangePage" :pageSize="10"></jw-pagination>
+            <div class="text-center text-sm">
+                <jw-pagination :items="savedUsers" @changePage="onChangePage" :pageSize="10"></jw-pagination>
             </div>
         </div>
     </div>
@@ -114,7 +114,7 @@ export default {
 
         destroyEvent() {
             axios.delete('/events/' + this.event.id).then(response => {
-                window.location.href = '/' + this.event.group.id + '/events';
+                window.location.href = "/events";
             });
         }
     }

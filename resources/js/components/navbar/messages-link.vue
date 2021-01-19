@@ -1,42 +1,26 @@
 <template>
-    <div class="text-center">
+    <div class="z-40 fixed bottom-4 right-6">
         <a
-            href="/create-group"
-            class="mb-6 rounded-lg border border-gray-300 py-2 px-3 font-bold text-black text-xs hover:text-gray-500 hover:bg-gray-100"
-            >+
+            v-bind:class="{
+                'bg-purple-200 hover:text-white hover:bg-purple-400': newMessage,
+                'hover:text-gray-500 hover:bg-gray-100': !newMessage,
+            }"
+            class="shadow border border-gray-300 text-black text-xs font-bold text-gray-700 rounded-full bg-white flex items-center justify-center font-mono"
+            style="height: 100px; width: 100px; font-size: 20px"
+            href="/chats"
+        >
+            <div
+                v-if="newMessage"
+                class="fixed bottom-24 right-8 rounded-full bg-red-500 w-3 h-3"
+            ></div>
+            <img src="/img/messages.png" alt="messages" />
         </a>
-        <div class="container text-center pt-4 pb-8">
-            <img
-                src="/storage/groups/avatars/default.jpg"
-                alt="group-avatar"
-                class="rounded shadow-lg mx-auto mb-2 object-cover w-32 h-32"
-            />
-
-            <div v-if="user.group">
-                <h2 class="font-bold text-2xl">{{ user.group.name }}</h2>
-                <p class="text-sm text-gray-500 mb-6">group</p>
-                <a
-                    class="block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100"
-                    href="/assignments"
-                    >Assignments
-                </a>
-                <a
-                    class="block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100"
-                    href="/events"
-                    >Events
-                </a>
-            </div>
-            <div v-else>
-                <h2 class="font-bold text-2xl mb-6">No Group</h2>
-            </div>
-        </div>
     </div>
 </template>
 
 <script>
 export default {
     props: ["user"],
-
     data() {
         return {
             newMessage: false,

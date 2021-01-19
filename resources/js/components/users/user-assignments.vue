@@ -52,7 +52,9 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    <tr v-for="assignment in pageOfItems" :key="assignment.id">
+                    <tr v-for="assignment in pageOfItems" :key="assignment.id"
+                        v-bind:class="{ 'bg-green-100': assignment.done, 'bg-red-100': !assignment.done}"
+                    >
                         <td class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">
                             <div class="text-sm font-medium text-gray-900">
                                 {{  new Date(assignment.due) | dateFormat('DD.MM.YYYY , HH:mm') }}
@@ -80,8 +82,8 @@
                         </td>
                         <td class="pr-6 py-4">  
                             <a 
-                                :href="'/' + assignment.group_id + '/assignments/' + assignment.id"
-                                class="shadow border border-gray-300 rounded-lg py-2 px-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
+                                :href="'/assignments/' + assignment.id"
+                                class="bg-white shadow border border-gray-300 rounded-lg py-2 px-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
                                 About
                             </a> 
                         </td>
@@ -89,7 +91,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="mt-10 clear-both w-full text-center">
+        <div class="mt-4 clear-both w-full text-center text-sm">
             <jw-pagination :items="filteredAssignments" @changePage="onChangePage" :pageSize="4"></jw-pagination>
         </div>
         </div>

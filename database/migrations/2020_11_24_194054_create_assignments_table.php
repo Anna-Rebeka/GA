@@ -21,6 +21,7 @@ class CreateAssignmentsTable extends Migration
             $table->foreignId('group_id');
             $table->dateTime('due');
             $table->text('description');
+            $table->boolean('done')->default(false);
             $table->timestamps();
 
             $table->foreign('assignee_id')

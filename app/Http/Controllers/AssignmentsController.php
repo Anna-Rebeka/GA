@@ -16,8 +16,9 @@ class AssignmentsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Group $group)
+    public function index()
     {
+        $group = auth()->user()->group;
         $assignments = $group->assignments()->orderBy('due')->get();
 
         foreach ($assignments as $assignment){
@@ -85,7 +86,7 @@ class AssignmentsController extends Controller
      * @param  \App\Models\Assignment  $assignment
      * @return \Illuminate\Http\Response
      */
-    public function show(Group $group, Assignment $assignment)
+    public function show(Assignment $assignment)
     {
         $assignment->author;
         $assignment->assignee;
@@ -132,6 +133,11 @@ class AssignmentsController extends Controller
     public function take(Assignment $assignment)
     {
         $assignment->update(array('assignee_id' => auth()->user()->id));
+    }
+
+    public function done(Assignment $assignment)
+    {
+        $assignment->update(array('done' => true));
     }
 }
 

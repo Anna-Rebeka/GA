@@ -20,6 +20,7 @@ class Assignment extends Model
         'author_id',
         'group_id',
         'due',
+        'done',
         'description',
         'created_at'
     ];
@@ -34,5 +35,9 @@ class Assignment extends Model
 
     public function assignee(){
         return $this->belongsTo(User::class);
+    }
+    
+    public function comments(){
+        return $this->hasMany(AssignmentsComments::class);
     }
 }

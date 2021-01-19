@@ -1,8 +1,9 @@
 import Vue from 'vue';
-import dropdown from './components/dropdown.vue';
+import navbar from './components/navbar/navbar.vue';
+import messagesLink from './components/navbar/messages-link.vue';
+import groupSelection from './components/navbar/group-selection.vue';
 import groupPanel from './components/group-panel.vue';
 import membersPanel from './components/members-panel.vue';
-import changeGroup from './components/groups/change-group.vue';
 import userShow from './components/users/user-show.vue';
 import userEdit from './components/users/user-edit.vue';
 import groupUsers from './components/users/group-members.vue';
@@ -16,6 +17,7 @@ import eventComments from './components/comments/event-comments.vue';
 import assignments from './components/assignments/group-assignments.vue';
 import assignmentShow from './components/assignments/assignment-show.vue';
 import assignmentsTable from './components/assignments/assignments-table.vue';
+import assignmentComments from './components/comments/assignment-comments.vue';
 import chatroomsIndex from './components/chatrooms/chatrooms-index.vue';
 import chatroomsShow from './components/chatrooms/chatrooms-show.vue';
 
@@ -29,10 +31,11 @@ require('./bootstrap');
 
 Vue.use(VueFilterDateFormat);
 
-Vue.component('dropdown', dropdown);
+Vue.component('navbar', navbar);
+Vue.component('messages-link', messagesLink);
+Vue.component('group-selection', groupSelection);
 Vue.component('group-panel', groupPanel);
 Vue.component('members-panel', membersPanel);
-Vue.component('change-group', changeGroup);
 Vue.component('user-show', userShow);
 Vue.component('user-edit', userEdit);
 Vue.component('group-members', groupUsers);
@@ -45,6 +48,7 @@ Vue.component('event-comments', eventComments);
 Vue.component('events-table', eventsTable);
 Vue.component('group-assignments', assignments);
 Vue.component('assignment-show', assignmentShow);
+Vue.component('assignment-comments', assignmentComments);
 Vue.component('assignments-table', assignmentsTable);
 Vue.component('jw-pagination', JwPagination);
 Vue.component('chatrooms-index', chatroomsIndex);

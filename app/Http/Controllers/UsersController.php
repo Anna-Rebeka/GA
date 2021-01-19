@@ -158,7 +158,13 @@ class UsersController extends Controller
             $user->active_group = $id;
             $user->save();
         }
-        return redirect(auth()->user()->path());
+    }
+    
+    public function getAllUsersGroups(User $user){
+        if(!$user->group){
+            return [];
+        }
+        return $user->groups()->orderBy('name')->get()->except($user->group->id);
     }
 
     public function getAllUserEvents(User $user){

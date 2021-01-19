@@ -4,6 +4,12 @@
         <div class="float-right">
             <div v-if="showedAssignment.author_id == user.id">
                 <button 
+                    v-if="!showedAssignment.done"
+                    @click="checkWithUser(showedAssignment, 'done')"
+                    class="rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-green-400 hover:text-gray-500 hover:bg-green-200 focus:outline-none">
+                    Done
+                </button> 
+                <button 
                     @click="checkWithUser(showedAssignment, 'delete')"
                     class="rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none">
                     Delete
@@ -35,6 +41,7 @@
             </div>
         </div>
     </div>
+    <assignment-comments :user ="this.user" :assignment="this.assignment"></assignment-comments>
 </div>
     
 </template>
@@ -54,6 +61,9 @@ export default {
             if (confirm("Are you sure? This action is irreversible.")) {
                 if ($whatToDo == "delete"){
                     this.deleteAssignment($assignment);
+                }
+                else if ($whatToDo == "done"){
+                    this.markAsDone($assignment);
                 }
                 else if ($whatToDo == "take"){
                     this.takeAssignment($assignment);
@@ -75,9 +85,22 @@ export default {
             });
         },
 
+        markAsDone($assignment) {
+            axios.patch('/assignments/' + $assignment.id + '/done').then(response => {    
+                this.showedAssignment.done = true;
+                this.reload();
+            }).catch(error => {
+                if (error.response.status == 422){
+                    this.errors = error.response.data.errors;
+                    console.log(this.errors);
+                }
+                console.log(error.message);
+            });
+        },
+
         deleteAssignment($assignment) {
             axios.delete('/assignments/' + $assignment.id).then(response => {
-                window.location.href = '/' + $assignment.group_id + '/assignments';
+                window.location.href = "/assignments";
             });
         }
     },
