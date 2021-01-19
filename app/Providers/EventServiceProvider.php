@@ -27,7 +27,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\EventCommented' => [
             'App\Listeners\EventCommentedNotification'
         ],
-        
+        'App\Events\AssignmentCommented' => [
+            'App\Listeners\AssignmentCommentedNotification'
+        ],
     ];
 
     /**

@@ -2796,22 +2796,22 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
+    var _this = this;
+
     this.getComments();
     document.getElementById("commentArea").addEventListener("keypress", this.submitOnEnter);
-    /*
-    window.Echo.private('commented_assignment.' + this.assignment.id + '.group.' + this.assignment.group_id)
-    .listen('EventCommented', (e) => {
-        e.assignment_comment.user = e.user;
-        this.comments.unshift(e.assignment_comment);
+    window.Echo["private"]('commented_assignment.' + this.assignment.id + '.group.' + this.assignment.group_id).listen('AssignmentCommented', function (e) {
+      e.assignment_comment.user = e.user;
+
+      _this.comments.unshift(e.assignment_comment);
     });
-    */
   },
   methods: {
     getComments: function getComments() {
-      var _this = this;
+      var _this2 = this;
 
       axios.get('/assignments/' + this.assignment.id + '/comments').then(function (response) {
-        _this.comments = response.data;
+        _this2.comments = response.data;
       })["catch"](function (error) {
         console.log(error.message);
       });
@@ -2828,7 +2828,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     submit: function submit() {
-      var _this2 = this;
+      var _this3 = this;
 
       var commentArea = document.getElementById("commentArea").value;
       document.getElementById("commentArea").value = "";
@@ -2836,13 +2836,13 @@ __webpack_require__.r(__webpack_exports__);
         assignment_id: this.assignment.id,
         text: commentArea
       }).then(function (response) {
-        response.data['user'] = _this2.user;
+        response.data['user'] = _this3.user;
 
-        _this2.comments.unshift(response.data);
+        _this3.comments.unshift(response.data);
       })["catch"](function (error) {
         if (error.response.status == 422) {
-          _this2.errors = error.response.data.errors;
-          console.log(_this2.errors);
+          _this3.errors = error.response.data.errors;
+          console.log(_this3.errors);
         }
 
         console.log(error.message);

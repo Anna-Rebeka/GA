@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Assignment;
 use App\Models\AssignmentsComments;
+use App\Events\AssignmentCommented;
+
 
 class AssignmentsCommentsController extends Controller
 {
@@ -28,8 +30,8 @@ class AssignmentsCommentsController extends Controller
             'text' => $attributes['text'],
         ]);
 
-        $event = Assignment::find($comment->event_id);
-        //broadcast(new EventCommented(auth()->user(), $comment, $event, $event->group))->toOthers();
+        $assignment = Assignment::find($comment->assignment_id);
+        broadcast(new AssignmentCommented(auth()->user(), $comment, $assignment, $assignment->group))->toOthers();
 
         return $comment;
     }

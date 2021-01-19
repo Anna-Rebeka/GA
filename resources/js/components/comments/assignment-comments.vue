@@ -51,13 +51,12 @@ export default {
         this.getComments();
         document.getElementById("commentArea").addEventListener("keypress", this.submitOnEnter);
 
-        /*
         window.Echo.private('commented_assignment.' + this.assignment.id + '.group.' + this.assignment.group_id)
-        .listen('EventCommented', (e) => {
+        .listen('AssignmentCommented', (e) => {
             e.assignment_comment.user = e.user;
             this.comments.unshift(e.assignment_comment);
         });
-        */
+        
     },
 
     methods: {

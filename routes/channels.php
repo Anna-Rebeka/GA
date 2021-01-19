@@ -23,6 +23,10 @@ Broadcast::channel('user.{id}.readMessages', function ($user, $userId) {
     return $user->id == $userId;
 });
 
+Broadcast::channel('commented_assignment.{id}.group.{gid}', function ($user, $aId, $gId) {
+    return Group::find($gId)->hasUser($user);
+});
+
 Broadcast::channel('commented_event.{id}.group.{gid}', function ($user, $eId, $gId) {
     return Group::find($gId)->hasUser($user);
 });
