@@ -6,6 +6,7 @@
                 class="inline-block rounded-lg bg-white border border-gray-300 text-gray-700 px-4 pr-8 h-8 mr-2 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
                 <option value="all">All</option>
                 <option value="mine">Mine</option>
+                <option value="toDo">To do</option>
                 <option value="free">Free</option>
                 <option value="created">Created by me</option>
             </select>
@@ -43,8 +44,11 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    <tr v-for="assignment in pageOfItems" :key="assignment.id">
+                <tbody 
+                    class="divide-y divide-gray-200">
+                    <tr v-for="assignment in pageOfItems" :key="assignment.id"
+                        v-bind:class="{ 'bg-green-100': assignment.done, 'bg-red-100': !assignment.done}"
+                    >
                         <td class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">
                             <div class="text-sm font-medium text-gray-900">
                                 {{  new Date(assignment.due) | dateFormat('DD.MM.YYYY , HH:mm') }}
@@ -68,7 +72,7 @@
                         <td> 
                             <a 
                                 :href="'assignments/' + assignment.id"
-                                class="shadow border border-gray-300 rounded-lg py-2 px-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
+                                class="bg-white shadow border border-gray-300 rounded-lg py-2 px-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
                                 About
                             </a> 
                         </td>
@@ -156,6 +160,9 @@ export default {
                 else if(this.select.value === "mine"){
                     this.filterMine();
                 }
+                else if(this.select.value === "toDo"){
+                    this.filterToDo();
+                }
                 else if(this.select.value === "free"){
                     this.filterFree();
                 }
@@ -179,6 +186,16 @@ export default {
                 return false;
             });
         },
+
+        filterToDo(){
+            var uid = this.user.id;
+            this.savedAssignments = this.savedAssignments.filter(function(e) {
+                if(!e.done){
+                    return true;
+                }
+                return false;
+            });
+        },    
 
         filterFree(){
             this.savedAssignments = this.savedAssignments.filter(function(e) {

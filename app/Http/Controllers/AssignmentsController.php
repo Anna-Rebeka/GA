@@ -134,5 +134,10 @@ class AssignmentsController extends Controller
     {
         $assignment->update(array('assignee_id' => auth()->user()->id));
     }
+
+    public function done(Assignment $assignment)
+    {
+        $assignment->update(array('done' => true));
+    }
 }
 

@@ -17,6 +17,7 @@ import eventComments from './components/comments/event-comments.vue';
 import assignments from './components/assignments/group-assignments.vue';
 import assignmentShow from './components/assignments/assignment-show.vue';
 import assignmentsTable from './components/assignments/assignments-table.vue';
+import assignmentComments from './components/comments/assignment-comments.vue';
 import chatroomsIndex from './components/chatrooms/chatrooms-index.vue';
 import chatroomsShow from './components/chatrooms/chatrooms-show.vue';
 
@@ -47,6 +48,7 @@ Vue.component('event-comments', eventComments);
 Vue.component('events-table', eventsTable);
 Vue.component('group-assignments', assignments);
 Vue.component('assignment-show', assignmentShow);
+Vue.component('assignment-comments', assignmentComments);
 Vue.component('assignments-table', assignmentsTable);
 Vue.component('jw-pagination', JwPagination);
 Vue.component('chatrooms-index', chatroomsIndex);

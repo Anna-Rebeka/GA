@@ -1949,6 +1949,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user', 'assignment'],
   data: function data() {
@@ -1961,6 +1968,8 @@ __webpack_require__.r(__webpack_exports__);
       if (confirm("Are you sure? This action is irreversible.")) {
         if ($whatToDo == "delete") {
           this.deleteAssignment($assignment);
+        } else if ($whatToDo == "done") {
+          this.markAsDone($assignment);
         } else if ($whatToDo == "take") {
           this.takeAssignment($assignment);
         }
@@ -1978,6 +1987,22 @@ __webpack_require__.r(__webpack_exports__);
         if (error.response.status == 422) {
           _this.errors = error.response.data.errors;
           console.log(_this.errors);
+        }
+
+        console.log(error.message);
+      });
+    },
+    markAsDone: function markAsDone($assignment) {
+      var _this2 = this;
+
+      axios.patch('/assignments/' + $assignment.id + '/done').then(function (response) {
+        _this2.showedAssignment.done = true;
+
+        _this2.reload();
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this2.errors = error.response.data.errors;
+          console.log(_this2.errors);
         }
 
         console.log(error.message);
@@ -2002,6 +2027,10 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
 //
 //
 //
@@ -2156,6 +2185,8 @@ __webpack_require__.r(__webpack_exports__);
           this.filterCreated();
         } else if (this.select.value === "mine") {
           this.filterMine();
+        } else if (this.select.value === "toDo") {
+          this.filterToDo();
         } else if (this.select.value === "free") {
           this.filterFree();
         }
@@ -2173,6 +2204,16 @@ __webpack_require__.r(__webpack_exports__);
       var uid = this.user.id;
       this.savedAssignments = this.savedAssignments.filter(function (e) {
         if (e.assignee_id == uid) {
+          return true;
+        }
+
+        return false;
+      });
+    },
+    filterToDo: function filterToDo() {
+      var uid = this.user.id;
+      this.savedAssignments = this.savedAssignments.filter(function (e) {
+        if (!e.done) {
           return true;
         }
 
@@ -2689,6 +2730,119 @@ __webpack_require__.r(__webpack_exports__);
         if (error.response.status == 422) {
           _this6.errors = error.response.data.errors;
           console.log(_this6.errors);
+        }
+
+        console.log(error.message);
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/comments/assignment-comments.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/comments/assignment-comments.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['user', 'assignment'],
+  data: function data() {
+    return {
+      comments: [],
+      pageOfItems: [],
+      csrf: document.head.querySelector('meta[name="csrf-token"]').content
+    };
+  },
+  mounted: function mounted() {
+    this.getComments();
+    document.getElementById("commentArea").addEventListener("keypress", this.submitOnEnter);
+    /*
+    window.Echo.private('commented_assignment.' + this.assignment.id + '.group.' + this.assignment.group_id)
+    .listen('EventCommented', (e) => {
+        e.assignment_comment.user = e.user;
+        this.comments.unshift(e.assignment_comment);
+    });
+    */
+  },
+  methods: {
+    getComments: function getComments() {
+      var _this = this;
+
+      axios.get('/assignments/' + this.assignment.id + '/comments').then(function (response) {
+        _this.comments = response.data;
+      })["catch"](function (error) {
+        console.log(error.message);
+      });
+    },
+    onChangePage: function onChangePage(pageOfItems) {
+      this.pageOfItems = pageOfItems;
+    },
+    submitOnEnter: function submitOnEnter(assignment) {
+      if (assignment.which === 13) {
+        assignment.target.form.dispatchEvent(new Event("submit", {
+          cancelable: true
+        }));
+        assignment.preventDefault();
+      }
+    },
+    submit: function submit() {
+      var _this2 = this;
+
+      var commentArea = document.getElementById("commentArea").value;
+      document.getElementById("commentArea").value = "";
+      axios.post('/assignments/' + this.assignment.id + '/comments', {
+        assignment_id: this.assignment.id,
+        text: commentArea
+      }).then(function (response) {
+        response.data['user'] = _this2.user;
+
+        _this2.comments.unshift(response.data);
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this2.errors = error.response.data.errors;
+          console.log(_this2.errors);
         }
 
         console.log(error.message);
@@ -3898,6 +4052,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
 //
 //
 //
@@ -31454,109 +31610,142 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("div", { staticClass: "p-8 mr-2 mb-8" }, [
-      _c("div", { staticClass: "float-right" }, [
-        _vm.showedAssignment.author_id == _vm.user.id
-          ? _c("div", [
-              _c(
-                "button",
-                {
-                  staticClass:
-                    "rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none",
-                  on: {
-                    click: function($event) {
-                      return _vm.checkWithUser(_vm.showedAssignment, "delete")
+  return _c(
+    "div",
+    [
+      _c("div", { staticClass: "p-8 mr-2 mb-8" }, [
+        _c("div", { staticClass: "float-right" }, [
+          _vm.showedAssignment.author_id == _vm.user.id
+            ? _c("div", [
+                !_vm.showedAssignment.done
+                  ? _c(
+                      "button",
+                      {
+                        staticClass:
+                          "rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-green-400 hover:text-gray-500 hover:bg-green-200 focus:outline-none",
+                        on: {
+                          click: function($event) {
+                            return _vm.checkWithUser(
+                              _vm.showedAssignment,
+                              "done"
+                            )
+                          }
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\r\n                    Done\r\n                "
+                        )
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass:
+                      "rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none",
+                    on: {
+                      click: function($event) {
+                        return _vm.checkWithUser(_vm.showedAssignment, "delete")
+                      }
                     }
-                  }
-                },
-                [_vm._v("\r\n                    Delete\r\n                ")]
-              )
-            ])
-          : _vm._e()
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "float-right" }, [
-        _vm.showedAssignment.assignee_id == null
-          ? _c("div", [
-              _c(
-                "button",
-                {
-                  staticClass:
-                    "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none",
-                  on: {
-                    click: function($event) {
-                      return _vm.checkWithUser(_vm.showedAssignment, "take")
-                    }
-                  }
-                },
-                [_vm._v("\r\n                    Take\r\n                ")]
-              )
-            ])
-          : _vm._e()
-      ]),
-      _vm._v(" "),
-      _c("h2", { staticClass: "font-bold text-2xl mb-4" }, [
-        _vm._v(" " + _vm._s(_vm.showedAssignment.name) + " ")
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded" }, [
-        _vm._m(0),
-        _vm._v(" "),
-        _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
-          _vm._v(
-            "\r\n                " +
-              _vm._s(
-                _vm._f("dateFormat")(
-                  new Date(_vm.showedAssignment.due),
-                  "DD.MM.YYYY , HH:mm"
+                  },
+                  [_vm._v("\r\n                    Delete\r\n                ")]
                 )
-              ) +
-              "\r\n            "
-          )
+              ])
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "float-right" }, [
+          _vm.showedAssignment.assignee_id == null
+            ? _c("div", [
+                _c(
+                  "button",
+                  {
+                    staticClass:
+                      "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none",
+                    on: {
+                      click: function($event) {
+                        return _vm.checkWithUser(_vm.showedAssignment, "take")
+                      }
+                    }
+                  },
+                  [_vm._v("\r\n                    Take\r\n                ")]
+                )
+              ])
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("h2", { staticClass: "font-bold text-2xl mb-4" }, [
+          _vm._v(" " + _vm._s(_vm.showedAssignment.name) + " ")
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
+            _vm._v(
+              "\r\n                " +
+                _vm._s(
+                  _vm._f("dateFormat")(
+                    new Date(_vm.showedAssignment.due),
+                    "DD.MM.YYYY , HH:mm"
+                  )
+                ) +
+                "\r\n            "
+            )
+          ])
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "mb-2 rounded bg-gray-100 px-6 p-4 w-2/5 inline-block"
+          },
+          [
+            _c("strong", [_vm._v("By Who")]),
+            _c("p", { staticClass: "bg-white p-2 rounded" }, [
+              _vm._v(_vm._s(_vm.showedAssignment.author.name))
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _vm.showedAssignment.assignee
+          ? _c(
+              "div",
+              {
+                staticClass:
+                  "mb-2 rounded bg-gray-100 px-6 p-4 w-2/5 inline-block"
+              },
+              [
+                _c("strong", [_vm._v("For Who")]),
+                _c("p", { staticClass: "bg-white p-2 rounded" }, [
+                  _vm._v(_vm._s(_vm.showedAssignment.assignee.name))
+                ])
+              ]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _c("div", { staticClass: "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded" }, [
+          _vm._m(1),
+          _vm._v(" "),
+          _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
+            _vm._v(
+              "\r\n                " +
+                _vm._s(_vm.showedAssignment.description) +
+                "\r\n            "
+            )
+          ])
         ])
       ]),
       _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "mb-2 rounded bg-gray-100 px-6 p-4 w-2/5 inline-block" },
-        [
-          _c("strong", [_vm._v("By Who")]),
-          _c("p", { staticClass: "bg-white p-2 rounded" }, [
-            _vm._v(_vm._s(_vm.showedAssignment.author.name))
-          ])
-        ]
-      ),
-      _vm._v(" "),
-      _vm.showedAssignment.assignee
-        ? _c(
-            "div",
-            {
-              staticClass:
-                "mb-2 rounded bg-gray-100 px-6 p-4 w-2/5 inline-block"
-            },
-            [
-              _c("strong", [_vm._v("For Who")]),
-              _c("p", { staticClass: "bg-white p-2 rounded" }, [
-                _vm._v(_vm._s(_vm.showedAssignment.assignee.name))
-              ])
-            ]
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      _c("div", { staticClass: "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded" }, [
-        _vm._m(1),
-        _vm._v(" "),
-        _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
-          _vm._v(
-            "\r\n                " +
-              _vm._s(_vm.showedAssignment.description) +
-              "\r\n            "
-          )
-        ])
-      ])
-    ])
-  ])
+      _c("assignment-comments", {
+        attrs: { user: this.user, assignment: this.assignment }
+      })
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function() {
@@ -31622,138 +31811,150 @@ var render = function() {
                     _vm._v(" "),
                     _c(
                       "tbody",
-                      { staticClass: "bg-white divide-y divide-gray-200" },
+                      { staticClass: "divide-y divide-gray-200" },
                       _vm._l(_vm.pageOfItems, function(assignment) {
-                        return _c("tr", { key: assignment.id }, [
-                          _c(
-                            "td",
-                            {
-                              staticClass:
-                                "px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
-                            },
-                            [
-                              _c(
-                                "div",
-                                {
-                                  staticClass:
-                                    "text-sm font-medium text-gray-900"
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                            " +
-                                      _vm._s(
-                                        _vm._f("dateFormat")(
-                                          new Date(assignment.due),
-                                          "DD.MM.YYYY , HH:mm"
-                                        )
-                                      ) +
-                                      "\n                        "
-                                  )
-                                ]
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            { staticClass: "px-6 py-4 whitespace-nowrap" },
-                            [
-                              _c(
-                                "div",
-                                { staticClass: "text-sm text-gray-900" },
-                                [
-                                  _vm._v(
-                                    "\n                                " +
-                                      _vm._s(assignment.name) +
-                                      "\n                        "
-                                  )
-                                ]
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            { staticClass: "px-6 py-4 whitespace-nowrap" },
-                            [
-                              _c(
-                                "div",
-                                { staticClass: "text-sm text-gray-900" },
-                                [
-                                  _vm._v(
-                                    "\n                                " +
-                                      _vm._s(assignment.author.name) +
-                                      "\n                        "
-                                  )
-                                ]
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            { staticClass: "px-6 py-4 whitespace-nowrap" },
-                            [
-                              assignment.assignee
-                                ? _c(
-                                    "div",
-                                    { staticClass: "text-sm text-gray-900" },
-                                    [
-                                      _vm._v(
-                                        "\n                                " +
-                                          _vm._s(assignment.assignee.name) +
-                                          "\n                        "
-                                      )
-                                    ]
-                                  )
-                                : _vm._e()
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c("td", [
+                        return _c(
+                          "tr",
+                          {
+                            key: assignment.id,
+                            class: {
+                              "bg-green-100": assignment.done,
+                              "bg-red-100": !assignment.done
+                            }
+                          },
+                          [
                             _c(
-                              "a",
+                              "td",
                               {
                                 staticClass:
-                                  "shadow border border-gray-300 rounded-lg py-2 px-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
-                                attrs: { href: "assignments/" + assignment.id }
+                                  "px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
                               },
                               [
-                                _vm._v(
-                                  "\n                            About\n                        "
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "text-sm font-medium text-gray-900"
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                            " +
+                                        _vm._s(
+                                          _vm._f("dateFormat")(
+                                            new Date(assignment.due),
+                                            "DD.MM.YYYY , HH:mm"
+                                          )
+                                        ) +
+                                        "\n                        "
+                                    )
+                                  ]
                                 )
                               ]
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c("td", [
-                            _c("div", { staticClass: "ml-4" }, [
-                              assignment.assignee_id == null
-                                ? _c("div", [
-                                    _c(
-                                      "button",
-                                      {
-                                        staticClass:
-                                          "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none",
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.checkTakeWithUser(
-                                              assignment
-                                            )
-                                          }
-                                        }
-                                      },
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "td",
+                              { staticClass: "px-6 py-4 whitespace-nowrap" },
+                              [
+                                _c(
+                                  "div",
+                                  { staticClass: "text-sm text-gray-900" },
+                                  [
+                                    _vm._v(
+                                      "\n                                " +
+                                        _vm._s(assignment.name) +
+                                        "\n                        "
+                                    )
+                                  ]
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "td",
+                              { staticClass: "px-6 py-4 whitespace-nowrap" },
+                              [
+                                _c(
+                                  "div",
+                                  { staticClass: "text-sm text-gray-900" },
+                                  [
+                                    _vm._v(
+                                      "\n                                " +
+                                        _vm._s(assignment.author.name) +
+                                        "\n                        "
+                                    )
+                                  ]
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "td",
+                              { staticClass: "px-6 py-4 whitespace-nowrap" },
+                              [
+                                assignment.assignee
+                                  ? _c(
+                                      "div",
+                                      { staticClass: "text-sm text-gray-900" },
                                       [
                                         _vm._v(
-                                          "\n                                    Take\n                                "
+                                          "\n                                " +
+                                            _vm._s(assignment.assignee.name) +
+                                            "\n                        "
                                         )
                                       ]
                                     )
-                                  ])
-                                : _vm._e()
+                                  : _vm._e()
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c(
+                                "a",
+                                {
+                                  staticClass:
+                                    "bg-white shadow border border-gray-300 rounded-lg py-2 px-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+                                  attrs: {
+                                    href: "assignments/" + assignment.id
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                            About\n                        "
+                                  )
+                                ]
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("div", { staticClass: "ml-4" }, [
+                                assignment.assignee_id == null
+                                  ? _c("div", [
+                                      _c(
+                                        "button",
+                                        {
+                                          staticClass:
+                                            "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none",
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.checkTakeWithUser(
+                                                assignment
+                                              )
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                    Take\n                                "
+                                          )
+                                        ]
+                                      )
+                                    ])
+                                  : _vm._e()
+                              ])
                             ])
-                          ])
-                        ])
+                          ]
+                        )
                       }),
                       0
                     )
@@ -31796,6 +31997,8 @@ var staticRenderFns = [
           _c("option", { attrs: { value: "all" } }, [_vm._v("All")]),
           _vm._v(" "),
           _c("option", { attrs: { value: "mine" } }, [_vm._v("Mine")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "toDo" } }, [_vm._v("To do")]),
           _vm._v(" "),
           _c("option", { attrs: { value: "free" } }, [_vm._v("Free")]),
           _vm._v(" "),
@@ -32514,6 +32717,130 @@ var staticRenderFns = [
     )
   }
 ]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/comments/assignment-comments.vue?vue&type=template&id=00807da4&":
+/*!*******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/comments/assignment-comments.vue?vue&type=template&id=00807da4& ***!
+  \*******************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "mx-8" }, [
+    _c("h3", { staticClass: "font-bold mb-4 text-underlined" }, [
+      _vm._v(" Comments section ")
+    ]),
+    _vm._v(" "),
+    _c(
+      "form",
+      {
+        staticClass: "mb-4",
+        on: {
+          submit: function($event) {
+            $event.preventDefault()
+            return _vm.submit($event)
+          }
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "bg-white shadow border rounded-lg h-20 py-3 px-8" },
+          [
+            _c("input", {
+              attrs: { type: "hidden", name: "_token" },
+              domProps: { value: _vm.csrf }
+            }),
+            _vm._v(" "),
+            _c("textarea", {
+              staticClass: "w-full resize-none focus:outline-none",
+              attrs: {
+                id: "commentArea",
+                name: "text",
+                placeholder: "Write a comment..."
+              }
+            })
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "border border-gray-300 rounded-lg mb-2" },
+      _vm._l(_vm.pageOfItems, function(comment) {
+        return _c(
+          "div",
+          {
+            key: comment.id,
+            staticClass: "flex p-4 border-b border-b-gray-400"
+          },
+          [
+            _c("div", { staticClass: "mr-2" }, [
+              _c("img", {
+                staticClass: "rounded-full object-cover h-15 w-15 mr-2",
+                attrs: { src: comment.user.avatar, alt: "avatar" }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "w-full" }, [
+              _c("h5", { staticClass: "font-bold mb-2" }, [
+                _vm._v(" " + _vm._s(comment.user.name) + " ")
+              ]),
+              _vm._v(" "),
+              _c("p", { staticClass: "text-sm mb-3 break-words" }, [
+                _vm._v(
+                  "\n                        " +
+                    _vm._s(comment.text) +
+                    "\n                    "
+                )
+              ]),
+              _vm._v(" "),
+              _c("p", { staticClass: "text-xs float-right" }, [
+                _vm._v(
+                  " " +
+                    _vm._s(
+                      _vm._f("dateFormat")(
+                        new Date(comment.created_at),
+                        "HH:mm , DD.MM.YYYY"
+                      )
+                    ) +
+                    " "
+                )
+              ])
+            ])
+          ]
+        )
+      }),
+      0
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "text-center text-sm" },
+      [
+        _c("jw-pagination", {
+          attrs: { items: _vm.comments, pageSize: 10 },
+          on: { changePage: _vm.onChangePage }
+        })
+      ],
+      1
+    )
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -34120,128 +34447,140 @@ var render = function() {
                       "tbody",
                       { staticClass: "bg-white divide-y divide-gray-200" },
                       _vm._l(_vm.pageOfItems, function(assignment) {
-                        return _c("tr", { key: assignment.id }, [
-                          _c(
-                            "td",
-                            {
-                              staticClass:
-                                "px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
-                            },
-                            [
+                        return _c(
+                          "tr",
+                          {
+                            key: assignment.id,
+                            class: {
+                              "bg-green-100": assignment.done,
+                              "bg-red-100": !assignment.done
+                            }
+                          },
+                          [
+                            _c(
+                              "td",
+                              {
+                                staticClass:
+                                  "px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
+                              },
+                              [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "text-sm font-medium text-gray-900"
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\r\n                                " +
+                                        _vm._s(
+                                          _vm._f("dateFormat")(
+                                            new Date(assignment.due),
+                                            "DD.MM.YYYY , HH:mm"
+                                          )
+                                        ) +
+                                        "\r\n                            "
+                                    )
+                                  ]
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "td",
+                              { staticClass: "px-6 py-4 whitespace-nowrap" },
+                              [
+                                _c(
+                                  "div",
+                                  { staticClass: "text-sm text-gray-900" },
+                                  [
+                                    _vm._v(
+                                      "\r\n                                    " +
+                                        _vm._s(assignment.name) +
+                                        "\r\n                            "
+                                    )
+                                  ]
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "td",
+                              { staticClass: "px-6 py-4 whitespace-nowrap" },
+                              [
+                                _c(
+                                  "div",
+                                  { staticClass: "text-sm text-gray-900" },
+                                  [
+                                    _vm._v(
+                                      "\r\n                                    " +
+                                        _vm._s(assignment.author_name) +
+                                        "\r\n                            "
+                                    )
+                                  ]
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "td",
+                              { staticClass: "px-6 py-4 whitespace-nowrap" },
+                              [
+                                assignment.assignee_name
+                                  ? _c(
+                                      "div",
+                                      { staticClass: "text-sm text-gray-900" },
+                                      [
+                                        _vm._v(
+                                          "\r\n                                    " +
+                                            _vm._s(assignment.assignee_name) +
+                                            "\r\n                            "
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e()
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "td",
+                              { staticClass: "px-6 py-4 whitespace-nowrap" },
+                              [
+                                assignment.assignee_name
+                                  ? _c(
+                                      "div",
+                                      { staticClass: "text-sm text-gray-900" },
+                                      [
+                                        _vm._v(
+                                          "\r\n                                    " +
+                                            _vm._s(assignment.group_name) +
+                                            "\r\n                            "
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e()
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "pr-6 py-4" }, [
                               _c(
-                                "div",
+                                "a",
                                 {
                                   staticClass:
-                                    "text-sm font-medium text-gray-900"
+                                    "bg-white shadow border border-gray-300 rounded-lg py-2 px-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+                                  attrs: {
+                                    href: "/assignments/" + assignment.id
+                                  }
                                 },
                                 [
                                   _vm._v(
-                                    "\r\n                                " +
-                                      _vm._s(
-                                        _vm._f("dateFormat")(
-                                          new Date(assignment.due),
-                                          "DD.MM.YYYY , HH:mm"
-                                        )
-                                      ) +
-                                      "\r\n                            "
+                                    "\r\n                                About\r\n                            "
                                   )
                                 ]
                               )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            { staticClass: "px-6 py-4 whitespace-nowrap" },
-                            [
-                              _c(
-                                "div",
-                                { staticClass: "text-sm text-gray-900" },
-                                [
-                                  _vm._v(
-                                    "\r\n                                    " +
-                                      _vm._s(assignment.name) +
-                                      "\r\n                            "
-                                  )
-                                ]
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            { staticClass: "px-6 py-4 whitespace-nowrap" },
-                            [
-                              _c(
-                                "div",
-                                { staticClass: "text-sm text-gray-900" },
-                                [
-                                  _vm._v(
-                                    "\r\n                                    " +
-                                      _vm._s(assignment.author_name) +
-                                      "\r\n                            "
-                                  )
-                                ]
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            { staticClass: "px-6 py-4 whitespace-nowrap" },
-                            [
-                              assignment.assignee_name
-                                ? _c(
-                                    "div",
-                                    { staticClass: "text-sm text-gray-900" },
-                                    [
-                                      _vm._v(
-                                        "\r\n                                    " +
-                                          _vm._s(assignment.assignee_name) +
-                                          "\r\n                            "
-                                      )
-                                    ]
-                                  )
-                                : _vm._e()
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            { staticClass: "px-6 py-4 whitespace-nowrap" },
-                            [
-                              assignment.assignee_name
-                                ? _c(
-                                    "div",
-                                    { staticClass: "text-sm text-gray-900" },
-                                    [
-                                      _vm._v(
-                                        "\r\n                                    " +
-                                          _vm._s(assignment.group_name) +
-                                          "\r\n                            "
-                                      )
-                                    ]
-                                  )
-                                : _vm._e()
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c("td", { staticClass: "pr-6 py-4" }, [
-                            _c(
-                              "a",
-                              {
-                                staticClass:
-                                  "shadow border border-gray-300 rounded-lg py-2 px-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
-                                attrs: { href: "/assignments/" + assignment.id }
-                              },
-                              [
-                                _vm._v(
-                                  "\r\n                                About\r\n                            "
-                                )
-                              ]
-                            )
-                          ])
-                        ])
+                            ])
+                          ]
+                        )
                       }),
                       0
                     )
@@ -47051,11 +47390,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_assignments_group_assignments_vue__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/assignments/group-assignments.vue */ "./resources/js/components/assignments/group-assignments.vue");
 /* harmony import */ var _components_assignments_assignment_show_vue__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/assignments/assignment-show.vue */ "./resources/js/components/assignments/assignment-show.vue");
 /* harmony import */ var _components_assignments_assignments_table_vue__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/assignments/assignments-table.vue */ "./resources/js/components/assignments/assignments-table.vue");
-/* harmony import */ var _components_chatrooms_chatrooms_index_vue__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/chatrooms/chatrooms-index.vue */ "./resources/js/components/chatrooms/chatrooms-index.vue");
-/* harmony import */ var _components_chatrooms_chatrooms_show_vue__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/chatrooms/chatrooms-show.vue */ "./resources/js/components/chatrooms/chatrooms-show.vue");
-/* harmony import */ var jw_vue_pagination__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! jw-vue-pagination */ "./node_modules/jw-vue-pagination/lib/JwPagination.js");
-/* harmony import */ var jw_vue_pagination__WEBPACK_IMPORTED_MODULE_21___default = /*#__PURE__*/__webpack_require__.n(jw_vue_pagination__WEBPACK_IMPORTED_MODULE_21__);
-/* harmony import */ var vue_filter_date_format__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! vue-filter-date-format */ "./node_modules/vue-filter-date-format/dist/vue-filter-date-format.esm.js");
+/* harmony import */ var _components_comments_assignment_comments_vue__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/comments/assignment-comments.vue */ "./resources/js/components/comments/assignment-comments.vue");
+/* harmony import */ var _components_chatrooms_chatrooms_index_vue__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/chatrooms/chatrooms-index.vue */ "./resources/js/components/chatrooms/chatrooms-index.vue");
+/* harmony import */ var _components_chatrooms_chatrooms_show_vue__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./components/chatrooms/chatrooms-show.vue */ "./resources/js/components/chatrooms/chatrooms-show.vue");
+/* harmony import */ var jw_vue_pagination__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! jw-vue-pagination */ "./node_modules/jw-vue-pagination/lib/JwPagination.js");
+/* harmony import */ var jw_vue_pagination__WEBPACK_IMPORTED_MODULE_22___default = /*#__PURE__*/__webpack_require__.n(jw_vue_pagination__WEBPACK_IMPORTED_MODULE_22__);
+/* harmony import */ var vue_filter_date_format__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! vue-filter-date-format */ "./node_modules/vue-filter-date-format/dist/vue-filter-date-format.esm.js");
+
 
 
 
@@ -47084,7 +47425,7 @@ __webpack_require__(/*! masonry-layout */ "./node_modules/masonry-layout/masonry
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_filter_date_format__WEBPACK_IMPORTED_MODULE_22__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_filter_date_format__WEBPACK_IMPORTED_MODULE_23__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('navbar', _components_navbar_navbar_vue__WEBPACK_IMPORTED_MODULE_1__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('messages-link', _components_navbar_messages_link_vue__WEBPACK_IMPORTED_MODULE_2__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('group-selection', _components_navbar_group_selection_vue__WEBPACK_IMPORTED_MODULE_3__["default"]);
@@ -47102,10 +47443,11 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('event-comments', _componen
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('events-table', _components_events_events_table_vue__WEBPACK_IMPORTED_MODULE_14__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('group-assignments', _components_assignments_group_assignments_vue__WEBPACK_IMPORTED_MODULE_16__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('assignment-show', _components_assignments_assignment_show_vue__WEBPACK_IMPORTED_MODULE_17__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('assignment-comments', _components_comments_assignment_comments_vue__WEBPACK_IMPORTED_MODULE_19__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('assignments-table', _components_assignments_assignments_table_vue__WEBPACK_IMPORTED_MODULE_18__["default"]);
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('jw-pagination', jw_vue_pagination__WEBPACK_IMPORTED_MODULE_21___default.a);
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('chatrooms-index', _components_chatrooms_chatrooms_index_vue__WEBPACK_IMPORTED_MODULE_19__["default"]);
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('chatrooms-show', _components_chatrooms_chatrooms_show_vue__WEBPACK_IMPORTED_MODULE_20__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('jw-pagination', jw_vue_pagination__WEBPACK_IMPORTED_MODULE_22___default.a);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('chatrooms-index', _components_chatrooms_chatrooms_index_vue__WEBPACK_IMPORTED_MODULE_20__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('chatrooms-show', _components_chatrooms_chatrooms_show_vue__WEBPACK_IMPORTED_MODULE_21__["default"]);
 var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#app'
 });
@@ -47509,6 +47851,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_chatrooms_show_vue_vue_type_template_id_e6f70fb8___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_chatrooms_show_vue_vue_type_template_id_e6f70fb8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/comments/assignment-comments.vue":
+/*!******************************************************************!*\
+  !*** ./resources/js/components/comments/assignment-comments.vue ***!
+  \******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _assignment_comments_vue_vue_type_template_id_00807da4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./assignment-comments.vue?vue&type=template&id=00807da4& */ "./resources/js/components/comments/assignment-comments.vue?vue&type=template&id=00807da4&");
+/* harmony import */ var _assignment_comments_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./assignment-comments.vue?vue&type=script&lang=js& */ "./resources/js/components/comments/assignment-comments.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _assignment_comments_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _assignment_comments_vue_vue_type_template_id_00807da4___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _assignment_comments_vue_vue_type_template_id_00807da4___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/comments/assignment-comments.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/comments/assignment-comments.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************!*\
+  !*** ./resources/js/components/comments/assignment-comments.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_assignment_comments_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./assignment-comments.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/comments/assignment-comments.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_assignment_comments_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/comments/assignment-comments.vue?vue&type=template&id=00807da4&":
+/*!*************************************************************************************************!*\
+  !*** ./resources/js/components/comments/assignment-comments.vue?vue&type=template&id=00807da4& ***!
+  \*************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_assignment_comments_vue_vue_type_template_id_00807da4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./assignment-comments.vue?vue&type=template&id=00807da4& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/comments/assignment-comments.vue?vue&type=template&id=00807da4&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_assignment_comments_vue_vue_type_template_id_00807da4___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_assignment_comments_vue_vue_type_template_id_00807da4___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
