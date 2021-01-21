@@ -22,7 +22,7 @@ class AssignmentsController extends Controller
         $assignments = $group->assignments()->orderBy('due')->get();
 
         foreach ($assignments as $assignment){
-            $assignment->assignee;
+            $assignment->users;
             $assignment->author;
         }
 
@@ -53,9 +53,9 @@ class AssignmentsController extends Controller
     {
         $attributes = $fields->validate([
             'name' => ['required', 'string', 'max:255'],
-            'description' => ['string', 'max:255'],
+            'description' => ['required', 'string', 'max:255'],
+            'on_time' => ['required', 'boolean'],
             'due' => ['required'],
-            'assignee' => ['nullable', 'integer']
             ]);
         
         $user = auth()->user();
@@ -69,12 +69,16 @@ class AssignmentsController extends Controller
             'author_id' => $user->id,
             'group_id' => $user->group->id,
             'description' => $attributes['description'],
+            'on_time' => $attributes['on_time'],
             'due' => $attributes['due'],
-            'assignee_id' => $attributes['assignee']
         ]);
 
-        if($assignment->assignee_id){
-            $assignment->assignee;
+        //for each assignee attach this assignment
+        $assignment->users()->attach($fields['users']);
+
+        //if assignment has assignee(s) return them as assignment->users
+        if(true){
+            $assignment->users;
         }
         
         return $assignment;
@@ -89,7 +93,7 @@ class AssignmentsController extends Controller
     public function show(Assignment $assignment)
     {
         $assignment->author;
-        $assignment->assignee;
+        $assignment->users;
         return view('assignments.show', [
             'user' => auth()->user(),
             'assignment' => $assignment
@@ -127,12 +131,13 @@ class AssignmentsController extends Controller
      */
     public function destroy(Assignment $assignment)
     {
+        $assignment->users()->detach();
         $assignment->delete();
     }
     
     public function take(Assignment $assignment)
     {
-        $assignment->update(array('assignee_id' => auth()->user()->id));
+        $assignment->users()->attach(auth()->user()->id);
     }
 
     public function done(Assignment $assignment)

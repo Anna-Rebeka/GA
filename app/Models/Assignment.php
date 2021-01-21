@@ -16,10 +16,10 @@ class Assignment extends Model
      */
     protected $fillable = [
         'name',
-        'assignee_id',
         'author_id',
         'group_id',
         'due',
+        'on_time',
         'done',
         'description',
         'created_at'

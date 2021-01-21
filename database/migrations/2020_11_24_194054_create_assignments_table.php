@@ -18,6 +18,8 @@ class CreateAssignmentsTable extends Migration
             $table->string('name');
             $table->foreignId('author_id');
             $table->foreignId('group_id');
+            $table->boolean('on_time'); 
+            //assignment is etiher due some date (on_time = false) or must be done on time (true; on time = due time) 
             $table->dateTime('due');
             $table->text('description');
             $table->boolean('done')->default(false);

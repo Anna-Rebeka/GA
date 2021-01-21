@@ -18,8 +18,11 @@
                 </button>
             </div>
         </div>
+        <p class="text-xs font-bold text-blue-500 float-left">Deadline </p> <p class="text-sm font-bold float-left ml-2 mr-2">/</p> <p class="float-left text-xs font-bold text-red-600 mb-4 mr-8"> On time</p>
+        <p class="text-xs px-1 font-medium bg-red-100 float-left">waiting</p> <p class="text-sm font-bold float-left ml-2 mr-2">/</p> <p class="text-xs px-2 font-medium bg-green-100 float-left"> done</p>
+
         
-        <div class="flex flex-col">
+        <div class="flex flex-col clear-both">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
         <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
@@ -27,16 +30,13 @@
                 <thead>
                     <tr>
                         <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            When
+                            When 
                         </th>
                         <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             What
                         </th>
                         <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             By who
-                        </th>
-                        <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            For who
                         </th>
                         <th scope="col" class="px-6 py-3 bg-gray-50">
                         </th>
@@ -49,24 +49,23 @@
                     <tr v-for="assignment in pageOfItems" :key="assignment.id"
                         v-bind:class="{ 'bg-green-100': assignment.done, 'bg-red-100': !assignment.done}"
                     >
-                        <td class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">
-                            <div class="text-sm font-medium text-gray-900">
+                        <td class="bg-white pl-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">
+                            <div 
+                                class="text-sm font-bold"
+                                v-bind:class="{ 'text-red-600': assignment.on_time, 'text-blue-500': !assignment.on_time}"
+
+                            >
                                 {{  new Date(assignment.due) | dateFormat('DD.MM.YYYY , HH:mm') }}
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900">
+                            <div class="text-sm text-grey-900">
                                     {{ assignment.name }}
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="text-sm text-gray-900">
                                     {{ assignment.author.name }}
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div v-if="assignment.assignee" class="text-sm text-gray-900">
-                                    {{ assignment.assignee.name }}
                             </div>
                         </td>
                         <td> 
@@ -78,7 +77,7 @@
                         </td>
                         <td> 
                             <div class="ml-4">
-                                <div v-if="assignment.assignee_id == null">
+                                <div v-if="assignment.users.length == 0">
                                     <button 
                                         @click="checkTakeWithUser(assignment)"
                                         class="rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none">
@@ -178,9 +177,9 @@ export default {
         },
 
         filterMine(){
-            var uid = this.user.id;
+            var user = this.user;
             this.savedAssignments = this.savedAssignments.filter(function(e) {
-                if(e.assignee_id == uid){
+                if(e.users.includes(user)){
                     return true;
                 }
                 return false;
@@ -199,7 +198,7 @@ export default {
 
         filterFree(){
             this.savedAssignments = this.savedAssignments.filter(function(e) {
-                if(e.assignee_id){
+                if(e.users){
                     return false;
                 }
                 return true;
@@ -217,8 +216,7 @@ export default {
         takeAssignment($assignment) {
             axios.patch('/assignments/' + $assignment.id + '/take').then(response => {    
                 var index = this.savedAssignments.indexOf($assignment);
-                this.allAssignments[index].assignee = this.user;
-                this.allAssignments[index].assignee_id = this.user.id;
+                this.allAssignments[index].users.push(this.user);
                 this.savedAssignments = this.allAssignments;
                 this.reload();
             }).catch(error => {
