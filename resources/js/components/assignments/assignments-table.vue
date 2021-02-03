@@ -40,8 +40,6 @@
                         </th>
                         <th scope="col" class="px-6 py-3 bg-gray-50">
                         </th>
-                        <th scope="col" class="px-6 py-3 bg-gray-50">
-                        </th>
                     </tr>
                 </thead>
                 <tbody 
@@ -72,19 +70,8 @@
                             <a 
                                 :href="'assignments/' + assignment.id"
                                 class="bg-white shadow border border-gray-300 rounded-lg py-2 px-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
-                                About
+                                Details
                             </a> 
-                        </td>
-                        <td> 
-                            <div class="ml-4">
-                                <div v-if="assignment.users.length == 0">
-                                    <button 
-                                        @click="checkTakeWithUser(assignment)"
-                                        class="rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none">
-                                        Take
-                                    </button> 
-                                </div>
-                            </div>
                         </td>
                     </tr>
                 </tbody>
@@ -205,45 +192,8 @@ export default {
             });
         },
 
-        reload() {
-            this.$forceUpdate();
-         },
-
         onChangePage(pageOfItems) {
             this.pageOfItems = pageOfItems;
-        },
-
-        takeAssignment($assignment) {
-            axios.patch('/assignments/' + $assignment.id + '/take').then(response => {    
-                var index = this.savedAssignments.indexOf($assignment);
-                this.allAssignments[index].users.push(this.user);
-                this.savedAssignments = this.allAssignments;
-                this.reload();
-            }).catch(error => {
-                if (error.response.status == 422){
-                    this.errors = error.response.data.errors;
-                    console.log(this.errors);
-                }
-                console.log(error.message);
-            });
-        },
-
-        abandonAssignment($assignment) {
-            axios.post('/assignments/' + $assignment.id + '/leave').then(response => {
-                this.reload();
-            }).catch(error => {
-                if (error.response.status == 422){
-                    this.errors = error.response.data.errors;
-                    console.log(this.errors);
-                }
-                console.log(error.message);
-            });
-        },
-
-        checkTakeWithUser($assignment, $whatToDo){
-            if (confirm("Are you sure? This action is irreversible.")) {
-                this.takeAssignment($assignment);
-            }
         },
     },
 }

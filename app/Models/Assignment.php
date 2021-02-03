@@ -22,6 +22,7 @@ class Assignment extends Model
         'on_time',
         'done',
         'description',
+        'max_assignees',
         'created_at'
     ];
 
@@ -39,5 +40,12 @@ class Assignment extends Model
     
     public function comments(){
         return $this->hasMany(AssignmentsComments::class);
+    }
+
+    public function isAssigned(User $user){
+        if($this->users->contains($user)){
+            return true;
+        }
+        return false;
     }
 }

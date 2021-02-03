@@ -1979,14 +1979,35 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "assignment"],
   data: function data() {
     return {
-      showedAssignment: this.assignment
+      showedAssignment: this.assignment,
+      takenAssignment: false
     };
   },
+  mounted: function mounted() {
+    this.isAssigned();
+  },
   methods: {
+    isAssigned: function isAssigned() {
+      var _this = this;
+
+      axios.get('/assignments/' + this.user.id).then(function (response) {
+        _this.takenAssignment = response.data;
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this.errors = error.response.data.errors;
+          console.log(_this.errors);
+        }
+
+        console.log(error.message);
+      });
+    },
     checkWithUser: function checkWithUser($assignment, $whatToDo) {
       if (confirm("Are you sure? This action is irreversible.")) {
         if ($whatToDo == "delete") {
@@ -1999,32 +2020,32 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     takeAssignment: function takeAssignment($assignment) {
-      var _this = this;
+      var _this2 = this;
 
       axios.patch("/assignments/" + $assignment.id + "/take").then(function (response) {
-        _this.showedAssignment.users.push(_this.user);
+        _this2.showedAssignment.users.push(_this2.user);
 
-        _this.reload();
+        _this2.takenAssignment = true;
       })["catch"](function (error) {
         if (error.response.status == 422) {
-          _this.errors = error.response.data.errors;
-          console.log(_this.errors);
+          _this2.errors = error.response.data.errors;
+          console.log(_this2.errors);
         }
 
         console.log(error.message);
       });
     },
     markAsDone: function markAsDone($assignment) {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.patch("/assignments/" + $assignment.id + "/done").then(function (response) {
-        _this2.showedAssignment.done = true;
+        _this3.showedAssignment.done = true;
 
-        _this2.reload();
+        _this3.reload();
       })["catch"](function (error) {
         if (error.response.status == 422) {
-          _this2.errors = error.response.data.errors;
-          console.log(_this2.errors);
+          _this3.errors = error.response.data.errors;
+          console.log(_this3.errors);
         }
 
         console.log(error.message);
@@ -2049,19 +2070,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -2250,50 +2258,8 @@ __webpack_require__.r(__webpack_exports__);
         return true;
       });
     },
-    reload: function reload() {
-      this.$forceUpdate();
-    },
     onChangePage: function onChangePage(pageOfItems) {
       this.pageOfItems = pageOfItems;
-    },
-    takeAssignment: function takeAssignment($assignment) {
-      var _this = this;
-
-      axios.patch('/assignments/' + $assignment.id + '/take').then(function (response) {
-        var index = _this.savedAssignments.indexOf($assignment);
-
-        _this.allAssignments[index].users.push(_this.user);
-
-        _this.savedAssignments = _this.allAssignments;
-
-        _this.reload();
-      })["catch"](function (error) {
-        if (error.response.status == 422) {
-          _this.errors = error.response.data.errors;
-          console.log(_this.errors);
-        }
-
-        console.log(error.message);
-      });
-    },
-    abandonAssignment: function abandonAssignment($assignment) {
-      var _this2 = this;
-
-      axios.post('/assignments/' + $assignment.id + '/leave').then(function (response) {
-        _this2.reload();
-      })["catch"](function (error) {
-        if (error.response.status == 422) {
-          _this2.errors = error.response.data.errors;
-          console.log(_this2.errors);
-        }
-
-        console.log(error.message);
-      });
-    },
-    checkTakeWithUser: function checkTakeWithUser($assignment, $whatToDo) {
-      if (confirm("Are you sure? This action is irreversible.")) {
-        this.takeAssignment($assignment);
-      }
     }
   }
 });
@@ -2309,6 +2275,15 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -31684,21 +31659,34 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "float-right" }, [
-          _vm.showedAssignment.users.length == 0
+          !_vm.takenAssignment
             ? _c("div", [
-                _c(
-                  "button",
-                  {
-                    staticClass:
-                      "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none",
-                    on: {
-                      click: function($event) {
-                        return _vm.checkWithUser(_vm.showedAssignment, "take")
-                      }
-                    }
-                  },
-                  [_vm._v("\n                    Take\n                ")]
-                )
+                _vm.showedAssignment.max_assignees == null ||
+                _vm.showedAssignment.users.length <
+                  _vm.showedAssignment.max_assignees
+                  ? _c("div", [
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none",
+                          on: {
+                            click: function($event) {
+                              return _vm.checkWithUser(
+                                _vm.showedAssignment,
+                                "take"
+                              )
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                        Take\n                    "
+                          )
+                        ]
+                      )
+                    ])
+                  : _vm._e()
               ])
             : _vm._e()
         ]),
@@ -31974,38 +31962,10 @@ var render = function() {
                                 },
                                 [
                                   _vm._v(
-                                    "\n                            About\n                        "
+                                    "\n                            Details\n                        "
                                   )
                                 ]
                               )
-                            ]),
-                            _vm._v(" "),
-                            _c("td", [
-                              _c("div", { staticClass: "ml-4" }, [
-                                assignment.users.length == 0
-                                  ? _c("div", [
-                                      _c(
-                                        "button",
-                                        {
-                                          staticClass:
-                                            "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none",
-                                          on: {
-                                            click: function($event) {
-                                              return _vm.checkTakeWithUser(
-                                                assignment
-                                              )
-                                            }
-                                          }
-                                        },
-                                        [
-                                          _vm._v(
-                                            "\n                                    Take\n                                "
-                                          )
-                                        ]
-                                      )
-                                    ])
-                                  : _vm._e()
-                              ])
                             ])
                           ]
                         )
@@ -32134,11 +32094,6 @@ var staticRenderFns = [
         _c("th", {
           staticClass: "px-6 py-3 bg-gray-50",
           attrs: { scope: "col" }
-        }),
-        _vm._v(" "),
-        _c("th", {
-          staticClass: "px-6 py-3 bg-gray-50",
-          attrs: { scope: "col" }
         })
       ])
     ])
@@ -32226,271 +32181,312 @@ var render = function() {
                       )
                     : _vm._e(),
                   _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "mx-auto w-full mb-10" },
-                    [
-                      _c("p", { staticClass: "mb-4" }, [
-                        _c(
-                          "label",
-                          { staticClass: "mb-2", attrs: { for: "name" } },
-                          [_vm._v("Name")]
-                        ),
-                        _vm._v(" "),
-                        _c("br"),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.fields.name,
-                              expression: "fields.name"
-                            }
-                          ],
-                          staticClass: "border w-full p-2",
-                          attrs: {
-                            id: "name",
-                            type: "text",
-                            name: "name",
-                            required: ""
-                          },
-                          domProps: { value: _vm.fields.name },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(_vm.fields, "name", $event.target.value)
-                            }
-                          }
-                        })
-                      ]),
+                  _c("div", { staticClass: "mx-auto w-full mb-10" }, [
+                    _c("p", { staticClass: "mb-4" }, [
+                      _c(
+                        "label",
+                        { staticClass: "mb-2", attrs: { for: "name" } },
+                        [_vm._v("Name")]
+                      ),
                       _vm._v(" "),
-                      _c("p", { staticClass: "mb-4" }, [
+                      _c("br"),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.fields.name,
+                            expression: "fields.name"
+                          }
+                        ],
+                        staticClass: "border w-full p-2",
+                        attrs: {
+                          id: "name",
+                          type: "text",
+                          name: "name",
+                          required: ""
+                        },
+                        domProps: { value: _vm.fields.name },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.fields, "name", $event.target.value)
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "mb-4" }, [
+                      _c(
+                        "label",
+                        { staticClass: "mb-2", attrs: { for: "description" } },
+                        [_vm._v("Description")]
+                      ),
+                      _vm._v(" "),
+                      _c("br"),
+                      _vm._v(" "),
+                      _c("textarea", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.fields.description,
+                            expression: "fields.description"
+                          }
+                        ],
+                        staticClass:
+                          "w-full border p-2 h-24 resize-none focus:outline-none",
+                        attrs: {
+                          name: "description",
+                          placeholder: "specify this task...",
+                          required: ""
+                        },
+                        domProps: { value: _vm.fields.description },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.fields,
+                              "description",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "mb-6" }, [
+                      _c(
+                        "label",
+                        { staticClass: "mb-2", attrs: { for: "due" } },
+                        [_vm._v("When")]
+                      ),
+                      _vm._v(" "),
+                      _c("br"),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.fields.due,
+                            expression: "fields.due"
+                          }
+                        ],
+                        staticClass: "border p-2",
+                        attrs: {
+                          id: "due",
+                          type: "datetime-local",
+                          name: "due",
+                          required: ""
+                        },
+                        domProps: { value: _vm.fields.due },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.fields, "due", $event.target.value)
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "mb-1" }, [
+                      _vm._v(
+                        "\n                    Do assignment :\n                "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "mb-4" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.fields.on_time,
+                            expression: "fields.on_time"
+                          }
+                        ],
+                        attrs: {
+                          type: "radio",
+                          id: "false",
+                          name: "on_time",
+                          required: ""
+                        },
+                        domProps: {
+                          value: false,
+                          checked: _vm._q(_vm.fields.on_time, false)
+                        },
+                        on: {
+                          change: function($event) {
+                            return _vm.$set(_vm.fields, "on_time", false)
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("label", { attrs: { for: "false" } }, [
+                        _vm._v("before deadline")
+                      ]),
+                      _c("br"),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.fields.on_time,
+                            expression: "fields.on_time"
+                          }
+                        ],
+                        attrs: {
+                          type: "radio",
+                          id: "true",
+                          name: "on_time",
+                          required: ""
+                        },
+                        domProps: {
+                          value: true,
+                          checked: _vm._q(_vm.fields.on_time, true)
+                        },
+                        on: {
+                          change: function($event) {
+                            return _vm.$set(_vm.fields, "on_time", true)
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("label", { attrs: { for: "true" } }, [
+                        _vm._v("on time")
+                      ]),
+                      _c("br")
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "mb-4" },
+                      [
                         _c(
                           "label",
                           {
                             staticClass: "mb-2",
-                            attrs: { for: "description" }
+                            attrs: { for: "event_place" }
                           },
-                          [_vm._v("Description")]
+                          [_vm._v("Assign this task to")]
                         ),
                         _vm._v(" "),
-                        _c("br"),
-                        _vm._v(" "),
-                        _c("textarea", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.fields.description,
-                              expression: "fields.description"
-                            }
-                          ],
-                          staticClass:
-                            "w-full border p-2 h-24 resize-none focus:outline-none",
-                          attrs: {
-                            name: "description",
-                            placeholder: "specify this task...",
-                            required: ""
-                          },
-                          domProps: { value: _vm.fields.description },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(
-                                _vm.fields,
-                                "description",
-                                $event.target.value
-                              )
-                            }
-                          }
-                        })
-                      ]),
-                      _vm._v(" "),
-                      _c("p", { staticClass: "mb-6" }, [
-                        _c(
-                          "label",
-                          { staticClass: "mb-2", attrs: { for: "due" } },
-                          [_vm._v("When")]
-                        ),
-                        _vm._v(" "),
-                        _c("br"),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.fields.due,
-                              expression: "fields.due"
-                            }
-                          ],
-                          staticClass: "border p-2",
-                          attrs: {
-                            id: "due",
-                            type: "datetime-local",
-                            name: "due",
-                            required: ""
-                          },
-                          domProps: { value: _vm.fields.due },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(_vm.fields, "due", $event.target.value)
-                            }
-                          }
-                        })
-                      ]),
-                      _vm._v(" "),
-                      _c("p", { staticClass: "mb-1" }, [
-                        _vm._v(
-                          "\n                    Do assignment :\n                "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "mb-4" }, [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.fields.on_time,
-                              expression: "fields.on_time"
-                            }
-                          ],
-                          attrs: {
-                            type: "radio",
-                            id: "false",
-                            name: "on_time",
-                            required: ""
-                          },
-                          domProps: {
-                            value: false,
-                            checked: _vm._q(_vm.fields.on_time, false)
-                          },
-                          on: {
-                            change: function($event) {
-                              return _vm.$set(_vm.fields, "on_time", false)
-                            }
-                          }
-                        }),
-                        _vm._v(" "),
-                        _c("label", { attrs: { for: "false" } }, [
-                          _vm._v("before deadline")
-                        ]),
-                        _c("br"),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.fields.on_time,
-                              expression: "fields.on_time"
-                            }
-                          ],
-                          attrs: {
-                            type: "radio",
-                            id: "true",
-                            name: "on_time",
-                            required: ""
-                          },
-                          domProps: {
-                            value: true,
-                            checked: _vm._q(_vm.fields.on_time, true)
-                          },
-                          on: {
-                            change: function($event) {
-                              return _vm.$set(_vm.fields, "on_time", true)
-                            }
-                          }
-                        }),
-                        _vm._v(" "),
-                        _c("label", { attrs: { for: "true" } }, [
-                          _vm._v("on time")
-                        ]),
-                        _c("br")
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "label",
-                        { staticClass: "mb-2", attrs: { for: "event_place" } },
-                        [_vm._v("Assign this task to")]
-                      ),
-                      _vm._v(" "),
-                      _vm._l(_vm.members, function(member) {
-                        return _c(
-                          "div",
-                          { key: member.id, attrs: { value: member.id } },
-                          [
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.fields.users,
-                                  expression: "fields.users"
-                                }
-                              ],
-                              attrs: {
-                                type: "checkbox",
-                                id: member.id,
-                                name: member.id
-                              },
-                              domProps: {
-                                value: member.id,
-                                checked: Array.isArray(_vm.fields.users)
-                                  ? _vm._i(_vm.fields.users, member.id) > -1
-                                  : _vm.fields.users
-                              },
-                              on: {
-                                change: function($event) {
-                                  var $$a = _vm.fields.users,
-                                    $$el = $event.target,
-                                    $$c = $$el.checked ? true : false
-                                  if (Array.isArray($$a)) {
-                                    var $$v = member.id,
-                                      $$i = _vm._i($$a, $$v)
-                                    if ($$el.checked) {
-                                      $$i < 0 &&
-                                        _vm.$set(
-                                          _vm.fields,
-                                          "users",
-                                          $$a.concat([$$v])
-                                        )
+                        _vm._l(_vm.members, function(member) {
+                          return _c(
+                            "div",
+                            { key: member.id, attrs: { value: member.id } },
+                            [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.fields.users,
+                                    expression: "fields.users"
+                                  }
+                                ],
+                                attrs: {
+                                  type: "checkbox",
+                                  id: member.id,
+                                  name: member.id
+                                },
+                                domProps: {
+                                  value: member.id,
+                                  checked: Array.isArray(_vm.fields.users)
+                                    ? _vm._i(_vm.fields.users, member.id) > -1
+                                    : _vm.fields.users
+                                },
+                                on: {
+                                  change: function($event) {
+                                    var $$a = _vm.fields.users,
+                                      $$el = $event.target,
+                                      $$c = $$el.checked ? true : false
+                                    if (Array.isArray($$a)) {
+                                      var $$v = member.id,
+                                        $$i = _vm._i($$a, $$v)
+                                      if ($$el.checked) {
+                                        $$i < 0 &&
+                                          _vm.$set(
+                                            _vm.fields,
+                                            "users",
+                                            $$a.concat([$$v])
+                                          )
+                                      } else {
+                                        $$i > -1 &&
+                                          _vm.$set(
+                                            _vm.fields,
+                                            "users",
+                                            $$a
+                                              .slice(0, $$i)
+                                              .concat($$a.slice($$i + 1))
+                                          )
+                                      }
                                     } else {
-                                      $$i > -1 &&
-                                        _vm.$set(
-                                          _vm.fields,
-                                          "users",
-                                          $$a
-                                            .slice(0, $$i)
-                                            .concat($$a.slice($$i + 1))
-                                        )
+                                      _vm.$set(_vm.fields, "users", $$c)
                                     }
-                                  } else {
-                                    _vm.$set(_vm.fields, "users", $$c)
                                   }
                                 }
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c("label", { attrs: { for: member.id } }, [
-                              _vm._v(" " + _vm._s(member.name))
-                            ]),
-                            _c("br")
-                          ]
-                        )
-                      })
-                    ],
-                    2
-                  ),
+                              }),
+                              _vm._v(" "),
+                              _c("label", { attrs: { for: member.id } }, [
+                                _vm._v(" " + _vm._s(member.name))
+                              ]),
+                              _c("br")
+                            ]
+                          )
+                        })
+                      ],
+                      2
+                    ),
+                    _vm._v(" "),
+                    _c("label", { attrs: { for: "quantity" } }, [
+                      _vm._v("Maximum number of assignees:")
+                    ]),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "text-sm" }, [
+                      _vm._v("0 = not set")
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.fields.max_assignees,
+                          expression: "fields.max_assignees"
+                        }
+                      ],
+                      staticClass: "border p-2",
+                      attrs: {
+                        type: "number",
+                        id: "max_assignees",
+                        min: "0",
+                        name: "max_assignees"
+                      },
+                      domProps: { value: _vm.fields.max_assignees },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.fields,
+                            "max_assignees",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]),
                   _vm._v(" "),
                   _c(
                     "button",
@@ -33424,7 +33420,7 @@ var render = function() {
                               },
                               [
                                 _vm._v(
-                                  "\n                            About\n                        "
+                                  "\n                            Details\n                        "
                                 )
                               ]
                             )

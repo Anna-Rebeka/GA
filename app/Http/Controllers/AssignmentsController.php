@@ -56,6 +56,7 @@ class AssignmentsController extends Controller
             'description' => ['required', 'string', 'max:255'],
             'on_time' => ['required', 'boolean'],
             'due' => ['required'],
+            'max_assignees' => ['integer'] 
             ]);
         
         $user = auth()->user();
@@ -64,11 +65,16 @@ class AssignmentsController extends Controller
             $attributes['assignee'] = null;
         }
 
+        if($fields['max_assignees'] == 0){
+            $attributes['max_assignees'] = null;
+        }
+
         $assignment = Assignment::create([
             'name' => $attributes['name'],
             'author_id' => $user->id,
             'group_id' => $user->group->id,
             'description' => $attributes['description'],
+            'max_assignees' =>  $attributes['max_assignees'],
             'on_time' => $attributes['on_time'],
             'due' => $attributes['due'],
         ]);
@@ -76,10 +82,7 @@ class AssignmentsController extends Controller
         //for each assignee attach this assignment
         $assignment->users()->attach($fields['users']);
 
-        //if assignment has assignee(s) return them as assignment->users
-        if(true){
-            $assignment->users;
-        }
+        $assignment->users;
         
         return $assignment;
     }

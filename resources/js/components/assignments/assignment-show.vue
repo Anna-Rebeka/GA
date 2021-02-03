@@ -19,14 +19,17 @@
                 </div>
             </div>
             <div class="float-right">
-                <div v-if="showedAssignment.users.length == 0">
-                    <button
-                        @click="checkWithUser(showedAssignment, 'take')"
-                        class="rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none"
-                    >
-                        Take
-                    </button>
+                <div v-if="!takenAssignment">
+                    <div v-if="showedAssignment.max_assignees == null || showedAssignment.users.length  < showedAssignment.max_assignees">
+                        <button
+                            @click="checkWithUser(showedAssignment, 'take')"
+                            class="rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none"
+                        >
+                            Take
+                        </button>
+                    </div>
                 </div>
+                
             </div>
             <h2 class="font-bold text-2xl mb-4">{{ showedAssignment.name }}</h2>
             <div class="py-2 px-6 mb-2 mr-2 bg-gray-100 rounded w-2/5 inline-block">
@@ -75,10 +78,27 @@ export default {
     data() {
         return {
             showedAssignment: this.assignment,
+            takenAssignment: false,
         };
     },
 
+    mounted() {
+        this.isAssigned();
+    },
+
     methods: {
+        isAssigned(){
+            axios.get('/assignments/' + this.user.id).then(response => {
+                this.takenAssignment = response.data;
+            }).catch(error => {
+                if (error.response.status == 422){
+                    this.errors = error.response.data.errors;
+                    console.log(this.errors);
+                }
+                console.log(error.message);
+            });
+        },
+
         checkWithUser($assignment, $whatToDo) {
             if (confirm("Are you sure? This action is irreversible.")) {
                 if ($whatToDo == "delete") {
@@ -96,7 +116,7 @@ export default {
                 .patch("/assignments/" + $assignment.id + "/take")
                 .then((response) => {
                     this.showedAssignment.users.push(this.user);
-                    this.reload();
+                    this.takenAssignment = true;
                 })
                 .catch((error) => {
                     if (error.response.status == 422) {
