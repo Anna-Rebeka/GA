@@ -1956,14 +1956,58 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user', 'assignment'],
+  props: ["user", "assignment"],
   data: function data() {
     return {
-      showedAssignment: this.assignment
+      showedAssignment: this.assignment,
+      takenAssignment: false
     };
   },
+  mounted: function mounted() {
+    this.isAssigned();
+  },
   methods: {
+    isAssigned: function isAssigned() {
+      var _this = this;
+
+      axios.get('/assignments/' + this.user.id).then(function (response) {
+        _this.takenAssignment = response.data;
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this.errors = error.response.data.errors;
+          console.log(_this.errors);
+        }
+
+        console.log(error.message);
+      });
+    },
     checkWithUser: function checkWithUser($assignment, $whatToDo) {
       if (confirm("Are you sure? This action is irreversible.")) {
         if ($whatToDo == "delete") {
@@ -1976,29 +2020,12 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     takeAssignment: function takeAssignment($assignment) {
-      var _this = this;
-
-      axios.patch('/assignments/' + $assignment.id + '/take').then(function (response) {
-        _this.showedAssignment.assignee = _this.user;
-        _this.showedAssignment.assignee_id = _this.user.id;
-
-        _this.reload();
-      })["catch"](function (error) {
-        if (error.response.status == 422) {
-          _this.errors = error.response.data.errors;
-          console.log(_this.errors);
-        }
-
-        console.log(error.message);
-      });
-    },
-    markAsDone: function markAsDone($assignment) {
       var _this2 = this;
 
-      axios.patch('/assignments/' + $assignment.id + '/done').then(function (response) {
-        _this2.showedAssignment.done = true;
+      axios.patch("/assignments/" + $assignment.id + "/take").then(function (response) {
+        _this2.showedAssignment.users.push(_this2.user);
 
-        _this2.reload();
+        _this2.takenAssignment = true;
       })["catch"](function (error) {
         if (error.response.status == 422) {
           _this2.errors = error.response.data.errors;
@@ -2008,8 +2035,24 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error.message);
       });
     },
+    markAsDone: function markAsDone($assignment) {
+      var _this3 = this;
+
+      axios.patch("/assignments/" + $assignment.id + "/done").then(function (response) {
+        _this3.showedAssignment.done = true;
+
+        _this3.reload();
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this3.errors = error.response.data.errors;
+          console.log(_this3.errors);
+        }
+
+        console.log(error.message);
+      });
+    },
     deleteAssignment: function deleteAssignment($assignment) {
-      axios["delete"]('/assignments/' + $assignment.id).then(function (response) {
+      axios["delete"]("/assignments/" + $assignment.id).then(function (response) {
         window.location.href = "/assignments";
       });
     }
@@ -2027,20 +2070,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -2201,9 +2230,9 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     filterMine: function filterMine() {
-      var uid = this.user.id;
+      var user = this.user;
       this.savedAssignments = this.savedAssignments.filter(function (e) {
-        if (e.assignee_id == uid) {
+        if (e.users.includes(user)) {
           return true;
         }
 
@@ -2222,57 +2251,15 @@ __webpack_require__.r(__webpack_exports__);
     },
     filterFree: function filterFree() {
       this.savedAssignments = this.savedAssignments.filter(function (e) {
-        if (e.assignee_id) {
+        if (e.users) {
           return false;
         }
 
         return true;
       });
     },
-    reload: function reload() {
-      this.$forceUpdate();
-    },
     onChangePage: function onChangePage(pageOfItems) {
       this.pageOfItems = pageOfItems;
-    },
-    takeAssignment: function takeAssignment($assignment) {
-      var _this = this;
-
-      axios.patch('/assignments/' + $assignment.id + '/take').then(function (response) {
-        var index = _this.savedAssignments.indexOf($assignment);
-
-        _this.allAssignments[index].assignee = _this.user;
-        _this.allAssignments[index].assignee_id = _this.user.id;
-        _this.savedAssignments = _this.allAssignments;
-
-        _this.reload();
-      })["catch"](function (error) {
-        if (error.response.status == 422) {
-          _this.errors = error.response.data.errors;
-          console.log(_this.errors);
-        }
-
-        console.log(error.message);
-      });
-    },
-    abandonAssignment: function abandonAssignment($assignment) {
-      var _this2 = this;
-
-      axios.post('/assignments/' + $assignment.id + '/leave').then(function (response) {
-        _this2.reload();
-      })["catch"](function (error) {
-        if (error.response.status == 422) {
-          _this2.errors = error.response.data.errors;
-          console.log(_this2.errors);
-        }
-
-        console.log(error.message);
-      });
-    },
-    checkTakeWithUser: function checkTakeWithUser($assignment, $whatToDo) {
-      if (confirm("Are you sure? This action is irreversible.")) {
-        this.takeAssignment($assignment);
-      }
     }
   }
 });
@@ -2365,6 +2352,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user', 'assignments', 'members'],
   data: function data() {
@@ -2375,6 +2377,9 @@ __webpack_require__.r(__webpack_exports__);
       createNewAssignment: false,
       newAssignmentCreated: false
     };
+  },
+  mounted: function mounted() {
+    this.fields.users = [];
   },
   methods: {
     submit: function submit() {
@@ -31632,11 +31637,7 @@ var render = function() {
                           }
                         }
                       },
-                      [
-                        _vm._v(
-                          "\r\n                    Done\r\n                "
-                        )
-                      ]
+                      [_vm._v("\n                    Done\n                ")]
                     )
                   : _vm._e(),
                 _vm._v(" "),
@@ -31651,52 +31652,72 @@ var render = function() {
                       }
                     }
                   },
-                  [_vm._v("\r\n                    Delete\r\n                ")]
+                  [_vm._v("\n                    Delete\n                ")]
                 )
               ])
             : _vm._e()
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "float-right" }, [
-          _vm.showedAssignment.assignee_id == null
+          !_vm.takenAssignment
             ? _c("div", [
-                _c(
-                  "button",
-                  {
-                    staticClass:
-                      "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none",
-                    on: {
-                      click: function($event) {
-                        return _vm.checkWithUser(_vm.showedAssignment, "take")
-                      }
-                    }
-                  },
-                  [_vm._v("\r\n                    Take\r\n                ")]
-                )
+                _vm.showedAssignment.max_assignees == null ||
+                _vm.showedAssignment.users.length <
+                  _vm.showedAssignment.max_assignees
+                  ? _c("div", [
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none",
+                          on: {
+                            click: function($event) {
+                              return _vm.checkWithUser(
+                                _vm.showedAssignment,
+                                "take"
+                              )
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                        Take\n                    "
+                          )
+                        ]
+                      )
+                    ])
+                  : _vm._e()
               ])
             : _vm._e()
         ]),
         _vm._v(" "),
         _c("h2", { staticClass: "font-bold text-2xl mb-4" }, [
-          _vm._v(" " + _vm._s(_vm.showedAssignment.name) + " ")
+          _vm._v(_vm._s(_vm.showedAssignment.name))
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded" }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
-            _vm._v(
-              "\r\n                " +
-                _vm._s(
-                  _vm._f("dateFormat")(
-                    new Date(_vm.showedAssignment.due),
-                    "DD.MM.YYYY , HH:mm"
-                  )
-                ) +
-                "\r\n            "
-            )
-          ])
-        ]),
+        _c(
+          "div",
+          {
+            staticClass:
+              "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded w-2/5 inline-block"
+          },
+          [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
+              _vm._v(
+                "\n                " +
+                  _vm._s(
+                    _vm._f("dateFormat")(
+                      new Date(_vm.showedAssignment.due),
+                      "DD.MM.YYYY , HH:mm"
+                    )
+                  ) +
+                  "\n            "
+              )
+            ])
+          ]
+        ),
         _vm._v(" "),
         _c(
           "div",
@@ -31705,26 +31726,36 @@ var render = function() {
           },
           [
             _c("strong", [_vm._v("By Who")]),
+            _vm._v(" "),
             _c("p", { staticClass: "bg-white p-2 rounded" }, [
-              _vm._v(_vm._s(_vm.showedAssignment.author.name))
+              _vm._v(
+                "\n                " +
+                  _vm._s(_vm.showedAssignment.author.name) +
+                  "\n            "
+              )
             ])
           ]
         ),
         _vm._v(" "),
-        _vm.showedAssignment.assignee
-          ? _c(
-              "div",
-              {
-                staticClass:
-                  "mb-2 rounded bg-gray-100 px-6 p-4 w-2/5 inline-block"
-              },
-              [
-                _c("strong", [_vm._v("For Who")]),
-                _c("p", { staticClass: "bg-white p-2 rounded" }, [
-                  _vm._v(_vm._s(_vm.showedAssignment.assignee.name))
-                ])
-              ]
-            )
+        _vm.showedAssignment.users
+          ? _c("div", { staticClass: "mb-2 rounded bg-gray-100 px-6 p-4" }, [
+              _c("strong", [_vm._v("For Who")]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "bg-white p-2 rounded" },
+                _vm._l(_vm.showedAssignment.users, function(assignee) {
+                  return _c("p", { key: assignee.id }, [
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(assignee.name) +
+                        "\n                "
+                    )
+                  ])
+                }),
+                0
+              )
+            ])
           : _vm._e(),
         _vm._v(" "),
         _c("div", { staticClass: "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded" }, [
@@ -31732,9 +31763,9 @@ var render = function() {
           _vm._v(" "),
           _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
             _vm._v(
-              "\r\n                " +
+              "\n                " +
                 _vm._s(_vm.showedAssignment.description) +
-                "\r\n            "
+                "\n            "
             )
           ])
         ])
@@ -31787,7 +31818,35 @@ var render = function() {
   return _c("div", [
     _vm._m(0),
     _vm._v(" "),
-    _c("div", { staticClass: "flex flex-col" }, [
+    _c("p", { staticClass: "text-xs font-bold text-blue-500 float-left" }, [
+      _vm._v("Deadline ")
+    ]),
+    _vm._v(" "),
+    _c("p", { staticClass: "text-sm font-bold float-left ml-2 mr-2" }, [
+      _vm._v("/")
+    ]),
+    _vm._v(" "),
+    _c(
+      "p",
+      { staticClass: "float-left text-xs font-bold text-red-600 mb-4 mr-8" },
+      [_vm._v(" On time")]
+    ),
+    _vm._v(" "),
+    _c("p", { staticClass: "text-xs px-1 font-medium bg-red-100 float-left" }, [
+      _vm._v("waiting")
+    ]),
+    _vm._v(" "),
+    _c("p", { staticClass: "text-sm font-bold float-left ml-2 mr-2" }, [
+      _vm._v("/")
+    ]),
+    _vm._v(" "),
+    _c(
+      "p",
+      { staticClass: "text-xs px-2 font-medium bg-green-100 float-left" },
+      [_vm._v(" done")]
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "flex flex-col clear-both" }, [
       _c("div", { staticClass: "-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8" }, [
         _c(
           "div",
@@ -31827,14 +31886,17 @@ var render = function() {
                               "td",
                               {
                                 staticClass:
-                                  "px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
+                                  "bg-white pl-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
                               },
                               [
                                 _c(
                                   "div",
                                   {
-                                    staticClass:
-                                      "text-sm font-medium text-gray-900"
+                                    staticClass: "text-sm font-bold",
+                                    class: {
+                                      "text-red-600": assignment.on_time,
+                                      "text-blue-500": !assignment.on_time
+                                    }
                                   },
                                   [
                                     _vm._v(
@@ -31858,7 +31920,7 @@ var render = function() {
                               [
                                 _c(
                                   "div",
-                                  { staticClass: "text-sm text-gray-900" },
+                                  { staticClass: "text-sm text-grey-900" },
                                   [
                                     _vm._v(
                                       "\n                                " +
@@ -31888,26 +31950,6 @@ var render = function() {
                               ]
                             ),
                             _vm._v(" "),
-                            _c(
-                              "td",
-                              { staticClass: "px-6 py-4 whitespace-nowrap" },
-                              [
-                                assignment.assignee
-                                  ? _c(
-                                      "div",
-                                      { staticClass: "text-sm text-gray-900" },
-                                      [
-                                        _vm._v(
-                                          "\n                                " +
-                                            _vm._s(assignment.assignee.name) +
-                                            "\n                        "
-                                        )
-                                      ]
-                                    )
-                                  : _vm._e()
-                              ]
-                            ),
-                            _vm._v(" "),
                             _c("td", [
                               _c(
                                 "a",
@@ -31920,38 +31962,10 @@ var render = function() {
                                 },
                                 [
                                   _vm._v(
-                                    "\n                            About\n                        "
+                                    "\n                            Details\n                        "
                                   )
                                 ]
                               )
-                            ]),
-                            _vm._v(" "),
-                            _c("td", [
-                              _c("div", { staticClass: "ml-4" }, [
-                                assignment.assignee_id == null
-                                  ? _c("div", [
-                                      _c(
-                                        "button",
-                                        {
-                                          staticClass:
-                                            "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none",
-                                          on: {
-                                            click: function($event) {
-                                              return _vm.checkTakeWithUser(
-                                                assignment
-                                              )
-                                            }
-                                          }
-                                        },
-                                        [
-                                          _vm._v(
-                                            "\n                                    Take\n                                "
-                                          )
-                                        ]
-                                      )
-                                    ])
-                                  : _vm._e()
-                              ])
                             ])
                           ]
                         )
@@ -32054,7 +32068,7 @@ var staticRenderFns = [
               "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
             attrs: { scope: "col" }
           },
-          [_vm._v("\n                        When\n                    ")]
+          [_vm._v("\n                        When \n                    ")]
         ),
         _vm._v(" "),
         _c(
@@ -32076,21 +32090,6 @@ var staticRenderFns = [
           },
           [_vm._v("\n                        By who\n                    ")]
         ),
-        _vm._v(" "),
-        _c(
-          "th",
-          {
-            staticClass:
-              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
-            attrs: { scope: "col" }
-          },
-          [_vm._v("\n                        For who\n                    ")]
-        ),
-        _vm._v(" "),
-        _c("th", {
-          staticClass: "px-6 py-3 bg-gray-50",
-          attrs: { scope: "col" }
-        }),
         _vm._v(" "),
         _c("th", {
           staticClass: "px-6 py-3 bg-gray-50",
@@ -32265,7 +32264,7 @@ var render = function() {
                       _c(
                         "label",
                         { staticClass: "mb-2", attrs: { for: "due" } },
-                        [_vm._v("Deadline")]
+                        [_vm._v("When")]
                       ),
                       _vm._v(" "),
                       _c("br"),
@@ -32298,70 +32297,195 @@ var render = function() {
                       })
                     ]),
                     _vm._v(" "),
-                    _c("p", { staticClass: "mb-4" }, [
-                      _c(
-                        "label",
-                        { staticClass: "mb-2", attrs: { for: "event_place" } },
-                        [_vm._v("Assign this task to")]
-                      ),
+                    _c("p", { staticClass: "mb-1" }, [
+                      _vm._v(
+                        "\n                    Do assignment :\n                "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "mb-4" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.fields.on_time,
+                            expression: "fields.on_time"
+                          }
+                        ],
+                        attrs: {
+                          type: "radio",
+                          id: "false",
+                          name: "on_time",
+                          required: ""
+                        },
+                        domProps: {
+                          value: false,
+                          checked: _vm._q(_vm.fields.on_time, false)
+                        },
+                        on: {
+                          change: function($event) {
+                            return _vm.$set(_vm.fields, "on_time", false)
+                          }
+                        }
+                      }),
                       _vm._v(" "),
+                      _c("label", { attrs: { for: "false" } }, [
+                        _vm._v("before deadline")
+                      ]),
                       _c("br"),
                       _vm._v(" "),
-                      _c(
-                        "select",
-                        {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.fields.assignee,
-                              expression: "fields.assignee"
-                            }
-                          ],
-                          staticClass: "border p-1",
-                          attrs: { id: "assignee", name: "assignee" },
-                          on: {
-                            change: function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.$set(
-                                _vm.fields,
-                                "assignee",
-                                $event.target.multiple
-                                  ? $$selectedVal
-                                  : $$selectedVal[0]
-                              )
-                            }
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.fields.on_time,
+                            expression: "fields.on_time"
                           }
-                        },
-                        [
-                          _c("option", { attrs: { value: "" } }),
-                          _vm._v(" "),
-                          _vm._l(_vm.members, function(member) {
-                            return _c(
-                              "option",
-                              {
-                                key: member.id,
-                                domProps: { value: member.id }
-                              },
-                              [
-                                _vm._v(
-                                  _vm._s(member.name) +
-                                    "\n                        "
-                                )
-                              ]
-                            )
-                          })
                         ],
-                        2
-                      )
-                    ])
+                        attrs: {
+                          type: "radio",
+                          id: "true",
+                          name: "on_time",
+                          required: ""
+                        },
+                        domProps: {
+                          value: true,
+                          checked: _vm._q(_vm.fields.on_time, true)
+                        },
+                        on: {
+                          change: function($event) {
+                            return _vm.$set(_vm.fields, "on_time", true)
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("label", { attrs: { for: "true" } }, [
+                        _vm._v("on time")
+                      ]),
+                      _c("br")
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "mb-4" },
+                      [
+                        _c(
+                          "label",
+                          {
+                            staticClass: "mb-2",
+                            attrs: { for: "event_place" }
+                          },
+                          [_vm._v("Assign this task to")]
+                        ),
+                        _vm._v(" "),
+                        _vm._l(_vm.members, function(member) {
+                          return _c(
+                            "div",
+                            { key: member.id, attrs: { value: member.id } },
+                            [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.fields.users,
+                                    expression: "fields.users"
+                                  }
+                                ],
+                                attrs: {
+                                  type: "checkbox",
+                                  id: member.id,
+                                  name: member.id
+                                },
+                                domProps: {
+                                  value: member.id,
+                                  checked: Array.isArray(_vm.fields.users)
+                                    ? _vm._i(_vm.fields.users, member.id) > -1
+                                    : _vm.fields.users
+                                },
+                                on: {
+                                  change: function($event) {
+                                    var $$a = _vm.fields.users,
+                                      $$el = $event.target,
+                                      $$c = $$el.checked ? true : false
+                                    if (Array.isArray($$a)) {
+                                      var $$v = member.id,
+                                        $$i = _vm._i($$a, $$v)
+                                      if ($$el.checked) {
+                                        $$i < 0 &&
+                                          _vm.$set(
+                                            _vm.fields,
+                                            "users",
+                                            $$a.concat([$$v])
+                                          )
+                                      } else {
+                                        $$i > -1 &&
+                                          _vm.$set(
+                                            _vm.fields,
+                                            "users",
+                                            $$a
+                                              .slice(0, $$i)
+                                              .concat($$a.slice($$i + 1))
+                                          )
+                                      }
+                                    } else {
+                                      _vm.$set(_vm.fields, "users", $$c)
+                                    }
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("label", { attrs: { for: member.id } }, [
+                                _vm._v(" " + _vm._s(member.name))
+                              ]),
+                              _c("br")
+                            ]
+                          )
+                        })
+                      ],
+                      2
+                    ),
+                    _vm._v(" "),
+                    _c("label", { attrs: { for: "quantity" } }, [
+                      _vm._v("Maximum number of assignees:")
+                    ]),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "text-sm" }, [
+                      _vm._v("0 = not set")
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.fields.max_assignees,
+                          expression: "fields.max_assignees"
+                        }
+                      ],
+                      staticClass: "border p-2",
+                      attrs: {
+                        type: "number",
+                        id: "max_assignees",
+                        min: "0",
+                        name: "max_assignees"
+                      },
+                      domProps: { value: _vm.fields.max_assignees },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.fields,
+                            "max_assignees",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
                   ]),
                   _vm._v(" "),
                   _c(
@@ -33296,7 +33420,7 @@ var render = function() {
                               },
                               [
                                 _vm._v(
-                                  "\n                            About\n                        "
+                                  "\n                            Details\n                        "
                                 )
                               ]
                             )

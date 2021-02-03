@@ -16,12 +16,13 @@ class Assignment extends Model
      */
     protected $fillable = [
         'name',
-        'assignee_id',
         'author_id',
         'group_id',
         'due',
+        'on_time',
         'done',
         'description',
+        'max_assignees',
         'created_at'
     ];
 
@@ -33,11 +34,18 @@ class Assignment extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function assignee(){
-        return $this->belongsTo(User::class);
+    public function users(){
+        return $this->belongsToMany(User::class);
     }
     
     public function comments(){
         return $this->hasMany(AssignmentsComments::class);
+    }
+
+    public function isAssigned(User $user){
+        if($this->users->contains($user)){
+            return true;
+        }
+        return false;
     }
 }

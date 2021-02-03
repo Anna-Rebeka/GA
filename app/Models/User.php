@@ -103,4 +103,8 @@ class User extends Authenticatable
     public function chatrooms() {
         return $this->belongsToMany(Chatroom::class);
     }
+
+    public function assignments(){
+        return $this->belongsToMany(Assignment::class);
+    }
 }

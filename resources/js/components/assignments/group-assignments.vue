@@ -37,7 +37,7 @@
                         </textarea>
                     </p>
                     <p class="mb-6">
-                        <label class="mb-2" for="due">Deadline</label>
+                        <label class="mb-2" for="due">When</label>
                         <br>
                         <input
                             id="due"
@@ -48,18 +48,33 @@
                             required
                         >
                     </p>
-                    <p class="mb-4">
-                        <label class="mb-2" for="event_place">Assign this task to</label>
-                        <br>
-                        <select class="border p-1"
-                            id="assignee" name="assignee" v-model="fields.assignee">
-                            <option value=""></option>
-                            <option 
-                                v-for="member in members" :key="member.id" 
-                                :value="member.id">{{ member.name }}
-                            </option>
-                        </select>
+                    <p class="mb-1">
+                        Do assignment :
                     </p>
+                    <div class="mb-4">
+                        <input type="radio" v-model="fields.on_time" id="false" name="on_time" :value="false" required>
+                        <label for="false">before deadline</label><br>
+                        <input type="radio" v-model="fields.on_time" id="true" name="on_time" :value="true" required>
+                        <label for="true">on time</label><br>
+                    </div>
+                        <div class="mb-4">
+                            <label class="mb-2" for="event_place">Assign this task to</label>
+                            <div 
+                                v-for="member in members" :key="member.id" 
+                                :value="member.id"
+                            >
+                                <input type="checkbox" v-model="fields.users" :id="member.id" :name="member.id" :value="member.id">
+                                <label :for="member.id"> {{ member.name }}</label><br>
+                            </div>
+                        </div>
+                        
+                        <label for="quantity">Maximum number of assignees:</label>
+                        <p class="text-sm">0 = not set</p>
+                        <input 
+                            v-model="fields.max_assignees" 
+                            type="number" id="max_assignees" min="0" name="max_assignees"
+                            class="border p-2"
+                        >
                 </div>
                 <button type="submit" class="shadow float-right -mt-6 rounded-lg border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
                     Create an assignment
@@ -86,6 +101,9 @@ export default {
             createNewAssignment: false,
             newAssignmentCreated: false,
         };
+    },
+    mounted() {
+        this.fields.users = [];
     },
     methods: {
         submit() {

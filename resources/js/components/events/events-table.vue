@@ -61,7 +61,7 @@
                             <a 
                                 :href="'events/' + event.id"
                                 class="shadow border border-gray-300 rounded-lg py-2 px-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
-                                About
+                                Details
                             </a> 
                         </td>
                         <td> 
