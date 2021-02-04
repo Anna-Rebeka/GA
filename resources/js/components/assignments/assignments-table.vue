@@ -57,7 +57,7 @@
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-grey-900">
+                            <div class="text-sm text-grey-900 truncate ... max-w-xs">
                                     {{ assignment.name }}
                             </div>
                         </td>
@@ -69,7 +69,7 @@
                         <td> 
                             <a 
                                 :href="'assignments/' + assignment.id"
-                                class="bg-white shadow border border-gray-300 rounded-lg py-2 px-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
+                                class="bg-white shadow border border-gray-300 rounded-lg py-2 px-2 mr-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
                                 Details
                             </a> 
                         </td>

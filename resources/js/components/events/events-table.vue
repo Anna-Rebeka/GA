@@ -36,8 +36,6 @@
                         </th>
                         <th scope="col" class="px-6 py-3 bg-gray-50">
                         </th>
-                        <th scope="col" class="px-6 py-3 bg-gray-50">
-                        </th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -48,7 +46,7 @@
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900">
+                            <div class="text-sm text-gray-900 truncate ... max-w-xs">
                                     {{ event.name }}
                             </div>
                         </td>
@@ -60,34 +58,9 @@
                         <td> 
                             <a 
                                 :href="'events/' + event.id"
-                                class="shadow border border-gray-300 rounded-lg py-2 px-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
+                                class="shadow border border-gray-300 rounded-lg py-2 px-2 mr-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
                                 Details
                             </a> 
-                        </td>
-                        <td> 
-                            <div class="ml-4">
-                                <div v-if="eusers[event.id] && !eusers[event.id].includes(user.id)">
-                                    <button 
-                                        @click="joinEvent(event)"
-                                        class="rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none">
-                                        Join
-                                    </button> 
-                                </div>
-                                <div  v-else-if="event.host_id == user.id">
-                                    <button 
-                                        @click="checkWithUser(event)"
-                                        class="rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none">
-                                        Delete
-                                    </button> 
-                                </div>
-                                <div v-else>
-                                    <button 
-                                        @click="leaveEvent(event)"
-                                        class="rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-red-200 hover:text-gray-500 hover:bg-red-100 focus:outline-none">
-                                        Leave
-                                    </button> 
-                                </div>
-                            </div>
                         </td>
                     </tr>
                 </tbody>

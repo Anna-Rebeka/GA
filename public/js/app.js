@@ -1982,6 +1982,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "assignment"],
   data: function data() {
@@ -3038,6 +3040,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user', 'going', 'event', 'host'],
   data: function data() {
@@ -3117,33 +3121,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -31691,9 +31668,15 @@ var render = function() {
             : _vm._e()
         ]),
         _vm._v(" "),
-        _c("h2", { staticClass: "font-bold text-2xl mb-4" }, [
-          _vm._v(_vm._s(_vm.showedAssignment.name))
-        ]),
+        _c(
+          "div",
+          { staticClass: "overflow-ellipsis overflow-hidden ...  max-w-sm" },
+          [
+            _c("h2", { staticClass: "font-bold text-2xl mb-4" }, [
+              _vm._v(_vm._s(_vm.showedAssignment.name))
+            ])
+          ]
+        ),
         _vm._v(" "),
         _c(
           "div",
@@ -31920,7 +31903,10 @@ var render = function() {
                               [
                                 _c(
                                   "div",
-                                  { staticClass: "text-sm text-grey-900" },
+                                  {
+                                    staticClass:
+                                      "text-sm text-grey-900 truncate ... max-w-xs"
+                                  },
                                   [
                                     _vm._v(
                                       "\n                                " +
@@ -31955,7 +31941,7 @@ var render = function() {
                                 "a",
                                 {
                                   staticClass:
-                                    "bg-white shadow border border-gray-300 rounded-lg py-2 px-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+                                    "bg-white shadow border border-gray-300 rounded-lg py-2 px-2 mr-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
                                   attrs: {
                                     href: "assignments/" + assignment.id
                                   }
@@ -33129,7 +33115,21 @@ var render = function() {
                 },
                 [_vm._v("\r\n                Join\r\n            ")]
               )
-            : _vm.event.host_id == _vm.user.id
+            : _c(
+                "button",
+                {
+                  staticClass:
+                    "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-red-200 hover:text-gray-500 hover:bg-red-100 focus:outline-none",
+                  on: {
+                    click: function($event) {
+                      return _vm.leaveEvent()
+                    }
+                  }
+                },
+                [_vm._v("\r\n                Leave\r\n            ")]
+              ),
+          _vm._v(" "),
+          _vm.event.host_id == _vm.user.id
             ? _c(
                 "button",
                 {
@@ -33143,24 +33143,18 @@ var render = function() {
                 },
                 [_vm._v("\r\n                Delete\r\n            ")]
               )
-            : _c(
-                "button",
-                {
-                  staticClass:
-                    "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-red-200 hover:text-gray-500 hover:bg-red-100 focus:outline-none",
-                  on: {
-                    click: function($event) {
-                      return _vm.leaveEvent()
-                    }
-                  }
-                },
-                [_vm._v("\r\n                Leave\r\n            ")]
-              )
+            : _vm._e()
         ]),
         _vm._v(" "),
-        _c("h2", { staticClass: "font-bold text-2xl mb-4" }, [
-          _vm._v(" " + _vm._s(_vm.event.name) + " ")
-        ]),
+        _c(
+          "div",
+          { staticClass: "overflow-ellipsis overflow-hidden ...  max-w-sm" },
+          [
+            _c("h2", { staticClass: "font-bold text-2xl mb-4" }, [
+              _vm._v(" " + _vm._s(_vm.event.name) + " ")
+            ])
+          ]
+        ),
         _vm._v(" "),
         _c("div", { staticClass: "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded" }, [
           _vm._m(0),
@@ -33380,7 +33374,10 @@ var render = function() {
                             [
                               _c(
                                 "div",
-                                { staticClass: "text-sm text-gray-900" },
+                                {
+                                  staticClass:
+                                    "text-sm text-gray-900 truncate ... max-w-xs"
+                                },
                                 [
                                   _vm._v(
                                     "\n                                " +
@@ -33415,7 +33412,7 @@ var render = function() {
                               "a",
                               {
                                 staticClass:
-                                  "shadow border border-gray-300 rounded-lg py-2 px-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+                                  "shadow border border-gray-300 rounded-lg py-2 px-2 mr-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
                                 attrs: { href: "events/" + event.id }
                               },
                               [
@@ -33424,71 +33421,6 @@ var render = function() {
                                 )
                               ]
                             )
-                          ]),
-                          _vm._v(" "),
-                          _c("td", [
-                            _c("div", { staticClass: "ml-4" }, [
-                              _vm.eusers[event.id] &&
-                              !_vm.eusers[event.id].includes(_vm.user.id)
-                                ? _c("div", [
-                                    _c(
-                                      "button",
-                                      {
-                                        staticClass:
-                                          "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none",
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.joinEvent(event)
-                                          }
-                                        }
-                                      },
-                                      [
-                                        _vm._v(
-                                          "\n                                    Join\n                                "
-                                        )
-                                      ]
-                                    )
-                                  ])
-                                : event.host_id == _vm.user.id
-                                ? _c("div", [
-                                    _c(
-                                      "button",
-                                      {
-                                        staticClass:
-                                          "rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none",
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.checkWithUser(event)
-                                          }
-                                        }
-                                      },
-                                      [
-                                        _vm._v(
-                                          "\n                                    Delete\n                                "
-                                        )
-                                      ]
-                                    )
-                                  ])
-                                : _c("div", [
-                                    _c(
-                                      "button",
-                                      {
-                                        staticClass:
-                                          "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-red-200 hover:text-gray-500 hover:bg-red-100 focus:outline-none",
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.leaveEvent(event)
-                                          }
-                                        }
-                                      },
-                                      [
-                                        _vm._v(
-                                          "\n                                    Leave\n                                "
-                                        )
-                                      ]
-                                    )
-                                  ])
-                            ])
                           ])
                         ])
                       }),
@@ -33610,11 +33542,6 @@ var staticRenderFns = [
           },
           [_vm._v("\n                        Where\n                    ")]
         ),
-        _vm._v(" "),
-        _c("th", {
-          staticClass: "px-6 py-3 bg-gray-50",
-          attrs: { scope: "col" }
-        }),
         _vm._v(" "),
         _c("th", {
           staticClass: "px-6 py-3 bg-gray-50",
