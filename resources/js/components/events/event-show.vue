@@ -9,19 +9,21 @@
                 Join
             </button> 
             <button 
-                v-else-if="event.host_id == user.id"
-                @click="checkWithUser()"
-                class="rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none">
-                Delete
-            </button> 
-            <button 
                 v-else
                 @click="leaveEvent()" 
                 class="rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-red-200 hover:text-gray-500 hover:bg-red-100 focus:outline-none">
                 Leave
             </button> 
+             <button 
+                v-if="event.host_id == user.id"
+                @click="checkWithUser()"
+                class="rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none">
+                Delete
+            </button> 
         </div>
-        <h2 class="font-bold text-2xl mb-4"> {{ event.name }} </h2>
+        <div class="overflow-ellipsis overflow-hidden ...  max-w-sm">
+            <h2 class="font-bold text-2xl mb-4"> {{ event.name }} </h2>
+        </div>
         <div class="py-2 px-6 mb-2 mr-2 bg-gray-100 rounded">
             <p class="mb-2"> <strong>Host</strong></p>
             <div class="bg-white rounded mb-2 pl-2 pt-2 pb-2" >

@@ -31,7 +31,9 @@
                 </div>
                 
             </div>
-            <h2 class="font-bold text-2xl mb-4">{{ showedAssignment.name }}</h2>
+            <div class="overflow-ellipsis overflow-hidden ...  max-w-sm">
+                <h2 class="font-bold text-2xl mb-4">{{ showedAssignment.name }}</h2>
+            </div>
             <div class="py-2 px-6 mb-2 mr-2 bg-gray-100 rounded w-2/5 inline-block">
                 <p class="mb-2"><strong>Due</strong></p>
                 <div class="bg-white rounded mb-2 pl-2 pt-2 pb-2">
