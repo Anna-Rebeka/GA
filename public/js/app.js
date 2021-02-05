@@ -33853,12 +33853,12 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "text-center" }, [
+  return _c("div", { staticClass: "text-center pt-6" }, [
     _c(
       "a",
       {
         staticClass:
-          "mb-6 rounded-lg border border-gray-300 py-2 px-3 font-bold text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+          "bg-white mb-6 rounded-lg border border-gray-300 py-2 px-3 font-bold text-black text-xs hover:text-gray-500 hover:bg-gray-100",
         attrs: { href: "/create-group" }
       },
       [_vm._v("+\n    ")]
@@ -33887,7 +33887,7 @@ var render = function() {
               "a",
               {
                 staticClass:
-                  "block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+                  "bg-white block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
                 attrs: { href: "/assignments" }
               },
               [_vm._v("Assignments\n            ")]
@@ -33897,7 +33897,7 @@ var render = function() {
               "a",
               {
                 staticClass:
-                  "block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+                  "bg-white block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
                 attrs: { href: "/events" }
               },
               [_vm._v("Events\n            ")]
@@ -33933,7 +33933,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container text-center py-4" }, [
+  return _c("div", { staticClass: "container text-center pb-4 pt-7" }, [
     _c("h2", { staticClass: "font-bold text-2xl mb-4" }, [
       _vm._v(" Group members ")
     ]),
@@ -33961,7 +33961,7 @@ var render = function() {
                       "p",
                       {
                         staticClass:
-                          "ml-2 text-left text-gray-700 font-semibold font-sans tracking-wide"
+                          "ml-2 text-left font-semibold font-sans tracking-wide"
                       },
                       [_vm._v(_vm._s(member.name))]
                     )
@@ -33979,7 +33979,7 @@ var render = function() {
         "a",
         {
           staticClass:
-            "w-24 float-left m-2 rounded-full shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+            "bg-white w-24 float-left m-2 rounded-full shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
           attrs: { href: "/invite-member" }
         },
         [_vm._v("Ivite\n              ")]
@@ -33990,7 +33990,7 @@ var render = function() {
             "a",
             {
               staticClass:
-                "w-24 float-right m-2 rounded-full shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+                "bg-white w-24 float-right m-2 rounded-full shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
               attrs: { href: "/all-members/" + _vm.groupid }
             },
             [_vm._v("Show all\n              ")]
@@ -34115,6 +34115,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
+    { staticClass: "py-1" },
     [
       _c("div", { staticClass: "container mx-auto flex justify-between" }, [
         _c(
@@ -34126,12 +34127,15 @@ var render = function() {
               { staticClass: "mr-6", attrs: { href: _vm.route_dashboard } },
               [
                 _c("img", {
-                  attrs: { src: "/img/logo.png", width: "60px", alt: "logo" }
+                  attrs: { src: "/img/logo.png", width: "45px", alt: "logo" }
                 })
               ]
             ),
             _vm._v(" "),
-            _c("group-selection", { attrs: { user: _vm.user } })
+            _c("group-selection", {
+              staticClass: "mt-1",
+              attrs: { user: _vm.user }
+            })
           ],
           1
         ),
@@ -34146,7 +34150,7 @@ var render = function() {
             "button",
             {
               staticClass:
-                "shadow w-22 h-10 text-center relative inline-flex justify-center rounded-full border border-gray-300 -mt-2 ml-5 px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
+                "shadow w-22 h-10 text-center relative inline-flex justify-center rounded-full border border-gray-300 ml-5 px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
             },
             [_vm._v("\n                Logout\n            ")]
           )
@@ -35157,11 +35161,10 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "-mt-8 mb-6 relative" }, [
+  return _c("div", { staticClass: "z-0 -mt-10 mb-6" }, [
     _c("div", { staticClass: "relative -mx-8 mb-4" }, [
       _c("img", {
-        staticClass:
-          "h-40 w-full mb-2 rounded-t shadow-lg object-cover overflow-hidden",
+        staticClass: "h-40 w-full px-1 mb-2 object-cover overflow-hidden",
         attrs: { src: _vm.user.banner, alt: _vm.user.username }
       }),
       _vm._v(" "),
@@ -35173,39 +35176,43 @@ var render = function() {
       })
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "flex justify-between items-center mb-6" }, [
-      _c("div", { staticStyle: { "max-width": "270px" } }, [
-        _c("h2", { staticClass: "font-bold text-2xl" }, [
-          _vm._v(" " + _vm._s(_vm.user.name) + " ")
+    _c(
+      "div",
+      { staticClass: "flex rounded-lg justify-between items-center mb-6" },
+      [
+        _c("div", { staticStyle: { "max-width": "270px" } }, [
+          _c("h2", { staticClass: "font-bold text-2xl" }, [
+            _vm._v(" " + _vm._s(_vm.user.name) + " ")
+          ]),
+          _vm._v(" "),
+          _c("p", { staticClass: "text-sm" }, [
+            _vm._v("Joined " + _vm._s(_vm.userCreatedAt))
+          ])
         ]),
         _vm._v(" "),
-        _c("p", { staticClass: "text-sm" }, [
-          _vm._v("Joined " + _vm._s(_vm.userCreatedAt))
-        ])
-      ]),
-      _vm._v(" "),
-      _vm.authUser.id == _vm.user.id
-        ? _c("div", { staticClass: "flex" }, [
-            _c(
+        _vm.authUser.id == _vm.user.id
+          ? _c("div", { staticClass: "flex" }, [
+              _c(
+                "a",
+                {
+                  staticClass:
+                    "rounded-full shadow border border-gray-300 py-2 px-4 mr-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+                  attrs: { href: _vm.userEditPath }
+                },
+                [_vm._v("\n                    Edit profile\n                ")]
+              )
+            ])
+          : _c(
               "a",
               {
                 staticClass:
                   "rounded-full shadow border border-gray-300 py-2 px-4 mr-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
-                attrs: { href: _vm.userEditPath }
+                attrs: { href: "/chats/find/" + _vm.user.id }
               },
-              [_vm._v("\n                    Edit profile\n                ")]
+              [_vm._v("  \n                Chat \n            ")]
             )
-          ])
-        : _c(
-            "a",
-            {
-              staticClass:
-                "rounded-full shadow border border-gray-300 py-2 px-4 mr-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
-              attrs: { href: "/chats/find/" + _vm.user.id }
-            },
-            [_vm._v("  \n                Chat \n            ")]
-          )
-    ]),
+      ]
+    ),
     _vm._v(" "),
     _c("p", { staticClass: "text-sm mb-4" }, [
       _vm._v("\n        " + _vm._s(_vm.user.bio) + "\n    ")

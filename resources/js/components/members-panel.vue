@@ -1,5 +1,5 @@
 <template>
-  <div class="container text-center py-4">
+  <div class="container text-center pb-4 pt-7">
             <h2 class="font-bold text-2xl mb-4"> Group members </h2> 
             <ul v-if="members" class="w-full max-w-md mb-4">
               <li v-for="member in visibleMembers" :key="member.name"
@@ -7,7 +7,7 @@
                   <a :href="'/profile/' + member.username">
                       <div class="flex items-center">
                           <img class="w-10 h-10 object-cover rounded-full" :src="member.avatar" :alt="member.name">
-                          <p class="ml-2 text-left text-gray-700 font-semibold font-sans tracking-wide">{{ member.name }}</p>
+                          <p class="ml-2 text-left font-semibold font-sans tracking-wide">{{ member.name }}</p>
                       </div>
                   </a>
               </li>
@@ -17,14 +17,14 @@
             <div class="flex w-full justify-between">
                 <a
                     href="/invite-member" 
-                    class="w-24 float-left m-2 rounded-full shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100"
+                    class="bg-white w-24 float-left m-2 rounded-full shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100"
                     >Ivite
                 </a>
 
                 <a  
                     v-if="members.length > 0"
                     :href="'/all-members/' + groupid"
-                    class="w-24 float-right m-2 rounded-full shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100"
+                    class="bg-white w-24 float-right m-2 rounded-full shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100"
                     >Show all
                 </a>
             </div>

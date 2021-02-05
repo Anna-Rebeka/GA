@@ -1,10 +1,10 @@
 <template>
-    <div class="-mt-8 mb-6 relative">
+    <div class="z-0 -mt-10 mb-6">
         <div class="relative -mx-8 mb-4">
             <img 
                 :src="user.banner" 
                 :alt="user.username"
-                class="h-40 w-full mb-2 rounded-t shadow-lg object-cover overflow-hidden"
+                class="h-40 w-full px-1 mb-2 object-cover overflow-hidden"
             >
             <img 
                 :src="user.avatar"
@@ -14,7 +14,7 @@
             >
         </div>
 
-        <div class="flex justify-between items-center mb-6">
+        <div class="flex rounded-lg justify-between items-center mb-6">
             <div style="max-width: 270px;">
                 <h2 class="font-bold text-2xl"> {{ user.name }} </h2>
                 <p class="text-sm">Joined {{ userCreatedAt }}</p>
