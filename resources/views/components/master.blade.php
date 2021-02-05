@@ -18,7 +18,7 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
-<body  style="background-color: #ffecd1;">
+<body  class="bg-gray-100">
     <img class="hidden lg:flex w-48 z-10 fixed bottom-0 left-0" src="/img/radars.png" alt="">
     <div id="app">
         <section class="mt-16 px-8">
