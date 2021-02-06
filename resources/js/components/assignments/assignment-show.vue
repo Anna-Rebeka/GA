@@ -10,9 +10,15 @@
                     >
                         Done
                     </button>
+                    <a
+                        :href="showedAssignment.id + '/edit'" 
+                        class="rounded-lg border border-gray-300 px-4 py-2 mr-2 text-xs bg-white hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
+                    >
+                        Edit
+                    </a>
                     <button
                         @click="checkWithUser(showedAssignment, 'delete')"
-                        class="rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none"
+                        class="rounded-lg border border-gray-300 w-16 py-2 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none"
                     >
                         Delete
                     </button>
@@ -32,10 +38,14 @@
                 
             </div>
             <div class="overflow-ellipsis overflow-hidden ...  max-w-sm">
-                <h2 class="font-bold text-2xl mb-4">{{ showedAssignment.name }}</h2>
+                <h2 v-if="showedAssignment.done" style="color: #6cc2bd;" class="font-bold text-2xl mb-4">{{ showedAssignment.name }}</h2>
+                <h2 v-else style="color: #f67e7d;" class="font-bold text-2xl mb-4">{{ showedAssignment.name }}</h2>
             </div>
             <div class="py-2 px-6 mb-2 mr-2 bg-gray-100 rounded w-2/5 inline-block">
-                <p class="mb-2"><strong>Due</strong></p>
+
+                <p v-if="showedAssignment.on_time" style="color: #f67e7d;" class="mb-2"><strong>On time</strong></p>
+                <p v-else style="color: #5a819e;" class="mb-2"><strong>Deadline</strong></p>
+
                 <div class="bg-white rounded mb-2 pl-2 pt-2 pb-2">
                     {{
                         new Date(showedAssignment.due)

@@ -1984,6 +1984,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "assignment"],
   data: function data() {
@@ -4137,6 +4147,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['authUser'],
   data: function data() {
@@ -4196,6 +4209,7 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get(this.authUser.username + '/assignments/mine').then(function (response) {
         _this.assignments = response.data;
+        console.log(_this.assignments);
         _this.filteredAssignments = _this.assignments;
       })["catch"](function (error) {
         if (error.response.status == 422) {
@@ -31619,10 +31633,20 @@ var render = function() {
                   : _vm._e(),
                 _vm._v(" "),
                 _c(
+                  "a",
+                  {
+                    staticClass:
+                      "rounded-lg border border-gray-300 px-4 py-2 mr-2 text-xs bg-white hover:text-gray-500 hover:bg-gray-100 focus:outline-none",
+                    attrs: { href: _vm.showedAssignment.id + "/edit" }
+                  },
+                  [_vm._v("\n                    Edit\n                ")]
+                ),
+                _vm._v(" "),
+                _c(
                   "button",
                   {
                     staticClass:
-                      "rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none",
+                      "rounded-lg border border-gray-300 w-16 py-2 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none",
                     on: {
                       click: function($event) {
                         return _vm.checkWithUser(_vm.showedAssignment, "delete")
@@ -31672,9 +31696,23 @@ var render = function() {
           "div",
           { staticClass: "overflow-ellipsis overflow-hidden ...  max-w-sm" },
           [
-            _c("h2", { staticClass: "font-bold text-2xl mb-4" }, [
-              _vm._v(_vm._s(_vm.showedAssignment.name))
-            ])
+            _vm.showedAssignment.done
+              ? _c(
+                  "h2",
+                  {
+                    staticClass: "font-bold text-2xl mb-4",
+                    staticStyle: { color: "#6cc2bd" }
+                  },
+                  [_vm._v(_vm._s(_vm.showedAssignment.name))]
+                )
+              : _c(
+                  "h2",
+                  {
+                    staticClass: "font-bold text-2xl mb-4",
+                    staticStyle: { color: "#f67e7d" }
+                  },
+                  [_vm._v(_vm._s(_vm.showedAssignment.name))]
+                )
           ]
         ),
         _vm._v(" "),
@@ -31685,7 +31723,17 @@ var render = function() {
               "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded w-2/5 inline-block"
           },
           [
-            _vm._m(0),
+            _vm.showedAssignment.on_time
+              ? _c(
+                  "p",
+                  { staticClass: "mb-2", staticStyle: { color: "#f67e7d" } },
+                  [_c("strong", [_vm._v("On time")])]
+                )
+              : _c(
+                  "p",
+                  { staticClass: "mb-2", staticStyle: { color: "#5a819e" } },
+                  [_c("strong", [_vm._v("Deadline")])]
+                ),
             _vm._v(" "),
             _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
               _vm._v(
@@ -31742,7 +31790,7 @@ var render = function() {
           : _vm._e(),
         _vm._v(" "),
         _c("div", { staticClass: "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded" }, [
-          _vm._m(1),
+          _vm._m(0),
           _vm._v(" "),
           _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
             _vm._v(
@@ -31762,12 +31810,6 @@ var render = function() {
   )
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("p", { staticClass: "mb-2" }, [_c("strong", [_vm._v("Due")])])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -34476,7 +34518,39 @@ var render = function() {
     _vm._v(" "),
     _vm._m(0),
     _vm._v(" "),
-    _c("div", { staticClass: "flex flex-col" }, [
+    _c(
+      "p",
+      { staticClass: "ml-2 text-xs font-bold text-blue-500 float-left" },
+      [_vm._v("Deadline ")]
+    ),
+    _vm._v(" "),
+    _c("p", { staticClass: "text-sm font-bold float-left ml-2 mr-2" }, [
+      _vm._v("/")
+    ]),
+    _vm._v(" "),
+    _c(
+      "p",
+      { staticClass: "float-left text-xs font-bold text-red-600 mb-4 mr-8" },
+      [_vm._v(" On time")]
+    ),
+    _vm._v(" "),
+    _c(
+      "p",
+      { staticClass: "ml-2 text-xs px-1 font-medium bg-red-100 float-left" },
+      [_vm._v("waiting")]
+    ),
+    _vm._v(" "),
+    _c("p", { staticClass: "text-sm font-bold float-left ml-2 mr-2" }, [
+      _vm._v("/")
+    ]),
+    _vm._v(" "),
+    _c(
+      "p",
+      { staticClass: "text-xs px-2 font-medium bg-green-100 float-left" },
+      [_vm._v(" done")]
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "flex flex-col clear-both" }, [
       _c("div", { staticClass: "-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8" }, [
         _c(
           "div",
@@ -34516,14 +34590,17 @@ var render = function() {
                               "td",
                               {
                                 staticClass:
-                                  "px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
+                                  "bg-white px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
                               },
                               [
                                 _c(
                                   "div",
                                   {
-                                    staticClass:
-                                      "text-sm font-medium text-gray-900"
+                                    staticClass: "text-sm font-bold",
+                                    class: {
+                                      "text-red-600": assignment.on_time,
+                                      "text-blue-500": !assignment.on_time
+                                    }
                                   },
                                   [
                                     _vm._v(
@@ -34563,37 +34640,29 @@ var render = function() {
                               "td",
                               { staticClass: "px-6 py-4 whitespace-nowrap" },
                               [
-                                _c(
-                                  "div",
-                                  { staticClass: "text-sm text-gray-900" },
-                                  [
-                                    _vm._v(
-                                      "\r\n                                    " +
-                                        _vm._s(assignment.author_name) +
-                                        "\r\n                            "
-                                    )
-                                  ]
-                                )
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              { staticClass: "px-6 py-4 whitespace-nowrap" },
-                              [
-                                assignment.assignee_name
+                                assignment.author
                                   ? _c(
                                       "div",
                                       { staticClass: "text-sm text-gray-900" },
                                       [
                                         _vm._v(
                                           "\r\n                                    " +
-                                            _vm._s(assignment.assignee_name) +
+                                            _vm._s(assignment.author.name) +
                                             "\r\n                            "
                                         )
                                       ]
                                     )
-                                  : _vm._e()
+                                  : _c(
+                                      "div",
+                                      { staticClass: "text-sm text-gray-900" },
+                                      [
+                                        _vm._v(
+                                          "\r\n                                    " +
+                                            _vm._s(assignment.author_name) +
+                                            "\r\n                            "
+                                        )
+                                      ]
+                                    )
                               ]
                             ),
                             _vm._v(" "),
@@ -34601,8 +34670,19 @@ var render = function() {
                               "td",
                               { staticClass: "px-6 py-4 whitespace-nowrap" },
                               [
-                                assignment.assignee_name
+                                assignment.group
                                   ? _c(
+                                      "div",
+                                      { staticClass: "text-sm text-gray-900" },
+                                      [
+                                        _vm._v(
+                                          "\r\n                                    " +
+                                            _vm._s(assignment.group.name) +
+                                            "\r\n                            "
+                                        )
+                                      ]
+                                    )
+                                  : _c(
                                       "div",
                                       { staticClass: "text-sm text-gray-900" },
                                       [
@@ -34613,7 +34693,6 @@ var render = function() {
                                         )
                                       ]
                                     )
-                                  : _vm._e()
                               ]
                             ),
                             _vm._v(" "),
@@ -34629,7 +34708,7 @@ var render = function() {
                                 },
                                 [
                                   _vm._v(
-                                    "\r\n                                About\r\n                            "
+                                    "\r\n                                Details\r\n                            "
                                   )
                                 ]
                               )
@@ -34758,20 +34837,6 @@ var staticRenderFns = [
           [
             _vm._v(
               "\r\n                            By who\r\n                        "
-            )
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "th",
-          {
-            staticClass:
-              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
-            attrs: { scope: "col" }
-          },
-          [
-            _vm._v(
-              "\r\n                            For who\r\n                        "
             )
           ]
         ),
