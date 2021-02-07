@@ -31882,7 +31882,10 @@ var render = function() {
               [
                 _c(
                   "table",
-                  { staticClass: "min-w-full divide-y divide-gray-200" },
+                  {
+                    staticClass:
+                      "min-w-full divide-y divide-gray-200 table-fixed"
+                  },
                   [
                     _vm._m(1),
                     _vm._v(" "),
@@ -31910,7 +31913,7 @@ var render = function() {
                                 _c(
                                   "div",
                                   {
-                                    staticClass: "text-sm font-bold",
+                                    staticClass: "w-32 text-sm font-bold",
                                     class: {
                                       "text-red-600": assignment.on_time,
                                       "text-blue-500": !assignment.on_time
@@ -31940,7 +31943,7 @@ var render = function() {
                                   "div",
                                   {
                                     staticClass:
-                                      "text-sm text-grey-900 truncate ... max-w-xs"
+                                      "w-48 text-sm text-grey-900 truncate ... max-w-xs"
                                   },
                                   [
                                     _vm._v(
@@ -32086,7 +32089,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+              "pl-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase",
             attrs: { scope: "col" }
           },
           [_vm._v("\n                        When \n                    ")]
@@ -32096,7 +32099,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+              "pl-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase",
             attrs: { scope: "col" }
           },
           [_vm._v("\n                        What\n                    ")]
@@ -32106,7 +32109,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+              "pl-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase",
             attrs: { scope: "col" }
           },
           [_vm._v("\n                        By who\n                    ")]
@@ -33365,7 +33368,10 @@ var render = function() {
               [
                 _c(
                   "table",
-                  { staticClass: "min-w-full divide-y divide-gray-200" },
+                  {
+                    staticClass:
+                      "min-w-full divide-y divide-gray-200 table-fixed"
+                  },
                   [
                     _vm._m(1),
                     _vm._v(" "),
@@ -33411,7 +33417,7 @@ var render = function() {
                                 "div",
                                 {
                                   staticClass:
-                                    "text-sm text-gray-900 truncate ... max-w-xs"
+                                    "w-40 text-sm text-grey-900 truncate ..."
                                 },
                                 [
                                   _vm._v(
@@ -33430,7 +33436,10 @@ var render = function() {
                             [
                               _c(
                                 "div",
-                                { staticClass: "text-sm text-gray-900" },
+                                {
+                                  staticClass:
+                                    "w-32 text-sm text-grey-900 truncate ..."
+                                },
                                 [
                                   _vm._v(
                                     "\n                                " +
@@ -34561,7 +34570,10 @@ var render = function() {
               [
                 _c(
                   "table",
-                  { staticClass: "min-w-full divide-y divide-gray-200" },
+                  {
+                    staticClass:
+                      "min-w-full divide-y divide-gray-200 table-fixed"
+                  },
                   [
                     _vm._m(1),
                     _vm._v(" "),
@@ -34589,7 +34601,7 @@ var render = function() {
                                 _c(
                                   "div",
                                   {
-                                    staticClass: "text-sm font-bold",
+                                    staticClass: "w-32 text-sm font-bold",
                                     class: {
                                       "text-red-600": assignment.on_time,
                                       "text-blue-500": !assignment.on_time
@@ -34617,7 +34629,10 @@ var render = function() {
                               [
                                 _c(
                                   "div",
-                                  { staticClass: "text-sm text-gray-900" },
+                                  {
+                                    staticClass:
+                                      "w-32 text-sm text-grey-900 truncate ... max-w-xs"
+                                  },
                                   [
                                     _vm._v(
                                       "\r\n                                    " +
@@ -34796,7 +34811,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase",
             attrs: { scope: "col" }
           },
           [
@@ -34810,7 +34825,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase",
             attrs: { scope: "col" }
           },
           [
@@ -34824,7 +34839,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase",
             attrs: { scope: "col" }
           },
           [
@@ -34838,7 +34853,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase",
             attrs: { scope: "col" }
           },
           [
@@ -34942,7 +34957,10 @@ var render = function() {
               [
                 _c(
                   "table",
-                  { staticClass: "min-w-full divide-y divide-gray-200" },
+                  {
+                    staticClass:
+                      "min-w-full divide-y divide-gray-200 table-fixed"
+                  },
                   [
                     _vm._m(1),
                     _vm._v(" "),
@@ -34955,7 +34973,7 @@ var render = function() {
                             "td",
                             {
                               staticClass:
-                                "px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
+                                "w-16 px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
                             },
                             [
                               _c(
@@ -34970,7 +34988,7 @@ var render = function() {
                                       _vm._s(
                                         _vm._f("dateFormat")(
                                           new Date(event.event_time),
-                                          "DD.MM.YYYY , HH:mm"
+                                          "DD.MM.YYYY  HH:mm"
                                         )
                                       ) +
                                       "\r\n                            "
@@ -34986,7 +35004,10 @@ var render = function() {
                             [
                               _c(
                                 "div",
-                                { staticClass: "text-sm text-gray-900" },
+                                {
+                                  staticClass:
+                                    "w-40 text-sm text-grey-900 truncate ..."
+                                },
                                 [
                                   _vm._v(
                                     "\r\n                                    " +
@@ -35004,7 +35025,10 @@ var render = function() {
                             [
                               _c(
                                 "div",
-                                { staticClass: "text-sm text-gray-900" },
+                                {
+                                  staticClass:
+                                    "w-32 text-sm text-grey-900 truncate ..."
+                                },
                                 [
                                   _vm._v(
                                     "\r\n                                    " +
@@ -35022,7 +35046,7 @@ var render = function() {
                             [
                               _c(
                                 "div",
-                                { staticClass: "text-sm text-gray-900" },
+                                { staticClass: "w-16 text-sm text-gray-900" },
                                 [
                                   _vm._v(
                                     "\r\n                                    " +
@@ -35044,7 +35068,7 @@ var render = function() {
                               },
                               [
                                 _vm._v(
-                                  "\r\n                                About\r\n                            "
+                                  "\r\n                                Details\r\n                            "
                                 )
                               ]
                             )
@@ -35138,7 +35162,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase",
             attrs: { scope: "col" }
           },
           [
@@ -35152,7 +35176,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+              "w-16 px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase",
             attrs: { scope: "col" }
           },
           [
@@ -35166,7 +35190,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase",
             attrs: { scope: "col" }
           },
           [
@@ -35180,7 +35204,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase",
             attrs: { scope: "col" }
           },
           [

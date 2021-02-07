@@ -29,19 +29,19 @@
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
         <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-            <table class="min-w-full divide-y divide-gray-200">
+            <table class="min-w-full divide-y divide-gray-200 table-fixed">
                 <thead>
                     <tr>
-                        <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase">
                             When
                         </th>
-                        <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th scope="col" class="w-16 px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase">
                             What
                         </th>
-                        <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase">
                             Where
                         </th>
-                        <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase">
                             Group
                         </th>
                         <th scope="col" class="px-6 py-3 bg-gray-50">
@@ -50,23 +50,23 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     <tr v-for="event in pageOfItems" :key="event.id">
-                        <td class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">
+                        <td class="w-16 px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">
                             <div class="text-sm font-medium text-gray-900">
-                                {{  new Date(event.event_time) | dateFormat('DD.MM.YYYY , HH:mm') }}
+                                {{  new Date(event.event_time) | dateFormat('DD.MM.YYYY  HH:mm') }}
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900">
+                            <div class="w-40 text-sm text-grey-900 truncate ...">
                                     {{ event.name }}
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900">
+                            <div class="w-32 text-sm text-grey-900 truncate ...">
                                     {{ event.event_place }}
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900">
+                            <div class="w-16 text-sm text-gray-900">
                                     {{ event.group_name }}
                             </div>
                         </td>
@@ -74,7 +74,7 @@
                             <a 
                                 :href="'/events/' + event.id"
                                 class="shadow border border-gray-300 rounded-lg mr-6 py-2 px-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
-                                About
+                                Details
                             </a> 
                         </td>
                     </tr>
