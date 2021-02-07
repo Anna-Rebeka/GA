@@ -2266,11 +2266,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     filterFree: function filterFree() {
       this.savedAssignments = this.savedAssignments.filter(function (e) {
-        if (e.users) {
-          return false;
+        if (e.users.length == 0) {
+          return true;
         }
 
-        return true;
+        return false;
       });
     },
     onChangePage: function onChangePage(pageOfItems) {
