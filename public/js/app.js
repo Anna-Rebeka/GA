@@ -35046,7 +35046,7 @@ var render = function() {
                             [
                               _c(
                                 "div",
-                                { staticClass: "w-16 text-sm text-gray-900" },
+                                { staticClass: "text-sm text-gray-900" },
                                 [
                                   _vm._v(
                                     "\r\n                                    " +
