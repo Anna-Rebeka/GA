@@ -10,12 +10,14 @@
                     >
                         Done
                     </button>
+                    <!--
                     <a
                         :href="showedAssignment.id + '/edit'" 
                         class="rounded-lg border border-gray-300 px-4 py-2 mr-2 text-xs bg-white hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
                     >
                         Edit
                     </a>
+                    -->
                     <button
                         @click="checkWithUser(showedAssignment, 'delete')"
                         class="rounded-lg border border-gray-300 w-16 py-2 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none"
@@ -100,8 +102,9 @@ export default {
 
     methods: {
         isAssigned(){
-            axios.get('/assignments/' + this.user.id).then(response => {
+            axios.get('/assignments/' + this.showedAssignment.id + '/taken/' + this.user.id).then(response => {
                 this.takenAssignment = response.data;
+                console.log(response.data);
             }).catch(error => {
                 if (error.response.status == 422){
                     this.errors = error.response.data.errors;

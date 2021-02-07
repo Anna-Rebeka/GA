@@ -147,5 +147,9 @@ class AssignmentsController extends Controller
     {
         $assignment->update(array('done' => true));
     }
+
+    public function assignmentUserCheck(Assignment $assignment, User $user){
+        return $assignment->isAssigned($user);
+    }
 }
 

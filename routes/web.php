@@ -71,7 +71,7 @@ Route::middleware('auth')->group(function() {
 
     Route::get('/assignments', [AssignmentsController::class, 'index']);
     Route::get('/assignments/{assignment:id}', [AssignmentsController::class, 'show']);
-    Route::get('/assignments/{user:id}', [AssignmentsController::class, 'isAssigned']);
+    Route::get('/assignments/{assignment:id}/taken/{user:id}', [AssignmentsController::class, 'assignmentUserCheck']);
     Route::post('/assignments', [AssignmentsController::class, 'store']);
     Route::delete('/assignments/{assignment:id}', [AssignmentsController::class, 'destroy']);
     Route::patch('/assignments/{assignment:id}/take', [AssignmentsController::class, 'take']);

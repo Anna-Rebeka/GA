@@ -1994,6 +1994,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "assignment"],
   data: function data() {
@@ -2009,8 +2011,9 @@ __webpack_require__.r(__webpack_exports__);
     isAssigned: function isAssigned() {
       var _this = this;
 
-      axios.get('/assignments/' + this.user.id).then(function (response) {
+      axios.get('/assignments/' + this.showedAssignment.id + '/taken/' + this.user.id).then(function (response) {
         _this.takenAssignment = response.data;
+        console.log(response.data);
       })["catch"](function (error) {
         if (error.response.status == 422) {
           _this.errors = error.response.data.errors;
@@ -31631,16 +31634,6 @@ var render = function() {
                       [_vm._v("\n                    Done\n                ")]
                     )
                   : _vm._e(),
-                _vm._v(" "),
-                _c(
-                  "a",
-                  {
-                    staticClass:
-                      "rounded-lg border border-gray-300 px-4 py-2 mr-2 text-xs bg-white hover:text-gray-500 hover:bg-gray-100 focus:outline-none",
-                    attrs: { href: _vm.showedAssignment.id + "/edit" }
-                  },
-                  [_vm._v("\n                    Edit\n                ")]
-                ),
                 _vm._v(" "),
                 _c(
                   "button",
