@@ -19,7 +19,7 @@
             </div>
         </div>
         <p class="text-xs font-bold text-blue-500 float-left">Deadline </p> <p class="text-sm font-bold float-left ml-2 mr-2">/</p> <p class="float-left text-xs font-bold text-red-600 mb-4 mr-8"> On time</p>
-        <p class="text-xs px-1 font-medium bg-red-100 float-left">waiting</p> <p class="text-sm font-bold float-left ml-2 mr-2">/</p> <p class="text-xs px-2 font-medium bg-green-100 float-left"> done</p>
+        <p class="text-xs px-1 font-medium bg-red-100 float-left">Waiting</p> <p class="text-sm font-bold float-left ml-2 mr-2">/</p> <p class="text-xs px-2 font-medium bg-green-100 float-left"> Done</p>
 
         
         <div class="flex flex-col clear-both">

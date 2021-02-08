@@ -3215,6 +3215,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user', 'eusers', 'events'],
   data: function data() {
@@ -4558,6 +4563,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['authUser'],
   data: function data() {
@@ -4566,7 +4576,8 @@ __webpack_require__.r(__webpack_exports__);
       filteredEvents: [],
       pageOfItems: [],
       filtered: "joined",
-      searchBar: null
+      searchBar: null,
+      today: new Date()
     };
   },
   mounted: function mounted() {
@@ -4578,6 +4589,30 @@ __webpack_require__.r(__webpack_exports__);
     this.searchBar.addEventListener("keypress", this.searchOnEnter);
   },
   methods: {
+    closeDate: function closeDate(eventDate) {
+      if (eventDate.toLocaleDateString() == this.today.toLocaleDateString()) {
+        return true;
+      }
+
+      var Difference_In_Time = eventDate.getTime() - this.today.getTime();
+      var Difference_In_Days = Math.ceil(Difference_In_Time / (1000 * 3600 * 24));
+
+      if (Difference_In_Days <= 3) {
+        return true;
+      }
+
+      return false;
+    },
+    soonToComeDate: function soonToComeDate(eventDate) {
+      var Difference_In_Time = eventDate.getTime() - this.today.getTime();
+      var Difference_In_Days = Math.ceil(Difference_In_Time / (1000 * 3600 * 24));
+
+      if (Difference_In_Days > 3 && Difference_In_Days <= 29) {
+        return true;
+      }
+
+      return false;
+    },
     searchOnEnter: function searchOnEnter(event) {
       if (event.which === 13) {
         this.findEventByName();
@@ -31879,7 +31914,7 @@ var render = function() {
     ),
     _vm._v(" "),
     _c("p", { staticClass: "text-xs px-1 font-medium bg-red-100 float-left" }, [
-      _vm._v("waiting")
+      _vm._v("Waiting")
     ]),
     _vm._v(" "),
     _c("p", { staticClass: "text-sm font-bold float-left ml-2 mr-2" }, [
@@ -31889,7 +31924,7 @@ var render = function() {
     _c(
       "p",
       { staticClass: "text-xs px-2 font-medium bg-green-100 float-left" },
-      [_vm._v(" done")]
+      [_vm._v(" Done")]
     ),
     _vm._v(" "),
     _c("div", { staticClass: "flex flex-col clear-both" }, [
@@ -33378,7 +33413,35 @@ var render = function() {
   return _c("div", [
     _vm._m(0),
     _vm._v(" "),
-    _c("div", { staticClass: "flex flex-col" }, [
+    _c("p", { staticClass: "text-xs font-bold text-blue-500 float-left" }, [
+      _vm._v("This month ")
+    ]),
+    _vm._v(" "),
+    _c("p", { staticClass: "text-sm font-bold float-left ml-2 mr-2" }, [
+      _vm._v("/")
+    ]),
+    _vm._v(" "),
+    _c(
+      "p",
+      { staticClass: "float-left text-xs font-bold text-red-600 mb-4 mr-8" },
+      [_vm._v(" In three days")]
+    ),
+    _vm._v(" "),
+    _c("p", { staticClass: "text-xs px-1 font-medium bg-red-100 float-left" }, [
+      _vm._v("Pending")
+    ]),
+    _vm._v(" "),
+    _c("p", { staticClass: "text-sm font-bold float-left ml-2 mr-2" }, [
+      _vm._v("/")
+    ]),
+    _vm._v(" "),
+    _c(
+      "p",
+      { staticClass: "text-xs px-2 font-medium bg-green-100 float-left" },
+      [_vm._v(" Joined")]
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "flex flex-col clear-both" }, [
       _c("div", { staticClass: "-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8" }, [
         _c(
           "div",
@@ -33407,101 +33470,115 @@ var render = function() {
                       "tbody",
                       { staticClass: "bg-white divide-y divide-gray-200" },
                       _vm._l(_vm.pageOfItems, function(event) {
-                        return _c("tr", { key: event.id }, [
-                          _c(
-                            "td",
-                            {
-                              staticClass:
-                                "px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
-                            },
-                            [
-                              _c(
-                                "div",
-                                {
-                                  staticClass: "w-32 text-sm font-bold",
-                                  class: {
-                                    "text-red-600": _vm.closeDate(
-                                      new Date(event.event_time)
-                                    ),
-                                    "text-blue-500": _vm.soonToComeDate(
-                                      new Date(event.event_time)
-                                    )
-                                  }
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                            " +
-                                      _vm._s(
-                                        _vm._f("dateFormat")(
-                                          new Date(event.event_time),
-                                          "DD.MM.YYYY , HH:mm"
-                                        )
-                                      ) +
-                                      "\n                        "
-                                  )
-                                ]
+                        return _c(
+                          "tr",
+                          {
+                            key: event.id,
+                            class: {
+                              "bg-green-100": _vm.eusers[event.id].includes(
+                                _vm.user.id
+                              ),
+                              "bg-red-100": !_vm.eusers[event.id].includes(
+                                _vm.user.id
                               )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            { staticClass: "px-6 py-4 whitespace-nowrap" },
-                            [
-                              _c(
-                                "div",
-                                {
-                                  staticClass:
-                                    "w-40 text-sm text-grey-900 truncate ..."
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                " +
-                                      _vm._s(event.name) +
-                                      "\n                        "
-                                  )
-                                ]
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            { staticClass: "px-6 py-4 whitespace-nowrap" },
-                            [
-                              _c(
-                                "div",
-                                {
-                                  staticClass:
-                                    "w-32 text-sm text-grey-900 truncate ..."
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                " +
-                                      _vm._s(event.event_place) +
-                                      "\n                        "
-                                  )
-                                ]
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c("td", [
+                            }
+                          },
+                          [
                             _c(
-                              "a",
+                              "td",
                               {
                                 staticClass:
-                                  "shadow border border-gray-300 rounded-lg py-2 px-2 mr-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
-                                attrs: { href: "events/" + event.id }
+                                  "bg-white px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
                               },
                               [
-                                _vm._v(
-                                  "\n                            Details\n                        "
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass: "w-32 text-sm font-bold",
+                                    class: {
+                                      "text-red-600": _vm.closeDate(
+                                        new Date(event.event_time)
+                                      ),
+                                      "text-blue-500": _vm.soonToComeDate(
+                                        new Date(event.event_time)
+                                      )
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                            " +
+                                        _vm._s(
+                                          _vm._f("dateFormat")(
+                                            new Date(event.event_time),
+                                            "DD.MM.YYYY , HH:mm"
+                                          )
+                                        ) +
+                                        "\n                        "
+                                    )
+                                  ]
                                 )
                               ]
-                            )
-                          ])
-                        ])
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "td",
+                              { staticClass: "px-6 py-4 whitespace-nowrap" },
+                              [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "w-40 text-sm text-grey-900 truncate ..."
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                " +
+                                        _vm._s(event.name) +
+                                        "\n                        "
+                                    )
+                                  ]
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "td",
+                              { staticClass: "px-6 py-4 whitespace-nowrap" },
+                              [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "w-32 text-sm text-grey-900 truncate ..."
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                " +
+                                        _vm._s(event.event_place) +
+                                        "\n                        "
+                                    )
+                                  ]
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c(
+                                "a",
+                                {
+                                  staticClass:
+                                    "bg-white shadow border border-gray-300 rounded-lg py-2 px-2 mr-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+                                  attrs: { href: "events/" + event.id }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                            Details\n                        "
+                                  )
+                                ]
+                              )
+                            ])
+                          ]
+                        )
                       }),
                       0
                     )
@@ -34974,7 +35051,21 @@ var render = function() {
     _vm._v(" "),
     _vm._m(0),
     _vm._v(" "),
-    _c("div", { staticClass: "flex flex-col" }, [
+    _c("p", { staticClass: "text-xs font-bold text-blue-500 float-left" }, [
+      _vm._v("This month ")
+    ]),
+    _vm._v(" "),
+    _c("p", { staticClass: "text-sm font-bold float-left ml-2 mr-2" }, [
+      _vm._v("/")
+    ]),
+    _vm._v(" "),
+    _c(
+      "p",
+      { staticClass: "float-left text-xs font-bold text-red-600 mb-4 mr-8" },
+      [_vm._v(" In three days")]
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "flex flex-col clear-both" }, [
       _c("div", { staticClass: "-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8" }, [
         _c(
           "div",
@@ -35014,8 +35105,15 @@ var render = function() {
                               _c(
                                 "div",
                                 {
-                                  staticClass:
-                                    "text-sm font-medium text-gray-900"
+                                  staticClass: "w-32 text-sm font-bold",
+                                  class: {
+                                    "text-red-600": _vm.closeDate(
+                                      new Date(event.event_time)
+                                    ),
+                                    "text-blue-500": _vm.soonToComeDate(
+                                      new Date(event.event_time)
+                                    )
+                                  }
                                 },
                                 [
                                   _vm._v(
