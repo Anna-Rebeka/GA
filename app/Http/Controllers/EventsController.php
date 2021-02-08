@@ -17,7 +17,7 @@ class EventsController extends Controller
     public function index()
     {
         $group = auth()->user()->group;
-        $events = $group->events()->orderBy('event_time')->get();
+        $events = $group->events()->orderBy('event_time')->where('events.event_time', '>=', now())->get();
         $eusers = [];
 
         foreach ($events as $event){

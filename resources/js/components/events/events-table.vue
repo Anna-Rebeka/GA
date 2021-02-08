@@ -41,7 +41,10 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                     <tr v-for="event in pageOfItems" :key="event.id">
                         <td class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">
-                            <div class="text-sm font-medium text-gray-900">
+                            <div 
+                                class="w-32 text-sm font-bold"
+                                v-bind:class="{ 'text-red-600': closeDate(new Date(event.event_time)), 'text-blue-500': soonToComeDate(new Date(event.event_time))}"
+                            >
                                 {{  new Date(event.event_time) | dateFormat('DD.MM.YYYY , HH:mm') }}
                             </div>
                         </td>
@@ -89,6 +92,7 @@ export default {
             filtered: "all",
             select: null,
             searchBar: null,
+            today: new Date(),
         };
     },
 
@@ -101,6 +105,27 @@ export default {
     },
 
     methods: {
+        closeDate(eventDate){
+            if (eventDate.toLocaleDateString() == this.today.toLocaleDateString()) {
+                return true;
+            }
+            var Difference_In_Time = eventDate.getTime() - this.today.getTime(); 
+            var Difference_In_Days = Math.ceil(Difference_In_Time / (1000 * 3600 * 24)); 
+            if (Difference_In_Days <= 3) {
+                return true;
+            }
+            return false;
+        },
+
+        soonToComeDate(eventDate){
+            var Difference_In_Time = eventDate.getTime() - this.today.getTime(); 
+            var Difference_In_Days = Math.ceil(Difference_In_Time / (1000 * 3600 * 24)); 
+            if (Difference_In_Days > 3 && Difference_In_Days <= 29) {
+                return true;
+            }
+            return false;
+        },
+
         searchOnEnter(event){
             if(event.which === 13){
                 this.savedEvents = this.allEvents;

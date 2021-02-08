@@ -3212,6 +3212,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user', 'eusers', 'events'],
   data: function data() {
@@ -3223,7 +3226,8 @@ __webpack_require__.r(__webpack_exports__);
       newEventCreated: false,
       filtered: "all",
       select: null,
-      searchBar: null
+      searchBar: null,
+      today: new Date()
     };
   },
   mounted: function mounted() {
@@ -3234,6 +3238,30 @@ __webpack_require__.r(__webpack_exports__);
     this.searchBar.addEventListener("keypress", this.searchOnEnter);
   },
   methods: {
+    closeDate: function closeDate(eventDate) {
+      if (eventDate.toLocaleDateString() == this.today.toLocaleDateString()) {
+        return true;
+      }
+
+      var Difference_In_Time = eventDate.getTime() - this.today.getTime();
+      var Difference_In_Days = Math.ceil(Difference_In_Time / (1000 * 3600 * 24));
+
+      if (Difference_In_Days <= 3) {
+        return true;
+      }
+
+      return false;
+    },
+    soonToComeDate: function soonToComeDate(eventDate) {
+      var Difference_In_Time = eventDate.getTime() - this.today.getTime();
+      var Difference_In_Days = Math.ceil(Difference_In_Time / (1000 * 3600 * 24));
+
+      if (Difference_In_Days > 3 && Difference_In_Days <= 29) {
+        return true;
+      }
+
+      return false;
+    },
     searchOnEnter: function searchOnEnter(event) {
       if (event.which === 13) {
         this.savedEvents = this.allEvents;
@@ -33390,8 +33418,15 @@ var render = function() {
                               _c(
                                 "div",
                                 {
-                                  staticClass:
-                                    "text-sm font-medium text-gray-900"
+                                  staticClass: "w-32 text-sm font-bold",
+                                  class: {
+                                    "text-red-600": _vm.closeDate(
+                                      new Date(event.event_time)
+                                    ),
+                                    "text-blue-500": _vm.soonToComeDate(
+                                      new Date(event.event_time)
+                                    )
+                                  }
                                 },
                                 [
                                   _vm._v(
