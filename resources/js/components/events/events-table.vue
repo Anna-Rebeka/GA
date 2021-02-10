@@ -123,9 +123,13 @@ export default {
         },
 
         soonToComeDate(eventDate){
+            if (eventDate.getFullYear() != this.today.getFullYear() || 
+                eventDate.getMonth() != this.today.getMonth()){
+                    return false;
+                }
             var Difference_In_Time = eventDate.getTime() - this.today.getTime(); 
             var Difference_In_Days = Math.ceil(Difference_In_Time / (1000 * 3600 * 24)); 
-            if (Difference_In_Days > 3 && Difference_In_Days <= 29) {
+            if (Difference_In_Days > 3) {
                 return true;
             }
             return false;

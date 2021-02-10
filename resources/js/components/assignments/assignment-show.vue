@@ -1,12 +1,12 @@
 <template>
     <div>
-        <div class="p-8 mr-2 mb-8">
+        <div class="p-8 mr-2 mb-2">
             <div class="float-right">
                 <div v-if="showedAssignment.author_id == user.id">
                     <button
                         v-if="!showedAssignment.done"
                         @click="checkWithUser(showedAssignment, 'done')"
-                        class="rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-green-400 hover:text-gray-500 hover:bg-green-200 focus:outline-none"
+                        class="rounded-lg py-2 px-4 mr-2 text-white text-sm bg-green-400 hover: hover:bg-green-300 focus:outline-none"
                     >
                         Done
                     </button>
@@ -20,7 +20,7 @@
                     -->
                     <button
                         @click="checkWithUser(showedAssignment, 'delete')"
-                        class="rounded-lg border border-gray-300 w-16 py-2 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none"
+                        class="rounded-lg w-16 px-2 py-2 mr-2 text-white text-sm bg-red-400 hover:bg-red-300 focus:outline-none"
                     >
                         Delete
                     </button>
@@ -31,7 +31,7 @@
                     <div v-if="showedAssignment.max_assignees == null || showedAssignment.users.length  < showedAssignment.max_assignees">
                         <button
                             @click="checkWithUser(showedAssignment, 'take')"
-                            class="rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none"
+                            class="text-sm bg-blue-400 text-white rounded-lg w-16 py-2 hover:bg-blue-500 mr-3 focus:outline-none"
                         >
                             Take
                         </button>
@@ -79,10 +79,6 @@
                 </div>
             </div>
         </div>
-        <assignment-comments
-            :user="this.user"
-            :assignment="this.assignment"
-        ></assignment-comments>
     </div>
 </template>
 
@@ -102,11 +98,14 @@ export default {
 
     methods: {
         isAssigned(){
-            axios.get('/assignments/' + this.showedAssignment.id + '/taken/' + this.user.id).then(response => {
+            axios.get('/assignments/' + this.showedAssignment.id + '/is-taken-by-auth').then(response => {
                 this.takenAssignment = response.data;
-                console.log(response.data);
             }).catch(error => {
                 if (error.response.status == 422){
+                    this.errors = error.response.data.errors;
+                    console.log(this.errors);
+                }
+                if (error.response.status == 404){
                     this.errors = error.response.data.errors;
                     console.log(this.errors);
                 }

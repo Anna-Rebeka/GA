@@ -5,13 +5,13 @@
             <button 
                 v-if="going && !going.includes(user.id)"
                 @click="joinEvent()"
-                class="rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none">
+                class="rounded-lg border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none">
                 Join
             </button> 
             <button 
                 v-else
                 @click="leaveEvent()" 
-                class="rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-red-200 hover:text-gray-500 hover:bg-red-100 focus:outline-none">
+                class="rounded-lg border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-red-200 hover:text-gray-500 hover:bg-red-100 focus:outline-none">
                 Leave
             </button> 
              <button 
@@ -43,7 +43,7 @@
             <div class="bg-white rounded mb-4 pt-4 pb-2" >
                 <ul v-for="goingUser in pageOfItems" :key="goingUser.name">
                     <li class="flex items-center ml-2 mb-2">
-                        <img class="w-10 h-10 object-cover rounded-full mr-2" :src="goingUser.avatar" alt="">
+                        <img class="w-10 h-10 object-cover rounded-lg mr-2" :src="goingUser.avatar" alt="">
                         {{ goingUser.name }}
                     </li>
                 </ul>

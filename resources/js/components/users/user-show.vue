@@ -23,14 +23,14 @@
                 <div v-if="authUser.id == user.id" class="flex">
                     <a 
                         :href="userEditPath"
-                        class="rounded-full shadow border border-gray-300 py-2 px-4 mr-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
+                        class="rounded-lg shadow border border-gray-300 py-2 px-4 mr-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
                         Edit profile
                     </a>
                 </div>       
                 <a 
                     v-else
                     :href="'/chats/find/' + user.id" 
-                    class="rounded-full shadow border border-gray-300 py-2 px-4 mr-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100"
+                    class="rounded-lg shadow border border-gray-300 py-2 px-4 mr-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100"
                 >  
                     Chat 
                 </a>

@@ -1992,10 +1992,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "assignment"],
   data: function data() {
@@ -2011,11 +2007,15 @@ __webpack_require__.r(__webpack_exports__);
     isAssigned: function isAssigned() {
       var _this = this;
 
-      axios.get('/assignments/' + this.showedAssignment.id + '/taken/' + this.user.id).then(function (response) {
+      axios.get('/assignments/' + this.showedAssignment.id + '/is-taken-by-auth').then(function (response) {
         _this.takenAssignment = response.data;
-        console.log(response.data);
       })["catch"](function (error) {
         if (error.response.status == 422) {
+          _this.errors = error.response.data.errors;
+          console.log(_this.errors);
+        }
+
+        if (error.response.status == 404) {
           _this.errors = error.response.data.errors;
           console.log(_this.errors);
         }
@@ -3258,10 +3258,14 @@ __webpack_require__.r(__webpack_exports__);
       return false;
     },
     soonToComeDate: function soonToComeDate(eventDate) {
+      if (eventDate.getFullYear() != this.today.getFullYear() || eventDate.getMonth() != this.today.getMonth()) {
+        return false;
+      }
+
       var Difference_In_Time = eventDate.getTime() - this.today.getTime();
       var Difference_In_Days = Math.ceil(Difference_In_Time / (1000 * 3600 * 24));
 
-      if (Difference_In_Days > 3 && Difference_In_Days <= 29) {
+      if (Difference_In_Days > 3) {
         return true;
       }
 
@@ -4604,10 +4608,14 @@ __webpack_require__.r(__webpack_exports__);
       return false;
     },
     soonToComeDate: function soonToComeDate(eventDate) {
+      if (eventDate.getFullYear() != this.today.getFullYear() || eventDate.getMonth() != this.today.getMonth()) {
+        return false;
+      }
+
       var Difference_In_Time = eventDate.getTime() - this.today.getTime();
       var Difference_In_Days = Math.ceil(Difference_In_Time / (1000 * 3600 * 24));
 
-      if (Difference_In_Days > 3 && Difference_In_Days <= 29) {
+      if (Difference_In_Days > 3) {
         return true;
       }
 
@@ -31672,198 +31680,185 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c("div", { staticClass: "p-8 mr-2 mb-8" }, [
-        _c("div", { staticClass: "float-right" }, [
-          _vm.showedAssignment.author_id == _vm.user.id
-            ? _c("div", [
-                !_vm.showedAssignment.done
-                  ? _c(
+  return _c("div", [
+    _c("div", { staticClass: "p-8 mr-2 mb-2" }, [
+      _c("div", { staticClass: "float-right" }, [
+        _vm.showedAssignment.author_id == _vm.user.id
+          ? _c("div", [
+              !_vm.showedAssignment.done
+                ? _c(
+                    "button",
+                    {
+                      staticClass:
+                        "rounded-lg py-2 px-4 mr-2 text-white text-sm bg-green-400 hover: hover:bg-green-300 focus:outline-none",
+                      on: {
+                        click: function($event) {
+                          return _vm.checkWithUser(_vm.showedAssignment, "done")
+                        }
+                      }
+                    },
+                    [_vm._v("\n                    Done\n                ")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass:
+                    "rounded-lg w-16 px-2 py-2 mr-2 text-white text-sm bg-red-400 hover:bg-red-300 focus:outline-none",
+                  on: {
+                    click: function($event) {
+                      return _vm.checkWithUser(_vm.showedAssignment, "delete")
+                    }
+                  }
+                },
+                [_vm._v("\n                    Delete\n                ")]
+              )
+            ])
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "float-right" }, [
+        !_vm.takenAssignment
+          ? _c("div", [
+              _vm.showedAssignment.max_assignees == null ||
+              _vm.showedAssignment.users.length <
+                _vm.showedAssignment.max_assignees
+                ? _c("div", [
+                    _c(
                       "button",
                       {
                         staticClass:
-                          "rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-green-400 hover:text-gray-500 hover:bg-green-200 focus:outline-none",
+                          "text-sm bg-blue-400 text-white rounded-lg w-16 py-2 hover:bg-blue-500 mr-3 focus:outline-none",
                         on: {
                           click: function($event) {
                             return _vm.checkWithUser(
                               _vm.showedAssignment,
-                              "done"
+                              "take"
                             )
                           }
                         }
                       },
-                      [_vm._v("\n                    Done\n                ")]
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass:
-                      "rounded-lg border border-gray-300 w-16 py-2 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none",
-                    on: {
-                      click: function($event) {
-                        return _vm.checkWithUser(_vm.showedAssignment, "delete")
-                      }
-                    }
-                  },
-                  [_vm._v("\n                    Delete\n                ")]
-                )
-              ])
-            : _vm._e()
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "float-right" }, [
-          !_vm.takenAssignment
-            ? _c("div", [
-                _vm.showedAssignment.max_assignees == null ||
-                _vm.showedAssignment.users.length <
-                  _vm.showedAssignment.max_assignees
-                  ? _c("div", [
-                      _c(
-                        "button",
-                        {
-                          staticClass:
-                            "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none",
-                          on: {
-                            click: function($event) {
-                              return _vm.checkWithUser(
-                                _vm.showedAssignment,
-                                "take"
-                              )
-                            }
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n                        Take\n                    "
-                          )
-                        ]
-                      )
-                    ])
-                  : _vm._e()
-              ])
-            : _vm._e()
-        ]),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "overflow-ellipsis overflow-hidden ...  max-w-sm" },
-          [
-            _vm.showedAssignment.done
-              ? _c(
-                  "h2",
-                  {
-                    staticClass: "font-bold text-2xl mb-4",
-                    staticStyle: { color: "#6cc2bd" }
-                  },
-                  [_vm._v(_vm._s(_vm.showedAssignment.name))]
-                )
-              : _c(
-                  "h2",
-                  {
-                    staticClass: "font-bold text-2xl mb-4",
-                    staticStyle: { color: "#f67e7d" }
-                  },
-                  [_vm._v(_vm._s(_vm.showedAssignment.name))]
-                )
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass:
-              "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded w-2/5 inline-block"
-          },
-          [
-            _vm.showedAssignment.on_time
-              ? _c(
-                  "p",
-                  { staticClass: "mb-2", staticStyle: { color: "#f67e7d" } },
-                  [_c("strong", [_vm._v("On time")])]
-                )
-              : _c(
-                  "p",
-                  { staticClass: "mb-2", staticStyle: { color: "#5a819e" } },
-                  [_c("strong", [_vm._v("Deadline")])]
-                ),
-            _vm._v(" "),
-            _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
-              _vm._v(
-                "\n                " +
-                  _vm._s(
-                    _vm._f("dateFormat")(
-                      new Date(_vm.showedAssignment.due),
-                      "DD.MM.YYYY , HH:mm"
-                    )
-                  ) +
-                  "\n            "
-              )
-            ])
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass: "mb-2 rounded bg-gray-100 px-6 p-4 w-2/5 inline-block"
-          },
-          [
-            _c("strong", [_vm._v("By Who")]),
-            _vm._v(" "),
-            _c("p", { staticClass: "bg-white p-2 rounded" }, [
-              _vm._v(
-                "\n                " +
-                  _vm._s(_vm.showedAssignment.author.name) +
-                  "\n            "
-              )
-            ])
-          ]
-        ),
-        _vm._v(" "),
-        _vm.showedAssignment.users
-          ? _c("div", { staticClass: "mb-2 rounded bg-gray-100 px-6 p-4" }, [
-              _c("strong", [_vm._v("For Who")]),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "bg-white p-2 rounded" },
-                _vm._l(_vm.showedAssignment.users, function(assignee) {
-                  return _c("p", { key: assignee.id }, [
-                    _vm._v(
-                      "\n                    " +
-                        _vm._s(assignee.name) +
-                        "\n                "
+                      [
+                        _vm._v(
+                          "\n                        Take\n                    "
+                        )
+                      ]
                     )
                   ])
-                }),
-                0
-              )
+                : _vm._e()
             ])
-          : _vm._e(),
-        _vm._v(" "),
-        _c("div", { staticClass: "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded" }, [
-          _vm._m(0),
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "overflow-ellipsis overflow-hidden ...  max-w-sm" },
+        [
+          _vm.showedAssignment.done
+            ? _c(
+                "h2",
+                {
+                  staticClass: "font-bold text-2xl mb-4",
+                  staticStyle: { color: "#6cc2bd" }
+                },
+                [_vm._v(_vm._s(_vm.showedAssignment.name))]
+              )
+            : _c(
+                "h2",
+                {
+                  staticClass: "font-bold text-2xl mb-4",
+                  staticStyle: { color: "#f67e7d" }
+                },
+                [_vm._v(_vm._s(_vm.showedAssignment.name))]
+              )
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass:
+            "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded w-2/5 inline-block"
+        },
+        [
+          _vm.showedAssignment.on_time
+            ? _c(
+                "p",
+                { staticClass: "mb-2", staticStyle: { color: "#f67e7d" } },
+                [_c("strong", [_vm._v("On time")])]
+              )
+            : _c(
+                "p",
+                { staticClass: "mb-2", staticStyle: { color: "#5a819e" } },
+                [_c("strong", [_vm._v("Deadline")])]
+              ),
           _vm._v(" "),
           _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
             _vm._v(
               "\n                " +
-                _vm._s(_vm.showedAssignment.description) +
+                _vm._s(
+                  _vm._f("dateFormat")(
+                    new Date(_vm.showedAssignment.due),
+                    "DD.MM.YYYY , HH:mm"
+                  )
+                ) +
                 "\n            "
             )
           ])
-        ])
-      ]),
+        ]
+      ),
       _vm._v(" "),
-      _c("assignment-comments", {
-        attrs: { user: this.user, assignment: this.assignment }
-      })
-    ],
-    1
-  )
+      _c(
+        "div",
+        { staticClass: "mb-2 rounded bg-gray-100 px-6 p-4 w-2/5 inline-block" },
+        [
+          _c("strong", [_vm._v("By Who")]),
+          _vm._v(" "),
+          _c("p", { staticClass: "bg-white p-2 rounded" }, [
+            _vm._v(
+              "\n                " +
+                _vm._s(_vm.showedAssignment.author.name) +
+                "\n            "
+            )
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _vm.showedAssignment.users
+        ? _c("div", { staticClass: "mb-2 rounded bg-gray-100 px-6 p-4" }, [
+            _c("strong", [_vm._v("For Who")]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "bg-white p-2 rounded" },
+              _vm._l(_vm.showedAssignment.users, function(assignee) {
+                return _c("p", { key: assignee.id }, [
+                  _vm._v(
+                    "\n                    " +
+                      _vm._s(assignee.name) +
+                      "\n                "
+                  )
+                ])
+              }),
+              0
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _c("div", { staticClass: "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
+          _vm._v(
+            "\n                " +
+              _vm._s(_vm.showedAssignment.description) +
+              "\n            "
+          )
+        ])
+      ])
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
@@ -33207,7 +33202,7 @@ var render = function() {
                 "button",
                 {
                   staticClass:
-                    "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none",
+                    "rounded-lg border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none",
                   on: {
                     click: function($event) {
                       return _vm.joinEvent()
@@ -33220,7 +33215,7 @@ var render = function() {
                 "button",
                 {
                   staticClass:
-                    "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-red-200 hover:text-gray-500 hover:bg-red-100 focus:outline-none",
+                    "rounded-lg border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-red-200 hover:text-gray-500 hover:bg-red-100 focus:outline-none",
                   on: {
                     click: function($event) {
                       return _vm.leaveEvent()
@@ -33332,7 +33327,7 @@ var render = function() {
               return _c("ul", { key: goingUser.name }, [
                 _c("li", { staticClass: "flex items-center ml-2 mb-2" }, [
                   _c("img", {
-                    staticClass: "w-10 h-10 object-cover rounded-full mr-2",
+                    staticClass: "w-10 h-10 object-cover rounded-lg mr-2",
                     attrs: { src: goingUser.avatar, alt: "" }
                   }),
                   _vm._v(
@@ -34135,7 +34130,7 @@ var render = function() {
         "a",
         {
           staticClass:
-            "bg-white w-24 float-left m-2 rounded-full shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+            "bg-white w-24 float-left m-2  shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 rounded-lg",
           attrs: { href: "/invite-member" }
         },
         [_vm._v("Ivite\n              ")]
@@ -34146,7 +34141,7 @@ var render = function() {
             "a",
             {
               staticClass:
-                "bg-white w-24 float-right m-2 rounded-full shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+                "bg-white w-24 float-right m-2  shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 rounded-lg",
               attrs: { href: "/all-members/" + _vm.groupid }
             },
             [_vm._v("Show all\n              ")]
@@ -35179,7 +35174,7 @@ var render = function() {
                             [
                               _c(
                                 "div",
-                                { staticClass: "text-sm text-gray-900" },
+                                { staticClass: "w-24 text-sm text-gray-900" },
                                 [
                                   _vm._v(
                                     "\r\n                                    " +
@@ -35411,7 +35406,7 @@ var render = function() {
                 "a",
                 {
                   staticClass:
-                    "rounded-full shadow border border-gray-300 py-2 px-4 mr-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+                    "rounded-lg shadow border border-gray-300 py-2 px-4 mr-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
                   attrs: { href: _vm.userEditPath }
                 },
                 [_vm._v("\n                    Edit profile\n                ")]
@@ -35421,7 +35416,7 @@ var render = function() {
               "a",
               {
                 staticClass:
-                  "rounded-full shadow border border-gray-300 py-2 px-4 mr-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+                  "rounded-lg shadow border border-gray-300 py-2 px-4 mr-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
                 attrs: { href: "/chats/find/" + _vm.user.id }
               },
               [_vm._v("  \n                Chat \n            ")]
