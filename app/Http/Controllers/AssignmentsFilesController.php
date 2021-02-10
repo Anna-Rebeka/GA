@@ -6,6 +6,8 @@ use App\Models\AssignmentsFile;
 use App\Models\Assignment;
 use App\Models\User;
 
+use Illuminate\Support\Facades\Storage;
+
 use Illuminate\Http\Request;
 
 class AssignmentsFilesController extends Controller
@@ -63,10 +65,10 @@ class AssignmentsFilesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\AssignmentsFiles  $assignmentsFiles
+     * @param  \App\Models\AssignmentsFile  $assignmentsFiles
      * @return \Illuminate\Http\Response
      */
-    public function show(AssignmentsFiles $assignmentsFiles)
+    public function show(AssignmentsFile $assignmentsFiles)
     {
         //
     }
@@ -74,10 +76,10 @@ class AssignmentsFilesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\AssignmentsFiles  $assignmentsFiles
+     * @param  \App\Models\AssignmentsFile  $assignmentsFiles
      * @return \Illuminate\Http\Response
      */
-    public function edit(AssignmentsFiles $assignmentsFiles)
+    public function edit(AssignmentsFile $assignmentsFiles)
     {
         //
     }
@@ -86,10 +88,10 @@ class AssignmentsFilesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\AssignmentsFiles  $assignmentsFiles
+     * @param  \App\Models\AssignmentsFile  $assignmentsFiles
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, AssignmentsFiles $assignmentsFiles)
+    public function update(Request $request, AssignmentsFile $assignmentsFiles)
     {
         //
     }
@@ -97,11 +99,15 @@ class AssignmentsFilesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\AssignmentsFiles  $assignmentsFiles
+     * @param  \App\Models\AssignmentsFile  $assignmentsFiles
      * @return \Illuminate\Http\Response
      */
-    public function destroy(AssignmentsFiles $assignmentsFiles)
+    public function destroy(int $id)
     {
-        //
+        $assignmentsFile = AssignmentsFile::findOrFail($id);
+        Storage::delete($assignmentsFile->assignment_file);
+        $assignmentsFile->delete();
+        
+        return back();
     }
 }

@@ -82,6 +82,8 @@ Route::middleware('auth')->group(function() {
     Route::post('/assignments/{assignment:id}/comments', [AssignmentsCommentsController::class, 'store']);
 
     Route::post('/assignments/{assignment:id}/file-upload', [AssignmentsFilesController::class, 'store']);
+    Route::delete('/assignmentsFiles/{id}/file-delete', [AssignmentsFilesController::class, 'destroy']);
+
 
     Route::get('/chats', [ChatroomsController::class, 'index']);
     Route::get('/chats/{chatroom:id}/latestMessage', [ChatroomsController::class, 'getLatestMessage']);
