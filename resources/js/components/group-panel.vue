@@ -1,8 +1,8 @@
 <template>
-    <div class="text-center">
+    <div class="text-center pt-6">
         <a
             href="/create-group"
-            class="mb-6 rounded-lg border border-gray-300 py-2 px-3 font-bold text-black text-xs hover:text-gray-500 hover:bg-gray-100"
+            class="bg-white mb-6 rounded-lg border border-gray-300 py-2 px-3 font-bold text-black text-xs hover:text-gray-500 hover:bg-gray-100"
             >+
         </a>
         <div class="container text-center pt-4 pb-8">
@@ -16,12 +16,12 @@
                 <h2 class="font-bold text-2xl">{{ user.group.name }}</h2>
                 <p class="text-sm text-gray-500 mb-6">group</p>
                 <a
-                    class="block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100"
+                    class="bg-white block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100"
                     href="/assignments"
                     >Assignments
                 </a>
                 <a
-                    class="block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100"
+                    class="bg-white block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100"
                     href="/events"
                     >Events
                 </a>

@@ -42,6 +42,10 @@ class Assignment extends Model
         return $this->hasMany(AssignmentsComments::class);
     }
 
+    public function assignments_files(){
+        return $this->hasMany(AssignmentsFile::class);
+    }
+
     public function isAssigned(User $user){
         if($this->users->contains($user)){
             return true;

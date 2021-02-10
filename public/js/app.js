@@ -1984,6 +1984,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "assignment"],
   data: function data() {
@@ -1999,10 +2007,15 @@ __webpack_require__.r(__webpack_exports__);
     isAssigned: function isAssigned() {
       var _this = this;
 
-      axios.get('/assignments/' + this.user.id).then(function (response) {
+      axios.get('/assignments/' + this.showedAssignment.id + '/is-taken-by-auth').then(function (response) {
         _this.takenAssignment = response.data;
       })["catch"](function (error) {
         if (error.response.status == 422) {
+          _this.errors = error.response.data.errors;
+          console.log(_this.errors);
+        }
+
+        if (error.response.status == 404) {
           _this.errors = error.response.data.errors;
           console.log(_this.errors);
         }
@@ -2253,11 +2266,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     filterFree: function filterFree() {
       this.savedAssignments = this.savedAssignments.filter(function (e) {
-        if (e.users) {
-          return false;
+        if (e.users.length == 0) {
+          return true;
         }
 
-        return true;
+        return false;
       });
     },
     onChangePage: function onChangePage(pageOfItems) {
@@ -3199,6 +3212,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user', 'eusers', 'events'],
   data: function data() {
@@ -3210,7 +3231,8 @@ __webpack_require__.r(__webpack_exports__);
       newEventCreated: false,
       filtered: "all",
       select: null,
-      searchBar: null
+      searchBar: null,
+      today: new Date()
     };
   },
   mounted: function mounted() {
@@ -3221,6 +3243,34 @@ __webpack_require__.r(__webpack_exports__);
     this.searchBar.addEventListener("keypress", this.searchOnEnter);
   },
   methods: {
+    closeDate: function closeDate(eventDate) {
+      if (eventDate.toLocaleDateString() == this.today.toLocaleDateString()) {
+        return true;
+      }
+
+      var Difference_In_Time = eventDate.getTime() - this.today.getTime();
+      var Difference_In_Days = Math.ceil(Difference_In_Time / (1000 * 3600 * 24));
+
+      if (Difference_In_Days <= 3) {
+        return true;
+      }
+
+      return false;
+    },
+    soonToComeDate: function soonToComeDate(eventDate) {
+      if (eventDate.getFullYear() != this.today.getFullYear() || eventDate.getMonth() != this.today.getMonth()) {
+        return false;
+      }
+
+      var Difference_In_Time = eventDate.getTime() - this.today.getTime();
+      var Difference_In_Days = Math.ceil(Difference_In_Time / (1000 * 3600 * 24));
+
+      if (Difference_In_Days > 3) {
+        return true;
+      }
+
+      return false;
+    },
     searchOnEnter: function searchOnEnter(event) {
       if (event.which === 13) {
         this.savedEvents = this.allEvents;
@@ -4137,6 +4187,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['authUser'],
   data: function data() {
@@ -4196,6 +4249,7 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get(this.authUser.username + '/assignments/mine').then(function (response) {
         _this.assignments = response.data;
+        console.log(_this.assignments);
         _this.filteredAssignments = _this.assignments;
       })["catch"](function (error) {
         if (error.response.status == 422) {
@@ -4513,6 +4567,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['authUser'],
   data: function data() {
@@ -4521,7 +4580,8 @@ __webpack_require__.r(__webpack_exports__);
       filteredEvents: [],
       pageOfItems: [],
       filtered: "joined",
-      searchBar: null
+      searchBar: null,
+      today: new Date()
     };
   },
   mounted: function mounted() {
@@ -4533,6 +4593,34 @@ __webpack_require__.r(__webpack_exports__);
     this.searchBar.addEventListener("keypress", this.searchOnEnter);
   },
   methods: {
+    closeDate: function closeDate(eventDate) {
+      if (eventDate.toLocaleDateString() == this.today.toLocaleDateString()) {
+        return true;
+      }
+
+      var Difference_In_Time = eventDate.getTime() - this.today.getTime();
+      var Difference_In_Days = Math.ceil(Difference_In_Time / (1000 * 3600 * 24));
+
+      if (Difference_In_Days <= 3) {
+        return true;
+      }
+
+      return false;
+    },
+    soonToComeDate: function soonToComeDate(eventDate) {
+      if (eventDate.getFullYear() != this.today.getFullYear() || eventDate.getMonth() != this.today.getMonth()) {
+        return false;
+      }
+
+      var Difference_In_Time = eventDate.getTime() - this.today.getTime();
+      var Difference_In_Days = Math.ceil(Difference_In_Time / (1000 * 3600 * 24));
+
+      if (Difference_In_Days > 3) {
+        return true;
+      }
+
+      return false;
+    },
     searchOnEnter: function searchOnEnter(event) {
       if (event.which === 13) {
         this.findEventByName();
@@ -31592,182 +31680,187 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c("div", { staticClass: "p-8 mr-2 mb-8" }, [
-        _c("div", { staticClass: "float-right" }, [
-          _vm.showedAssignment.author_id == _vm.user.id
-            ? _c("div", [
-                !_vm.showedAssignment.done
-                  ? _c(
+  return _c("div", [
+    _c("div", { staticClass: "p-8 mr-2 mb-2" }, [
+      _c("div", { staticClass: "float-right" }, [
+        _vm.showedAssignment.author_id == _vm.user.id
+          ? _c("div", [
+              !_vm.showedAssignment.done
+                ? _c(
+                    "button",
+                    {
+                      staticClass:
+                        "rounded-lg py-2 px-4 mr-2 text-white text-sm bg-green-400 hover: hover:bg-green-300 focus:outline-none",
+                      on: {
+                        click: function($event) {
+                          return _vm.checkWithUser(_vm.showedAssignment, "done")
+                        }
+                      }
+                    },
+                    [_vm._v("\n                    Done\n                ")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass:
+                    "rounded-lg w-16 px-2 py-2 mr-2 text-white text-sm bg-red-400 hover:bg-red-300 focus:outline-none",
+                  on: {
+                    click: function($event) {
+                      return _vm.checkWithUser(_vm.showedAssignment, "delete")
+                    }
+                  }
+                },
+                [_vm._v("\n                    Delete\n                ")]
+              )
+            ])
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "float-right" }, [
+        !_vm.takenAssignment
+          ? _c("div", [
+              _vm.showedAssignment.max_assignees == null ||
+              _vm.showedAssignment.users.length <
+                _vm.showedAssignment.max_assignees
+                ? _c("div", [
+                    _c(
                       "button",
                       {
                         staticClass:
-                          "rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-green-400 hover:text-gray-500 hover:bg-green-200 focus:outline-none",
+                          "text-sm bg-blue-400 text-white rounded-lg w-16 py-2 hover:bg-blue-500 mr-3 focus:outline-none",
                         on: {
                           click: function($event) {
                             return _vm.checkWithUser(
                               _vm.showedAssignment,
-                              "done"
+                              "take"
                             )
                           }
                         }
                       },
-                      [_vm._v("\n                    Done\n                ")]
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass:
-                      "rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none",
-                    on: {
-                      click: function($event) {
-                        return _vm.checkWithUser(_vm.showedAssignment, "delete")
-                      }
-                    }
-                  },
-                  [_vm._v("\n                    Delete\n                ")]
-                )
-              ])
-            : _vm._e()
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "float-right" }, [
-          !_vm.takenAssignment
-            ? _c("div", [
-                _vm.showedAssignment.max_assignees == null ||
-                _vm.showedAssignment.users.length <
-                  _vm.showedAssignment.max_assignees
-                  ? _c("div", [
-                      _c(
-                        "button",
-                        {
-                          staticClass:
-                            "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none",
-                          on: {
-                            click: function($event) {
-                              return _vm.checkWithUser(
-                                _vm.showedAssignment,
-                                "take"
-                              )
-                            }
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n                        Take\n                    "
-                          )
-                        ]
-                      )
-                    ])
-                  : _vm._e()
-              ])
-            : _vm._e()
-        ]),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "overflow-ellipsis overflow-hidden ...  max-w-sm" },
-          [
-            _c("h2", { staticClass: "font-bold text-2xl mb-4" }, [
-              _vm._v(_vm._s(_vm.showedAssignment.name))
-            ])
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass:
-              "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded w-2/5 inline-block"
-          },
-          [
-            _vm._m(0),
-            _vm._v(" "),
-            _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
-              _vm._v(
-                "\n                " +
-                  _vm._s(
-                    _vm._f("dateFormat")(
-                      new Date(_vm.showedAssignment.due),
-                      "DD.MM.YYYY , HH:mm"
-                    )
-                  ) +
-                  "\n            "
-              )
-            ])
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass: "mb-2 rounded bg-gray-100 px-6 p-4 w-2/5 inline-block"
-          },
-          [
-            _c("strong", [_vm._v("By Who")]),
-            _vm._v(" "),
-            _c("p", { staticClass: "bg-white p-2 rounded" }, [
-              _vm._v(
-                "\n                " +
-                  _vm._s(_vm.showedAssignment.author.name) +
-                  "\n            "
-              )
-            ])
-          ]
-        ),
-        _vm._v(" "),
-        _vm.showedAssignment.users
-          ? _c("div", { staticClass: "mb-2 rounded bg-gray-100 px-6 p-4" }, [
-              _c("strong", [_vm._v("For Who")]),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "bg-white p-2 rounded" },
-                _vm._l(_vm.showedAssignment.users, function(assignee) {
-                  return _c("p", { key: assignee.id }, [
-                    _vm._v(
-                      "\n                    " +
-                        _vm._s(assignee.name) +
-                        "\n                "
+                      [
+                        _vm._v(
+                          "\n                        Take\n                    "
+                        )
+                      ]
                     )
                   ])
-                }),
-                0
-              )
+                : _vm._e()
             ])
-          : _vm._e(),
-        _vm._v(" "),
-        _c("div", { staticClass: "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded" }, [
-          _vm._m(1),
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "overflow-ellipsis overflow-hidden ...  max-w-sm" },
+        [
+          _vm.showedAssignment.done
+            ? _c(
+                "h2",
+                {
+                  staticClass: "font-bold text-2xl mb-4",
+                  staticStyle: { color: "#6cc2bd" }
+                },
+                [_vm._v(_vm._s(_vm.showedAssignment.name))]
+              )
+            : _c(
+                "h2",
+                {
+                  staticClass: "font-bold text-2xl mb-4",
+                  staticStyle: { color: "#f67e7d" }
+                },
+                [_vm._v(_vm._s(_vm.showedAssignment.name))]
+              )
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass:
+            "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded w-2/5 inline-block"
+        },
+        [
+          _vm.showedAssignment.on_time
+            ? _c(
+                "p",
+                { staticClass: "mb-2", staticStyle: { color: "#f67e7d" } },
+                [_c("strong", [_vm._v("On time")])]
+              )
+            : _c(
+                "p",
+                { staticClass: "mb-2", staticStyle: { color: "#5a819e" } },
+                [_c("strong", [_vm._v("Deadline")])]
+              ),
           _vm._v(" "),
           _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
             _vm._v(
               "\n                " +
-                _vm._s(_vm.showedAssignment.description) +
+                _vm._s(
+                  _vm._f("dateFormat")(
+                    new Date(_vm.showedAssignment.due),
+                    "DD.MM.YYYY , HH:mm"
+                  )
+                ) +
                 "\n            "
             )
           ])
-        ])
-      ]),
+        ]
+      ),
       _vm._v(" "),
-      _c("assignment-comments", {
-        attrs: { user: this.user, assignment: this.assignment }
-      })
-    ],
-    1
-  )
+      _c(
+        "div",
+        { staticClass: "mb-2 rounded bg-gray-100 px-6 p-4 w-2/5 inline-block" },
+        [
+          _c("strong", [_vm._v("By Who")]),
+          _vm._v(" "),
+          _c("p", { staticClass: "bg-white p-2 rounded" }, [
+            _vm._v(
+              "\n                " +
+                _vm._s(_vm.showedAssignment.author.name) +
+                "\n            "
+            )
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _vm.showedAssignment.users
+        ? _c("div", { staticClass: "mb-2 rounded bg-gray-100 px-6 p-4" }, [
+            _c("strong", [_vm._v("For Who")]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "bg-white p-2 rounded" },
+              _vm._l(_vm.showedAssignment.users, function(assignee) {
+                return _c("p", { key: assignee.id }, [
+                  _vm._v(
+                    "\n                    " +
+                      _vm._s(assignee.name) +
+                      "\n                "
+                  )
+                ])
+              }),
+              0
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _c("div", { staticClass: "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
+          _vm._v(
+            "\n                " +
+              _vm._s(_vm.showedAssignment.description) +
+              "\n            "
+          )
+        ])
+      ])
+    ])
+  ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("p", { staticClass: "mb-2" }, [_c("strong", [_vm._v("Due")])])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -31816,7 +31909,7 @@ var render = function() {
     ),
     _vm._v(" "),
     _c("p", { staticClass: "text-xs px-1 font-medium bg-red-100 float-left" }, [
-      _vm._v("waiting")
+      _vm._v("Waiting")
     ]),
     _vm._v(" "),
     _c("p", { staticClass: "text-sm font-bold float-left ml-2 mr-2" }, [
@@ -31826,7 +31919,7 @@ var render = function() {
     _c(
       "p",
       { staticClass: "text-xs px-2 font-medium bg-green-100 float-left" },
-      [_vm._v(" done")]
+      [_vm._v(" Done")]
     ),
     _vm._v(" "),
     _c("div", { staticClass: "flex flex-col clear-both" }, [
@@ -31847,7 +31940,10 @@ var render = function() {
               [
                 _c(
                   "table",
-                  { staticClass: "min-w-full divide-y divide-gray-200" },
+                  {
+                    staticClass:
+                      "min-w-full divide-y divide-gray-200 table-fixed"
+                  },
                   [
                     _vm._m(1),
                     _vm._v(" "),
@@ -31875,7 +31971,7 @@ var render = function() {
                                 _c(
                                   "div",
                                   {
-                                    staticClass: "text-sm font-bold",
+                                    staticClass: "w-32 text-sm font-bold",
                                     class: {
                                       "text-red-600": assignment.on_time,
                                       "text-blue-500": !assignment.on_time
@@ -31905,7 +32001,7 @@ var render = function() {
                                   "div",
                                   {
                                     staticClass:
-                                      "text-sm text-grey-900 truncate ... max-w-xs"
+                                      "w-48 text-sm text-grey-900 truncate ... max-w-xs"
                                   },
                                   [
                                     _vm._v(
@@ -32051,7 +32147,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+              "pl-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase",
             attrs: { scope: "col" }
           },
           [_vm._v("\n                        When \n                    ")]
@@ -32061,7 +32157,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+              "pl-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase",
             attrs: { scope: "col" }
           },
           [_vm._v("\n                        What\n                    ")]
@@ -32071,7 +32167,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+              "pl-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase",
             attrs: { scope: "col" }
           },
           [_vm._v("\n                        By who\n                    ")]
@@ -33106,7 +33202,7 @@ var render = function() {
                 "button",
                 {
                   staticClass:
-                    "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none",
+                    "rounded-lg border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none",
                   on: {
                     click: function($event) {
                       return _vm.joinEvent()
@@ -33119,7 +33215,7 @@ var render = function() {
                 "button",
                 {
                   staticClass:
-                    "rounded-full border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-red-200 hover:text-gray-500 hover:bg-red-100 focus:outline-none",
+                    "rounded-lg border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-red-200 hover:text-gray-500 hover:bg-red-100 focus:outline-none",
                   on: {
                     click: function($event) {
                       return _vm.leaveEvent()
@@ -33231,7 +33327,7 @@ var render = function() {
               return _c("ul", { key: goingUser.name }, [
                 _c("li", { staticClass: "flex items-center ml-2 mb-2" }, [
                   _c("img", {
-                    staticClass: "w-10 h-10 object-cover rounded-full mr-2",
+                    staticClass: "w-10 h-10 object-cover rounded-lg mr-2",
                     attrs: { src: goingUser.avatar, alt: "" }
                   }),
                   _vm._v(
@@ -33312,7 +33408,35 @@ var render = function() {
   return _c("div", [
     _vm._m(0),
     _vm._v(" "),
-    _c("div", { staticClass: "flex flex-col" }, [
+    _c("p", { staticClass: "text-xs font-bold text-blue-500 float-left" }, [
+      _vm._v("This month ")
+    ]),
+    _vm._v(" "),
+    _c("p", { staticClass: "text-sm font-bold float-left ml-2 mr-2" }, [
+      _vm._v("/")
+    ]),
+    _vm._v(" "),
+    _c(
+      "p",
+      { staticClass: "float-left text-xs font-bold text-red-600 mb-4 mr-8" },
+      [_vm._v(" In three days")]
+    ),
+    _vm._v(" "),
+    _c("p", { staticClass: "text-xs px-1 font-medium bg-red-100 float-left" }, [
+      _vm._v("Pending")
+    ]),
+    _vm._v(" "),
+    _c("p", { staticClass: "text-sm font-bold float-left ml-2 mr-2" }, [
+      _vm._v("/")
+    ]),
+    _vm._v(" "),
+    _c(
+      "p",
+      { staticClass: "text-xs px-2 font-medium bg-green-100 float-left" },
+      [_vm._v(" Joined")]
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "flex flex-col clear-both" }, [
       _c("div", { staticClass: "-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8" }, [
         _c(
           "div",
@@ -33330,7 +33454,10 @@ var render = function() {
               [
                 _c(
                   "table",
-                  { staticClass: "min-w-full divide-y divide-gray-200" },
+                  {
+                    staticClass:
+                      "min-w-full divide-y divide-gray-200 table-fixed"
+                  },
                   [
                     _vm._m(1),
                     _vm._v(" "),
@@ -33338,91 +33465,115 @@ var render = function() {
                       "tbody",
                       { staticClass: "bg-white divide-y divide-gray-200" },
                       _vm._l(_vm.pageOfItems, function(event) {
-                        return _c("tr", { key: event.id }, [
-                          _c(
-                            "td",
-                            {
-                              staticClass:
-                                "px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
-                            },
-                            [
-                              _c(
-                                "div",
-                                {
-                                  staticClass:
-                                    "text-sm font-medium text-gray-900"
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                            " +
-                                      _vm._s(
-                                        _vm._f("dateFormat")(
-                                          new Date(event.event_time),
-                                          "DD.MM.YYYY , HH:mm"
-                                        )
-                                      ) +
-                                      "\n                        "
-                                  )
-                                ]
+                        return _c(
+                          "tr",
+                          {
+                            key: event.id,
+                            class: {
+                              "bg-green-100": _vm.eusers[event.id].includes(
+                                _vm.user.id
+                              ),
+                              "bg-red-100": !_vm.eusers[event.id].includes(
+                                _vm.user.id
                               )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            { staticClass: "px-6 py-4 whitespace-nowrap" },
-                            [
-                              _c(
-                                "div",
-                                {
-                                  staticClass:
-                                    "text-sm text-gray-900 truncate ... max-w-xs"
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                " +
-                                      _vm._s(event.name) +
-                                      "\n                        "
-                                  )
-                                ]
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            { staticClass: "px-6 py-4 whitespace-nowrap" },
-                            [
-                              _c(
-                                "div",
-                                { staticClass: "text-sm text-gray-900" },
-                                [
-                                  _vm._v(
-                                    "\n                                " +
-                                      _vm._s(event.event_place) +
-                                      "\n                        "
-                                  )
-                                ]
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c("td", [
+                            }
+                          },
+                          [
                             _c(
-                              "a",
+                              "td",
                               {
                                 staticClass:
-                                  "shadow border border-gray-300 rounded-lg py-2 px-2 mr-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
-                                attrs: { href: "events/" + event.id }
+                                  "bg-white px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
                               },
                               [
-                                _vm._v(
-                                  "\n                            Details\n                        "
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass: "w-32 text-sm font-bold",
+                                    class: {
+                                      "text-red-600": _vm.closeDate(
+                                        new Date(event.event_time)
+                                      ),
+                                      "text-blue-500": _vm.soonToComeDate(
+                                        new Date(event.event_time)
+                                      )
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                            " +
+                                        _vm._s(
+                                          _vm._f("dateFormat")(
+                                            new Date(event.event_time),
+                                            "DD.MM.YYYY , HH:mm"
+                                          )
+                                        ) +
+                                        "\n                        "
+                                    )
+                                  ]
                                 )
                               ]
-                            )
-                          ])
-                        ])
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "td",
+                              { staticClass: "px-6 py-4 whitespace-nowrap" },
+                              [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "w-40 text-sm text-grey-900 truncate ..."
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                " +
+                                        _vm._s(event.name) +
+                                        "\n                        "
+                                    )
+                                  ]
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "td",
+                              { staticClass: "px-6 py-4 whitespace-nowrap" },
+                              [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "w-32 text-sm text-grey-900 truncate ..."
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                " +
+                                        _vm._s(event.event_place) +
+                                        "\n                        "
+                                    )
+                                  ]
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c(
+                                "a",
+                                {
+                                  staticClass:
+                                    "bg-white shadow border border-gray-300 rounded-lg py-2 px-2 mr-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+                                  attrs: { href: "events/" + event.id }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                            Details\n                        "
+                                  )
+                                ]
+                              )
+                            ])
+                          ]
+                        )
                       }),
                       0
                     )
@@ -33853,12 +34004,12 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "text-center" }, [
+  return _c("div", { staticClass: "text-center pt-6" }, [
     _c(
       "a",
       {
         staticClass:
-          "mb-6 rounded-lg border border-gray-300 py-2 px-3 font-bold text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+          "bg-white mb-6 rounded-lg border border-gray-300 py-2 px-3 font-bold text-black text-xs hover:text-gray-500 hover:bg-gray-100",
         attrs: { href: "/create-group" }
       },
       [_vm._v("+\n    ")]
@@ -33887,7 +34038,7 @@ var render = function() {
               "a",
               {
                 staticClass:
-                  "block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+                  "bg-white block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
                 attrs: { href: "/assignments" }
               },
               [_vm._v("Assignments\n            ")]
@@ -33897,7 +34048,7 @@ var render = function() {
               "a",
               {
                 staticClass:
-                  "block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+                  "bg-white block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
                 attrs: { href: "/events" }
               },
               [_vm._v("Events\n            ")]
@@ -33933,7 +34084,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container text-center py-4" }, [
+  return _c("div", { staticClass: "container text-center pb-4 pt-7" }, [
     _c("h2", { staticClass: "font-bold text-2xl mb-4" }, [
       _vm._v(" Group members ")
     ]),
@@ -33961,7 +34112,7 @@ var render = function() {
                       "p",
                       {
                         staticClass:
-                          "ml-2 text-left text-gray-700 font-semibold font-sans tracking-wide"
+                          "ml-2 text-left font-semibold font-sans tracking-wide"
                       },
                       [_vm._v(_vm._s(member.name))]
                     )
@@ -33979,7 +34130,7 @@ var render = function() {
         "a",
         {
           staticClass:
-            "w-24 float-left m-2 rounded-full shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+            "bg-white w-24 float-left m-2  shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 rounded-lg",
           attrs: { href: "/invite-member" }
         },
         [_vm._v("Ivite\n              ")]
@@ -33990,7 +34141,7 @@ var render = function() {
             "a",
             {
               staticClass:
-                "w-24 float-right m-2 rounded-full shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+                "bg-white w-24 float-right m-2  shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 rounded-lg",
               attrs: { href: "/all-members/" + _vm.groupid }
             },
             [_vm._v("Show all\n              ")]
@@ -34115,6 +34266,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
+    { staticClass: "py-1" },
     [
       _c("div", { staticClass: "container mx-auto flex justify-between" }, [
         _c(
@@ -34126,12 +34278,15 @@ var render = function() {
               { staticClass: "mr-6", attrs: { href: _vm.route_dashboard } },
               [
                 _c("img", {
-                  attrs: { src: "/img/logo.png", width: "60px", alt: "logo" }
+                  attrs: { src: "/img/logo.png", width: "45px", alt: "logo" }
                 })
               ]
             ),
             _vm._v(" "),
-            _c("group-selection", { attrs: { user: _vm.user } })
+            _c("group-selection", {
+              staticClass: "mt-1",
+              attrs: { user: _vm.user }
+            })
           ],
           1
         ),
@@ -34146,7 +34301,7 @@ var render = function() {
             "button",
             {
               staticClass:
-                "shadow w-22 h-10 text-center relative inline-flex justify-center rounded-full border border-gray-300 -mt-2 ml-5 px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
+                "shadow w-22 h-10 text-center relative inline-flex justify-center rounded-full border border-gray-300 ml-5 px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
             },
             [_vm._v("\n                Logout\n            ")]
           )
@@ -34472,7 +34627,39 @@ var render = function() {
     _vm._v(" "),
     _vm._m(0),
     _vm._v(" "),
-    _c("div", { staticClass: "flex flex-col" }, [
+    _c(
+      "p",
+      { staticClass: "ml-2 text-xs font-bold text-blue-500 float-left" },
+      [_vm._v("Deadline ")]
+    ),
+    _vm._v(" "),
+    _c("p", { staticClass: "text-sm font-bold float-left ml-2 mr-2" }, [
+      _vm._v("/")
+    ]),
+    _vm._v(" "),
+    _c(
+      "p",
+      { staticClass: "float-left text-xs font-bold text-red-600 mb-4 mr-8" },
+      [_vm._v(" On time")]
+    ),
+    _vm._v(" "),
+    _c(
+      "p",
+      { staticClass: "ml-2 text-xs px-1 font-medium bg-red-100 float-left" },
+      [_vm._v("waiting")]
+    ),
+    _vm._v(" "),
+    _c("p", { staticClass: "text-sm font-bold float-left ml-2 mr-2" }, [
+      _vm._v("/")
+    ]),
+    _vm._v(" "),
+    _c(
+      "p",
+      { staticClass: "text-xs px-2 font-medium bg-green-100 float-left" },
+      [_vm._v(" done")]
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "flex flex-col clear-both" }, [
       _c("div", { staticClass: "-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8" }, [
         _c(
           "div",
@@ -34490,7 +34677,10 @@ var render = function() {
               [
                 _c(
                   "table",
-                  { staticClass: "min-w-full divide-y divide-gray-200" },
+                  {
+                    staticClass:
+                      "min-w-full divide-y divide-gray-200 table-fixed"
+                  },
                   [
                     _vm._m(1),
                     _vm._v(" "),
@@ -34512,14 +34702,17 @@ var render = function() {
                               "td",
                               {
                                 staticClass:
-                                  "px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
+                                  "bg-white px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
                               },
                               [
                                 _c(
                                   "div",
                                   {
-                                    staticClass:
-                                      "text-sm font-medium text-gray-900"
+                                    staticClass: "w-32 text-sm font-bold",
+                                    class: {
+                                      "text-red-600": assignment.on_time,
+                                      "text-blue-500": !assignment.on_time
+                                    }
                                   },
                                   [
                                     _vm._v(
@@ -34543,7 +34736,10 @@ var render = function() {
                               [
                                 _c(
                                   "div",
-                                  { staticClass: "text-sm text-gray-900" },
+                                  {
+                                    staticClass:
+                                      "w-32 text-sm text-grey-900 truncate ... max-w-xs"
+                                  },
                                   [
                                     _vm._v(
                                       "\r\n                                    " +
@@ -34559,37 +34755,29 @@ var render = function() {
                               "td",
                               { staticClass: "px-6 py-4 whitespace-nowrap" },
                               [
-                                _c(
-                                  "div",
-                                  { staticClass: "text-sm text-gray-900" },
-                                  [
-                                    _vm._v(
-                                      "\r\n                                    " +
-                                        _vm._s(assignment.author_name) +
-                                        "\r\n                            "
-                                    )
-                                  ]
-                                )
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              { staticClass: "px-6 py-4 whitespace-nowrap" },
-                              [
-                                assignment.assignee_name
+                                assignment.author
                                   ? _c(
                                       "div",
                                       { staticClass: "text-sm text-gray-900" },
                                       [
                                         _vm._v(
                                           "\r\n                                    " +
-                                            _vm._s(assignment.assignee_name) +
+                                            _vm._s(assignment.author.name) +
                                             "\r\n                            "
                                         )
                                       ]
                                     )
-                                  : _vm._e()
+                                  : _c(
+                                      "div",
+                                      { staticClass: "text-sm text-gray-900" },
+                                      [
+                                        _vm._v(
+                                          "\r\n                                    " +
+                                            _vm._s(assignment.author_name) +
+                                            "\r\n                            "
+                                        )
+                                      ]
+                                    )
                               ]
                             ),
                             _vm._v(" "),
@@ -34597,8 +34785,19 @@ var render = function() {
                               "td",
                               { staticClass: "px-6 py-4 whitespace-nowrap" },
                               [
-                                assignment.assignee_name
+                                assignment.group
                                   ? _c(
+                                      "div",
+                                      { staticClass: "text-sm text-gray-900" },
+                                      [
+                                        _vm._v(
+                                          "\r\n                                    " +
+                                            _vm._s(assignment.group.name) +
+                                            "\r\n                            "
+                                        )
+                                      ]
+                                    )
+                                  : _c(
                                       "div",
                                       { staticClass: "text-sm text-gray-900" },
                                       [
@@ -34609,7 +34808,6 @@ var render = function() {
                                         )
                                       ]
                                     )
-                                  : _vm._e()
                               ]
                             ),
                             _vm._v(" "),
@@ -34625,7 +34823,7 @@ var render = function() {
                                 },
                                 [
                                   _vm._v(
-                                    "\r\n                                About\r\n                            "
+                                    "\r\n                                Details\r\n                            "
                                   )
                                 ]
                               )
@@ -34720,7 +34918,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase",
             attrs: { scope: "col" }
           },
           [
@@ -34734,7 +34932,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase",
             attrs: { scope: "col" }
           },
           [
@@ -34748,7 +34946,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase",
             attrs: { scope: "col" }
           },
           [
@@ -34762,21 +34960,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
-            attrs: { scope: "col" }
-          },
-          [
-            _vm._v(
-              "\r\n                            For who\r\n                        "
-            )
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "th",
-          {
-            staticClass:
-              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase",
             attrs: { scope: "col" }
           },
           [
@@ -34862,7 +35046,21 @@ var render = function() {
     _vm._v(" "),
     _vm._m(0),
     _vm._v(" "),
-    _c("div", { staticClass: "flex flex-col" }, [
+    _c("p", { staticClass: "text-xs font-bold text-blue-500 float-left" }, [
+      _vm._v("This month ")
+    ]),
+    _vm._v(" "),
+    _c("p", { staticClass: "text-sm font-bold float-left ml-2 mr-2" }, [
+      _vm._v("/")
+    ]),
+    _vm._v(" "),
+    _c(
+      "p",
+      { staticClass: "float-left text-xs font-bold text-red-600 mb-4 mr-8" },
+      [_vm._v(" In three days")]
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "flex flex-col clear-both" }, [
       _c("div", { staticClass: "-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8" }, [
         _c(
           "div",
@@ -34880,7 +35078,10 @@ var render = function() {
               [
                 _c(
                   "table",
-                  { staticClass: "min-w-full divide-y divide-gray-200" },
+                  {
+                    staticClass:
+                      "min-w-full divide-y divide-gray-200 table-fixed"
+                  },
                   [
                     _vm._m(1),
                     _vm._v(" "),
@@ -34893,14 +35094,21 @@ var render = function() {
                             "td",
                             {
                               staticClass:
-                                "px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
+                                "w-16 px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
                             },
                             [
                               _c(
                                 "div",
                                 {
-                                  staticClass:
-                                    "text-sm font-medium text-gray-900"
+                                  staticClass: "w-32 text-sm font-bold",
+                                  class: {
+                                    "text-red-600": _vm.closeDate(
+                                      new Date(event.event_time)
+                                    ),
+                                    "text-blue-500": _vm.soonToComeDate(
+                                      new Date(event.event_time)
+                                    )
+                                  }
                                 },
                                 [
                                   _vm._v(
@@ -34908,7 +35116,7 @@ var render = function() {
                                       _vm._s(
                                         _vm._f("dateFormat")(
                                           new Date(event.event_time),
-                                          "DD.MM.YYYY , HH:mm"
+                                          "DD.MM.YYYY  HH:mm"
                                         )
                                       ) +
                                       "\r\n                            "
@@ -34924,7 +35132,10 @@ var render = function() {
                             [
                               _c(
                                 "div",
-                                { staticClass: "text-sm text-gray-900" },
+                                {
+                                  staticClass:
+                                    "w-40 text-sm text-grey-900 truncate ..."
+                                },
                                 [
                                   _vm._v(
                                     "\r\n                                    " +
@@ -34942,7 +35153,10 @@ var render = function() {
                             [
                               _c(
                                 "div",
-                                { staticClass: "text-sm text-gray-900" },
+                                {
+                                  staticClass:
+                                    "w-32 text-sm text-grey-900 truncate ..."
+                                },
                                 [
                                   _vm._v(
                                     "\r\n                                    " +
@@ -34960,7 +35174,7 @@ var render = function() {
                             [
                               _c(
                                 "div",
-                                { staticClass: "text-sm text-gray-900" },
+                                { staticClass: "w-24 text-sm text-gray-900" },
                                 [
                                   _vm._v(
                                     "\r\n                                    " +
@@ -34982,7 +35196,7 @@ var render = function() {
                               },
                               [
                                 _vm._v(
-                                  "\r\n                                About\r\n                            "
+                                  "\r\n                                Details\r\n                            "
                                 )
                               ]
                             )
@@ -35076,7 +35290,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase",
             attrs: { scope: "col" }
           },
           [
@@ -35090,7 +35304,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+              "w-16 px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase",
             attrs: { scope: "col" }
           },
           [
@@ -35104,7 +35318,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase",
             attrs: { scope: "col" }
           },
           [
@@ -35118,7 +35332,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+              "px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase",
             attrs: { scope: "col" }
           },
           [
@@ -35157,11 +35371,10 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "-mt-8 mb-6 relative" }, [
+  return _c("div", { staticClass: "z-0 -mt-10 mb-6" }, [
     _c("div", { staticClass: "relative -mx-8 mb-4" }, [
       _c("img", {
-        staticClass:
-          "h-40 w-full mb-2 rounded-t shadow-lg object-cover overflow-hidden",
+        staticClass: "h-40 w-full px-1 mb-2 object-cover overflow-hidden",
         attrs: { src: _vm.user.banner, alt: _vm.user.username }
       }),
       _vm._v(" "),
@@ -35173,39 +35386,43 @@ var render = function() {
       })
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "flex justify-between items-center mb-6" }, [
-      _c("div", { staticStyle: { "max-width": "270px" } }, [
-        _c("h2", { staticClass: "font-bold text-2xl" }, [
-          _vm._v(" " + _vm._s(_vm.user.name) + " ")
+    _c(
+      "div",
+      { staticClass: "flex rounded-lg justify-between items-center mb-6" },
+      [
+        _c("div", { staticStyle: { "max-width": "270px" } }, [
+          _c("h2", { staticClass: "font-bold text-2xl" }, [
+            _vm._v(" " + _vm._s(_vm.user.name) + " ")
+          ]),
+          _vm._v(" "),
+          _c("p", { staticClass: "text-sm" }, [
+            _vm._v("Joined " + _vm._s(_vm.userCreatedAt))
+          ])
         ]),
         _vm._v(" "),
-        _c("p", { staticClass: "text-sm" }, [
-          _vm._v("Joined " + _vm._s(_vm.userCreatedAt))
-        ])
-      ]),
-      _vm._v(" "),
-      _vm.authUser.id == _vm.user.id
-        ? _c("div", { staticClass: "flex" }, [
-            _c(
+        _vm.authUser.id == _vm.user.id
+          ? _c("div", { staticClass: "flex" }, [
+              _c(
+                "a",
+                {
+                  staticClass:
+                    "rounded-lg shadow border border-gray-300 py-2 px-4 mr-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+                  attrs: { href: _vm.userEditPath }
+                },
+                [_vm._v("\n                    Edit profile\n                ")]
+              )
+            ])
+          : _c(
               "a",
               {
                 staticClass:
-                  "rounded-full shadow border border-gray-300 py-2 px-4 mr-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
-                attrs: { href: _vm.userEditPath }
+                  "rounded-lg shadow border border-gray-300 py-2 px-4 mr-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+                attrs: { href: "/chats/find/" + _vm.user.id }
               },
-              [_vm._v("\n                    Edit profile\n                ")]
+              [_vm._v("  \n                Chat \n            ")]
             )
-          ])
-        : _c(
-            "a",
-            {
-              staticClass:
-                "rounded-full shadow border border-gray-300 py-2 px-4 mr-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
-              attrs: { href: "/chats/find/" + _vm.user.id }
-            },
-            [_vm._v("  \n                Chat \n            ")]
-          )
-    ]),
+      ]
+    ),
     _vm._v(" "),
     _c("p", { staticClass: "text-sm mb-4" }, [
       _vm._v("\n        " + _vm._s(_vm.user.bio) + "\n    ")

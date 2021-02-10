@@ -19,23 +19,23 @@
             </div>
         </div>
         <p class="text-xs font-bold text-blue-500 float-left">Deadline </p> <p class="text-sm font-bold float-left ml-2 mr-2">/</p> <p class="float-left text-xs font-bold text-red-600 mb-4 mr-8"> On time</p>
-        <p class="text-xs px-1 font-medium bg-red-100 float-left">waiting</p> <p class="text-sm font-bold float-left ml-2 mr-2">/</p> <p class="text-xs px-2 font-medium bg-green-100 float-left"> done</p>
+        <p class="text-xs px-1 font-medium bg-red-100 float-left">Waiting</p> <p class="text-sm font-bold float-left ml-2 mr-2">/</p> <p class="text-xs px-2 font-medium bg-green-100 float-left"> Done</p>
 
         
         <div class="flex flex-col clear-both">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
         <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-            <table class="min-w-full divide-y divide-gray-200">
+            <table class="min-w-full divide-y divide-gray-200 table-fixed">
                 <thead>
                     <tr>
-                        <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th scope="col" class="pl-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase">
                             When 
                         </th>
-                        <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th scope="col" class="pl-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase">
                             What
                         </th>
-                        <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th scope="col" class="pl-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase">
                             By who
                         </th>
                         <th scope="col" class="px-6 py-3 bg-gray-50">
@@ -49,7 +49,7 @@
                     >
                         <td class="bg-white pl-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">
                             <div 
-                                class="text-sm font-bold"
+                                class="w-32 text-sm font-bold"
                                 v-bind:class="{ 'text-red-600': assignment.on_time, 'text-blue-500': !assignment.on_time}"
 
                             >
@@ -57,7 +57,7 @@
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-grey-900 truncate ... max-w-xs">
+                            <div class="w-48 text-sm text-grey-900 truncate ... max-w-xs">
                                     {{ assignment.name }}
                             </div>
                         </td>
@@ -185,10 +185,10 @@ export default {
 
         filterFree(){
             this.savedAssignments = this.savedAssignments.filter(function(e) {
-                if(e.users){
-                    return false;
+                if(e.users.length == 0){
+                    return true;
                 }
-                return true;
+                return false;
             });
         },
 

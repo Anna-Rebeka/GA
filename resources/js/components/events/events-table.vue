@@ -17,12 +17,15 @@
                 </button>
             </div>
         </div>
-        
-        <div class="flex flex-col">
+
+        <p class="text-xs font-bold text-blue-500 float-left">This month </p> <p class="text-sm font-bold float-left ml-2 mr-2">/</p> <p class="float-left text-xs font-bold text-red-600 mb-4 mr-8"> In three days</p>
+        <p class="text-xs px-1 font-medium bg-red-100 float-left">Pending</p> <p class="text-sm font-bold float-left ml-2 mr-2">/</p> <p class="text-xs px-2 font-medium bg-green-100 float-left"> Joined</p>
+    
+        <div class="flex flex-col clear-both">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
         <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-            <table class="min-w-full divide-y divide-gray-200">
+            <table class="min-w-full divide-y divide-gray-200 table-fixed">
                 <thead>
                     <tr>
                         <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -39,26 +42,31 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    <tr v-for="event in pageOfItems" :key="event.id">
-                        <td class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">
-                            <div class="text-sm font-medium text-gray-900">
+                    <tr v-for="event in pageOfItems" :key="event.id"
+                        v-bind:class="{ 'bg-green-100':  eusers[event.id].includes(user.id), 'bg-red-100': !eusers[event.id].includes(user.id)}"
+                    >
+                        <td class="bg-white px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">
+                            <div 
+                                class="w-32 text-sm font-bold"
+                                v-bind:class="{ 'text-red-600': closeDate(new Date(event.event_time)), 'text-blue-500': soonToComeDate(new Date(event.event_time))}"
+                            >
                                 {{  new Date(event.event_time) | dateFormat('DD.MM.YYYY , HH:mm') }}
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900 truncate ... max-w-xs">
+                            <div class="w-40 text-sm text-grey-900 truncate ...">
                                     {{ event.name }}
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900">
+                            <div class="w-32 text-sm text-grey-900 truncate ...">
                                     {{ event.event_place }}
                             </div>
                         </td>
                         <td> 
                             <a 
                                 :href="'events/' + event.id"
-                                class="shadow border border-gray-300 rounded-lg py-2 px-2 mr-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
+                                class="bg-white shadow border border-gray-300 rounded-lg py-2 px-2 mr-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
                                 Details
                             </a> 
                         </td>
@@ -89,6 +97,7 @@ export default {
             filtered: "all",
             select: null,
             searchBar: null,
+            today: new Date(),
         };
     },
 
@@ -101,6 +110,31 @@ export default {
     },
 
     methods: {
+        closeDate(eventDate){
+            if (eventDate.toLocaleDateString() == this.today.toLocaleDateString()) {
+                return true;
+            }
+            var Difference_In_Time = eventDate.getTime() - this.today.getTime(); 
+            var Difference_In_Days = Math.ceil(Difference_In_Time / (1000 * 3600 * 24)); 
+            if (Difference_In_Days <= 3) {
+                return true;
+            }
+            return false;
+        },
+
+        soonToComeDate(eventDate){
+            if (eventDate.getFullYear() != this.today.getFullYear() || 
+                eventDate.getMonth() != this.today.getMonth()){
+                    return false;
+                }
+            var Difference_In_Time = eventDate.getTime() - this.today.getTime(); 
+            var Difference_In_Days = Math.ceil(Difference_In_Time / (1000 * 3600 * 24)); 
+            if (Difference_In_Days > 3) {
+                return true;
+            }
+            return false;
+        },
+
         searchOnEnter(event){
             if(event.which === 13){
                 this.savedEvents = this.allEvents;

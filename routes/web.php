@@ -14,6 +14,7 @@ use App\Http\Controllers\AssignmentsController;
 use App\Http\Controllers\AssignmentsCommentsController;
 use App\Http\Controllers\ChatroomsController;
 use App\Http\Controllers\MessagesController;
+use App\Http\Controllers\AssignmentsFilesController;
 
 
 /*
@@ -71,7 +72,7 @@ Route::middleware('auth')->group(function() {
 
     Route::get('/assignments', [AssignmentsController::class, 'index']);
     Route::get('/assignments/{assignment:id}', [AssignmentsController::class, 'show']);
-    Route::get('/assignments/{user:id}', [AssignmentsController::class, 'isAssigned']);
+    Route::get('/assignments/{assignment:id}/is-taken-by-auth', [AssignmentsController::class, 'assignmentUserCheck']);
     Route::post('/assignments', [AssignmentsController::class, 'store']);
     Route::delete('/assignments/{assignment:id}', [AssignmentsController::class, 'destroy']);
     Route::patch('/assignments/{assignment:id}/take', [AssignmentsController::class, 'take']);
@@ -79,6 +80,8 @@ Route::middleware('auth')->group(function() {
 
     Route::get('/assignments/{assignment:id}/comments', [AssignmentsCommentsController::class, 'index']);
     Route::post('/assignments/{assignment:id}/comments', [AssignmentsCommentsController::class, 'store']);
+
+    Route::post('/assignments/{assignment:id}/file-upload', [AssignmentsFilesController::class, 'store']);
 
     Route::get('/chats', [ChatroomsController::class, 'index']);
     Route::get('/chats/{chatroom:id}/latestMessage', [ChatroomsController::class, 'getLatestMessage']);

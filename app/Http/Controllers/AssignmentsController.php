@@ -97,9 +97,11 @@ class AssignmentsController extends Controller
     {
         $assignment->author;
         $assignment->users;
+        
         return view('assignments.show', [
             'user' => auth()->user(),
-            'assignment' => $assignment
+            'assignment' => $assignment,
+            'assignments_files' => $assignment->assignments_files()->paginate(10),
         ]);
     }
 
@@ -146,6 +148,10 @@ class AssignmentsController extends Controller
     public function done(Assignment $assignment)
     {
         $assignment->update(array('done' => true));
+    }
+
+    public function assignmentUserCheck(Assignment $assignment){
+        return $assignment->isAssigned(auth()->user());
     }
 }
 
