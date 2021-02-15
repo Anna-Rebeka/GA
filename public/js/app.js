@@ -2631,13 +2631,121 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user', 'chatroom'],
+  props: ["user", "chatroom"],
   data: function data() {
     return {
       messages: [],
       users: [],
-      newMessage: ''
+      newMessage: "",
+      image: "",
+      uploadImage: false,
+      uploadFile: false,
+      csrf: document.head.querySelector('meta[name="csrf-token"]').content
     };
   },
   mounted: function mounted() {
@@ -2646,7 +2754,7 @@ __webpack_require__.r(__webpack_exports__);
     this.getMessages();
     this.getUsers();
     document.getElementById("messageArea").addEventListener("keypress", this.submitOnEnter);
-    window.Echo["private"]('chatrooms.' + this.chatroom.id).listen('MessageSent', function (e) {
+    window.Echo["private"]("chatrooms." + this.chatroom.id).listen("MessageSent", function (e) {
       e.message.sender = e.sender;
 
       _this.markAsReadMessage(e.message.id);
@@ -2667,7 +2775,7 @@ __webpack_require__.r(__webpack_exports__);
     getUsers: function getUsers() {
       var _this3 = this;
 
-      axios.get('/chats/' + this.chatroom.id + '/users/' + this.user.id).then(function (response) {
+      axios.get("/chats/" + this.chatroom.id + "/users/" + this.user.id).then(function (response) {
         _this3.users = response.data;
       })["catch"](function (error) {
         if (error.response.status == 422) {
@@ -2682,7 +2790,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this4 = this;
 
       var div = this.chatWindow;
-      axios.get('/chats/' + this.chatroom.id + '/messages').then(function (response) {
+      axios.get("/chats/" + this.chatroom.id + "/messages").then(function (response) {
         _this4.messages = response.data.reverse();
 
         _this4.scrollChat();
@@ -2700,7 +2808,7 @@ __webpack_require__.r(__webpack_exports__);
     loadOlderMessages: function loadOlderMessages() {
       var _this5 = this;
 
-      axios.get('/chats/' + this.chatroom.id + '/loadOlderMessages/' + this.messages.length, {}).then(function (response) {
+      axios.get("/chats/" + this.chatroom.id + "/loadOlderMessages/" + this.messages.length, {}).then(function (response) {
         _this5.messages = response.data.reverse().concat(_this5.messages);
       })["catch"](function (error) {
         if (error.response.status == 422) {
@@ -2712,34 +2820,57 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     markAsReadMessages: function markAsReadMessages() {
-      axios.patch('/chats/' + this.chatroom.id + '/readAll').then(function (response) {})["catch"](function (error) {
+      axios.patch("/chats/" + this.chatroom.id + "/readAll").then(function (response) {})["catch"](function (error) {
         console.log(error.message);
       });
     },
     markAsReadMessage: function markAsReadMessage(messageId) {
-      axios.patch('/chats/' + this.chatroom.id + '/readMessage/' + messageId).then(function (response) {})["catch"](function (error) {
+      axios.patch("/chats/" + this.chatroom.id + "/readMessage/" + messageId).then(function (response) {})["catch"](function (error) {
         console.log(error.message);
       });
     },
     submitOnEnter: function submitOnEnter(event) {
       if (event.which === 13) {
-        event.target.form.dispatchEvent(new Event("submit", {
-          cancelable: true
-        }));
-        event.preventDefault();
+        this.submit();
       }
     },
+    handleImageUpload: function handleImageUpload() {
+      this.image = this.$refs.image.files[0];
+    },
+    handleFileUpload: function handleFileUpload() {
+      this.file = this.$refs.file.files[0];
+    },
+    //https://github.com/axios/axios/issues/2002
+    //https://serversideup.net/uploading-files-vuejs-axios/
     submit: function submit() {
       var _this6 = this;
 
       var messageArea = document.getElementById("messageArea").value;
+
+      if (messageArea == "" && !this.image && !this.file) {
+        return;
+      }
+
       document.getElementById("messageArea").value = "";
-      axios.post('/chats/' + this.chatroom.id + '/send', {
-        chatroom_id: this.chatroom.id,
-        text: messageArea,
-        chatroom: this.chatroom
+      var formData = new FormData();
+
+      if (this.image) {
+        formData.append("image", this.image);
+      }
+
+      if (this.file) {
+        formData.append("file", this.file);
+      }
+
+      formData.append("text", messageArea);
+      formData.append("chatroom_id", this.chatroom.id);
+      formData.append("chatroom", this.chatroom);
+      axios.post("/chats/" + this.chatroom.id + "/send", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
       }).then(function (response) {
-        response.data['sender'] = _this6.user;
+        response.data["sender"] = _this6.user;
 
         _this6.messages.push(response.data);
 
@@ -32798,7 +32929,7 @@ var render = function() {
             key: chatUser.id,
             staticClass: "text-lg font-bold text-center h-14 w-full -mt-4 mb-6"
           },
-          [_vm._v("\n        " + _vm._s(chatUser.name) + "\n\n    ")]
+          [_vm._v("\n        " + _vm._s(chatUser.name) + "\n    ")]
         )
       }),
       _vm._v(" "),
@@ -32814,14 +32945,14 @@ var render = function() {
             "button",
             {
               staticClass:
-                "bg-white text-sm text-center relative clear-both w-full h-8 px-4 pt-1 mb-4 border border-gray-300 hover:bg-purple-100",
+                "bg-white text-sm text-center relative clear-both w-full h-8 px-4 pt-1 mb-4 border border-gray-300 hover:bg-purple-100 focus:outline-none focus:bg-purple-100",
               on: {
                 click: function($event) {
                   return _vm.loadOlderMessages()
                 }
               }
             },
-            [_vm._v("\n                Load older messages  \n            ")]
+            [_vm._v("\n            Load older messages\n        ")]
           ),
           _vm._v(" "),
           _vm._l(_vm.messages, function(message) {
@@ -32841,7 +32972,13 @@ var render = function() {
                   _c(
                     "h5",
                     { staticClass: "text-xs text-gray-500 absolute bottom-0" },
-                    [_vm._v(_vm._s(message.sender.name))]
+                    [
+                      _vm._v(
+                        "\n                    " +
+                          _vm._s(message.sender.name) +
+                          "\n                "
+                      )
+                    ]
                   ),
                   _vm._v(" "),
                   _c("div", { staticClass: "float-left mr-2" }, [
@@ -32854,22 +32991,22 @@ var render = function() {
                   _c("div", [
                     _c("p", { staticClass: "text-sm mb-3 break-words p-4" }, [
                       _vm._v(
-                        "\n                            " +
+                        "\n                        " +
                           _vm._s(message.text) +
-                          "\n                        "
+                          "\n                    "
                       )
                     ]),
                     _vm._v(" "),
                     _c("p", { staticClass: "text-xs float-right mb-2" }, [
                       _vm._v(
-                        " " +
+                        "\n                        " +
                           _vm._s(
                             _vm._f("dateFormat")(
                               new Date(message.created_at),
                               "HH:mm , DD.MM.YYYY"
                             )
                           ) +
-                          " "
+                          "\n                    "
                       )
                     ])
                   ])
@@ -32881,18 +33018,147 @@ var render = function() {
         2
       ),
       _vm._v(" "),
+      _c("form", { staticClass: "mb-4 clear-both" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _vm.uploadImage
+          ? _c("div", [
+              _c("div", { staticClass: "float-left" }, [
+                _c(
+                  "label",
+                  {
+                    staticClass: "font-bold mb-4 text-underlined",
+                    attrs: { for: "image" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                    Select a photo\n                "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "text-sm mt-4 file-upload-wrapper",
+                    attrs: { "data-text": "Select a photo!" }
+                  },
+                  [
+                    _c("input", {
+                      ref: "image",
+                      attrs: { type: "file", id: "image" },
+                      on: {
+                        change: function($event) {
+                          return _vm.handleImageUpload()
+                        }
+                      }
+                    })
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "mb-6" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass:
+                      "float-left text-sm bg-blue-400 text-white rounded-lg px-2 w-16 py-2 mx-2 mt-8 hover:bg-blue-500 focus:outline-none",
+                    attrs: { id: "sendImage", type: "submit" },
+                    on: {
+                      submit: function($event) {
+                        $event.preventDefault()
+                        return _vm.submit()
+                      },
+                      click: function($event) {
+                        return _vm.submit()
+                      }
+                    }
+                  },
+                  [_vm._v("\n                    Submit\n                ")]
+                )
+              ])
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _c("div", { staticClass: "clear-both mb-6" }),
+        _vm._v(" "),
+        _vm.uploadFile
+          ? _c("div", [
+              _c("div", { staticClass: "float-left mb-2" }, [
+                _c(
+                  "label",
+                  {
+                    staticClass: "font-bold mb-4 text-underlined",
+                    attrs: { for: "file_path" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                    Select a file\n                "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "text-sm mt-4 file-upload-wrapper",
+                    attrs: { "data-text": "Select your file!" }
+                  },
+                  [
+                    _c("input", {
+                      ref: "file",
+                      attrs: { type: "file", id: "file" },
+                      on: {
+                        change: function($event) {
+                          return _vm.handleFileUpload()
+                        }
+                      }
+                    })
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _vm._m(1)
+            ])
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "clear-both mb-6" }),
+      _vm._v(" "),
       _c(
-        "form",
+        "button",
         {
-          staticClass: "mb-4",
+          staticClass: "float-left",
           on: {
-            submit: function($event) {
-              $event.preventDefault()
-              return _vm.submit($event)
+            click: function($event) {
+              _vm.uploadImage = !_vm.uploadImage
             }
           }
         },
-        [_vm._m(0)]
+        [
+          _c("img", {
+            staticClass: "h-16",
+            attrs: { src: "/img/image.png", alt: "", srcset: "" }
+          })
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "float-left",
+          on: {
+            click: function($event) {
+              _vm.uploadFile = !_vm.uploadFile
+            }
+          }
+        },
+        [
+          _c("img", {
+            staticClass: "h-16",
+            attrs: { src: "/img/file.png", alt: "", srcset: "" }
+          })
+        ]
       )
     ],
     2
@@ -32921,6 +33187,43 @@ var staticRenderFns = [
         })
       ]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "float-left mb-2" }, [
+      _c(
+        "label",
+        {
+          staticClass: "font-bold mb-4 text-underline",
+          attrs: { for: "file_name" }
+        },
+        [_vm._v("\n                    Name your file\n                ")]
+      ),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v(" "),
+      _c("input", {
+        staticClass:
+          "border-b border-gray-400 p-2 mb-4 w-64 focus:outline-none",
+        attrs: {
+          id: "file_name",
+          type: "text",
+          name: "file_name",
+          value: "",
+          pattern: "[a-zA-Z0-9_-]+"
+        }
+      }),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v(" "),
+      _c("p", { staticClass: "text-xs mb-2" }, [
+        _vm._v(
+          '\n                    (please use only letters, numbers, "_" and "-")\n                '
+        )
+      ])
+    ])
   }
 ]
 render._withStripped = true
@@ -33327,7 +33630,7 @@ var render = function() {
               return _c("ul", { key: goingUser.name }, [
                 _c("li", { staticClass: "flex items-center ml-2 mb-2" }, [
                   _c("img", {
-                    staticClass: "w-10 h-10 object-cover rounded-lg mr-2",
+                    staticClass: "w-10 h-10 object-cover rounded-full mr-2",
                     attrs: { src: goingUser.avatar, alt: "" }
                   }),
                   _vm._v(
@@ -34449,10 +34752,10 @@ var render = function() {
                   _c(
                     "button",
                     {
-                      staticClass: "w-4 h-4",
+                      staticClass:
+                        "w-6 h-4 font-bold text-red-500 text-xl hover:text-red-400 focus:outline-none",
                       staticStyle: {
-                        background:
-                          "url(/storage/icons/bin.png) focus:outline-none"
+                        background: "url(/storage/icons/bin.png)"
                       },
                       attrs: { type: "button", "data-toggle": "modal" },
                       on: {

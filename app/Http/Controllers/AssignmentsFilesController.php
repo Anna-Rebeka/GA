@@ -41,20 +41,20 @@ class AssignmentsFilesController extends Controller
     public function store(Request $request, Assignment $assignment)
     {
         $attributes = $request->validate([
-            'assignment_file' => ['file', 'required'],
+            'file_path' => ['file', 'required'],
             'file_name' => ['string','alpha_dash', 'required'],
             ]);
         
         $user = auth()->user();
 
-        $attributes['assignment_file'] = request('assignment_file')->store('assignment_file');
-        $ext = pathinfo($attributes['assignment_file'], PATHINFO_EXTENSION);
+        $attributes['file_path'] = request('file_path')->store('assignment_file');
+        $ext = pathinfo($attributes['file_path'], PATHINFO_EXTENSION);
         
         $attributes['file_name'] .= '.' . $ext;
 
         $assignmentFile = AssignmentsFile::create([
             'user_id' => $user->id,
-            'assignment_file' => $attributes['assignment_file'],
+            'file_path' => $attributes['file_path'],
             'file_name' => $attributes['file_name'], 
             'assignment_id' => $assignment->id,
         ]);
@@ -105,7 +105,7 @@ class AssignmentsFilesController extends Controller
     public function destroy(int $id)
     {
         $assignmentsFile = AssignmentsFile::findOrFail($id);
-        Storage::delete($assignmentsFile->assignment_file);
+        Storage::delete($assignmentsFile->file_path);
         $assignmentsFile->delete();
         
         return back();
