@@ -2735,6 +2735,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "chatroom"],
   data: function data() {
@@ -32983,18 +32986,41 @@ var render = function() {
                   _vm._v(" "),
                   _c("div", { staticClass: "float-left mr-2" }, [
                     _c("img", {
-                      staticClass: "rounded-full object-cover h-15 w-15 mr-2",
+                      staticClass:
+                        "rounded-full object-cover h-15 w-15 mr-2 mb-3",
                       attrs: { src: message.sender.avatar, alt: "avatar" }
                     })
                   ]),
                   _vm._v(" "),
                   _c("div", [
-                    _c("p", { staticClass: "text-sm mb-3 break-words p-4" }, [
+                    _c("div", { staticClass: "text-sm mb-3 break-words p-4" }, [
                       _vm._v(
                         "\n                        " +
                           _vm._s(message.text) +
-                          "\n                    "
-                      )
+                          "\n                        "
+                      ),
+                      message.image_path
+                        ? _c("div", [
+                            _c("img", {
+                              attrs: {
+                                src: "/storage/" + message.image_path,
+                                alt: "image"
+                              }
+                            })
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      message.file_path
+                        ? _c("div", [
+                            _c(
+                              "a",
+                              {
+                                attrs: { href: "/storage/" + message.file_path }
+                              },
+                              [_vm._v(" file ")]
+                            )
+                          ])
+                        : _vm._e()
                     ]),
                     _vm._v(" "),
                     _c("p", { staticClass: "text-xs float-right mb-2" }, [
@@ -33018,110 +33044,122 @@ var render = function() {
         2
       ),
       _vm._v(" "),
-      _c("form", { staticClass: "mb-4 clear-both" }, [
-        _vm._m(0),
-        _vm._v(" "),
-        _vm.uploadImage
-          ? _c("div", [
-              _c("div", { staticClass: "float-left" }, [
-                _c(
-                  "label",
-                  {
-                    staticClass: "font-bold mb-4 text-underlined",
-                    attrs: { for: "image" }
-                  },
-                  [
-                    _vm._v(
-                      "\n                    Select a photo\n                "
-                    )
-                  ]
-                ),
+      _c(
+        "div",
+        {
+          staticClass: "mb-4 clear-both",
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              return _vm.submit()
+            }
+          }
+        },
+        [
+          _vm._m(0),
+          _vm._v(" "),
+          _vm.uploadImage
+            ? _c("div", [
+                _c("div", { staticClass: "float-left" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "font-bold mb-4 text-underlined",
+                      attrs: { for: "image" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                    Select a photo\n                "
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "text-sm mt-4 file-upload-wrapper",
+                      attrs: { "data-text": "Select a photo!" }
+                    },
+                    [
+                      _c("input", {
+                        ref: "image",
+                        attrs: { type: "file", id: "image" },
+                        on: {
+                          change: function($event) {
+                            return _vm.handleImageUpload()
+                          }
+                        }
+                      })
+                    ]
+                  )
+                ]),
                 _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    staticClass: "text-sm mt-4 file-upload-wrapper",
-                    attrs: { "data-text": "Select a photo!" }
-                  },
-                  [
-                    _c("input", {
-                      ref: "image",
-                      attrs: { type: "file", id: "image" },
+                _c("div", { staticClass: "mb-6" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass:
+                        "float-left text-sm bg-blue-400 text-white rounded-lg px-2 w-16 py-2 mx-2 mt-8 hover:bg-blue-500 focus:outline-none",
+                      attrs: { id: "sendImage", type: "submit" },
                       on: {
-                        change: function($event) {
-                          return _vm.handleImageUpload()
+                        submit: function($event) {
+                          $event.preventDefault()
+                          return _vm.submit()
+                        },
+                        click: function($event) {
+                          return _vm.submit()
                         }
                       }
-                    })
-                  ]
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "mb-6" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass:
-                      "float-left text-sm bg-blue-400 text-white rounded-lg px-2 w-16 py-2 mx-2 mt-8 hover:bg-blue-500 focus:outline-none",
-                    attrs: { id: "sendImage", type: "submit" },
-                    on: {
-                      submit: function($event) {
-                        $event.preventDefault()
-                        return _vm.submit()
-                      },
-                      click: function($event) {
-                        return _vm.submit()
-                      }
-                    }
-                  },
-                  [_vm._v("\n                    Submit\n                ")]
-                )
+                    },
+                    [_vm._v("\n                    Submit\n                ")]
+                  )
+                ])
               ])
-            ])
-          : _vm._e(),
-        _vm._v(" "),
-        _c("div", { staticClass: "clear-both mb-6" }),
-        _vm._v(" "),
-        _vm.uploadFile
-          ? _c("div", [
-              _c("div", { staticClass: "float-left mb-2" }, [
-                _c(
-                  "label",
-                  {
-                    staticClass: "font-bold mb-4 text-underlined",
-                    attrs: { for: "file_path" }
-                  },
-                  [
-                    _vm._v(
-                      "\n                    Select a file\n                "
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    staticClass: "text-sm mt-4 file-upload-wrapper",
-                    attrs: { "data-text": "Select your file!" }
-                  },
-                  [
-                    _c("input", {
-                      ref: "file",
-                      attrs: { type: "file", id: "file" },
-                      on: {
-                        change: function($event) {
-                          return _vm.handleFileUpload()
+            : _vm._e(),
+          _vm._v(" "),
+          _c("div", { staticClass: "clear-both mb-6" }),
+          _vm._v(" "),
+          _vm.uploadFile
+            ? _c("div", [
+                _c("div", { staticClass: "float-left mb-2" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "font-bold mb-4 text-underlined",
+                      attrs: { for: "file_path" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                    Select a file\n                "
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "text-sm mt-4 file-upload-wrapper",
+                      attrs: { "data-text": "Select your file!" }
+                    },
+                    [
+                      _c("input", {
+                        ref: "file",
+                        attrs: { type: "file", id: "file" },
+                        on: {
+                          change: function($event) {
+                            return _vm.handleFileUpload()
+                          }
                         }
-                      }
-                    })
-                  ]
-                )
-              ]),
-              _vm._v(" "),
-              _vm._m(1)
-            ])
-          : _vm._e()
-      ]),
+                      })
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _vm._m(1)
+              ])
+            : _vm._e()
+        ]
+      ),
       _vm._v(" "),
       _c("div", { staticClass: "clear-both mb-6" }),
       _vm._v(" "),

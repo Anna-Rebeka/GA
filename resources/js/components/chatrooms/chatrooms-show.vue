@@ -35,13 +35,16 @@
                         <img
                             :src="message.sender.avatar"
                             alt="avatar"
-                            class="rounded-full object-cover h-15 w-15 mr-2"
+                            class="rounded-full object-cover h-15 w-15 mr-2 mb-3"
                         />
                     </div>
                     <div>
-                        <p class="text-sm mb-3 break-words p-4">
+                        <div class="text-sm mb-3 break-words p-4">
                             {{ message.text }}
-                        </p>
+                            <div v-if="message.image_path"> <img :src="'/storage/' + message.image_path" alt="image"> </div>
+                            <div v-if="message.file_path"> <a :href="'/storage/' + message.file_path"> file </a></div>
+                        </div>
+                        
                         <p class="text-xs float-right mb-2">
                             {{
                                 new Date(message.created_at)
@@ -52,7 +55,7 @@
                 </div>
             </div>
         </div>
-        <form class="mb-4 clear-both">
+        <div v-on:submit.prevent="submit()" class="mb-4 clear-both">
             <div
                 class="bg-white relative h-24 w-full px-4 pt-4 mt-4 mb-2 border border-gray-300 rounded-lg"
             >
@@ -138,7 +141,7 @@
                     </p>
                 </div>
             </div>
-        </form>
+        </div>
         <div class="clear-both mb-6"></div>
         <button @click="uploadImage = !uploadImage" class="float-left">
             <img class="h-16" src="/img/image.png" alt="" srcset="" />
