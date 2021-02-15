@@ -21,7 +21,7 @@
             <div
                 v-for="message in messages"
                 :key="message.id"
-                class="bg-white relative clear-both w-1/2 px-4 pt-4 mb-2 border border-gray-300 rounded-lg"
+                class="bg-white relative clear-both w-full md:w-3/4 lg:w-1/2 px-4 pt-4 mb-2 border border-gray-300 rounded-lg"
                 v-bind:class="{
                     'float-right bg-purple-100': message.sender.id == user.id,
                     'pb-6': message.sender.id != user.id,
@@ -145,11 +145,10 @@
                 </div>
             </div>
         </div>
-        <div class="clear-both mb-6"></div>
-        <button @click="uploadImage = !uploadImage" class="float-left">
+        <button @click="uploadImage = !uploadImage" class="relative l-0">
             <img class="h-16" src="/img/image.png" alt="" srcset="" />
         </button>
-        <button @click="uploadFile = !uploadFile" class="float-left">
+        <button @click="uploadFile = !uploadFile" class="relative l-0">
             <img class="h-16" src="/img/file.png" alt="" srcset="" />
         </button>
     </div>

@@ -2740,7 +2740,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "chatroom"],
   data: function data() {
@@ -32970,7 +32969,7 @@ var render = function() {
               {
                 key: message.id,
                 staticClass:
-                  "bg-white relative clear-both w-1/2 px-4 pt-4 mb-2 border border-gray-300 rounded-lg",
+                  "bg-white relative clear-both w-full md:w-3/4 lg:w-1/2 px-4 pt-4 mb-2 border border-gray-300 rounded-lg",
                 class: {
                   "float-right bg-purple-100": message.sender.id == _vm.user.id,
                   "pb-6": message.sender.id != _vm.user.id
@@ -33185,12 +33184,10 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "clear-both mb-6" }),
-      _vm._v(" "),
       _c(
         "button",
         {
-          staticClass: "float-left",
+          staticClass: "relative l-0",
           on: {
             click: function($event) {
               _vm.uploadImage = !_vm.uploadImage
@@ -33208,7 +33205,7 @@ var render = function() {
       _c(
         "button",
         {
-          staticClass: "float-left",
+          staticClass: "relative l-0",
           on: {
             click: function($event) {
               _vm.uploadFile = !_vm.uploadFile
