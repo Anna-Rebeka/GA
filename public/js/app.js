@@ -2738,6 +2738,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "chatroom"],
   data: function data() {
@@ -2843,8 +2846,6 @@ __webpack_require__.r(__webpack_exports__);
     handleFileUpload: function handleFileUpload() {
       this.file = this.$refs.file.files[0];
     },
-    //https://github.com/axios/axios/issues/2002
-    //https://serversideup.net/uploading-files-vuejs-axios/
     submit: function submit() {
       var _this6 = this;
 
@@ -2863,6 +2864,11 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.file) {
         formData.append("file", this.file);
+        var fileName = document.getElementById("file_name").value;
+
+        if (fileName.trim() != "") {
+          formData.append("file_name", fileName);
+        }
       }
 
       formData.append("text", messageArea);
@@ -33012,13 +33018,31 @@ var render = function() {
                       _vm._v(" "),
                       message.file_path
                         ? _c("div", [
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "/storage/" + message.file_path }
-                              },
-                              [_vm._v(" file ")]
-                            )
+                            message.file_name
+                              ? _c(
+                                  "a",
+                                  {
+                                    staticClass: "font-semibold underline",
+                                    attrs: {
+                                      href: "/storage/" + message.file_path
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      " " + _vm._s(message.file_name) + " "
+                                    )
+                                  ]
+                                )
+                              : _c(
+                                  "a",
+                                  {
+                                    staticClass: "font-semibold underline",
+                                    attrs: {
+                                      href: "/storage/" + message.file_path
+                                    }
+                                  },
+                                  [_vm._v(" attached file ")]
+                                )
                           ])
                         : _vm._e()
                     ]),
@@ -33257,9 +33281,7 @@ var staticRenderFns = [
       _c("br"),
       _vm._v(" "),
       _c("p", { staticClass: "text-xs mb-2" }, [
-        _vm._v(
-          '\n                    (please use only letters, numbers, "_" and "-")\n                '
-        )
+        _vm._v("\n                    (max 1000 chars)\n                ")
       ])
     ])
   }

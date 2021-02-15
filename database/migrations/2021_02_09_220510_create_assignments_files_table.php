@@ -17,7 +17,7 @@ class CreateAssignmentsFilesTable extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->text('file_path');
-            $table->string('file_name');
+            $table->string('file_name', 1000);
             $table->foreignId('assignment_id');
             $table->timestamps();
             

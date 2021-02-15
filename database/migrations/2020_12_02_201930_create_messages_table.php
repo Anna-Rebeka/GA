@@ -20,6 +20,7 @@ class CreateMessagesTable extends Migration
             $table->string('text', 1000)->nullable();
             $table->text('image_path')->nullable();
             $table->text('file_path')->nullable();
+            $table->string('file_name', 1000)->nullable();
             $table->boolean('read')->default(false);
             $table->timestamps();
 

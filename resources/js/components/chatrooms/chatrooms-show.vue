@@ -42,7 +42,10 @@
                         <div class="text-sm mb-3 break-words p-4">
                             {{ message.text }}
                             <div v-if="message.image_path"> <img :src="'/storage/' + message.image_path" alt="image"> </div>
-                            <div v-if="message.file_path"> <a :href="'/storage/' + message.file_path"> file </a></div>
+                            <div v-if="message.file_path"> 
+                                <a v-if="message.file_name" class="font-semibold underline" :href="'/storage/' + message.file_path"> {{ message.file_name }} </a>
+                                <a v-else class="font-semibold underline" :href="'/storage/' + message.file_path"> attached file </a>
+                            </div>
                         </div>
                         
                         <p class="text-xs float-right mb-2">
@@ -137,7 +140,7 @@
                     />
                     <br />
                     <p class="text-xs mb-2">
-                        (please use only letters, numbers, "_" and "-")
+                        (max 1000 chars)
                     </p>
                 </div>
             </div>
@@ -283,8 +286,6 @@ export default {
             this.file = this.$refs.file.files[0];
         },
 
-        //https://github.com/axios/axios/issues/2002
-        //https://serversideup.net/uploading-files-vuejs-axios/
         submit() {
             var messageArea = document.getElementById("messageArea").value;
 
@@ -301,6 +302,10 @@ export default {
             }
             if (this.file) {
                 formData.append("file", this.file);
+                var fileName = document.getElementById("file_name").value;
+                if(fileName.trim() != ""){
+                    formData.append("file_name", fileName);
+                }
             }
             formData.append("text", messageArea);
             formData.append("chatroom_id", this.chatroom.id);

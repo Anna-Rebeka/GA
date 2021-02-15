@@ -50,6 +50,7 @@ class MessagesController extends Controller
             'text' => ['nullable', 'max:1000'],
             'image' => ['nullable', 'file'],
             'file' => ['nullable', 'file'],
+            'file_name' => ['nullable', 'string', 'max:1000'],
             ]);
         
         if(!isset($attributes['image']) || empty($attributes['image'])){
@@ -64,7 +65,14 @@ class MessagesController extends Controller
         else{
             $attributes['file'] = $fields->file->store('files');
         }
-        
+
+        if(!isset($attributes['file_name']) || empty($attributes['file_name'])){
+            $attributes['file_name'] = null;
+        }
+        else{
+            $ext = pathinfo($attributes['file'], PATHINFO_EXTENSION);
+            $attributes['file_name'] .= '.' . $ext;
+        }
 
         $message = Message::create([
             'sender_id' => auth()->user()->id,
@@ -72,11 +80,11 @@ class MessagesController extends Controller
             'text' => $attributes['text'],
             'image_path' => $attributes['image'],
             'file_path' => $attributes['file'],
+            'file_name' => $attributes['file_name'],
             'read' => false,
         ]);
         
         broadcast(new MessageSent($message, Chatroom::find($message->chatroom_id), auth()->user()))->toOthers();
-
         
         return $message;
     }
