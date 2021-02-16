@@ -2740,6 +2740,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "chatroom"],
   data: function data() {
@@ -2859,14 +2874,17 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.image) {
         formData.append("image", this.image);
+        document.getElementById("image").value = "";
       }
 
       if (this.file) {
         formData.append("file", this.file);
         var fileName = document.getElementById("file_name").value;
+        document.getElementById("file").value = "";
 
         if (fileName.trim() != "") {
           formData.append("file_name", fileName);
+          document.getElementById("file_name").value = "";
         }
       }
 
@@ -2881,6 +2899,8 @@ __webpack_require__.r(__webpack_exports__);
         response.data["sender"] = _this6.user;
 
         _this6.messages.push(response.data);
+
+        document.getElementById("messageArea").value = "";
 
         _this6.$nextTick(function () {
           _this6.$refs.chat.scrollTop = 9999;
@@ -33028,7 +33048,9 @@ var render = function() {
                                   },
                                   [
                                     _vm._v(
-                                      " " + _vm._s(message.file_name) + " "
+                                      "\n                                " +
+                                        _vm._s(message.file_name) +
+                                        "\n                            "
                                     )
                                   ]
                                 )
@@ -33040,7 +33062,11 @@ var render = function() {
                                       href: "/storage/" + message.file_path
                                     }
                                   },
-                                  [_vm._v(" attached file ")]
+                                  [
+                                    _vm._v(
+                                      "\n                                attached file\n                            "
+                                    )
+                                  ]
                                 )
                           ])
                         : _vm._e()
@@ -33079,11 +33105,90 @@ var render = function() {
           }
         },
         [
-          _vm._m(0),
+          _c(
+            "div",
+            {
+              staticClass:
+                "bg-white relative h-24 w-full px-4 pt-4 mt-4 mb-2 border border-gray-300 rounded-lg"
+            },
+            [
+              _c("textarea", {
+                staticClass: "w-full resize-none focus:outline-none",
+                attrs: {
+                  id: "messageArea",
+                  name: "text",
+                  placeholder: "New message...",
+                  maxlength: "1000"
+                }
+              }),
+              _vm._v(" "),
+              _c("div", { staticClass: "absolute bottom-2 right-0" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass:
+                      "text-sm bg-blue-400 text-white rounded-full w-10 px-2 py-2 mr-2 hover:bg-blue-500 focus:outline-none",
+                    attrs: { id: "sendImage", type: "submit" },
+                    on: {
+                      submit: function($event) {
+                        $event.preventDefault()
+                        return _vm.submit()
+                      },
+                      click: function($event) {
+                        return _vm.submit()
+                      }
+                    }
+                  },
+                  [
+                    _c("img", {
+                      staticClass: "w-8",
+                      attrs: { src: "/img/send_icon.png", alt: "send" }
+                    })
+                  ]
+                )
+              ])
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "relative",
+              on: {
+                click: function($event) {
+                  _vm.uploadImage = !_vm.uploadImage
+                }
+              }
+            },
+            [
+              _c("img", {
+                staticClass: "h-16",
+                attrs: { src: "/img/image.png", alt: "", srcset: "" }
+              })
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "relative mb-5",
+              on: {
+                click: function($event) {
+                  _vm.uploadFile = !_vm.uploadFile
+                }
+              }
+            },
+            [
+              _c("img", {
+                staticClass: "h-16",
+                attrs: { src: "/img/file.png", alt: "", srcset: "" }
+              })
+            ]
+          ),
           _vm._v(" "),
           _vm.uploadImage
-            ? _c("div", [
-                _c("div", { staticClass: "float-left" }, [
+            ? _c("div", { staticClass: "mb-6" }, [
+                _c("div", { staticClass: "relative" }, [
                   _c(
                     "label",
                     {
@@ -33115,27 +33220,6 @@ var render = function() {
                       })
                     ]
                   )
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "mb-6" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass:
-                        "float-left text-sm bg-blue-400 text-white rounded-lg px-2 w-16 py-2 mx-2 mt-8 hover:bg-blue-500 focus:outline-none",
-                      attrs: { id: "sendImage", type: "submit" },
-                      on: {
-                        submit: function($event) {
-                          $event.preventDefault()
-                          return _vm.submit()
-                        },
-                        click: function($event) {
-                          return _vm.submit()
-                        }
-                      }
-                    },
-                    [_vm._v("\n                    Submit\n                ")]
-                  )
                 ])
               ])
             : _vm._e(),
@@ -33144,7 +33228,7 @@ var render = function() {
           _vm._v(" "),
           _vm.uploadFile
             ? _c("div", [
-                _c("div", { staticClass: "float-left mb-2" }, [
+                _c("div", { staticClass: "relative mb-2 lg:float-left" }, [
                   _c(
                     "label",
                     {
@@ -33178,45 +33262,9 @@ var render = function() {
                   )
                 ]),
                 _vm._v(" "),
-                _vm._m(1)
+                _vm._m(0)
               ])
             : _vm._e()
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "relative l-0",
-          on: {
-            click: function($event) {
-              _vm.uploadImage = !_vm.uploadImage
-            }
-          }
-        },
-        [
-          _c("img", {
-            staticClass: "h-16",
-            attrs: { src: "/img/image.png", alt: "", srcset: "" }
-          })
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "relative l-0",
-          on: {
-            click: function($event) {
-              _vm.uploadFile = !_vm.uploadFile
-            }
-          }
-        },
-        [
-          _c("img", {
-            staticClass: "h-16",
-            attrs: { src: "/img/file.png", alt: "", srcset: "" }
-          })
         ]
       )
     ],
@@ -33230,57 +33278,36 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "div",
-      {
-        staticClass:
-          "bg-white relative h-24 w-full px-4 pt-4 mt-4 mb-2 border border-gray-300 rounded-lg"
-      },
+      { staticClass: "relative mt-5 mb-2 lg:mt-0 lg:ml-6 lg:float-left" },
       [
-        _c("textarea", {
-          staticClass: "w-full resize-none focus:outline-none",
+        _c(
+          "label",
+          {
+            staticClass: "font-bold mb-4 text-underline",
+            attrs: { for: "file_name" }
+          },
+          [_vm._v("\n                    Name your file\n                ")]
+        ),
+        _vm._v(" "),
+        _c("br"),
+        _vm._v(" "),
+        _c("input", {
+          staticClass:
+            "border-b border-gray-400 p-2 mb-4 w-64 focus:outline-none",
           attrs: {
-            id: "messageArea",
-            name: "text",
-            placeholder: "New message...",
-            maxlength: "1000"
+            id: "file_name",
+            type: "text",
+            name: "file_name",
+            value: "",
+            pattern: "[a-zA-Z0-9_-]+"
           }
-        })
+        }),
+        _vm._v(" "),
+        _c("br"),
+        _vm._v(" "),
+        _c("p", { staticClass: "text-xs mb-2" }, [_vm._v("(max 1000 chars)")])
       ]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "float-left mb-2" }, [
-      _c(
-        "label",
-        {
-          staticClass: "font-bold mb-4 text-underline",
-          attrs: { for: "file_name" }
-        },
-        [_vm._v("\n                    Name your file\n                ")]
-      ),
-      _vm._v(" "),
-      _c("br"),
-      _vm._v(" "),
-      _c("input", {
-        staticClass:
-          "border-b border-gray-400 p-2 mb-4 w-64 focus:outline-none",
-        attrs: {
-          id: "file_name",
-          type: "text",
-          name: "file_name",
-          value: "",
-          pattern: "[a-zA-Z0-9_-]+"
-        }
-      }),
-      _vm._v(" "),
-      _c("br"),
-      _vm._v(" "),
-      _c("p", { staticClass: "text-xs mb-2" }, [
-        _vm._v("\n                    (max 1000 chars)\n                ")
-      ])
-    ])
   }
 ]
 render._withStripped = true

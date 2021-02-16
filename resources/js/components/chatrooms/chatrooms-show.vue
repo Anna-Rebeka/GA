@@ -41,13 +41,30 @@
                     <div>
                         <div class="text-sm mb-3 break-words p-4">
                             {{ message.text }}
-                            <div v-if="message.image_path"> <img :src="'/storage/' + message.image_path" alt="image"> </div>
-                            <div v-if="message.file_path"> 
-                                <a v-if="message.file_name" class="font-semibold underline" :href="'/storage/' + message.file_path"> {{ message.file_name }} </a>
-                                <a v-else class="font-semibold underline" :href="'/storage/' + message.file_path"> attached file </a>
+                            <div v-if="message.image_path">
+                                <img
+                                    :src="'/storage/' + message.image_path"
+                                    alt="image"
+                                />
+                            </div>
+                            <div v-if="message.file_path">
+                                <a
+                                    v-if="message.file_name"
+                                    class="font-semibold underline"
+                                    :href="'/storage/' + message.file_path"
+                                >
+                                    {{ message.file_name }}
+                                </a>
+                                <a
+                                    v-else
+                                    class="font-semibold underline"
+                                    :href="'/storage/' + message.file_path"
+                                >
+                                    attached file
+                                </a>
                             </div>
                         </div>
-                        
+
                         <p class="text-xs float-right mb-2">
                             {{
                                 new Date(message.created_at)
@@ -70,9 +87,26 @@
                     class="w-full resize-none focus:outline-none"
                 >
                 </textarea>
+                <div class="absolute bottom-2 right-0">
+                    <button
+                        v-on:submit.prevent="submit()"
+                        @click="submit()"
+                        id="sendImage"
+                        type="submit"
+                        class="text-sm bg-blue-400 text-white rounded-full w-10 px-2 py-2 mr-2 hover:bg-blue-500 focus:outline-none"
+                    >
+                        <img src="/img/send_icon.png" alt="send" class="w-8" />
+                    </button>
+                </div>
             </div>
-            <div v-if="uploadImage">
-                <div class="float-left">
+            <button @click="uploadImage = !uploadImage" class="relative">
+                <img class="h-16" src="/img/image.png" alt="" srcset="" />
+            </button>
+            <button @click="uploadFile = !uploadFile" class="relative mb-5">
+                <img class="h-16" src="/img/file.png" alt="" srcset="" />
+            </button>
+            <div v-if="uploadImage" class="mb-6">
+                <div class="relative">
                     <label class="font-bold mb-4 text-underlined" for="image">
                         Select a photo
                     </label>
@@ -88,22 +122,11 @@
                         />
                     </div>
                 </div>
-                <div class="mb-6">
-                    <button
-                        v-on:submit.prevent="submit()"
-                        @click="submit()"
-                        id="sendImage"
-                        type="submit"
-                        class="float-left text-sm bg-blue-400 text-white rounded-lg px-2 w-16 py-2 mx-2 mt-8 hover:bg-blue-500 focus:outline-none"
-                    >
-                        Submit
-                    </button>
-                </div>
             </div>
 
             <div class="clear-both mb-6"></div>
             <div v-if="uploadFile">
-                <div class="float-left mb-2">
+                <div class="relative mb-2 lg:float-left">
                     <label
                         class="font-bold mb-4 text-underlined"
                         for="file_path"
@@ -122,7 +145,7 @@
                         />
                     </div>
                 </div>
-                <div class="float-left mb-2">
+                <div class="relative mt-5 mb-2 lg:mt-0 lg:ml-6 lg:float-left">
                     <label
                         class="font-bold mb-4 text-underline"
                         for="file_name"
@@ -139,18 +162,10 @@
                         pattern="[a-zA-Z0-9_-]+"
                     />
                     <br />
-                    <p class="text-xs mb-2">
-                        (max 1000 chars)
-                    </p>
+                    <p class="text-xs mb-2">(max 1000 chars)</p>
                 </div>
             </div>
         </div>
-        <button @click="uploadImage = !uploadImage" class="relative l-0">
-            <img class="h-16" src="/img/image.png" alt="" srcset="" />
-        </button>
-        <button @click="uploadFile = !uploadFile" class="relative l-0">
-            <img class="h-16" src="/img/file.png" alt="" srcset="" />
-        </button>
     </div>
 </template>
 
@@ -291,25 +306,26 @@ export default {
             if (messageArea == "" && !this.image && !this.file) {
                 return;
             }
-
             document.getElementById("messageArea").value = "";
-
+            
             var formData = new FormData();
-
             if (this.image) {
                 formData.append("image", this.image);
+                document.getElementById("image").value = "";
             }
             if (this.file) {
                 formData.append("file", this.file);
                 var fileName = document.getElementById("file_name").value;
-                if(fileName.trim() != ""){
+                document.getElementById("file").value = "";
+                if (fileName.trim() != "") {
                     formData.append("file_name", fileName);
+                    document.getElementById("file_name").value = "";
                 }
             }
             formData.append("text", messageArea);
             formData.append("chatroom_id", this.chatroom.id);
             formData.append("chatroom", this.chatroom);
-
+            
             axios
                 .post("/chats/" + this.chatroom.id + "/send", formData, {
                     headers: {
@@ -319,6 +335,7 @@ export default {
                 .then((response) => {
                     response.data["sender"] = this.user;
                     this.messages.push(response.data);
+                    document.getElementById("messageArea").value = "";
                     this.$nextTick(() => {
                         this.$refs.chat.scrollTop = 9999;
                     });
