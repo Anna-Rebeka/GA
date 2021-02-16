@@ -58,6 +58,7 @@ Route::middleware('auth')->group(function() {
     Route::get('/create-group', [GroupsController::class, 'create']);
     Route::post('/create-group', [GroupsController::class, 'store']);
     Route::get('/group/{group:id}/members/get', [GroupsController::class, 'getMembers']);
+    Route::get('/{group:id}/whiteboard', [GroupsController::class, 'showWhiteboard']);
 
 
     Route::get('/events', [EventsController::class, 'index']);

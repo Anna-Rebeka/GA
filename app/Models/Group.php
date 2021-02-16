@@ -34,5 +34,9 @@ class Group extends Model
     public function assignments(){
         return $this->hasMany(Assignment::class);
     }
+
+    public function whiteboard_posts(){
+        return $this->hasMany(GroupWhiteboardPost::class);
+    }
 }
 

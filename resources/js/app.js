@@ -20,6 +20,7 @@ import assignmentsTable from './components/assignments/assignments-table.vue';
 import assignmentComments from './components/comments/assignment-comments.vue';
 import chatroomsIndex from './components/chatrooms/chatrooms-index.vue';
 import chatroomsShow from './components/chatrooms/chatrooms-show.vue';
+import groupWhiteboard from './components/groups/group-whiteboard.vue';
 
 
 import JwPagination from 'jw-vue-pagination';
@@ -53,7 +54,7 @@ Vue.component('assignments-table', assignmentsTable);
 Vue.component('jw-pagination', JwPagination);
 Vue.component('chatrooms-index', chatroomsIndex);
 Vue.component('chatrooms-show', chatroomsShow);
-
+Vue.component('group-whiteboard', groupWhiteboard);
 
 var app = new Vue({
    el: '#app',
