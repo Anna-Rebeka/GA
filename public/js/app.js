@@ -2901,6 +2901,8 @@ __webpack_require__.r(__webpack_exports__);
         _this6.messages.push(response.data);
 
         document.getElementById("messageArea").value = "";
+        _this6.uploadImage = false;
+        _this6.uploadFile = false;
 
         _this6.$nextTick(function () {
           _this6.$refs.chat.scrollTop = 9999;

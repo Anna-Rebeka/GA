@@ -336,6 +336,8 @@ export default {
                     response.data["sender"] = this.user;
                     this.messages.push(response.data);
                     document.getElementById("messageArea").value = "";
+                    this.uploadImage = false;
+                    this.uploadFile = false;
                     this.$nextTick(() => {
                         this.$refs.chat.scrollTop = 9999;
                     });
