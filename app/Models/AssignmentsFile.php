@@ -11,7 +11,7 @@ class AssignmentsFile extends Model
 
     protected $fillable = [
         'user_id',
-        'assignment_file',
+        'file_path',
         'file_name',
         'assignment_id',
     ];

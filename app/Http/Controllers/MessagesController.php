@@ -38,21 +38,53 @@ class MessagesController extends Controller
      */
     public function store(Request $fields)
     {
+        if($fields->image){
+            $fields->image = $fields->file('image');
+        }
+        if($fields->file){
+            $fields->file = $fields->file('file');
+        }
+
         $attributes = $fields->validate([
             'chatroom_id' => ['required'],
-            'text' => ['required', 'max:1000'],
+            'text' => ['nullable', 'max:1000'],
+            'image' => ['nullable', 'file'],
+            'file' => ['nullable', 'file'],
+            'file_name' => ['nullable', 'string', 'max:1000'],
             ]);
+        
+        if(!isset($attributes['image']) || empty($attributes['image'])){
+            $attributes['image'] = null;
+        }
+        else {
+            $attributes['image'] = $fields->image->store('photos');
+        }
+        if(!isset($attributes['file']) || empty($attributes['file'])){
+            $attributes['file'] = null;
+        }
+        else{
+            $attributes['file'] = $fields->file->store('files');
+        }
+
+        if(!isset($attributes['file_name']) || empty($attributes['file_name'])){
+            $attributes['file_name'] = null;
+        }
+        else{
+            $ext = pathinfo($attributes['file'], PATHINFO_EXTENSION);
+            $attributes['file_name'] .= '.' . $ext;
+        }
+
         $message = Message::create([
             'sender_id' => auth()->user()->id,
             'chatroom_id' => $attributes['chatroom_id'],
             'text' => $attributes['text'],
+            'image_path' => $attributes['image'],
+            'file_path' => $attributes['file'],
+            'file_name' => $attributes['file_name'],
             'read' => false,
         ]);
         
-        
-
         broadcast(new MessageSent($message, Chatroom::find($message->chatroom_id), auth()->user()))->toOthers();
-
         
         return $message;
     }

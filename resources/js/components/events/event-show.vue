@@ -43,7 +43,7 @@
             <div class="bg-white rounded mb-4 pt-4 pb-2" >
                 <ul v-for="goingUser in pageOfItems" :key="goingUser.name">
                     <li class="flex items-center ml-2 mb-2">
-                        <img class="w-10 h-10 object-cover rounded-lg mr-2" :src="goingUser.avatar" alt="">
+                        <img class="w-10 h-10 object-cover rounded-full mr-2" :src="goingUser.avatar" alt="">
                         {{ goingUser.name }}
                     </li>
                 </ul>

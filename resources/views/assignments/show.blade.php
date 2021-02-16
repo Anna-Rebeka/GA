@@ -3,24 +3,32 @@
     <div class="px-8 mr-2 mb-16">
         <div class="mb-10">
             @foreach ($assignments_files as $file)
-                <a class="block mb-1" href="/storage/{{ $file->assignment_file }}">{{ $file->file_name }}</a>
+                <a class="float-left mb-1" href="/storage/{{ $file->file_path }}">{{ $file->file_name }}</a>
+                @if ($file->user_id == $user->id)
+                    <form action="/assignmentsFiles/{{ $file->id }}/file-delete" method="post">
+                        @csrf
+                        @method('DELETE')
+                        <button class="ml-6 float-left text-red-500 font-bold"> x </button>
+                    </form>
+                    <div class="clear-both"></div>
+                @endif
             @endforeach
             {{ $assignments_files->links() }}
         </div>
         
-        <form action="/assignments/{{ $assignment->id }}/file-upload" method="post" enctype="multipart/form-data">
+        <form class="clear-both" action="/assignments/{{ $assignment->id }}/file-upload" method="post" enctype="multipart/form-data">
             @csrf
             <div class="float-left">
                 <label class="font-bold mb-4 text-underlined" 
-                    for="assignment_file"
+                    for="file_path"
                 >
                     File upload
                 </label>
                 
                 <div class="text-sm mt-4 file-upload-wrapper" data-text="Select your file!">
-                    <input name="assignment_file" id="assignment_file" type="file" value="assignment_file">
+                    <input name="file_path" id="file_path" type="file" value="file_path">
                 </div>
-                @error('assignment_file')
+                @error('file_path')
                     <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
                 @enderror
             </div>

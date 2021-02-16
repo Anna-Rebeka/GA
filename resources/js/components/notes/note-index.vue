@@ -28,7 +28,7 @@
                     </div>
                     <div class="px-6 pt-4 pb-2 mb-6 float-right">
                             <button 
-                                class="w-4 h-4" style="background: url(/storage/icons/bin.png) focus:outline-none" 
+                                class="w-6 h-4 font-bold text-red-500 text-xl hover:text-red-400 focus:outline-none" style="background: url(/storage/icons/bin.png)" 
                                 type="button" data-toggle="modal" 
                                 v-on:submit.prevent="deleteData(note)" @click="deleteData(note)">
                                 -

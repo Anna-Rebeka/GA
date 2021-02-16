@@ -17,7 +17,10 @@ class CreateMessagesTable extends Migration
             $table->id();
             $table->foreignId('sender_id');
             $table->foreignId('chatroom_id');
-            $table->string('text', 1000);
+            $table->string('text', 1000)->nullable();
+            $table->text('image_path')->nullable();
+            $table->text('file_path')->nullable();
+            $table->string('file_name', 1000)->nullable();
             $table->boolean('read')->default(false);
             $table->timestamps();
 
