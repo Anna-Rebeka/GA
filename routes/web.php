@@ -15,7 +15,7 @@ use App\Http\Controllers\AssignmentsCommentsController;
 use App\Http\Controllers\ChatroomsController;
 use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\AssignmentsFilesController;
-
+use App\Http\Controllers\GroupWhiteboardPostsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,8 +58,11 @@ Route::middleware('auth')->group(function() {
     Route::get('/create-group', [GroupsController::class, 'create']);
     Route::post('/create-group', [GroupsController::class, 'store']);
     Route::get('/group/{group:id}/members/get', [GroupsController::class, 'getMembers']);
-    Route::get('/{group:id}/whiteboard', [GroupsController::class, 'showWhiteboard']);
-
+    Route::get('/groups/{group:id}/whiteboard', [GroupsController::class, 'showWhiteboard']);
+    
+    Route::get('/groups/{group:id}/get-whiteboard-posts', [GroupWhiteboardPostsController::class, 'get_posts']);
+    Route::post('/groups/{group:id}/whiteboard-post', [GroupWhiteboardPostsController::class, 'store']);
+    Route::get('/groups/{group:id}/loadOlderPosts/{howManyDisplayed}', [GroupWhiteboardPostsController::class, 'load_older_posts']);
 
     Route::get('/events', [EventsController::class, 'index']);
     Route::get('/events/{event:id}', [EventsController::class, 'show']);

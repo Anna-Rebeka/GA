@@ -15,7 +15,7 @@ class CreateGroupWhiteboardPostsTable extends Migration
     {
         Schema::create('group_whiteboard_posts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
+            $table->foreignId('sender_id');
             $table->foreignId('group_id');
             $table->string('text', 2000)->nullable();
             $table->text('image_path')->nullable();
@@ -23,7 +23,7 @@ class CreateGroupWhiteboardPostsTable extends Migration
             $table->string('file_name', 1000)->nullable();
             $table->timestamps();
 
-            $table->foreign('user_id')
+            $table->foreign('sender_id')
                 ->references('id')
                 ->on('users');
             

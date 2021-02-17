@@ -85,6 +85,7 @@ return [
         public_path('assignment_file') => storage_path('app/public/assignment_files'),
         public_path('files') => storage_path('app/storage/files'),
         public_path('photos') => storage_path('app/storage/photos'),
+        public_path('posts') => storage_path('app/storage/posts'),
     ],
 
 ];

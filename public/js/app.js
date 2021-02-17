@@ -3810,7 +3810,299 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["user", "group"],
+  data: function data() {
+    return {
+      posts: [],
+      newPost: "",
+      image: "",
+      uploadImage: false,
+      uploadFile: false,
+      csrf: document.head.querySelector('meta[name="csrf-token"]').content
+    };
+  },
+  mounted: function mounted() {
+    this.getPosts();
+    document.getElementById("postArea").addEventListener("keypress", this.submitOnEnter);
+    /*
+    window.Echo.private("groups." + this.group.id).listen(
+        "PostSent",
+        (e) => {
+            e.post.sender = e.sender;
+            this.posts.push(e.post);
+            this.scrollPosts();
+        }
+    );
+    */
+  },
+  methods: {
+    scrollPosts: function scrollPosts() {
+      var _this = this;
+
+      this.$nextTick(function () {
+        _this.$refs.whiteboard.scrollTop = 9999;
+      });
+    },
+    getPosts: function getPosts() {
+      var _this2 = this;
+
+      axios.get("/groups/" + this.group.id + "/get-whiteboard-posts").then(function (response) {
+        _this2.posts = response.data.reverse();
+
+        _this2.scrollPosts();
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this2.errors = error.response.data.errors;
+          console.log(_this2.errors);
+        }
+
+        console.log(error.message);
+      });
+    },
+    loadOlderPosts: function loadOlderPosts() {
+      var _this3 = this;
+
+      axios.get("/groups/" + this.group.id + "/loadOlderPosts/" + this.posts.length, {}).then(function (response) {
+        _this3.posts = response.data.reverse().concat(_this3.posts);
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this3.errors = error.response.data.errors;
+          console.log(_this3.errors);
+        }
+
+        console.log(error.message);
+      });
+    },
+    submitOnEnter: function submitOnEnter(event) {
+      if (event.which === 13) {
+        this.submit();
+      }
+    },
+    handleImageUpload: function handleImageUpload() {
+      this.image = this.$refs.image.files[0];
+    },
+    handleFileUpload: function handleFileUpload() {
+      this.file = this.$refs.file.files[0];
+    },
+    submit: function submit() {
+      var _this4 = this;
+
+      var postArea = document.getElementById("postArea").value;
+
+      if (postArea == "" && !this.image && !this.file) {
+        return;
+      }
+
+      document.getElementById("postArea").value = "";
+      var formData = new FormData();
+
+      if (this.image) {
+        formData.append("image", this.image);
+        document.getElementById("image").value = "";
+      }
+
+      if (this.file) {
+        formData.append("file", this.file);
+        var fileName = document.getElementById("file_name").value;
+        document.getElementById("file").value = "";
+
+        if (fileName.trim() != "") {
+          formData.append("file_name", fileName);
+          document.getElementById("file_name").value = "";
+        }
+      }
+
+      formData.append("text", postArea);
+      formData.append("group_id", this.group.id);
+      axios.post("/groups/" + this.group.id + "/whiteboard-post", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      }).then(function (response) {
+        response.data["user"] = _this4.user;
+
+        _this4.posts.push(response.data);
+
+        document.getElementById("postArea").value = "";
+        _this4.uploadImage = false;
+        _this4.uploadFile = false;
+
+        _this4.$nextTick(function () {
+          _this4.$refs.whiteboard.scrollTop = 9999;
+        });
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this4.errors = error.response.data.errors;
+          console.log(_this4.errors);
+        }
+
+        console.log(error.message);
+      });
+    }
+  }
+});
 
 /***/ }),
 
@@ -34450,7 +34742,7 @@ var render = function() {
               {
                 staticClass:
                   "bg-white block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
-                attrs: { href: "/" + _vm.user.group.id + "/whiteboard" }
+                attrs: { href: "/groups/" + _vm.user.group.id + "/whiteboard" }
               },
               [_vm._v("Whiteboard\n            ")]
             ),
@@ -34505,9 +34797,352 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div")
+  return _c("div", [
+    _c(
+      "div",
+      {
+        ref: "whiteboard",
+        staticClass:
+          "container mb-2 pr-4 h-80 overflow-y-scroll min-h-screen\t",
+        attrs: { id: "whiteboard" }
+      },
+      [
+        _c(
+          "button",
+          {
+            staticClass:
+              "bg-white text-sm text-center relative clear-both w-full h-8 px-4 pt-1 mb-4 border border-gray-300 hover:bg-purple-100 focus:outline-none focus:bg-purple-100",
+            on: {
+              click: function($event) {
+                return _vm.loadOlderPosts()
+              }
+            }
+          },
+          [_vm._v("\n            Load older posts\n        ")]
+        ),
+        _vm._v(" "),
+        _vm._l(_vm.posts, function(post) {
+          return _c(
+            "div",
+            {
+              key: post.id,
+              staticClass:
+                "bg-white relative clear-both w-full px-4 pt-4 mb-2 border border-gray-300 rounded-lg",
+              class: {
+                "float-right bg-purple-100": post.sender.id == _vm.user.id,
+                "pb-6": post.sender.id != _vm.user.id
+              }
+            },
+            [
+              _c("div", [
+                _c(
+                  "h5",
+                  { staticClass: "text-xs text-gray-500 absolute bottom-0" },
+                  [
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(post.sender.name) +
+                        "\n                "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "float-left mr-2" }, [
+                  _c("img", {
+                    staticClass:
+                      "rounded-full object-cover h-15 w-15 mr-2 mb-3",
+                    attrs: { src: post.sender.avatar, alt: "avatar" }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", [
+                  _c("div", { staticClass: "text-sm mb-3 break-words p-4" }, [
+                    _vm._v(
+                      "\n                        " +
+                        _vm._s(post.text) +
+                        "\n                        "
+                    ),
+                    post.image_path
+                      ? _c("div", [
+                          _c("img", {
+                            staticClass: "max-h-80 max-w-lg mx-auto",
+                            attrs: {
+                              src: "/storage/" + post.image_path,
+                              alt: "image"
+                            }
+                          })
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    post.file_path
+                      ? _c("div", [
+                          post.file_name
+                            ? _c(
+                                "a",
+                                {
+                                  staticClass: "font-semibold underline",
+                                  attrs: { href: "/storage/" + post.file_path }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                " +
+                                      _vm._s(post.file_name) +
+                                      "\n                            "
+                                  )
+                                ]
+                              )
+                            : _c(
+                                "a",
+                                {
+                                  staticClass: "font-semibold underline",
+                                  attrs: { href: "/storage/" + post.file_path }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                attached file\n                            "
+                                  )
+                                ]
+                              )
+                        ])
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "text-xs float-right mb-2" }, [
+                    _vm._v(
+                      "\n                        " +
+                        _vm._s(
+                          _vm._f("dateFormat")(
+                            new Date(post.created_at),
+                            "HH:mm , DD.MM.YYYY"
+                          )
+                        ) +
+                        "\n                    "
+                    )
+                  ])
+                ])
+              ])
+            ]
+          )
+        })
+      ],
+      2
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "mb-4 clear-both",
+        on: {
+          submit: function($event) {
+            $event.preventDefault()
+            return _vm.submit()
+          }
+        }
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass:
+              "bg-white relative h-24 w-full px-4 pt-4 mt-4 mb-2 border border-gray-300 rounded-lg"
+          },
+          [
+            _c("textarea", {
+              staticClass: "w-full resize-none focus:outline-none",
+              attrs: {
+                id: "postArea",
+                name: "text",
+                placeholder: "New post...",
+                maxlength: "1000"
+              }
+            }),
+            _vm._v(" "),
+            _c("div", { staticClass: "absolute bottom-2 right-0" }, [
+              _c(
+                "button",
+                {
+                  staticClass:
+                    "text-sm bg-blue-400 text-white rounded-full w-10 px-2 py-2 mr-2 hover:bg-blue-500 focus:outline-none",
+                  attrs: { id: "sendImage", type: "submit" },
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.submit()
+                    },
+                    click: function($event) {
+                      return _vm.submit()
+                    }
+                  }
+                },
+                [
+                  _c("img", {
+                    staticClass: "w-8",
+                    attrs: { src: "/img/send_icon.png", alt: "send" }
+                  })
+                ]
+              )
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "relative",
+            on: {
+              click: function($event) {
+                _vm.uploadImage = !_vm.uploadImage
+              }
+            }
+          },
+          [
+            _c("img", {
+              staticClass: "h-16",
+              attrs: { src: "/img/image.png", alt: "", srcset: "" }
+            })
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "relative mb-5",
+            on: {
+              click: function($event) {
+                _vm.uploadFile = !_vm.uploadFile
+              }
+            }
+          },
+          [
+            _c("img", {
+              staticClass: "h-16",
+              attrs: { src: "/img/file.png", alt: "", srcset: "" }
+            })
+          ]
+        ),
+        _vm._v(" "),
+        _vm.uploadImage
+          ? _c("div", { staticClass: "mb-6" }, [
+              _c("div", { staticClass: "relative" }, [
+                _c(
+                  "label",
+                  {
+                    staticClass: "font-bold mb-4 text-underlined",
+                    attrs: { for: "image" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                    Select a photo\n                "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "text-sm mt-4 file-upload-wrapper",
+                    attrs: { "data-text": "Select a photo!" }
+                  },
+                  [
+                    _c("input", {
+                      ref: "image",
+                      attrs: { type: "file", id: "image" },
+                      on: {
+                        change: function($event) {
+                          return _vm.handleImageUpload()
+                        }
+                      }
+                    })
+                  ]
+                )
+              ])
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _c("div", { staticClass: "clear-both mb-6" }),
+        _vm._v(" "),
+        _vm.uploadFile
+          ? _c("div", [
+              _c("div", { staticClass: "relative mb-2 lg:float-left" }, [
+                _c(
+                  "label",
+                  {
+                    staticClass: "font-bold mb-4 text-underlined",
+                    attrs: { for: "file_path" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                    Select a file\n                "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "text-sm mt-4 file-upload-wrapper",
+                    attrs: { "data-text": "Select your file!" }
+                  },
+                  [
+                    _c("input", {
+                      ref: "file",
+                      attrs: { type: "file", id: "file" },
+                      on: {
+                        change: function($event) {
+                          return _vm.handleFileUpload()
+                        }
+                      }
+                    })
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _vm._m(0)
+            ])
+          : _vm._e()
+      ]
+    )
+  ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "relative mt-5 mb-2 lg:mt-0 lg:ml-6 lg:float-left" },
+      [
+        _c(
+          "label",
+          {
+            staticClass: "font-bold mb-4 text-underline",
+            attrs: { for: "file_name" }
+          },
+          [_vm._v("\n                    Name your file\n                ")]
+        ),
+        _vm._v(" "),
+        _c("br"),
+        _vm._v(" "),
+        _c("input", {
+          staticClass:
+            "border-b border-gray-400 p-2 mb-4 w-64 focus:outline-none",
+          attrs: {
+            id: "file_name",
+            type: "text",
+            name: "file_name",
+            value: "",
+            pattern: "[a-zA-Z0-9_-]+"
+          }
+        }),
+        _vm._v(" "),
+        _c("br"),
+        _vm._v(" "),
+        _c("p", { staticClass: "text-xs mb-2" }, [_vm._v("(max 1000 chars)")])
+      ]
+    )
+  }
+]
 render._withStripped = true
 
 
