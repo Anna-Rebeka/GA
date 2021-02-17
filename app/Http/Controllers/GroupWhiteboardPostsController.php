@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\GroupWhiteboardPost;
 use App\Models\Group;
 
+use App\Events\NewWhiteboardPost;
+
 use Illuminate\Http\Request;
 
 class GroupWhiteboardPostsController extends Controller
@@ -70,8 +72,8 @@ class GroupWhiteboardPostsController extends Controller
             'file_path' => $attributes['file'],
             'file_name' => $attributes['file_name'],
         ]);
-        
-        //broadcast(new MessageSent($post, Chatroom::find($post->group_id), auth()->user()))->toOthers();
+                
+        broadcast(new NewWhiteboardPost($post, Group::find($post->group_id), auth()->user()))->toOthers();
         
         $post->sender;
 
@@ -87,6 +89,4 @@ class GroupWhiteboardPostsController extends Controller
             ->offset($howManyDisplayed)
             ->get();
     }
-
-    
 }

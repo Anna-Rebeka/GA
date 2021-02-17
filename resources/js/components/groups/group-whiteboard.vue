@@ -184,16 +184,17 @@ export default {
             .getElementById("postArea")
             .addEventListener("keypress", this.submitOnEnter);
 
-        /*
+    
         window.Echo.private("groups." + this.group.id).listen(
-            "PostSent",
+            "NewWhiteboardPost",
             (e) => {
                 e.post.sender = e.sender;
                 this.posts.push(e.post);
                 this.scrollPosts();
+                console.log('uhu');
             }
         );
-        */
+        
     },
 
     methods: {

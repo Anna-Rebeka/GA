@@ -3984,52 +3984,53 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
+    var _this = this;
+
     this.getPosts();
     document.getElementById("postArea").addEventListener("keypress", this.submitOnEnter);
-    /*
-    window.Echo.private("groups." + this.group.id).listen(
-        "PostSent",
-        (e) => {
-            e.post.sender = e.sender;
-            this.posts.push(e.post);
-            this.scrollPosts();
-        }
-    );
-    */
+    window.Echo["private"]("groups." + this.group.id).listen("NewWhiteboardPost", function (e) {
+      e.post.sender = e.sender;
+
+      _this.posts.push(e.post);
+
+      _this.scrollPosts();
+
+      console.log('uhu');
+    });
   },
   methods: {
     scrollPosts: function scrollPosts() {
-      var _this = this;
+      var _this2 = this;
 
       this.$nextTick(function () {
-        _this.$refs.whiteboard.scrollTop = 9999;
+        _this2.$refs.whiteboard.scrollTop = 9999;
       });
     },
     getPosts: function getPosts() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get("/groups/" + this.group.id + "/get-whiteboard-posts").then(function (response) {
-        _this2.posts = response.data.reverse();
+        _this3.posts = response.data.reverse();
 
-        _this2.scrollPosts();
+        _this3.scrollPosts();
       })["catch"](function (error) {
         if (error.response.status == 422) {
-          _this2.errors = error.response.data.errors;
-          console.log(_this2.errors);
+          _this3.errors = error.response.data.errors;
+          console.log(_this3.errors);
         }
 
         console.log(error.message);
       });
     },
     loadOlderPosts: function loadOlderPosts() {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.get("/groups/" + this.group.id + "/loadOlderPosts/" + this.posts.length, {}).then(function (response) {
-        _this3.posts = response.data.reverse().concat(_this3.posts);
+        _this4.posts = response.data.reverse().concat(_this4.posts);
       })["catch"](function (error) {
         if (error.response.status == 422) {
-          _this3.errors = error.response.data.errors;
-          console.log(_this3.errors);
+          _this4.errors = error.response.data.errors;
+          console.log(_this4.errors);
         }
 
         console.log(error.message);
@@ -4047,7 +4048,7 @@ __webpack_require__.r(__webpack_exports__);
       this.file = this.$refs.file.files[0];
     },
     submit: function submit() {
-      var _this4 = this;
+      var _this5 = this;
 
       var postArea = document.getElementById("postArea").value;
 
@@ -4081,21 +4082,21 @@ __webpack_require__.r(__webpack_exports__);
           "Content-Type": "multipart/form-data"
         }
       }).then(function (response) {
-        response.data["user"] = _this4.user;
+        response.data["user"] = _this5.user;
 
-        _this4.posts.push(response.data);
+        _this5.posts.push(response.data);
 
         document.getElementById("postArea").value = "";
-        _this4.uploadImage = false;
-        _this4.uploadFile = false;
+        _this5.uploadImage = false;
+        _this5.uploadFile = false;
 
-        _this4.$nextTick(function () {
-          _this4.$refs.whiteboard.scrollTop = 9999;
+        _this5.$nextTick(function () {
+          _this5.$refs.whiteboard.scrollTop = 9999;
         });
       })["catch"](function (error) {
         if (error.response.status == 422) {
-          _this4.errors = error.response.data.errors;
-          console.log(_this4.errors);
+          _this5.errors = error.response.data.errors;
+          console.log(_this5.errors);
         }
 
         console.log(error.message);
