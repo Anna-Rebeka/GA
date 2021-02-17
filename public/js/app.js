@@ -3972,6 +3972,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "group"],
   data: function data() {
@@ -34852,23 +34854,25 @@ var render = function() {
               }
             },
             [
-              _c(
-                "button",
-                {
-                  staticClass: "absolute top-3 right-3",
-                  on: {
-                    click: function($event) {
-                      return _vm.deletePost(post)
-                    }
-                  }
-                },
-                [
-                  _c("img", {
-                    staticClass: "w-4",
-                    attrs: { src: "/img/bin.png", alt: "delete" }
-                  })
-                ]
-              ),
+              post.sender_id == _vm.user.id
+                ? _c(
+                    "button",
+                    {
+                      staticClass: "absolute top-3 right-3",
+                      on: {
+                        click: function($event) {
+                          return _vm.deletePost(post)
+                        }
+                      }
+                    },
+                    [
+                      _c("img", {
+                        staticClass: "w-4",
+                        attrs: { src: "/img/bin.png", alt: "delete" }
+                      })
+                    ]
+                  )
+                : _vm._e(),
               _vm._v(" "),
               _c("div", [
                 _c(
