@@ -63,7 +63,8 @@ Route::middleware('auth')->group(function() {
     Route::get('/groups/{group:id}/get-whiteboard-posts', [GroupWhiteboardPostsController::class, 'get_posts']);
     Route::post('/groups/{group:id}/whiteboard-post', [GroupWhiteboardPostsController::class, 'store']);
     Route::get('/groups/{group:id}/loadOlderPosts/{howManyDisplayed}', [GroupWhiteboardPostsController::class, 'load_older_posts']);
-
+    Route::delete('/groups/{group:id}/whiteboard-post-delete/{id}', [GroupWhiteboardPostsController::class, 'destroy']);
+    
     Route::get('/events', [EventsController::class, 'index']);
     Route::get('/events/{event:id}', [EventsController::class, 'show']);
     Route::post('/events', [EventsController::class, 'store']);

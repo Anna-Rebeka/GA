@@ -20,6 +20,7 @@
                     'pb-6': post.sender.id != user.id,
                 }"
             >
+                <button v-on:click="deletePost(post)" class="absolute top-3 right-3"><img class="w-4" src="/img/bin.png" alt="delete"></button>
                 <div>
                     <h5 class="text-xs text-gray-500 absolute bottom-0">
                         {{ post.sender.name }}
@@ -303,6 +304,28 @@ export default {
                         this.errors = error.response.data.errors;
                         console.log(this.errors);
                     }
+                    console.log(error.message);
+                });
+        },
+
+        deletePost(post){
+            axios
+                .delete(
+                    "/groups/" +
+                        this.group.id +
+                        "/whiteboard-post-delete/" +
+                        post.id,
+                    {}
+                )
+                .then((response) => {
+                    this.posts = this.posts.filter(function(p) { return p != post })
+                    console.log(response);
+                })
+                .catch((error) => {
+                    /*if (error.response.status == 422) {
+                        this.errors = error.response.data.errors;
+                        console.log(this.errors);
+                    }*/
                     console.log(error.message);
                 });
         },

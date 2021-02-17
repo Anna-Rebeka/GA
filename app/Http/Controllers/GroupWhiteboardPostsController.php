@@ -6,6 +6,7 @@ use App\Models\GroupWhiteboardPost;
 use App\Models\Group;
 
 use App\Events\NewWhiteboardPost;
+use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Http\Request;
 
@@ -80,6 +81,20 @@ class GroupWhiteboardPostsController extends Controller
         return $post;
     }
 
+
+    public function destroy(Group $group, $post_id)
+    {
+        $post = GroupWhiteboardPost::findOrFail($post_id);
+
+        if($post->file_path){
+            Storage::delete($post->file_path);
+        }
+        if($post->image_path){
+            Storage::delete($post->image_path);
+        }
+
+        $post->delete();
+    }
 
     public function load_older_posts(Group $group, $howManyDisplayed){
         return GroupWhiteboardPost::where('group_id', $group->id)

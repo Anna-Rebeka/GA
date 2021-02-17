@@ -3971,6 +3971,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "group"],
   data: function data() {
@@ -4099,6 +4100,22 @@ __webpack_require__.r(__webpack_exports__);
           console.log(_this5.errors);
         }
 
+        console.log(error.message);
+      });
+    },
+    deletePost: function deletePost(post) {
+      var _this6 = this;
+
+      axios["delete"]("/groups/" + this.group.id + "/whiteboard-post-delete/" + post.id, {}).then(function (response) {
+        _this6.posts = _this6.posts.filter(function (p) {
+          return p != post;
+        });
+        console.log(response);
+      })["catch"](function (error) {
+        /*if (error.response.status == 422) {
+            this.errors = error.response.data.errors;
+            console.log(this.errors);
+        }*/
         console.log(error.message);
       });
     }
@@ -34835,6 +34852,24 @@ var render = function() {
               }
             },
             [
+              _c(
+                "button",
+                {
+                  staticClass: "absolute top-3 right-3",
+                  on: {
+                    click: function($event) {
+                      return _vm.deletePost(post)
+                    }
+                  }
+                },
+                [
+                  _c("img", {
+                    staticClass: "w-4",
+                    attrs: { src: "/img/bin.png", alt: "delete" }
+                  })
+                ]
+              ),
+              _vm._v(" "),
               _c("div", [
                 _c(
                   "h5",
