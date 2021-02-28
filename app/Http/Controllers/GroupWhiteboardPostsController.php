@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 
 class GroupWhiteboardPostsController extends Controller
 {
-    public function get_posts(Group $group)
+    public function getPosts(Group $group)
     {
         return GroupWhiteboardPost::where('group_id', $group->id)
         ->with('sender')
@@ -96,7 +96,7 @@ class GroupWhiteboardPostsController extends Controller
         $post->delete();
     }
 
-    public function load_older_posts(Group $group, $howManyDisplayed){
+    public function loadOlderPosts(Group $group, $howManyDisplayed){
         return GroupWhiteboardPost::where('group_id', $group->id)
             ->with('sender')
             ->orderBy('created_at', 'DESC')

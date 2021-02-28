@@ -60,9 +60,9 @@ Route::middleware('auth')->group(function() {
     Route::get('/group/{group:id}/members/get', [GroupsController::class, 'getMembers']);
     Route::get('/groups/{group:id}/whiteboard', [GroupsController::class, 'showWhiteboard']);
     
-    Route::get('/groups/{group:id}/get-whiteboard-posts', [GroupWhiteboardPostsController::class, 'get_posts']);
+    Route::get('/groups/{group:id}/get-whiteboard-posts', [GroupWhiteboardPostsController::class, 'getPosts']);
     Route::post('/groups/{group:id}/whiteboard-post', [GroupWhiteboardPostsController::class, 'store']);
-    Route::get('/groups/{group:id}/loadOlderPosts/{howManyDisplayed}', [GroupWhiteboardPostsController::class, 'load_older_posts']);
+    Route::get('/groups/{group:id}/loadOlderPosts/{howManyDisplayed}', [GroupWhiteboardPostsController::class, 'loadOlderPosts']);
     Route::delete('/groups/{group:id}/whiteboard-post-delete/{id}', [GroupWhiteboardPostsController::class, 'destroy']);
     
     Route::get('/events', [EventsController::class, 'index']);
@@ -77,7 +77,7 @@ Route::middleware('auth')->group(function() {
 
     Route::get('/assignments', [AssignmentsController::class, 'index']);
     Route::get('/assignments/{assignment:id}', [AssignmentsController::class, 'show']);
-    Route::get('/assignments/{assignment:id}/is-taken-by-auth', [AssignmentsController::class, 'assignmentUserCheck']);
+    Route::get('/assignments/{assignment:id}/is-taken-by-auth', [AssignmentsController::class, 'checkAssignmentUser']);
     Route::post('/assignments', [AssignmentsController::class, 'store']);
     Route::delete('/assignments/{assignment:id}', [AssignmentsController::class, 'destroy']);
     Route::patch('/assignments/{assignment:id}/take', [AssignmentsController::class, 'take']);

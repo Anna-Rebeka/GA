@@ -65,11 +65,11 @@ class User extends Authenticatable
     }
 
     public function getAvatarAttribute($value){
-        return asset($value ? 'storage/'.$value : 'storage/users/avatars/default.jpg');
+        return asset($value ? 'storage/'.$value : '/img/default.jpg');
     }
   
     public function getBannerAttribute($value){
-        return asset($value ? 'storage/'.$value : 'storage/users/banners/default.png');
+        return asset($value ? 'storage/'.$value : '/img/default-banner.png');
     }
 
     public function groups(){

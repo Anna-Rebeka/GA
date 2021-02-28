@@ -26,11 +26,14 @@ class CreateMessagesTable extends Migration
 
             $table->foreign('sender_id')
                 ->references('id')
-                ->on('users');
+                ->on('users')
+                ->onDelete('cascade');
+
             
             $table->foreign('chatroom_id')
                 ->references('id')
-                ->on('chatrooms');
+                ->on('chatrooms')
+                ->onDelete('cascade');
         });
     }
 

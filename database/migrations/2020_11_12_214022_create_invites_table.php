@@ -22,7 +22,8 @@ class CreateInvitesTable extends Migration
 
             $table->foreign('group')
                 ->references('id')
-                ->on('groups');
+                ->on('groups')
+                ->onDelete('cascade');
         });
     }
 

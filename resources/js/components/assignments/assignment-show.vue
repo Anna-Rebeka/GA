@@ -10,14 +10,6 @@
                     >
                         Done
                     </button>
-                    <!--
-                    <a
-                        :href="showedAssignment.id + '/edit'" 
-                        class="rounded-lg border border-gray-300 px-4 py-2 mr-2 text-xs bg-white hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
-                    >
-                        Edit
-                    </a>
-                    -->
                     <button
                         @click="checkWithUser(showedAssignment, 'delete')"
                         class="rounded-lg w-16 px-2 py-2 mr-2 text-white text-sm bg-red-400 hover:bg-red-300 focus:outline-none"
@@ -146,7 +138,6 @@ export default {
                 .patch("/assignments/" + $assignment.id + "/done")
                 .then((response) => {
                     this.showedAssignment.done = true;
-                    this.reload();
                 })
                 .catch((error) => {
                     if (error.response.status == 422) {

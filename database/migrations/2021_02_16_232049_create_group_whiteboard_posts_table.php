@@ -25,11 +25,13 @@ class CreateGroupWhiteboardPostsTable extends Migration
 
             $table->foreign('sender_id')
                 ->references('id')
-                ->on('users');
+                ->on('users')
+                ->onDelete('cascade');
             
             $table->foreign('group_id')
                 ->references('id')
-                ->on('groups');
+                ->on('groups')
+                ->onDelete('cascade');
 
         });
     }

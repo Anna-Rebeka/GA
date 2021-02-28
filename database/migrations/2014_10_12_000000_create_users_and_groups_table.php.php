@@ -41,7 +41,8 @@ class CreateUsersAndGroupsTable extends Migration
 
             $table->foreign('admin_id')
             ->references('id')
-            ->on('users');
+            ->on('users')
+            ->onDelete('cascade');
         });
 
         Schema::enableForeignKeyConstraints();

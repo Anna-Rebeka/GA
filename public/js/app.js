@@ -1984,14 +1984,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "assignment"],
   data: function data() {
@@ -2055,8 +2047,6 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.patch("/assignments/" + $assignment.id + "/done").then(function (response) {
         _this3.showedAssignment.done = true;
-
-        _this3.reload();
       })["catch"](function (error) {
         if (error.response.status == 422) {
           _this3.errors = error.response.data.errors;
@@ -2247,7 +2237,9 @@ __webpack_require__.r(__webpack_exports__);
     filterMine: function filterMine() {
       var user = this.user;
       this.savedAssignments = this.savedAssignments.filter(function (e) {
-        if (e.users.includes(user)) {
+        if (e.users.map(function (u) {
+          return u.id;
+        }).includes(user.id)) {
           return true;
         }
 
@@ -32589,7 +32581,7 @@ var staticRenderFns = [
           _vm._v(" "),
           _c("option", { attrs: { value: "mine" } }, [_vm._v("Mine")]),
           _vm._v(" "),
-          _c("option", { attrs: { value: "toDo" } }, [_vm._v("To do")]),
+          _c("option", { attrs: { value: "toDo" } }, [_vm._v("Waiting")]),
           _vm._v(" "),
           _c("option", { attrs: { value: "free" } }, [_vm._v("Free")]),
           _vm._v(" "),
