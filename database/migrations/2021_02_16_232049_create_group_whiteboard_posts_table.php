@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEventsTable extends Migration
+class CreateGroupWhiteboardPostsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,17 @@ class CreateEventsTable extends Migration
      */
     public function up()
     {
-        Schema::create('events', function (Blueprint $table) {
+        Schema::create('group_whiteboard_posts', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->foreignId('host_id');
+            $table->foreignId('sender_id');
             $table->foreignId('group_id');
-            $table->string('description')->nullable();
-            $table->dateTime('event_time');
-            $table->string('event_place', 255);
+            $table->string('text', 2000)->nullable();
+            $table->text('image_path')->nullable();
+            $table->text('file_path')->nullable();
+            $table->string('file_name', 1000)->nullable();
             $table->timestamps();
 
-            $table->foreign('host_id')
+            $table->foreign('sender_id')
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade');
@@ -32,6 +32,7 @@ class CreateEventsTable extends Migration
                 ->references('id')
                 ->on('groups')
                 ->onDelete('cascade');
+
         });
     }
 
@@ -42,6 +43,6 @@ class CreateEventsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('meetings');
+        Schema::dropIfExists('group_whiteboard_posts');
     }
 }

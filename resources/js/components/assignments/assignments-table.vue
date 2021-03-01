@@ -6,7 +6,7 @@
                 class="inline-block rounded-lg bg-white border border-gray-300 text-gray-700 px-4 pr-8 h-8 mr-2 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
                 <option value="all">All</option>
                 <option value="mine">Mine</option>
-                <option value="toDo">To do</option>
+                <option value="toDo">Waiting</option>
                 <option value="free">Free</option>
                 <option value="created">Created by me</option>
             </select>
@@ -166,7 +166,7 @@ export default {
         filterMine(){
             var user = this.user;
             this.savedAssignments = this.savedAssignments.filter(function(e) {
-                if(e.users.includes(user)){
+                if(e.users.map(u => u.id).includes(user.id)){
                     return true;
                 }
                 return false;

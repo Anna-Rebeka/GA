@@ -16,7 +16,8 @@ class Group extends Model
      */
     protected $fillable = [
         'name',
-        'admin_id'
+        'admin_id',
+        'board'
     ];
 
     public function users(){
@@ -33,6 +34,10 @@ class Group extends Model
 
     public function assignments(){
         return $this->hasMany(Assignment::class);
+    }
+
+    public function whiteboard_posts(){
+        return $this->hasMany(GroupWhiteboardPost::class);
     }
 }
 

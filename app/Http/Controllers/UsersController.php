@@ -85,7 +85,6 @@ class UsersController extends Controller
 
      
     public function update(User $user){
-        //TODO -> FORMREQUEST 
         $attributes = request()->validate([
             'username' => [
                 'string', 
@@ -127,11 +126,11 @@ class UsersController extends Controller
         ]);
         
         if(request('avatar')){
-            $attributes['avatar'] = request('avatar')->store('avatars');
+            $attributes['avatar'] = request('avatar')->store('/users/avatars');
         }
 
         if(request('banner')){
-            $attributes['banner'] = request('banner')->store('banners');
+            $attributes['banner'] = request('banner')->store('/users/banners');
         }
         
         if(!request('password')){

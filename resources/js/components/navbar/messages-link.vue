@@ -1,5 +1,5 @@
 <template>
-    <div class="z-40 fixed bottom-4 right-6">
+    <div class="z-30 fixed bottom-4 right-6">
         <a
             v-bind:class="{
                 'bg-purple-200 hover:text-white hover:bg-purple-400': newMessage,

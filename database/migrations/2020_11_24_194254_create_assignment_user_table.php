@@ -21,11 +21,13 @@ class CreateAssignmentUserTable extends Migration
 
             $table->foreign('assignment_id')
                 ->references('id')
-                ->on('assignments');
+                ->on('assignments')
+                ->onDelete('cascade');
             
             $table->foreign('user_id')
                 ->references('id')
-                ->on('users');
+                ->on('users')
+                ->onDelete('cascade');
         });
     }
 
