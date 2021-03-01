@@ -1,5 +1,34 @@
 <template>
     <div>
+        <div v-if="!editingBoard" class="relative bg-purple-100 border-gray-300 rounded-lg p-5 mb-5">
+            <p v-if="groupBoard">{{ groupBoard }}</p>
+            <p v-if="!groupBoard && group.admin_id == user.id" class="text-gray-400 text-sm text-center">Write here for others to see!</p>
+            <p v-if="!groupBoard && group.admin_id != user.id" class="text-gray-400 text-center">...</p>
+            
+            <div v-if=" group.admin_id==user.id" class="absolute top-1 right-1">
+                <button v-on:click='editingBoard = !editingBoard' class="focus:outline-none">
+                    <img class="w-9 border border-gray-300 rounded-full" src="/img/edit.png" alt="edit">
+                </button>
+            </div>
+        </div>
+        <div v-if="editingBoard" class="relative">
+            <textarea
+                id="boardArea"
+                name="text"
+                :placeholder="groupBoard"
+                maxlength="500"
+                class="relative w-full resize-none bg-purple-100 border-gray-300 rounded-lg p-5 mb-5 focus:outline-none"
+            >
+            </textarea>
+            <div v-if="group.admin_id==user.id" class="absolute z-40 top-1 right-1">
+                <button v-on:click='editBoard()' class="focus:outline-none">
+                    <img class="w-9 border border-gray-300 rounded-full" src="/img/edit.png" alt="edit">
+                </button>
+                <button v-on:click='editingBoard = !editingBoard' class="focus:outline-none">
+                    <img class="w-9 border border-gray-300 rounded-full" src="/img/cancel.png" alt="edit">
+                </button>
+            </div>
+        </div>
         <div
             id="whiteboard"
             ref="whiteboard"
@@ -174,8 +203,10 @@ export default {
             posts: [],
             newPost: "",
             image: "",
+            groupBoard: this.group.board,
             uploadImage: false,
             uploadFile: false,
+            editingBoard: false,
             csrf: document.head.querySelector('meta[name="csrf-token"]')
                 .content,
         };
@@ -201,6 +232,17 @@ export default {
     },
 
     methods: {
+        editBoard(){
+            axios.patch("/groups/" + this.group.id + "/update-whiteboard", {
+                board: document.getElementById("boardArea").value,
+            }).then(response => {
+                this.groupBoard = response.data;
+                this.editingBoard = false;
+            }).catch(error => {
+                console.log(error.message);
+            });
+        },
+
         scrollPosts() {
             this.$nextTick(() => {
                 this.$refs.whiteboard.scrollTop = 9999;

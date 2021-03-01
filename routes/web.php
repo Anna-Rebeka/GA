@@ -62,6 +62,7 @@ Route::middleware('auth')->group(function() {
     
     Route::get('/groups/{group:id}/get-whiteboard-posts', [GroupWhiteboardPostsController::class, 'getPosts']);
     Route::post('/groups/{group:id}/whiteboard-post', [GroupWhiteboardPostsController::class, 'store']);
+    Route::patch('/groups/{group:id}/update-whiteboard', [GroupsController::class, 'updateBoard']);
     Route::get('/groups/{group:id}/loadOlderPosts/{howManyDisplayed}', [GroupWhiteboardPostsController::class, 'loadOlderPosts']);
     Route::delete('/groups/{group:id}/whiteboard-post-delete/{id}', [GroupWhiteboardPostsController::class, 'destroy']);
     

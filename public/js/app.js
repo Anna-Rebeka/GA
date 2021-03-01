@@ -3966,6 +3966,35 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "group"],
   data: function data() {
@@ -3973,8 +4002,10 @@ __webpack_require__.r(__webpack_exports__);
       posts: [],
       newPost: "",
       image: "",
+      groupBoard: this.group.board,
       uploadImage: false,
       uploadFile: false,
+      editingBoard: false,
       csrf: document.head.querySelector('meta[name="csrf-token"]').content
     };
   },
@@ -3994,38 +4025,50 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
-    scrollPosts: function scrollPosts() {
+    editBoard: function editBoard() {
       var _this2 = this;
 
+      axios.patch("/groups/" + this.group.id + "/update-whiteboard", {
+        board: document.getElementById("boardArea").value
+      }).then(function (response) {
+        _this2.groupBoard = response.data;
+        _this2.editingBoard = false;
+      })["catch"](function (error) {
+        console.log(error.message);
+      });
+    },
+    scrollPosts: function scrollPosts() {
+      var _this3 = this;
+
       this.$nextTick(function () {
-        _this2.$refs.whiteboard.scrollTop = 9999;
+        _this3.$refs.whiteboard.scrollTop = 9999;
       });
     },
     getPosts: function getPosts() {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.get("/groups/" + this.group.id + "/get-whiteboard-posts").then(function (response) {
-        _this3.posts = response.data.reverse();
+        _this4.posts = response.data.reverse();
 
-        _this3.scrollPosts();
+        _this4.scrollPosts();
       })["catch"](function (error) {
         if (error.response.status == 422) {
-          _this3.errors = error.response.data.errors;
-          console.log(_this3.errors);
+          _this4.errors = error.response.data.errors;
+          console.log(_this4.errors);
         }
 
         console.log(error.message);
       });
     },
     loadOlderPosts: function loadOlderPosts() {
-      var _this4 = this;
+      var _this5 = this;
 
       axios.get("/groups/" + this.group.id + "/loadOlderPosts/" + this.posts.length, {}).then(function (response) {
-        _this4.posts = response.data.reverse().concat(_this4.posts);
+        _this5.posts = response.data.reverse().concat(_this5.posts);
       })["catch"](function (error) {
         if (error.response.status == 422) {
-          _this4.errors = error.response.data.errors;
-          console.log(_this4.errors);
+          _this5.errors = error.response.data.errors;
+          console.log(_this5.errors);
         }
 
         console.log(error.message);
@@ -4043,7 +4086,7 @@ __webpack_require__.r(__webpack_exports__);
       this.file = this.$refs.file.files[0];
     },
     submit: function submit() {
-      var _this5 = this;
+      var _this6 = this;
 
       var postArea = document.getElementById("postArea").value;
 
@@ -4077,31 +4120,31 @@ __webpack_require__.r(__webpack_exports__);
           "Content-Type": "multipart/form-data"
         }
       }).then(function (response) {
-        response.data["user"] = _this5.user;
+        response.data["user"] = _this6.user;
 
-        _this5.posts.push(response.data);
+        _this6.posts.push(response.data);
 
         document.getElementById("postArea").value = "";
-        _this5.uploadImage = false;
-        _this5.uploadFile = false;
+        _this6.uploadImage = false;
+        _this6.uploadFile = false;
 
-        _this5.$nextTick(function () {
-          _this5.$refs.whiteboard.scrollTop = 9999;
+        _this6.$nextTick(function () {
+          _this6.$refs.whiteboard.scrollTop = 9999;
         });
       })["catch"](function (error) {
         if (error.response.status == 422) {
-          _this5.errors = error.response.data.errors;
-          console.log(_this5.errors);
+          _this6.errors = error.response.data.errors;
+          console.log(_this6.errors);
         }
 
         console.log(error.message);
       });
     },
     deletePost: function deletePost(post) {
-      var _this6 = this;
+      var _this7 = this;
 
       axios["delete"]("/groups/" + this.group.id + "/whiteboard-post-delete/" + post.id, {}).then(function (response) {
-        _this6.posts = _this6.posts.filter(function (p) {
+        _this7.posts = _this7.posts.filter(function (p) {
           return p != post;
         });
         console.log(response);
@@ -34810,6 +34853,110 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    !_vm.editingBoard
+      ? _c(
+          "div",
+          {
+            staticClass:
+              "relative bg-purple-100 border-gray-300 rounded-lg p-5 mb-5"
+          },
+          [
+            _vm.groupBoard
+              ? _c("p", [_vm._v(_vm._s(_vm.groupBoard))])
+              : _vm._e(),
+            _vm._v(" "),
+            !_vm.groupBoard && _vm.group.admin_id == _vm.user.id
+              ? _c("p", { staticClass: "text-gray-400 text-sm text-center" }, [
+                  _vm._v("Write here for others to see!")
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            !_vm.groupBoard && _vm.group.admin_id != _vm.user.id
+              ? _c("p", { staticClass: "text-gray-400 text-center" }, [
+                  _vm._v("...")
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.group.admin_id == _vm.user.id
+              ? _c("div", { staticClass: "absolute top-1 right-1" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "focus:outline-none",
+                      on: {
+                        click: function($event) {
+                          _vm.editingBoard = !_vm.editingBoard
+                        }
+                      }
+                    },
+                    [
+                      _c("img", {
+                        staticClass: "w-9 border border-gray-300 rounded-full",
+                        attrs: { src: "/img/edit.png", alt: "edit" }
+                      })
+                    ]
+                  )
+                ])
+              : _vm._e()
+          ]
+        )
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.editingBoard
+      ? _c("div", { staticClass: "relative" }, [
+          _c("textarea", {
+            staticClass:
+              "relative w-full resize-none bg-purple-100 border-gray-300 rounded-lg p-5 mb-5 focus:outline-none",
+            attrs: {
+              id: "boardArea",
+              name: "text",
+              placeholder: _vm.groupBoard,
+              maxlength: "500"
+            }
+          }),
+          _vm._v(" "),
+          _vm.group.admin_id == _vm.user.id
+            ? _c("div", { staticClass: "absolute z-40 top-1 right-1" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "focus:outline-none",
+                    on: {
+                      click: function($event) {
+                        return _vm.editBoard()
+                      }
+                    }
+                  },
+                  [
+                    _c("img", {
+                      staticClass: "w-9 border border-gray-300 rounded-full",
+                      attrs: { src: "/img/edit.png", alt: "edit" }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "focus:outline-none",
+                    on: {
+                      click: function($event) {
+                        _vm.editingBoard = !_vm.editingBoard
+                      }
+                    }
+                  },
+                  [
+                    _c("img", {
+                      staticClass: "w-9 border border-gray-300 rounded-full",
+                      attrs: { src: "/img/cancel.png", alt: "edit" }
+                    })
+                  ]
+                )
+              ])
+            : _vm._e()
+        ])
+      : _vm._e(),
+    _vm._v(" "),
     _c(
       "div",
       {

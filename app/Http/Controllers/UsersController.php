@@ -85,7 +85,6 @@ class UsersController extends Controller
 
      
     public function update(User $user){
-        //TODO -> FORMREQUEST 
         $attributes = request()->validate([
             'username' => [
                 'string', 

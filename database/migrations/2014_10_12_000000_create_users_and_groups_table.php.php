@@ -37,6 +37,7 @@ class CreateUsersAndGroupsTable extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('admin_id');
+            $table->string('board', 500)->nullable();
             $table->timestamps();
 
             $table->foreign('admin_id')

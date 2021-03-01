@@ -88,8 +88,48 @@ class GroupsController extends Controller
      */
     public function update(Request $request, Group $group)
     {
-        //
+        $attributes = request()->validate([
+            'name' => [
+                'string', 
+                'required', 
+                'max:255', 
+            ],
+            'admin_id' => [
+                'exists:users,id',
+                'required',
+            ],
+            'board' => [
+                'string', 
+                'nullable', 
+                'max:500', 
+            ],
+        ]);
+    
+        if(!request('board')){
+            $attributes['board'] = $group->board;
+        }
+        $group->update($attributes);
+        return back();
     }
+
+    public function updateBoard(Request $request, Group $group)
+    {
+        $attributes = request()->validate([
+            'board' => [
+                'string', 
+                'nullable', 
+                'max:500', 
+            ],
+        ]);
+            
+        if(!request('board')){
+            $attributes['board'] = NULL;
+        }
+
+        $group->update($attributes);
+        return $group->board;
+    }
+
 
     /**
      * Remove the specified resource from storage.
