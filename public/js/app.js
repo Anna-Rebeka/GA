@@ -3856,7 +3856,69 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["user", "group", "stats"],
+  data: function data() {
+    return {
+      newMessage: false,
+      howMany: 0,
+      chatrooms: [],
+      usersInfo: null
+    };
+  }
+});
 
 /***/ }),
 
@@ -34935,7 +34997,104 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("\n    hi\n")])
+  return _c("div", [
+    _c(
+      "div",
+      [
+        _c("h3", { staticClass: "text-center font-bold text-lg mb-3" }, [
+          _vm._v("\n            Assignments and Workload\n        ")
+        ]),
+        _vm._v(" "),
+        _c("p", { staticClass: "text-sm font-bold float-left ml-2 mr-2" }, [
+          _vm._v("%")
+        ]),
+        _vm._v(" "),
+        _c("p", { staticClass: "text-xs font-bold text-blue-500 float-left" }, [
+          _vm._v("\n            = users assignments\n        ")
+        ]),
+        _vm._v(" "),
+        _c("p", { staticClass: "text-sm font-bold float-left ml-2 mr-2" }, [
+          _vm._v("/")
+        ]),
+        _vm._v(" "),
+        _c(
+          "p",
+          {
+            staticClass: "float-left text-xs font-bold text-red-600 mb-4 mr-8"
+          },
+          [_vm._v("\n            all assignments\n        ")]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "clear-both mb-6" }),
+        _vm._v(" "),
+        _vm._l(_vm.stats, function(stat) {
+          return _c(
+            "div",
+            {
+              key: stat.user_id,
+              staticClass:
+                "relative float-left w-32 h-44 py-2 mr-5 text-center shadow-md border border-gray-200"
+            },
+            [
+              stat.avatar != null
+                ? _c("img", {
+                    staticClass:
+                      "rounded-full shadow-sm mx-auto mb-1 w-20 h-20 object-cover border-8",
+                    style:
+                      "border-color: rgba(0, " +
+                      (220 - Math.ceil(130 * stat.user_to_all)) +
+                      " , 0, 0.3)",
+                    attrs: { src: "/storage/" + stat.avatar, alt: "userAvatar" }
+                  })
+                : _c("img", {
+                    staticClass:
+                      "rounded-full hadow-sm mx-auto mb-1 w-20 h-20 object-cover border-8",
+                    style:
+                      "border-color: rgba(0, " +
+                      (220 + Math.ceil(130 * stat.user_to_all)) +
+                      " , 0, 0.3)",
+                    attrs: { src: "/img/default.jpg" }
+                  }),
+              _vm._v(" "),
+              _c("div", { staticClass: "max-h-14 overflow-y-auto" }, [
+                _c(
+                  "a",
+                  {
+                    staticClass: "hover:underline",
+                    attrs: { href: "/profile/" + stat.username }
+                  },
+                  [
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(stat.name) +
+                        "\n                "
+                    )
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "p",
+                {
+                  staticClass: "text-sm font-medium absolute bottom-0 right-8"
+                },
+                [
+                  _vm._v(
+                    "\n                " +
+                      _vm._s((stat.user_to_all * 100).toFixed(2)) +
+                      " %\n            "
+                  )
+                ]
+              )
+            ]
+          )
+        })
+      ],
+      2
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "clear-both h-10" })
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -35478,7 +35637,7 @@ var render = function() {
                       "p",
                       {
                         staticClass:
-                          "ml-2 text-left font-semibold font-sans tracking-wide"
+                          "hover:underline ml-2 text-left font-semibold font-sans tracking-wide"
                       },
                       [_vm._v(_vm._s(member.name))]
                     )
