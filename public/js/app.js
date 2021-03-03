@@ -3911,25 +3911,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "group", "stats", "free_users"],
   data: function data() {
@@ -3937,8 +3918,20 @@ __webpack_require__.r(__webpack_exports__);
       newMessage: false,
       howMany: 0,
       chatrooms: [],
-      usersInfo: null
+      usersInfo: null,
+      pageOfItems: [],
+      allUsers: this.allUsers = this.free_users.concat(this.stats)
     };
+  },
+  methods: {
+    onChangePage: function onChangePage(pageOfItems) {
+      this.pageOfItems = pageOfItems;
+    },
+    avatarPath: function avatarPath(oldPath) {
+      var index = oldPath.lastIndexOf("/") + 1;
+      var newPath = '/storage/users/avatars/'.concat(oldPath.substring(index));
+      return newPath;
+    }
   }
 });
 
@@ -4362,8 +4355,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user', 'members', 'groupid'],
+  props: ["user", "members", "groupid"],
   data: function data() {
     return {
       visibleMembers: null
@@ -35024,7 +35024,7 @@ var render = function() {
       "div",
       [
         _c("h3", { staticClass: "text-center font-bold text-lg mb-3" }, [
-          _vm._v("\n            Assignments and Workload\n        ")
+          _vm._v("Team Workload")
         ]),
         _vm._v(" "),
         _c("p", { staticClass: "text-sm font-bold float-left ml-2 mr-2" }, [
@@ -35049,76 +35049,35 @@ var render = function() {
         _vm._v(" "),
         _c("div", { staticClass: "clear-both mb-6" }),
         _vm._v(" "),
-        _vm._l(_vm.free_users, function(freeUser) {
+        _vm._l(_vm.pageOfItems, function(statUser) {
           return _c(
             "div",
             {
-              key: freeUser.id,
+              key: statUser.id,
               staticClass:
                 "relative float-left w-32 h-44 py-2 mr-5 text-center shadow-md border border-gray-200"
             },
             [
-              _c("img", {
-                staticClass:
-                  "rounded-full shadow-sm mx-auto mb-1 w-20 h-20 object-cover border-8 border-green-400 border-opacity-30",
-                attrs: { src: freeUser.avatar, alt: "userAvatar" }
-              }),
-              _vm._v(" "),
-              _c("div", { staticClass: "max-h-14 overflow-y-auto" }, [
-                _c(
-                  "a",
-                  {
-                    staticClass: "hover:underline",
-                    attrs: { href: "/profile/" + freeUser.username }
-                  },
-                  [
-                    _vm._v(
-                      "\n                    " +
-                        _vm._s(freeUser.name) +
-                        "\n                "
-                    )
-                  ]
-                )
-              ]),
-              _vm._v(" "),
-              _c(
-                "p",
-                {
-                  staticClass: "text-sm font-medium absolute bottom-0 right-9"
-                },
-                [_vm._v("\n                0.00 %\n            ")]
-              )
-            ]
-          )
-        }),
-        _vm._v(" "),
-        _vm._l(_vm.stats, function(stat) {
-          return _c(
-            "div",
-            {
-              key: stat.user_id,
-              staticClass:
-                "relative float-left w-32 h-44 py-2 mr-5 text-center shadow-md border border-gray-200"
-            },
-            [
-              stat.avatar != null
+              !statUser.user_to_all
                 ? _c("img", {
+                    staticClass:
+                      "rounded-full shadow-sm mx-auto mb-1 w-20 h-20 object-cover border-8 border-green-400 border-opacity-30",
+                    attrs: {
+                      src: _vm.avatarPath(statUser.avatar),
+                      alt: "userAvatar"
+                    }
+                  })
+                : _c("img", {
                     staticClass:
                       "rounded-full shadow-sm mx-auto mb-1 w-20 h-20 object-cover border-8",
                     style:
                       "border-color: rgba(0, " +
-                      (220 - Math.ceil(130 * stat.user_to_all)) +
+                      (220 - Math.ceil(130 * statUser.user_to_all)) +
                       " , 0, 0.3)",
-                    attrs: { src: "/storage/" + stat.avatar, alt: "userAvatar" }
-                  })
-                : _c("img", {
-                    staticClass:
-                      "rounded-full hadow-sm mx-auto mb-1 w-20 h-20 object-cover border-8",
-                    style:
-                      "border-color: rgba(0, " +
-                      (220 + Math.ceil(130 * stat.user_to_all)) +
-                      " , 0, 0.3)",
-                    attrs: { src: "/img/default.jpg" }
+                    attrs: {
+                      src: _vm.avatarPath(statUser.avatar),
+                      alt: "userAvatar"
+                    }
                   }),
               _vm._v(" "),
               _c("div", { staticClass: "max-h-14 overflow-y-auto" }, [
@@ -35126,31 +35085,41 @@ var render = function() {
                   "a",
                   {
                     staticClass: "hover:underline",
-                    attrs: { href: "/profile/" + stat.username }
+                    attrs: { href: "/profile/" + statUser.username }
                   },
                   [
                     _vm._v(
                       "\n                    " +
-                        _vm._s(stat.name) +
+                        _vm._s(statUser.name) +
                         "\n                "
                     )
                   ]
                 )
               ]),
               _vm._v(" "),
-              _c(
-                "p",
-                {
-                  staticClass: "text-sm font-medium absolute bottom-0 right-8"
-                },
-                [
-                  _vm._v(
-                    "\n                " +
-                      _vm._s((stat.user_to_all * 100).toFixed(2)) +
-                      " %\n            "
+              statUser.user_to_all
+                ? _c(
+                    "p",
+                    {
+                      staticClass:
+                        "text-sm font-medium absolute bottom-0 right-8"
+                    },
+                    [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s((statUser.user_to_all * 100).toFixed(2)) +
+                          " %\n            "
+                      )
+                    ]
                   )
-                ]
-              )
+                : _c(
+                    "p",
+                    {
+                      staticClass:
+                        "text-sm font-medium absolute bottom-0 right-9"
+                    },
+                    [_vm._v("\n                0.00 %\n            ")]
+                  )
             ]
           )
         })
@@ -35158,7 +35127,19 @@ var render = function() {
       2
     ),
     _vm._v(" "),
-    _c("div", { staticClass: "clear-both h-10" })
+    _c("div", { staticClass: "clear-both h-10" }),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "mt-5 clear-both w-full text-center text-sm" },
+      [
+        _c("jw-pagination", {
+          attrs: { items: _vm.allUsers, pageSize: 20 },
+          on: { changePage: _vm.onChangePage }
+        })
+      ],
+      1
+    )
   ])
 }
 var staticRenderFns = []
@@ -35676,7 +35657,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container text-center pb-4 pt-7" }, [
     _c("h2", { staticClass: "font-bold text-2xl mb-4" }, [
-      _vm._v(" Group members ")
+      _vm._v("Group members")
     ]),
     _vm._v(" "),
     _vm.members
@@ -35704,7 +35685,13 @@ var render = function() {
                         staticClass:
                           "hover:underline ml-2 text-left font-semibold font-sans tracking-wide"
                       },
-                      [_vm._v(_vm._s(member.name))]
+                      [
+                        _vm._v(
+                          "\n                        " +
+                            _vm._s(member.name) +
+                            "\n                    "
+                        )
+                      ]
                     )
                   ])
                 ])
@@ -35713,17 +35700,17 @@ var render = function() {
           }),
           0
         )
-      : _c("p", [_vm._v(" No members ")]),
+      : _c("p", [_vm._v("No members")]),
     _vm._v(" "),
     _c("div", { staticClass: "flex w-full justify-between" }, [
       _c(
         "a",
         {
           staticClass:
-            "bg-white w-24 float-left m-2  shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 rounded-lg",
+            "bg-white w-24 float-left m-2 shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 rounded-lg",
           attrs: { href: "/invite-member" }
         },
-        [_vm._v("Ivite\n              ")]
+        [_vm._v("Ivite\n        ")]
       ),
       _vm._v(" "),
       _vm.members.length > 0
@@ -35731,10 +35718,10 @@ var render = function() {
             "a",
             {
               staticClass:
-                "bg-white w-24 float-right m-2  shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 rounded-lg",
+                "bg-white w-24 float-right m-2 shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 rounded-lg",
               attrs: { href: "/all-members/" + _vm.groupid }
             },
-            [_vm._v("Show all\n              ")]
+            [_vm._v("Show all\n        ")]
           )
         : _vm._e()
     ])
