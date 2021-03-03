@@ -3908,8 +3908,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["user", "group", "stats"],
+  props: ["user", "group", "stats", "free_users"],
   data: function data() {
     return {
       newMessage: false,
@@ -35026,6 +35048,49 @@ var render = function() {
         ),
         _vm._v(" "),
         _c("div", { staticClass: "clear-both mb-6" }),
+        _vm._v(" "),
+        _vm._l(_vm.free_users, function(freeUser) {
+          return _c(
+            "div",
+            {
+              key: freeUser.id,
+              staticClass:
+                "relative float-left w-32 h-44 py-2 mr-5 text-center shadow-md border border-gray-200"
+            },
+            [
+              _c("img", {
+                staticClass:
+                  "rounded-full shadow-sm mx-auto mb-1 w-20 h-20 object-cover border-8 border-green-400 border-opacity-30",
+                attrs: { src: freeUser.avatar, alt: "userAvatar" }
+              }),
+              _vm._v(" "),
+              _c("div", { staticClass: "max-h-14 overflow-y-auto" }, [
+                _c(
+                  "a",
+                  {
+                    staticClass: "hover:underline",
+                    attrs: { href: "/profile/" + freeUser.username }
+                  },
+                  [
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(freeUser.name) +
+                        "\n                "
+                    )
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "p",
+                {
+                  staticClass: "text-sm font-medium absolute bottom-0 right-9"
+                },
+                [_vm._v("\n                0.00 %\n            ")]
+              )
+            ]
+          )
+        }),
         _vm._v(" "),
         _vm._l(_vm.stats, function(stat) {
           return _c(

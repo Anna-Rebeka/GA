@@ -14,6 +14,28 @@
             </p>
             <div class="clear-both mb-6"></div>
             <div
+                v-for="freeUser in free_users"
+                :key="freeUser.id"
+                class="relative float-left w-32 h-44 py-2 mr-5 text-center shadow-md border border-gray-200"
+            >
+                <img
+                    class="rounded-full shadow-sm mx-auto mb-1 w-20 h-20 object-cover border-8 border-green-400 border-opacity-30"
+                    :src="freeUser.avatar"
+                    alt="userAvatar"
+                />
+                <div class="max-h-14 overflow-y-auto">
+                    <a
+                        class="hover:underline"
+                        :href="'/profile/' + freeUser.username"
+                    >
+                        {{ freeUser.name }}
+                    </a>
+                </div>
+                <p class="text-sm font-medium absolute bottom-0 right-9">
+                    0.00 %
+                </p>
+            </div>
+            <div
                 v-for="stat in stats"
                 :key="stat.user_id"
                 class="relative float-left w-32 h-44 py-2 mr-5 text-center shadow-md border border-gray-200"
@@ -58,7 +80,7 @@
 
 <script>
 export default {
-    props: ["user", "group", "stats"],
+    props: ["user", "group", "stats", "free_users"],
 
     data() {
         return {
