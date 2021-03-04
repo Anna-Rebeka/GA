@@ -37044,7 +37044,7 @@ var render = function() {
       "div",
       { staticClass: "flex rounded-lg justify-between items-center mb-6" },
       [
-        _c("div", { staticStyle: { "max-width": "270px" } }, [
+        _c("div", { staticClass: "w-14 md:w-44 2xl:w-64" }, [
           _c("h2", { staticClass: "font-bold text-2xl" }, [
             _vm._v(" " + _vm._s(_vm.user.name) + " ")
           ]),
