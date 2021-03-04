@@ -2233,11 +2233,11 @@ __webpack_require__.r(__webpack_exports__);
     this.searchBar.addEventListener("keypress", this.searchOnEnter);
   },
   methods: {
-    searchOnEnter: function searchOnEnter(assignment) {
-      if (assignment.which === 13) {
+    searchOnEnter: function searchOnEnter(event) {
+      if (event.which === 13) {
         this.savedAssignments = this.allAssignments;
         this.findAssignmentByName();
-        assignment.preventDefault();
+        event.preventDefault();
       }
     },
     findAssignmentByName: function findAssignmentByName() {
@@ -3911,6 +3911,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "group", "stats", "free_users"],
   data: function data() {
@@ -3920,10 +3928,34 @@ __webpack_require__.r(__webpack_exports__);
       chatrooms: [],
       usersInfo: null,
       pageOfItems: [],
-      allUsers: this.allUsers = this.free_users.concat(this.stats)
+      allUsers: this.allUsers = this.free_users.concat(this.stats),
+      shownUsers: this.allUsers = this.free_users.concat(this.stats)
     };
   },
+  mounted: function mounted() {
+    document.getElementById("searchButton").addEventListener("click", this.findUserByName);
+    this.searchBar = document.getElementById("searchBar");
+    this.searchBar.addEventListener("keypress", this.searchOnEnter);
+  },
   methods: {
+    searchOnEnter: function searchOnEnter(event) {
+      if (event.which === 13) {
+        this.shownUsers = this.allUsers;
+        this.findUserByName();
+        event.preventDefault();
+      }
+    },
+    findUserByName: function findUserByName() {
+      if (this.searchBar.value == "") {
+        this.shownUsers = this.allUsers;
+        return;
+      }
+
+      var findBy = this.searchBar.value;
+      this.shownUsers = this.shownUsers.filter(function (e) {
+        return e.name.toLowerCase().includes(findBy.toLowerCase());
+      });
+    },
     onChangePage: function onChangePage(pageOfItems) {
       this.pageOfItems = pageOfItems;
     },
@@ -35027,6 +35059,10 @@ var render = function() {
           _vm._v("Team Workload")
         ]),
         _vm._v(" "),
+        _vm._m(0),
+        _vm._v(" "),
+        _c("div", { staticClass: "clear-both mb-3" }),
+        _vm._v(" "),
         _c("p", { staticClass: "text-sm font-bold float-left ml-2 mr-2" }, [
           _vm._v("%")
         ]),
@@ -35134,7 +35170,7 @@ var render = function() {
       { staticClass: "mt-5 clear-both w-full text-center text-sm" },
       [
         _c("jw-pagination", {
-          attrs: { items: _vm.allUsers, pageSize: 20 },
+          attrs: { items: _vm.shownUsers, pageSize: 20 },
           on: { changePage: _vm.onChangePage }
         })
       ],
@@ -35142,7 +35178,48 @@ var render = function() {
     )
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "inline-block relative text-gray-600 w-1/3" },
+      [
+        _c("input", {
+          staticClass:
+            "rounded-lg bg-white border border-gray-300 text-gray-500 w-full h-8 px-5 pr-10 rounded-lg text-sm focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500",
+          attrs: {
+            id: "searchBar",
+            type: "search",
+            name: "searchBar",
+            placeholder: "Search by name"
+          }
+        }),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass:
+              "absolute right-0 top-2 mr-4 bg-transparent focus:outline-none",
+            attrs: { id: "searchButton", type: "submit" }
+          },
+          [
+            _c("img", {
+              attrs: {
+                src: "/img/search.png",
+                width: "20",
+                height: "20",
+                alt: "submit"
+              }
+            })
+          ]
+        )
+      ]
+    )
+  }
+]
 render._withStripped = true
 
 
