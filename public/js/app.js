@@ -2509,6 +2509,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user', 'chatrooms'],
   data: function data() {
@@ -3960,6 +3969,10 @@ __webpack_require__.r(__webpack_exports__);
       this.pageOfItems = pageOfItems;
     },
     avatarPath: function avatarPath(oldPath) {
+      if (!oldPath) {
+        return '/img/default.jpg';
+      }
+
       var index = oldPath.lastIndexOf("/") + 1;
       var newPath = '/storage/users/avatars/'.concat(oldPath.substring(index));
       return newPath;
@@ -33401,46 +33414,52 @@ var render = function() {
                             ]
                           ),
                       _vm._v(" "),
-                      chat.latest_message.text.length > 30
-                        ? _c(
-                            "p",
-                            {
-                              staticClass: "text-sm mb-3 ml-4 break-words",
-                              class: {
-                                "font-bold":
-                                  !chat.latest_message.read &&
-                                  chat.latest_message.sender_id != _vm.user.id
-                              }
-                            },
-                            [
-                              _vm._v(
-                                "\n                        " +
-                                  _vm._s(
-                                    chat.latest_message.text.substring(0, 30) +
-                                      "..."
-                                  ) +
-                                  "\n                    "
-                              )
-                            ]
-                          )
-                        : _c(
-                            "p",
-                            {
-                              staticClass: "text-sm mb-3 ml-4 break-words",
-                              class: {
-                                "font-bold":
-                                  !chat.latest_message.read &&
-                                  chat.latest_message.sender_id != _vm.user.id
-                              }
-                            },
-                            [
-                              _vm._v(
-                                "\n                        " +
-                                  _vm._s(chat.latest_message.text) +
-                                  "\n                    "
-                              )
-                            ]
-                          ),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "text-sm mb-3 ml-4 break-words",
+                          class: {
+                            "font-bold":
+                              !chat.latest_message.read &&
+                              chat.latest_message.sender_id != _vm.user.id
+                          }
+                        },
+                        [
+                          chat.latest_message.file_path
+                            ? _c("p", [
+                                _vm._v(
+                                  "\n                            *sent a file*\n                        "
+                                )
+                              ])
+                            : chat.latest_message.image_path
+                            ? _c("p", [
+                                _vm._v(
+                                  "\n                            *sent a photo*\n                        "
+                                )
+                              ])
+                            : chat.latest_message.text &&
+                              chat.latest_message.text.length > 30
+                            ? _c("p", [
+                                _vm._v(
+                                  "\n                            " +
+                                    _vm._s(
+                                      chat.latest_message.text.substring(
+                                        0,
+                                        30
+                                      ) + "..."
+                                    ) +
+                                    "\n                        "
+                                )
+                              ])
+                            : _c("p", [
+                                _vm._v(
+                                  "\n                            " +
+                                    _vm._s(chat.latest_message.text) +
+                                    "\n                        "
+                                )
+                              ])
+                        ]
+                      ),
                       _vm._v(" "),
                       _c("p", { staticClass: "text-xs float-right" }, [
                         _vm._v(

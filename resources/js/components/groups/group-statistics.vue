@@ -114,6 +114,9 @@ export default {
         },
 
         avatarPath(oldPath) {
+            if(!oldPath){
+                return '/img/default.jpg';
+            }
             var index = oldPath.lastIndexOf("/") + 1;
             var newPath = '/storage/users/avatars/'.concat(oldPath.substring(index));
             return newPath;
