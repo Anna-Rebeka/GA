@@ -112,11 +112,11 @@ export default {
     },
 
     methods: {
-        searchOnEnter(assignment){
-            if(assignment.which === 13){
+        searchOnEnter(event){
+            if(event.which === 13){
                 this.savedAssignments = this.allAssignments;
                 this.findAssignmentByName();
-                assignment.preventDefault();     
+                event.preventDefault();     
             }
         },
 

@@ -21,7 +21,7 @@ import assignmentComments from './components/comments/assignment-comments.vue';
 import chatroomsIndex from './components/chatrooms/chatrooms-index.vue';
 import chatroomsShow from './components/chatrooms/chatrooms-show.vue';
 import groupWhiteboard from './components/groups/group-whiteboard.vue';
-
+import groupStatistics from './components/groups/group-statistics.vue';
 
 import JwPagination from 'jw-vue-pagination';
 
@@ -55,6 +55,8 @@ Vue.component('jw-pagination', JwPagination);
 Vue.component('chatrooms-index', chatroomsIndex);
 Vue.component('chatrooms-show', chatroomsShow);
 Vue.component('group-whiteboard', groupWhiteboard);
+Vue.component('group-statistics', groupStatistics);
+
 
 var app = new Vue({
    el: '#app',

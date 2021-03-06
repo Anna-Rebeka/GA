@@ -23,12 +23,21 @@
                         <div v-else class="text-sm mb-3 mx-4 float-left">
                             You:
                         </div>
-                        <p v-if="chat.latest_message.text.length > 30" class="text-sm mb-3 ml-4 break-words" v-bind:class="{ 'font-bold': !chat.latest_message.read && chat.latest_message.sender_id != user.id}">
-                            {{ chat.latest_message.text.substring(0, 30) + "..." }}
-                        </p>
-                        <p v-else class="text-sm mb-3 ml-4 break-words" v-bind:class="{ 'font-bold': !chat.latest_message.read && chat.latest_message.sender_id != user.id}">
-                            {{ chat.latest_message.text }}
-                        </p>
+                        <div class="text-sm mb-3 ml-4 break-words" v-bind:class="{ 'font-bold': !chat.latest_message.read && chat.latest_message.sender_id != user.id}">
+                            <p v-if="chat.latest_message.file_path">
+                                *sent a file*
+                            </p>
+                            <p v-else-if="chat.latest_message.image_path">
+                                *sent a photo*
+                            </p>
+                            <p v-else-if="chat.latest_message.text && chat.latest_message.text.length > 30">
+                                {{ chat.latest_message.text.substring(0, 30) + "..." }}
+                            </p>
+                            <p v-else>
+                                {{ chat.latest_message.text }}
+                            </p>
+                        </div>
+                        
                         <p class="text-xs float-right"> {{ new Date(chat.latest_message.created_at) | dateFormat('HH:mm , DD.MM.YYYY') }} </p>
                     </div>
                 </div>

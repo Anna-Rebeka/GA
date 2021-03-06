@@ -16,6 +16,7 @@ use App\Http\Controllers\ChatroomsController;
 use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\AssignmentsFilesController;
 use App\Http\Controllers\GroupWhiteboardPostsController;
+use App\Http\Controllers\GroupStatisticsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -90,6 +91,8 @@ Route::middleware('auth')->group(function() {
     Route::post('/assignments/{assignment:id}/file-upload', [AssignmentsFilesController::class, 'store']);
     Route::delete('/assignmentsFiles/{id}/file-delete', [AssignmentsFilesController::class, 'destroy']);
 
+    Route::get('/groups/{group:id}/group-statistics', [GroupStatisticsController::class, 'showStatistics']);
+    Route::get('/groups/{group:id}/get-assignments-statistic', [GroupStatisticsController::class, 'getAssignmentsStatistic']);
 
     Route::get('/chats', [ChatroomsController::class, 'index']);
     Route::get('/chats/{chatroom:id}/latestMessage', [ChatroomsController::class, 'getLatestMessage']);

@@ -15,7 +15,7 @@
         </div>
 
         <div class="flex rounded-lg justify-between items-center mb-6">
-            <div style="max-width: 270px;">
+            <div class="w-14 md:w-44 2xl:w-64">
                 <h2 class="font-bold text-2xl"> {{ user.name }} </h2>
                 <p class="text-sm">Joined {{ userCreatedAt }}</p>
             </div>
