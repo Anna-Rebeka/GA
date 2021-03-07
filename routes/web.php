@@ -70,6 +70,8 @@ Route::middleware('auth')->group(function() {
     Route::get('/events', [EventsController::class, 'index']);
     Route::get('/events/{event:id}', [EventsController::class, 'show']);
     Route::post('/events', [EventsController::class, 'store']);
+    Route::get('/events/{group:id}/loadOlderEvents/{howManyDisplayed}', [EventsController::class, 'loadOlderEvents']);
+
     Route::delete('/events/{event:id}', [EventsController::class, 'destroy']);
     Route::post('/events/{event:id}/join', [EventsController::class, 'join']);
     Route::post('/events/{event:id}/leave', [EventsController::class, 'leave']);
@@ -81,6 +83,8 @@ Route::middleware('auth')->group(function() {
     Route::get('/assignments/{assignment:id}', [AssignmentsController::class, 'show']);
     Route::get('/assignments/{assignment:id}/is-taken-by-auth', [AssignmentsController::class, 'checkAssignmentUser']);
     Route::post('/assignments', [AssignmentsController::class, 'store']);
+    Route::get('/assignments/{group:id}/loadOlderAssignments/{howManyDisplayed}', [AssignmentsController::class, 'loadOlderAssignments']);
+
     Route::delete('/assignments/{assignment:id}', [AssignmentsController::class, 'destroy']);
     Route::patch('/assignments/{assignment:id}/take', [AssignmentsController::class, 'take']);
     Route::patch('/assignments/{assignment:id}/done', [AssignmentsController::class, 'done']);

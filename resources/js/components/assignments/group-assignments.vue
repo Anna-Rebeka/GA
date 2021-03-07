@@ -1,7 +1,7 @@
 <template>
     <div class="mb-6">
         <div class="h-12">
-            <button @click="createNewAssignment = !createNewAssignment" class="shadow absolute r-0 w-min rounded-lg border border-gray-300 px-4 py-2 mb-8 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
+            <button @click="createNewAssignment = !createNewAssignment" class="shadow absolute w-min rounded-lg border border-gray-300 px-4 py-2 mb-8 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
                 New Assignment
             </button>
         </div>

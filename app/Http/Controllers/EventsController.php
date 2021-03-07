@@ -17,19 +17,11 @@ class EventsController extends Controller
     public function index()
     {
         $group = auth()->user()->group;
-        $events = $group->events()->orderBy('event_time')->where('events.event_time', '>=', now())->get();
-        $eusers = [];
-
-        foreach ($events as $event){
-            $event->users;
-            $eusers[$event->id] = $event->users->pluck('id');
-            $event->host;
-        }
+        $events = $group->events()->with('users')->with('host')->orderBy('event_time')->where('events.event_time', '>=', now())->get();
 
         return view('groups.events', [
             'user' => auth()->user(),
-            'events' => $events,
-            'eusers' => $eusers,
+            'events' => $events
         ]);
     }
 
@@ -138,5 +130,11 @@ class EventsController extends Controller
     public function leave(Event $event)
     {
         $event->users()->detach(auth()->user()->id);
+    }
+
+    public function loadOlderEvents(Group $group, $howManyDisplayed)
+    {
+        $events = $group->events()->with('users')->with('host')->offset($howManyDisplayed)->limit(10)->orderByDesc('event_time')->get();
+        return $events;
     }
 }
