@@ -3561,7 +3561,7 @@ __webpack_require__.r(__webpack_exports__);
       this.savedEvents = this.savedEvents.filter(function (e) {
         return e.users.map(function (u) {
           return u.id;
-        }).includes(authed.id) || e.host_id == authed.id;
+        }).includes(authed.id);
       });
     },
     filterPending: function filterPending() {
@@ -3570,7 +3570,7 @@ __webpack_require__.r(__webpack_exports__);
       this.savedEvents = this.savedEvents.filter(function (e) {
         return !e.users.map(function (u) {
           return u.id;
-        }).includes(authed.id) && e.host_id != authed.id;
+        }).includes(authed.id);
       });
     },
     reload: function reload() {

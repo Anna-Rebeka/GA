@@ -194,7 +194,7 @@ export default {
         filterJoined(){
             var authed = this.user;
             this.savedEvents = this.savedEvents.filter(function(e) {
-                return e.users.map(u => u.id).includes(authed.id) || e.host_id == authed.id;
+                return e.users.map(u => u.id).includes(authed.id);
             });
         },
 
@@ -202,7 +202,7 @@ export default {
             var authed = this.user;
             var eventUsers = [];
             this.savedEvents = this.savedEvents.filter(function(e) {
-                return !e.users.map(u => u.id).includes(authed.id) && e.host_id != authed.id;                
+                return !e.users.map(u => u.id).includes(authed.id);                
             });
         },
 
