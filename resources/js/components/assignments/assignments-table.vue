@@ -78,8 +78,13 @@
             </table>
         </div>
         <div class="mt-10 clear-both w-full text-center text-sm">
-            <jw-pagination :items="savedAssignments" @changePage="onChangePage" :pageSize="4"></jw-pagination>
+            <jw-pagination :items="savedAssignments" @changePage="onChangePage" :pageSize="5"></jw-pagination>
         </div>
+        <button 
+            v-on:click="loadOlderAssignments()"
+            class="shadow w-min rounded-lg border border-gray-300 px-4 py-2 mb-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
+            Load older
+        </button>
         </div>
         </div>
         </div>
@@ -109,6 +114,7 @@ export default {
         document.getElementById("searchButton").addEventListener("click", this.findAssignmentByName);
         this.searchBar = document.getElementById("searchBar");
         this.searchBar.addEventListener("keypress", this.searchOnEnter);
+        console.log(this.howManyLoaded);
     },
 
     methods: {
@@ -194,6 +200,32 @@ export default {
 
         onChangePage(pageOfItems) {
             this.pageOfItems = pageOfItems;
+        },
+
+        loadOlderAssignments(){
+            axios
+                .get(
+                    "/assignments/" +
+                        this.user.active_group +
+                        "/loadOlderAssignments/" +
+                        this.allAssignments.length,
+                    {}
+                )
+                .then((response) => {
+                    this.allAssignments = response.data
+                        .reverse()
+                        .concat(this.allAssignments);
+                    this.savedAssignments = response.data
+                        .reverse()
+                        .concat(this.savedAssignments);
+                })
+                .catch((error) => {
+                    if (error.response.status == 422) {
+                        this.errors = error.response.data.errors;
+                        console.log(this.errors);
+                    }
+                    console.log(error.message);
+                });
         },
     },
 }

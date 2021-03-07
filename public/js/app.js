@@ -2211,6 +2211,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user', 'assignments'],
   data: function data() {
@@ -2231,6 +2236,7 @@ __webpack_require__.r(__webpack_exports__);
     document.getElementById("searchButton").addEventListener("click", this.findAssignmentByName);
     this.searchBar = document.getElementById("searchBar");
     this.searchBar.addEventListener("keypress", this.searchOnEnter);
+    console.log(this.howManyLoaded);
   },
   methods: {
     searchOnEnter: function searchOnEnter(event) {
@@ -2314,6 +2320,21 @@ __webpack_require__.r(__webpack_exports__);
     },
     onChangePage: function onChangePage(pageOfItems) {
       this.pageOfItems = pageOfItems;
+    },
+    loadOlderAssignments: function loadOlderAssignments() {
+      var _this = this;
+
+      axios.get("/assignments/" + this.user.active_group + "/loadOlderAssignments/" + this.allAssignments.length, {}).then(function (response) {
+        _this.allAssignments = response.data.reverse().concat(_this.allAssignments);
+        _this.savedAssignments = response.data.reverse().concat(_this.savedAssignments);
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this.errors = error.response.data.errors;
+          console.log(_this.errors);
+        }
+
+        console.log(error.message);
+      });
     }
   }
 });
@@ -3429,8 +3450,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user', 'eusers', 'events'],
+  props: ['user', 'events'],
   data: function data() {
     return {
       allEvents: this.events,
@@ -3453,6 +3479,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     closeDate: function closeDate(eventDate) {
+      if (eventDate < Date.now()) {
+        return null;
+      }
+
       if (eventDate.toLocaleDateString() == this.today.toLocaleDateString()) {
         return true;
       }
@@ -3527,31 +3557,20 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     filterJoined: function filterJoined() {
-      var uid = this.user.id;
-      var eventUsers = [];
-
-      if (this.eusers) {
-        eventUsers = this.eusers;
-      }
-
+      var authed = this.user;
       this.savedEvents = this.savedEvents.filter(function (e) {
-        if (eventUsers[e.id]) {
-          return eventUsers[e.id].includes(uid) || e.host_id == uid;
-        }
+        return e.users.map(function (u) {
+          return u.id;
+        }).includes(authed.id);
       });
     },
     filterPending: function filterPending() {
-      var uid = this.user.id;
+      var authed = this.user;
       var eventUsers = [];
-
-      if (this.eusers) {
-        eventUsers = this.eusers;
-      }
-
       this.savedEvents = this.savedEvents.filter(function (e) {
-        if (eventUsers[e.id]) {
-          return !eventUsers[e.id].includes(uid) && e.host_id != uid;
-        }
+        return !e.users.map(function (u) {
+          return u.id;
+        }).includes(authed.id);
       });
     },
     reload: function reload() {
@@ -3560,13 +3579,12 @@ __webpack_require__.r(__webpack_exports__);
     onChangePage: function onChangePage(pageOfItems) {
       this.pageOfItems = pageOfItems;
     },
-    joinEvent: function joinEvent($event) {
+    loadOlderEvents: function loadOlderEvents() {
       var _this = this;
 
-      axios.post('/events/' + $event.id + '/join').then(function (response) {
-        _this.eusers[$event.id].push(_this.user.id);
-
-        _this.reload();
+      axios.get("/events/" + this.user.active_group + "/loadOlderEvents/" + this.allEvents.length, {}).then(function (response) {
+        _this.allEvents = response.data.reverse().concat(_this.allEvents);
+        _this.savedEvents = response.data.reverse().concat(_this.savedEvents);
       })["catch"](function (error) {
         if (error.response.status == 422) {
           _this.errors = error.response.data.errors;
@@ -3574,39 +3592,6 @@ __webpack_require__.r(__webpack_exports__);
         }
 
         console.log(error.message);
-      });
-    },
-    leaveEvent: function leaveEvent($event) {
-      var _this2 = this;
-
-      axios.post('/events/' + $event.id + '/leave').then(function (response) {
-        var index = _this2.eusers[$event.id].indexOf(_this2.user.id);
-
-        _this2.eusers[$event.id].splice(index, 1);
-
-        _this2.reload();
-      })["catch"](function (error) {
-        if (error.response.status == 422) {
-          _this2.errors = error.response.data.errors;
-          console.log(_this2.errors);
-        }
-
-        console.log(error.message);
-      });
-    },
-    checkWithUser: function checkWithUser($event) {
-      if (confirm("Are you sure? This action is irreversible.")) {
-        this.destroyEvent($event);
-      }
-    },
-    destroyEvent: function destroyEvent($event) {
-      var _this3 = this;
-
-      axios["delete"]('/events/' + $event.id).then(function (response) {
-        _this3.allEvents = _this3.allEvents.filter(function (e) {
-          return e != $event;
-        });
-        _this3.savedEvents = _this3.allEvents;
       });
     }
   }
@@ -32794,11 +32779,25 @@ var render = function() {
               { staticClass: "mt-10 clear-both w-full text-center text-sm" },
               [
                 _c("jw-pagination", {
-                  attrs: { items: _vm.savedAssignments, pageSize: 4 },
+                  attrs: { items: _vm.savedAssignments, pageSize: 5 },
                   on: { changePage: _vm.onChangePage }
                 })
               ],
               1
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass:
+                  "shadow w-min rounded-lg border border-gray-300 px-4 py-2 mb-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none",
+                on: {
+                  click: function($event) {
+                    return _vm.loadOlderAssignments()
+                  }
+                }
+              },
+              [_vm._v("\n        Load older\n    ")]
             )
           ]
         )
@@ -32941,7 +32940,7 @@ var render = function() {
           "button",
           {
             staticClass:
-              "shadow absolute r-0 w-min rounded-lg border border-gray-300 px-4 py-2 mb-8 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none",
+              "shadow absolute w-min rounded-lg border border-gray-300 px-4 py-2 mb-8 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none",
             on: {
               click: function($event) {
                 _vm.createNewAssignment = !_vm.createNewAssignment
@@ -34434,12 +34433,16 @@ var render = function() {
                           {
                             key: event.id,
                             class: {
-                              "bg-green-100": _vm.eusers[event.id].includes(
-                                _vm.user.id
-                              ),
-                              "bg-red-100": !_vm.eusers[event.id].includes(
-                                _vm.user.id
-                              )
+                              "bg-green-100": event.users
+                                .map(function(u) {
+                                  return u.id
+                                })
+                                .includes(_vm.user.id),
+                              "bg-red-100": !event.users
+                                .map(function(u) {
+                                  return u.id
+                                })
+                                .includes(_vm.user.id)
                             }
                           },
                           [
@@ -34460,7 +34463,9 @@ var render = function() {
                                       ),
                                       "text-blue-500": _vm.soonToComeDate(
                                         new Date(event.event_time)
-                                      )
+                                      ),
+                                      "text-gray-500":
+                                        new Date(event.event_time) < Date.now()
                                     }
                                   },
                                   [
@@ -34551,11 +34556,25 @@ var render = function() {
               { staticClass: "mt-10 clear-both w-full text-center text-sm" },
               [
                 _c("jw-pagination", {
-                  attrs: { items: _vm.savedEvents, pageSize: 4 },
+                  attrs: { items: _vm.savedEvents, pageSize: 5 },
                   on: { changePage: _vm.onChangePage }
                 })
               ],
               1
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass:
+                  "shadow w-min rounded-lg border border-gray-300 px-4 py-2 mb-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none",
+                on: {
+                  click: function($event) {
+                    return _vm.loadOlderEvents()
+                  }
+                }
+              },
+              [_vm._v("\n        Load older\n    ")]
             )
           ]
         )

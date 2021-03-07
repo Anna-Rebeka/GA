@@ -43,12 +43,12 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     <tr v-for="event in pageOfItems" :key="event.id"
-                        v-bind:class="{ 'bg-green-100':  eusers[event.id].includes(user.id), 'bg-red-100': !eusers[event.id].includes(user.id)}"
+                        v-bind:class="{ 'bg-green-100':  event.users.map(u => u.id).includes(user.id), 'bg-red-100': !event.users.map(u => u.id).includes(user.id)}"
                     >
                         <td class="bg-white px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">
                             <div 
                                 class="w-32 text-sm font-bold"
-                                v-bind:class="{ 'text-red-600': closeDate(new Date(event.event_time)), 'text-blue-500': soonToComeDate(new Date(event.event_time))}"
+                                v-bind:class="{'text-red-600': closeDate(new Date(event.event_time)), 'text-blue-500': soonToComeDate(new Date(event.event_time)), 'text-gray-500':new Date(event.event_time) < Date.now()}"
                             >
                                 {{  new Date(event.event_time) | dateFormat('DD.MM.YYYY , HH:mm') }}
                             </div>
@@ -75,8 +75,13 @@
             </table>
         </div>
         <div class="mt-10 clear-both w-full text-center text-sm">
-            <jw-pagination :items="savedEvents" @changePage="onChangePage" :pageSize="4"></jw-pagination>
+            <jw-pagination :items="savedEvents" @changePage="onChangePage" :pageSize="5"></jw-pagination>
         </div>
+        <button 
+            v-on:click="loadOlderEvents()"
+            class="shadow w-min rounded-lg border border-gray-300 px-4 py-2 mb-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
+            Load older
+        </button>
         </div>
         </div>
         </div>
@@ -86,7 +91,7 @@
 
 <script>
 export default {
-    props: ['user', 'eusers', 'events'],
+    props: ['user', 'events'],
     data() {
         return {
             allEvents: this.events,
@@ -111,6 +116,9 @@ export default {
 
     methods: {
         closeDate(eventDate){
+            if(eventDate < Date.now()){
+                return null;
+            }
             if (eventDate.toLocaleDateString() == this.today.toLocaleDateString()) {
                 return true;
             }
@@ -184,29 +192,17 @@ export default {
         },
 
         filterJoined(){
-            var uid = this.user.id;
-            var eventUsers = [];
-            if(this.eusers){
-                eventUsers = this.eusers;
-            }
+            var authed = this.user;
             this.savedEvents = this.savedEvents.filter(function(e) {
-                if(eventUsers[e.id]){
-                    return eventUsers[e.id].includes(uid) || e.host_id == uid;
-                }
+                return e.users.map(u => u.id).includes(authed.id);
             });
         },
 
         filterPending(){
-            var uid = this.user.id;
+            var authed = this.user;
             var eventUsers = [];
-            if(this.eusers){
-                eventUsers = this.eusers;
-            }
             this.savedEvents = this.savedEvents.filter(function(e) {
-                if(eventUsers[e.id]){
-                    return !eventUsers[e.id].includes(uid) && e.host_id != uid;
-                }
-                
+                return !e.users.map(u => u.id).includes(authed.id);                
             });
         },
 
@@ -218,45 +214,32 @@ export default {
             this.pageOfItems = pageOfItems;
         },
 
-        joinEvent($event) {
-            axios.post('/events/' + $event.id + '/join').then(response => {
-                this.eusers[$event.id].push(this.user.id);
-                this.reload();
-            }).catch(error => {
-                if (error.response.status == 422){
-                    this.errors = error.response.data.errors;
-                    console.log(this.errors);
-                }
-                console.log(error.message);
-            });
-        },
+        loadOlderEvents(){
+            axios
+                .get(
+                    "/events/" +
+                        this.user.active_group +
+                        "/loadOlderEvents/" +
+                        this.allEvents.length,
+                    {}
+                )
+                .then((response) => {
+                    this.allEvents = response.data
+                        .reverse()
+                        .concat(this.allEvents);
+                    this.savedEvents = response.data
+                        .reverse()
+                        .concat(this.savedEvents);
 
-        leaveEvent($event) {
-            axios.post('/events/' + $event.id + '/leave').then(response => {
-                var index = this.eusers[$event.id].indexOf(this.user.id);
-                this.eusers[$event.id].splice(index, 1);
-                this.reload();
-            }).catch(error => {
-                if (error.response.status == 422){
-                    this.errors = error.response.data.errors;
-                    console.log(this.errors);
-                }
-                console.log(error.message);
-            });
+                })
+                .catch((error) => {
+                    if (error.response.status == 422) {
+                        this.errors = error.response.data.errors;
+                        console.log(this.errors);
+                    }
+                    console.log(error.message);
+                });
         },
-
-        checkWithUser($event) {
-            if (confirm("Are you sure? This action is irreversible.")) {
-                this.destroyEvent($event);
-            }
-        },
-
-        destroyEvent($event) {
-            axios.delete('/events/' + $event.id).then(response => {
-                this.allEvents = this.allEvents.filter(function(e) { return e != $event })
-                this.savedEvents = this.allEvents;
-            });
-        }
     },
 }
 </script>

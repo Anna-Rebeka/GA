@@ -19,12 +19,7 @@ class AssignmentsController extends Controller
     public function index()
     {
         $group = auth()->user()->group;
-        $assignments = $group->assignments()->orderBy('due')->get();
-
-        foreach ($assignments as $assignment){
-            $assignment->users;
-            $assignment->author;
-        }
+        $assignments = $group->assignments()->with('users')->with('author')->where('due', '>=', now())->orderBy('due')->get();
 
         return view('groups.assignments', [
             'user' => auth()->user(),
@@ -152,6 +147,11 @@ class AssignmentsController extends Controller
 
     public function checkAssignmentUser(Assignment $assignment){
         return $assignment->isAssigned(auth()->user());
+    }
+
+    public function loadOlderAssignments(Group $group, $howManyDisplayed){
+        $assignments = $group->assignments()->with('users')->with('author')->offset($howManyDisplayed)->limit(10)->orderByDesc('due')->get();
+        return $assignments;
     }
 }
 
