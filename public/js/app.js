@@ -4854,6 +4854,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user"],
   data: function data() {
@@ -4863,7 +4869,8 @@ __webpack_require__.r(__webpack_exports__);
         id: 0,
         email: ""
       }],
-      aiId: 0
+      aiId: 0,
+      invitesSent: false
     };
   },
   created: function created() {},
@@ -4886,11 +4893,11 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.fields = this.fields.map(function (field) {
-        return field['email'];
+        return field["email"];
       });
-      axios.post('/invite-member', this.fields).then(function (response) {
+      axios.post("/invite-member", this.fields).then(function (response) {
         _this.fields = {};
-        console.log(response.data);
+        _this.invitesSent = true;
       })["catch"](function (error) {
         console.log(error.message);
       });
@@ -36415,108 +36422,15 @@ var render = function() {
             _vm._v("\n                The more the merrier!\n            ")
           ]),
           _vm._v(" "),
-          _c("p", { staticClass: "mb-4" }, [
-            _vm._v("Invite a new member by e-mail.")
-          ]),
-          _vm._v(" "),
-          _c(
-            "form",
-            {
-              on: {
-                submit: function($event) {
-                  $event.preventDefault()
-                  return _vm.submit()
-                }
-              }
-            },
-            [
-              _c("input", {
-                attrs: { type: "hidden", name: "_token" },
-                domProps: { value: _vm.csrf }
-              }),
-              _vm._v(" "),
-              _vm._l(_vm.fields, function(field) {
-                return _c("div", { key: field.id }, [
-                  _c("div", { staticClass: "mb-4" }, [
-                    _c(
-                      "button",
-                      {
-                        staticClass:
-                          "font-bold text-red-500 focus:outline-none",
-                        on: {
-                          click: function($event) {
-                            return _vm.removeField(field.id)
-                          }
-                        }
-                      },
-                      [
-                        _vm._v(
-                          "\n                            x\n                        "
-                        )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "label",
-                      { staticClass: "mb-2", attrs: { for: "email" } },
-                      [_vm._v("E-Mail Address:\n                        ")]
-                    ),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: field.email,
-                          expression: "field.email"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: {
-                        id: "email",
-                        type: "email",
-                        name: "email",
-                        value: "",
-                        required: "",
-                        autocomplete: "email"
-                      },
-                      domProps: { value: field.email },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(field, "email", $event.target.value)
-                        }
-                      }
-                    })
-                  ])
-                ])
-              }),
-              _vm._v(" "),
-              _c("div", { staticClass: "float-left mb-10" }, [
+          !_vm.invitesSent
+            ? _c("div", [
+                _c("p", { staticClass: "mb-4" }, [
+                  _vm._v("Invite a new member by e-mail.")
+                ]),
+                _vm._v(" "),
                 _c(
-                  "button",
+                  "form",
                   {
-                    staticClass:
-                      "rounded border border-gray-300 bg-white py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 focus:outline-none",
-                    on: { click: _vm.addField }
-                  },
-                  [
-                    _vm._v(
-                      "\n                        New Field\n                    "
-                    )
-                  ]
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "relative clear-both" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass:
-                      "rounded-lg absolute right-0 bottom-0 border border-gray-300 bg-white py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 focus:outline-none",
-                    attrs: { type: "submit" },
                     on: {
                       submit: function($event) {
                         $event.preventDefault()
@@ -36525,15 +36439,118 @@ var render = function() {
                     }
                   },
                   [
-                    _vm._v(
-                      "\n                        Send Request\n                    "
-                    )
-                  ]
+                    _c("input", {
+                      attrs: { type: "hidden", name: "_token" },
+                      domProps: { value: _vm.csrf }
+                    }),
+                    _vm._v(" "),
+                    _vm._l(_vm.fields, function(field) {
+                      return _c("div", { key: field.id }, [
+                        _c("div", { staticClass: "mb-4" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "font-bold text-red-500 focus:outline-none",
+                              on: {
+                                click: function($event) {
+                                  return _vm.removeField(field.id)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                x\n                            "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "label",
+                            { staticClass: "mb-2", attrs: { for: "email" } },
+                            [
+                              _vm._v(
+                                "E-Mail Address:\n                            "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: field.email,
+                                expression: "field.email"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: {
+                              id: "email",
+                              type: "email",
+                              name: "email",
+                              value: "",
+                              required: "",
+                              autocomplete: "email"
+                            },
+                            domProps: { value: field.email },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(field, "email", $event.target.value)
+                              }
+                            }
+                          })
+                        ])
+                      ])
+                    }),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "float-left mb-10" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "rounded border border-gray-300 bg-white py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 focus:outline-none",
+                          on: { click: _vm.addField }
+                        },
+                        [
+                          _vm._v(
+                            "\n                            New Field\n                        "
+                          )
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "relative clear-both" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "rounded-lg absolute right-0 bottom-0 border border-gray-300 bg-white py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 focus:outline-none",
+                          attrs: { type: "submit" },
+                          on: {
+                            submit: function($event) {
+                              $event.preventDefault()
+                              return _vm.submit()
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                            Send Request\n                        "
+                          )
+                        ]
+                      )
+                    ])
+                  ],
+                  2
                 )
               ])
-            ],
-            2
-          )
+            : _c("div", { staticClass: "text-center" }, [
+                _c("p", [_vm._v("Invites sent.")])
+              ])
         ]
       )
     ])
