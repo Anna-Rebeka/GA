@@ -66,6 +66,7 @@ class EventsController extends Controller
         ]);
         
         $user->events()->attach($event->id);
+        $event->users;
         return $event;
     }
 

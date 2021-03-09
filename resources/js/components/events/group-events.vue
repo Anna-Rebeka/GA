@@ -71,13 +71,13 @@
                     Your event was created! Check it out down below.
         </div>
         
-        <events-table :user="user" :eusers="eusers" :events="events"></events-table>
+        <events-table :user="user" :events="savedEvents"></events-table>
     </div>
 </template>
 
 <script>
 export default {
-    props: ['user', 'eusers', 'events'],
+    props: ['user', 'events'],
     data() {
         return {
             csrf: document.head.querySelector('meta[name="csrf-token"]').content,
@@ -85,6 +85,7 @@ export default {
             errors: {},
             createNewEvent: false,
             newEventCreated: false,
+            savedEvents: this.events,
         };
     },
     methods: {
@@ -93,9 +94,7 @@ export default {
                 this.fields = {};
                 this.createNewEvent = false;
                 this.newEventCreated = true;
-                this.events.unshift(response.data);    
-                this.eusers[response.data.id] = [response.data.host_id];
-
+                this.savedEvents.unshift(response.data);    
             }).catch(error => {
                 console.log(error.message);
             });
