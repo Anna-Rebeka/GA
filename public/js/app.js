@@ -4773,16 +4773,73 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['users'],
   data: function data() {
     return {
-      pageOfItems: []
+      pageOfItems: [],
+      savedUsers: this.users,
+      lettersCounter: 0
     };
+  },
+  mounted: function mounted() {
+    this.autocomplete(document.getElementById("memberInput"), this.savedUsers, this.lettersCounter);
   },
   methods: {
     onChangePage: function onChangePage(pageOfItems) {
       this.pageOfItems = pageOfItems;
+    },
+    autocomplete: function autocomplete(inp, members, counter) {
+      inp.addEventListener("input", function (e) {
+        if (counter < 2) {
+          counter += 1;
+          return false;
+        }
+
+        counter = 0;
+        var a,
+            b,
+            i,
+            val = this.value;
+        closeAllLists();
+
+        if (!val) {
+          return false;
+        }
+
+        a = document.createElement("DIV");
+        a.setAttribute("id", this.id + "autocomplete-list");
+        a.setAttribute("class", "autocomplete-items");
+        this.parentNode.appendChild(a);
+
+        for (i = 0; i < members.length; i++) {
+          if (members[i].name.toLowerCase().includes(val.toLowerCase())) {
+            b = document.createElement("DIV");
+            b.setAttribute("class", "w-full h-full");
+            b.innerHTML += "<a class='block border-none w-full' href='/profile/" + members[i].username + "'>" + members[i].name + "</a>";
+            a.appendChild(b);
+          }
+        }
+      });
+
+      function closeAllLists(elmnt) {
+        var x = document.getElementsByClassName("autocomplete-items");
+
+        for (var i = 0; i < x.length; i++) {
+          if (elmnt != x[i] && elmnt != inp) {
+            x[i].parentNode.removeChild(x[i]);
+          }
+        }
+      }
+
+      document.addEventListener("click", function (e) {
+        closeAllLists(e.target);
+      });
     }
   }
 });
@@ -36324,6 +36381,8 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "mb-6" }, [
+    _vm._m(0),
+    _vm._v(" "),
     _c(
       "ul",
       _vm._l(_vm.pageOfItems, function(user) {
@@ -36382,7 +36441,7 @@ var render = function() {
       { staticClass: "mt-10 clear-both w-full text-center text-sm" },
       [
         _c("jw-pagination", {
-          attrs: { items: _vm.users, pageSize: 6 },
+          attrs: { items: _vm.savedUsers, pageSize: 6 },
           on: { changePage: _vm.onChangePage }
         })
       ],
@@ -36390,7 +36449,25 @@ var render = function() {
     )
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "relative inline-block w-56 h-10 mb-10" }, [
+      _c("input", {
+        staticClass:
+          "rounded-lg bg-white border border-gray-300 text-gray-500 w-full h-full px-5 pr-10 rounded-lg text-sm focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500",
+        attrs: {
+          id: "memberInput",
+          type: "text",
+          name: "memberInput",
+          placeholder: "Start typing a name.."
+        }
+      })
+    ])
+  }
+]
 render._withStripped = true
 
 

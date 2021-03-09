@@ -17,7 +17,7 @@ class UsersController extends Controller
     
      public function index(Group $group)
     {   
-        $users = $group->users->except(auth()->user()->id);
+        $users = $group->users()->orderBy('name')->where('users.id', '!=', auth()->user()->id)->get();
         return view('profile.index', [
             'users' => $users
         ]);

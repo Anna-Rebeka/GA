@@ -1,5 +1,10 @@
 <template>
     <div class="mb-6">
+         <div class="relative inline-block w-56 h-10 mb-10" >
+            <input id="memberInput" type="text" name="memberInput" placeholder="Start typing a name.."
+                class="rounded-lg bg-white border border-gray-300 text-gray-500 w-full h-full px-5 pr-10 rounded-lg text-sm focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500"
+            >
+        </div>
         <ul>
             <li v-for="user in pageOfItems" :key="user.id" class="inline float-left mr-4">
                 <a :href="'/profile/' + user.username">
@@ -19,7 +24,7 @@
         </ul>
         
         <div class="mt-10 clear-both w-full text-center text-sm">
-            <jw-pagination :items="users" @changePage="onChangePage" :pageSize="6"></jw-pagination>
+            <jw-pagination :items="savedUsers" @changePage="onChangePage" :pageSize="6"></jw-pagination>
         </div>
     </div>
 </template>
@@ -29,12 +34,57 @@ export default {
     props: ['users'],
     data() {
         return {
-            pageOfItems: []
+            pageOfItems: [],
+            savedUsers: this.users,
+            lettersCounter: 0,
         };
     },
+
+    mounted(){
+        this.autocomplete(document.getElementById("memberInput"), this.savedUsers, this.lettersCounter);
+    },
+
     methods: {
         onChangePage(pageOfItems) {
             this.pageOfItems = pageOfItems;
+        },
+
+
+        autocomplete(inp, members, counter) {            
+            inp.addEventListener("input", function(e) {
+                if (counter < 2){
+                    counter += 1;
+                    return false;
+                }
+                counter = 0;
+                var a, b, i, val = this.value;
+                closeAllLists();
+                if (!val) { return false;}
+                a = document.createElement("DIV");
+                a.setAttribute("id", this.id + "autocomplete-list");
+                a.setAttribute("class", "autocomplete-items");
+                this.parentNode.appendChild(a);
+                for (i = 0; i < members.length; i++) {
+                    if (members[i].name.toLowerCase().includes(val.toLowerCase())){
+                        b = document.createElement("DIV");
+                        b.setAttribute("class", "w-full h-full");
+                        b.innerHTML += "<a class='block border-none w-full' href='/profile/" + members[i].username + "'>" + members[i].name + "</a>";
+                        a.appendChild(b);
+                    }
+                }
+            });
+            
+            function closeAllLists(elmnt) {
+                var x = document.getElementsByClassName("autocomplete-items");
+                for (var i = 0; i < x.length; i++) {
+                    if (elmnt != x[i] && elmnt != inp) {
+                        x[i].parentNode.removeChild(x[i]);
+                    }
+                }
+            }
+            document.addEventListener("click", function (e) {
+                closeAllLists(e.target);
+            });
         }
     }
 };
