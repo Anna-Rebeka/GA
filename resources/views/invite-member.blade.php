@@ -1,3 +1,3 @@
 <x-master>
-  <invite-members></invite-members>
+  <invite-members :user="{{ $user }}"></invite-members>
 </x-master>

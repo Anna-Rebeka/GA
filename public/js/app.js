@@ -3686,14 +3686,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user', 'eusers', 'events'],
+  props: ['user', 'events'],
   data: function data() {
     return {
       csrf: document.head.querySelector('meta[name="csrf-token"]').content,
       fields: {},
       errors: {},
       createNewEvent: false,
-      newEventCreated: false
+      newEventCreated: false,
+      savedEvents: this.events
     };
   },
   methods: {
@@ -3705,9 +3706,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.createNewEvent = false;
         _this.newEventCreated = true;
 
-        _this.events.unshift(response.data);
-
-        _this.eusers[response.data.id] = [response.data.host_id];
+        _this.savedEvents.unshift(response.data);
       })["catch"](function (error) {
         console.log(error.message);
       });
@@ -4848,6 +4847,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user"],
   data: function data() {
@@ -4862,13 +4868,32 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {},
   methods: {
-    AddField: function AddField() {
+    addField: function addField() {
       this.aiId += 1;
       this.fields.push({
         id: this.aiId,
         email: ""
       });
       console.log(this.fields);
+    },
+    removeField: function removeField(fieldId) {
+      this.fields = this.fields.filter(function (field) {
+        return field.id != fieldId;
+      });
+      console.log(this.fields);
+    },
+    submit: function submit() {
+      var _this = this;
+
+      this.fields = this.fields.map(function (field) {
+        return field['email'];
+      });
+      axios.post('/invite-member', this.fields).then(function (response) {
+        _this.fields = {};
+        console.log(response.data);
+      })["catch"](function (error) {
+        console.log(error.message);
+      });
     } //        <form method="POST" action="{{ route('invite') }}">
 
   }
@@ -35044,9 +35069,7 @@ var render = function() {
           )
         : _vm._e(),
       _vm._v(" "),
-      _c("events-table", {
-        attrs: { user: _vm.user, eusers: _vm.eusers, events: _vm.events }
-      })
+      _c("events-table", { attrs: { user: _vm.user, events: _vm.savedEvents } })
     ],
     1
   )
@@ -36397,11 +36420,42 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c(
-            "div",
+            "form",
+            {
+              on: {
+                submit: function($event) {
+                  $event.preventDefault()
+                  return _vm.submit()
+                }
+              }
+            },
             [
+              _c("input", {
+                attrs: { type: "hidden", name: "_token" },
+                domProps: { value: _vm.csrf }
+              }),
+              _vm._v(" "),
               _vm._l(_vm.fields, function(field) {
                 return _c("div", { key: field.id }, [
                   _c("div", { staticClass: "mb-4" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass:
+                          "font-bold text-red-500 focus:outline-none",
+                        on: {
+                          click: function($event) {
+                            return _vm.removeField(field.id)
+                          }
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n                            x\n                        "
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
                     _c(
                       "label",
                       { staticClass: "mb-2", attrs: { for: "email" } },
@@ -36446,7 +36500,7 @@ var render = function() {
                   {
                     staticClass:
                       "rounded border border-gray-300 bg-white py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 focus:outline-none",
-                    on: { click: _vm.AddField }
+                    on: { click: _vm.addField }
                   },
                   [
                     _vm._v(
@@ -36456,7 +36510,27 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _vm._m(0)
+              _c("div", { staticClass: "relative clear-both" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass:
+                      "rounded-lg absolute right-0 bottom-0 border border-gray-300 bg-white py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 focus:outline-none",
+                    attrs: { type: "submit" },
+                    on: {
+                      submit: function($event) {
+                        $event.preventDefault()
+                        return _vm.submit()
+                      }
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                        Send Request\n                    "
+                    )
+                  ]
+                )
+              ])
             ],
             2
           )
@@ -36465,24 +36539,7 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "relative clear-both" }, [
-      _c(
-        "button",
-        {
-          staticClass:
-            "rounded-lg absolute right-0 bottom-0 border border-gray-300 bg-white py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 focus:outline-none",
-          attrs: { type: "submit" }
-        },
-        [_vm._v("\n                        Send Request\n                    ")]
-      )
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
