@@ -31,7 +31,7 @@
                                 class="w-6 h-4 font-bold text-red-500 text-xl hover:text-red-400 focus:outline-none" style="background: url(/storage/icons/bin.png)" 
                                 type="button" data-toggle="modal" 
                                 v-on:submit.prevent="deleteData(note)" @click="deleteData(note)">
-                                -
+                                <img class="w-4" src="/img/bin.png" alt="delete">
                             </button>
                     </div>
                 </div>

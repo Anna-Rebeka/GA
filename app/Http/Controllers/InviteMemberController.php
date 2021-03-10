@@ -10,43 +10,54 @@ use App\Models\User;
 use App\Models\Group;
 use Illuminate\Support\Str;
 
+use Illuminate\Support\Facades\Validator;
+
+
 class InviteMemberController extends Controller
 {
     public function show(){
-        return view('invite-member');
+        return view('invite-member' , [
+            'user' => auth()->user(),
+        ]);
     }
 
-    public function process(){
-        request()->validate(['email' => 'required|email']);
-        $groupId = auth()->user()->group->id;
-        $group = Group::find($groupId);
-        $userEmail = request()->get('email');
-        $user = User::where('email', $userEmail)->first();
-        
-        //if the user is already in the group inform and do nothing
-        if ($user != null && $group->hasUser($user)){
-            $userExists = true;
-            return view('invite-member', ['userExists' => $userExists]);
-        }
-
-        do {
-            $token = Str::random(16);
-        } 
-        while (Invite::where('token', $token)->first());
-        
-        $invite = Invite::create([
-            'email' => $userEmail,
-            'token' => $token,
-            'group' => $groupId
+    public function process(Request $fields){
+        $validator = Validator::make($fields->all(), [
+            'required|email',  
         ]);
-
-        Mail::to(request('email'))
-            ->send(new InviteMemberMail($group->name, auth()->user()->name, $invite))
-        ;
-    
-        return redirect('/invite-member')
-            ->with('message', 'Email sent!');
         
+        if($validator->fails()){
+            return 'wrong email address';
+        };
+
+        $group_id = auth()->user()->group->id;
+        $group = Group::find($group_id);
+
+        $emails = $fields->all();
+
+        foreach($emails as $invite_email){
+            $user = User::where('email', $invite_email)->first();
+            //if the user is already in the group inform and do nothing
+            if ($user != null && $group->hasUser($user)){
+                continue;
+            }
+            do {
+                $token = Str::random(16);
+            } 
+
+            while (Invite::where('token', $token)->first());
+            
+            $invite = Invite::create([
+                'email' => $invite_email,
+                'token' => $token,
+                'group' => $group_id
+            ]);
+    
+            Mail::to($invite_email)
+                ->send(new InviteMemberMail($group->name, auth()->user()->name, $invite))
+            ;
+        }
+        return 'All invitations sent';
     }
 
     public function accept($token){
