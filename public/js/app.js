@@ -36331,9 +36331,10 @@ var render = function() {
                       }
                     },
                     [
-                      _vm._v(
-                        "\n                            -\n                        "
-                      )
+                      _c("img", {
+                        staticClass: "w-4",
+                        attrs: { src: "/img/bin.png", alt: "delete" }
+                      })
                     ]
                   )
                 ])
