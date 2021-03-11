@@ -92,8 +92,9 @@ Route::middleware('auth')->group(function() {
     Route::get('/assignments/{assignment:id}/comments', [AssignmentsCommentsController::class, 'index']);
     Route::post('/assignments/{assignment:id}/comments', [AssignmentsCommentsController::class, 'store']);
 
+    Route::get('/assignments/{assignment:id}/get-files', [AssignmentsFilesController::class, 'index']);
     Route::post('/assignments/{assignment:id}/file-upload', [AssignmentsFilesController::class, 'store']);
-    Route::delete('/assignmentsFiles/{id}/file-delete', [AssignmentsFilesController::class, 'destroy']);
+    Route::delete('/assignments/file-delete/{id}', [AssignmentsFilesController::class, 'destroy']);
 
     Route::get('/groups/{group:id}/group-statistics', [GroupStatisticsController::class, 'showStatistics']);
     Route::get('/groups/{group:id}/get-assignments-statistic', [GroupStatisticsController::class, 'getAssignmentsStatistic']);

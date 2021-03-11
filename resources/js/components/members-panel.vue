@@ -1,7 +1,7 @@
 <template>
     <div class="container text-center pb-4 pt-7">
         <h2 class="font-bold text-2xl mb-4">Group members</h2>
-        <ul v-if="members" class="w-full max-w-md mb-4">
+        <ul v-if="members" class="w-full max-w-md mb-2">
             <li
                 v-for="member in visibleMembers"
                 :key="member.name"
@@ -54,8 +54,8 @@ export default {
 
     mounted() {
         this.visibleMembers = this.members.sort(() => Math.random() - 0.5);
-        if (this.visibleMembers.length > 4) {
-            this.visibleMembers = this.visibleMembers.slice(0, 5);
+        if (this.visibleMembers.length > 3) {
+            this.visibleMembers = this.visibleMembers.slice(0, 4);
         }
     },
 };

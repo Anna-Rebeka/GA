@@ -17,9 +17,9 @@ class AssignmentsFilesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Assignment $assignment)
     {
-        //
+        return $assignment->assignments_files;
     }
 
     /**
@@ -59,7 +59,7 @@ class AssignmentsFilesController extends Controller
             'assignment_id' => $assignment->id,
         ]);
 
-        return back();
+        return $assignmentFile;
     }
 
     /**
@@ -107,7 +107,5 @@ class AssignmentsFilesController extends Controller
         $assignmentsFile = AssignmentsFile::findOrFail($id);
         Storage::delete($assignmentsFile->file_path);
         $assignmentsFile->delete();
-        
-        return back();
     }
 }

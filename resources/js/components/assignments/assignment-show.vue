@@ -71,6 +71,9 @@
                 </div>
             </div>
         </div>
+        
+        <assignment-show-file-upload :user="user" :assignment="assignment"></assignment-show-file-upload>
+
     </div>
 </template>
 
@@ -80,31 +83,11 @@ export default {
     data() {
         return {
             showedAssignment: this.assignment,
-            takenAssignment: false,
+            takenAssignment: this.assignment.taken,
         };
     },
 
-    mounted() {
-        this.isAssigned();
-    },
-
     methods: {
-        isAssigned(){
-            axios.get('/assignments/' + this.showedAssignment.id + '/is-taken-by-auth').then(response => {
-                this.takenAssignment = response.data;
-            }).catch(error => {
-                if (error.response.status == 422){
-                    this.errors = error.response.data.errors;
-                    console.log(this.errors);
-                }
-                if (error.response.status == 404){
-                    this.errors = error.response.data.errors;
-                    console.log(this.errors);
-                }
-                console.log(error.message);
-            });
-        },
-
         checkWithUser($assignment, $whatToDo) {
             if (confirm("Are you sure? This action is irreversible.")) {
                 if ($whatToDo == "delete") {
