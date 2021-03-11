@@ -92,11 +92,12 @@ class AssignmentsController extends Controller
     {
         $assignment->author;
         $assignment->users;
-        
+
+        $assignment->taken = $assignment->isAssigned(auth()->user());
+
         return view('assignments.show', [
             'user' => auth()->user(),
             'assignment' => $assignment,
-            'assignments_files' => $assignment->assignments_files()->paginate(10),
         ]);
     }
 
@@ -143,10 +144,6 @@ class AssignmentsController extends Controller
     public function done(Assignment $assignment)
     {
         $assignment->update(array('done' => true));
-    }
-
-    public function checkAssignmentUser(Assignment $assignment){
-        return $assignment->isAssigned(auth()->user());
     }
 
     public function loadOlderAssignments(Group $group, $howManyDisplayed){
