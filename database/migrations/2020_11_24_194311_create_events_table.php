@@ -20,7 +20,7 @@ class CreateEventsTable extends Migration
             $table->foreignId('group_id');
             $table->string('description')->nullable();
             $table->dateTime('event_time');
-            $table->dateTime('event_ending');
+            $table->dateTime('event_ending')->nullable();
             $table->string('event_place', 255);
             $table->timestamps();
 

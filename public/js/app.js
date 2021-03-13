@@ -3907,8 +3907,41 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user', 'events'],
+  props: ["user", "events"],
   data: function data() {
     return {
       csrf: document.head.querySelector('meta[name="csrf-token"]').content,
@@ -3923,7 +3956,14 @@ __webpack_require__.r(__webpack_exports__);
     submit: function submit() {
       var _this = this;
 
-      axios.post('/events', this.fields).then(function (response) {
+      if (this.fields.eventEnding) {
+        if (Date.parse(this.fields.eventTime) > Date.parse(this.fields.eventEnding)) {
+          //TODO alert user
+          return;
+        }
+      }
+
+      axios.post("/events", this.fields).then(function (response) {
         _this.fields = {};
         _this.createNewEvent = false;
         _this.newEventCreated = true;
@@ -35589,11 +35629,15 @@ var render = function() {
                       })
                     ]),
                     _vm._v(" "),
-                    _c("p", { staticClass: "mb-4" }, [
+                    _c("div", { staticClass: "mb-4" }, [
+                      _c("p", { staticClass: "text-sm text-gray-500" }, [
+                        _vm._v("(optional)")
+                      ]),
+                      _vm._v(" "),
                       _c(
                         "label",
                         { staticClass: "mb-2", attrs: { for: "description" } },
-                        [_vm._v("Description (optional)")]
+                        [_vm._v("Description:")]
                       ),
                       _vm._v(" "),
                       _c("br"),
@@ -35670,6 +35714,50 @@ var render = function() {
                       })
                     ]),
                     _vm._v(" "),
+                    _c("div", { staticClass: "mb-6" }, [
+                      _c("p", { staticClass: "text-sm text-gray-500" }, [
+                        _vm._v("(optional)")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "label",
+                        { staticClass: "mb-2", attrs: { for: "event_ending" } },
+                        [_vm._v("Ending at:")]
+                      ),
+                      _vm._v(" "),
+                      _c("br"),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.fields.eventEnding,
+                            expression: "fields.eventEnding"
+                          }
+                        ],
+                        staticClass: "border p-2",
+                        attrs: {
+                          id: "event_ending",
+                          type: "datetime-local",
+                          name: "event_ending"
+                        },
+                        domProps: { value: _vm.fields.eventEnding },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.fields,
+                              "eventEnding",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
                     _c("p", { staticClass: "mb-4" }, [
                       _c(
                         "label",
@@ -35736,7 +35824,7 @@ var render = function() {
             },
             [
               _vm._v(
-                "\n                Your event was created! Check it out down below.\n    "
+                "\n        Your event was created! Check it out down below.\n    "
               )
             ]
           )

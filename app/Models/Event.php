@@ -15,6 +15,7 @@ class Event extends Model
         'group_id',
         'description',
         'event_time',
+        'event_ending',
         'event_place'
     ];
     
