@@ -191,7 +191,7 @@ export default {
 
         filterFree(){
             this.savedAssignments = this.savedAssignments.filter(function(e) {
-                if(e.users.length == 0){
+                if(e.users.length == 0 || e.users.length < e.max_assignees){
                     return true;
                 }
                 return false;

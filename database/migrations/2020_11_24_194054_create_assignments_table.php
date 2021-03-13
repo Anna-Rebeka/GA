@@ -21,6 +21,7 @@ class CreateAssignmentsTable extends Migration
             $table->boolean('on_time'); 
             //assignment is etiher due some date (on_time = false) or must be done on time (true; on time = due time) 
             $table->dateTime('due');
+            $table->string('duration')->nullable();
             $table->text('description');
             $table->integer('max_assignees')->nullable();
             $table->boolean('done')->default(false);
