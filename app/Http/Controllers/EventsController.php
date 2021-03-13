@@ -46,7 +46,8 @@ class EventsController extends Controller
         $attributes = $fields->validate([
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:255'],
-            'eventTime' => ['required'],
+            'eventTime' => ['required', 'date_format:"Y-m-d\TH:i"'],
+            'eventEnding' => ['date_format:"Y-m-d\TH:i"'],
             'eventPlace' => ['required', 'string', 'max:255']
             ]);
         
@@ -56,12 +57,17 @@ class EventsController extends Controller
             $attributes['description'] = null;
         }
 
+        if($fields['eventEnding'] == null){
+            $attributes['eventEnding'] = null;
+        }
+
         $event = Event::create([
             'name' => $attributes['name'],
             'host_id' => $user->id,
             'group_id' => $user->group->id,
             'description' => $attributes['description'],
             'event_time' => $attributes['eventTime'],
+            'event_ending' => $attributes['eventEnding'],
             'event_place' => $attributes['eventPlace']
         ]);
         
