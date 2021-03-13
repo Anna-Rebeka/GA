@@ -52,53 +52,73 @@
                     {{ showedAssignment.name }}
                 </h2>
             </div>
-            <div
-                class="py-2 px-6 mb-2 mr-2 bg-gray-100 rounded w-2/5 inline-block"
-            >
-                <p
-                    v-if="showedAssignment.on_time"
-                    style="color: #f67e7d"
-                    class="mb-2"
-                >
-                    <strong>On time</strong>
-                </p>
-                <p v-else style="color: #5a819e" class="mb-2">
-                    <strong>Deadline</strong>
-                </p>
+            <div class="grid grid-cols-2 gap-2">
+                <div class="py-2 px-6 mb-2 mr-2 bg-gray-100 rounded">
+                    <p
+                        v-if="showedAssignment.on_time"
+                        style="color: #f67e7d"
+                        class="mb-2"
+                    >
+                        <strong>On time</strong>
+                    </p>
+                    <p v-else style="color: #5a819e" class="mb-2">
+                        <strong>Deadline</strong>
+                    </p>
 
-                <div class="bg-white rounded mb-2 pl-2 pt-2 pb-2">
-                    {{
-                        new Date(showedAssignment.due)
-                            | dateFormat("DD.MM.YYYY , HH:mm")
-                    }}
+                    <div class="bg-white rounded mb-2 pl-2 pt-2 pb-2">
+                        {{
+                            new Date(showedAssignment.due)
+                                | dateFormat("DD.MM.YYYY , HH:mm")
+                        }}
+                    </div>
+                </div>
+                <div class="mb-2 rounded bg-gray-100 px-6 py-4">
+                    <strong>By Who</strong>
+                    <p class="bg-white p-2 rounded">
+                        {{ showedAssignment.author.name }}
+                    </p>
                 </div>
             </div>
-            <div class="mb-2 rounded bg-gray-100 px-6 p-4 w-2/5 inline-block">
-                <strong>By Who</strong>
-                <p class="bg-white p-2 rounded">
-                    {{ showedAssignment.author.name }}
-                </p>
-            </div>
-            <div
-                class="py-2 px-6 mb-2 mr-2 bg-gray-100 rounded w-2/5 inline-block"
-            >
-                <p class="mb-2">
-                    <strong>For how long:</strong>
-                </p>
-                <div class="bg-white rounded mb-2 pl-2 pt-2 pb-2">
-                    <p v-if="showedAssignment.duration">{{ showedAssignment.duration }}</p>
-                    <p v-else>not set</p>
-                    
+            <div class="grid grid-cols-2 gap-2">
+                <div class="py-2 px-6 mb-2 mr-2 bg-gray-100 rounded">
+                    <p class="mb-2">
+                        <strong>For how long:</strong>
+                    </p>
+                    <div class="bg-white rounded mb-2 pl-2 pt-2 pb-2">
+                        <p v-if="showedAssignment.duration">
+                            {{ showedAssignment.duration }}
+                        </p>
+                        <p v-else>not set</p>
+                    </div>
+                </div>
+                <div class="mb-2 rounded bg-gray-100 px-6 py-4">
+                    <strong>Max participants:</strong>
+                    <div class="bg-white p-2 rounded">
+                        <p
+                            v-if="
+                                showedAssignment.max_assignees &&
+                                showedAssignment.max_assignees >
+                                    showedAssignment.users.length
+                            "
+                        >
+                            {{ showedAssignment.max_assignees }} (free to take)
+                        </p>
+                        <p
+                            v-if="
+                                showedAssignment.max_assignees &&
+                                showedAssignment.max_assignees <=
+                                    showedAssignment.users.length
+                            "
+                        >
+                            {{ showedAssignment.max_assignees }} (already taken)
+                        </p>
+                        <p v-if="showedAssignment.max_assignees == null">
+                            not set
+                        </p>
+                    </div>
                 </div>
             </div>
-            <div class="mb-2 rounded bg-gray-100 px-6 p-4 w-2/5 inline-block">
-                <strong>Max participants:</strong>
-                <div class="bg-white p-2 rounded">
-                    <p v-if="showedAssignment.max_assignees && showedAssignment.max_assignees > showedAssignment.users.length"> {{ showedAssignment.max_assignees }} (free to take) </p>
-                    <p v-if="showedAssignment.max_assignees && showedAssignment.max_assignees <= showedAssignment.users.length"> {{ showedAssignment.max_assignees }} (already taken) </p>
-                    <p v-if="showedAssignment.max_assignees == null">not set</p>    
-                </div>
-            </div>
+
             <div
                 v-if="showedAssignment.users"
                 class="mb-2 rounded bg-gray-100 px-6 p-4"
@@ -113,7 +133,7 @@
                     </p>
                 </div>
             </div>
-            <div class="py-2 px-6 mb-2 mr-2 bg-gray-100 rounded">
+            <div class="py-4 px-6 mb-2 bg-gray-100 rounded">
                 <p class="mb-2"><strong>What about</strong></p>
                 <div class="bg-white rounded mb-2 pl-2 pt-2 pb-2">
                     {{ showedAssignment.description }}

@@ -2263,6 +2263,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "assignment"],
   data: function data() {
@@ -3507,8 +3527,56 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user', 'going', 'event', 'host'],
+  props: ["user", "going", "event", "host"],
   data: function data() {
     return {
       savedUsers: this.event.users,
@@ -3530,7 +3598,7 @@ __webpack_require__.r(__webpack_exports__);
     joinEvent: function joinEvent() {
       var _this = this;
 
-      axios.post('/events/' + this.event.id + '/join').then(function (response) {
+      axios.post("/events/" + this.event.id + "/join").then(function (response) {
         _this.going.push(_this.user.id);
 
         _this.event.users.push(_this.user);
@@ -3548,7 +3616,7 @@ __webpack_require__.r(__webpack_exports__);
     leaveEvent: function leaveEvent() {
       var _this2 = this;
 
-      axios.post('/events/' + this.event.id + '/leave').then(function (response) {
+      axios.post("/events/" + this.event.id + "/leave").then(function (response) {
         var indexEU = _this2.event.users.indexOf(_this2.user);
 
         var indexG = _this2.going.indexOf(_this2.user.id);
@@ -3568,7 +3636,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     destroyEvent: function destroyEvent() {
-      axios["delete"]('/events/' + this.event.id).then(function (response) {
+      axios["delete"]("/events/" + this.event.id).then(function (response) {
         window.location.href = "/events";
       });
     }
@@ -3940,6 +4008,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "events"],
   data: function data() {
@@ -3949,7 +4020,8 @@ __webpack_require__.r(__webpack_exports__);
       errors: {},
       createNewEvent: false,
       newEventCreated: false,
-      savedEvents: this.events
+      savedEvents: this.events,
+      wrongDatesError: false
     };
   },
   methods: {
@@ -3958,7 +4030,7 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.fields.eventEnding) {
         if (Date.parse(this.fields.eventTime) > Date.parse(this.fields.eventEnding)) {
-          //TODO alert user
+          this.wrongDatesError = true;
           return;
         }
       }
@@ -33140,81 +33212,81 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass:
-              "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded w-2/5 inline-block"
-          },
-          [
-            _vm.showedAssignment.on_time
-              ? _c(
-                  "p",
-                  { staticClass: "mb-2", staticStyle: { color: "#f67e7d" } },
-                  [_c("strong", [_vm._v("On time")])]
-                )
-              : _c(
-                  "p",
-                  { staticClass: "mb-2", staticStyle: { color: "#5a819e" } },
-                  [_c("strong", [_vm._v("Deadline")])]
-                ),
-            _vm._v(" "),
-            _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
-              _vm._v(
-                "\n                " +
-                  _vm._s(
-                    _vm._f("dateFormat")(
-                      new Date(_vm.showedAssignment.due),
-                      "DD.MM.YYYY , HH:mm"
-                    )
-                  ) +
-                  "\n            "
+        _c("div", { staticClass: "grid grid-cols-2 gap-2" }, [
+          _c(
+            "div",
+            { staticClass: "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded" },
+            [
+              _vm.showedAssignment.on_time
+                ? _c(
+                    "p",
+                    { staticClass: "mb-2", staticStyle: { color: "#f67e7d" } },
+                    [_c("strong", [_vm._v("On time")])]
+                  )
+                : _c(
+                    "p",
+                    { staticClass: "mb-2", staticStyle: { color: "#5a819e" } },
+                    [_c("strong", [_vm._v("Deadline")])]
+                  ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" },
+                [
+                  _vm._v(
+                    "\n                    " +
+                      _vm._s(
+                        _vm._f("dateFormat")(
+                          new Date(_vm.showedAssignment.due),
+                          "DD.MM.YYYY , HH:mm"
+                        )
+                      ) +
+                      "\n                "
+                  )
+                ]
               )
-            ])
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass: "mb-2 rounded bg-gray-100 px-6 p-4 w-2/5 inline-block"
-          },
-          [
+            ]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "mb-2 rounded bg-gray-100 px-6 py-4" }, [
             _c("strong", [_vm._v("By Who")]),
             _vm._v(" "),
             _c("p", { staticClass: "bg-white p-2 rounded" }, [
               _vm._v(
-                "\n                " +
+                "\n                    " +
                   _vm._s(_vm.showedAssignment.author.name) +
-                  "\n            "
+                  "\n                "
               )
             ])
-          ]
-        ),
+          ])
+        ]),
         _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass:
-              "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded w-2/5 inline-block"
-          },
-          [
-            _vm._m(0),
-            _vm._v(" "),
-            _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
-              _vm.showedAssignment.duration
-                ? _c("p", [_vm._v(_vm._s(_vm.showedAssignment.duration))])
-                : _c("p", [_vm._v("not set")])
-            ])
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass: "mb-2 rounded bg-gray-100 px-6 p-4 w-2/5 inline-block"
-          },
-          [
+        _c("div", { staticClass: "grid grid-cols-2 gap-2" }, [
+          _c(
+            "div",
+            { staticClass: "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded" },
+            [
+              _vm._m(0),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" },
+                [
+                  _vm.showedAssignment.duration
+                    ? _c("p", [
+                        _vm._v(
+                          "\n                        " +
+                            _vm._s(_vm.showedAssignment.duration) +
+                            "\n                    "
+                        )
+                      ])
+                    : _c("p", [_vm._v("not set")])
+                ]
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "mb-2 rounded bg-gray-100 px-6 py-4" }, [
             _c("strong", [_vm._v("Max participants:")]),
             _vm._v(" "),
             _c("div", { staticClass: "bg-white p-2 rounded" }, [
@@ -33223,9 +33295,9 @@ var render = function() {
                 _vm.showedAssignment.users.length
                 ? _c("p", [
                     _vm._v(
-                      " " +
+                      "\n                        " +
                         _vm._s(_vm.showedAssignment.max_assignees) +
-                        " (free to take) "
+                        " (free to take)\n                    "
                     )
                   ])
                 : _vm._e(),
@@ -33235,19 +33307,23 @@ var render = function() {
                 _vm.showedAssignment.users.length
                 ? _c("p", [
                     _vm._v(
-                      " " +
+                      "\n                        " +
                         _vm._s(_vm.showedAssignment.max_assignees) +
-                        " (already taken) "
+                        " (already taken)\n                    "
                     )
                   ])
                 : _vm._e(),
               _vm._v(" "),
               _vm.showedAssignment.max_assignees == null
-                ? _c("p", [_vm._v("not set")])
+                ? _c("p", [
+                    _vm._v(
+                      "\n                        not set\n                    "
+                    )
+                  ])
                 : _vm._e()
             ])
-          ]
-        ),
+          ])
+        ]),
         _vm._v(" "),
         _vm.showedAssignment.users
           ? _c("div", { staticClass: "mb-2 rounded bg-gray-100 px-6 p-4" }, [
@@ -33270,7 +33346,7 @@ var render = function() {
             ])
           : _vm._e(),
         _vm._v(" "),
-        _c("div", { staticClass: "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded" }, [
+        _c("div", { staticClass: "py-4 px-6 mb-2 bg-gray-100 rounded" }, [
           _vm._m(1),
           _vm._v(" "),
           _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
@@ -34996,7 +35072,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("\r\n                Join\r\n            ")]
+                [_vm._v("\n                Join\n            ")]
               )
             : _c(
                 "button",
@@ -35009,7 +35085,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("\r\n                Leave\r\n            ")]
+                [_vm._v("\n                Leave\n            ")]
               ),
           _vm._v(" "),
           _vm.event.host_id == _vm.user.id
@@ -35024,17 +35100,17 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("\r\n                Delete\r\n            ")]
+                [_vm._v("\n                Delete\n            ")]
               )
             : _vm._e()
         ]),
         _vm._v(" "),
         _c(
           "div",
-          { staticClass: "overflow-ellipsis overflow-hidden ...  max-w-sm" },
+          { staticClass: "overflow-ellipsis overflow-hidden ... max-w-sm" },
           [
             _c("h2", { staticClass: "font-bold text-2xl mb-4" }, [
-              _vm._v(" " + _vm._s(_vm.event.name) + " ")
+              _vm._v(_vm._s(_vm.event.name))
             ])
           ]
         ),
@@ -35043,60 +35119,77 @@ var render = function() {
           _vm._m(0),
           _vm._v(" "),
           _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
-            _vm._v(
-              "\r\n                " + _vm._s(_vm.host) + "\r\n            "
-            )
+            _vm._v("\n                " + _vm._s(_vm.host) + "\n            ")
           ])
         ]),
         _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass: "mb-2 rounded bg-gray-100 px-6 p-4 w-2/5 inline-block"
-          },
-          [
-            _c("strong", [_vm._v("When")]),
+        _c("div", { staticClass: "grid grid-cols-2 gap-2" }, [
+          _c("div", { staticClass: "mb-2 rounded bg-gray-100 px-6 p-4" }, [
+            _c("strong", [_vm._v("When:")]),
+            _vm._v(" "),
             _c("p", { staticClass: "bg-white p-2 rounded" }, [
               _vm._v(
-                _vm._s(
-                  _vm._f("dateFormat")(
-                    new Date(_vm.event.event_time),
-                    "DD.MM.YYYY , HH:mm"
-                  )
-                )
+                "\n                    " +
+                  _vm._s(
+                    _vm._f("dateFormat")(
+                      new Date(_vm.event.event_time),
+                      "DD.MM.YYYY , HH:mm"
+                    )
+                  ) +
+                  "\n                "
               )
             ])
-          ]
-        ),
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "mb-2 mr-2 rounded bg-gray-100 px-6 p-4" }, [
+            _c("strong", [_vm._v("Event ends:")]),
+            _vm._v(" "),
+            _vm.event.event_ending
+              ? _c("p", { staticClass: "bg-white p-2 rounded" }, [
+                  _vm._v(
+                    "\n                    " +
+                      _vm._s(
+                        _vm._f("dateFormat")(
+                          new Date(_vm.event.event_ending),
+                          "DD.MM.YYYY , HH:mm"
+                        )
+                      ) +
+                      "\n                "
+                  )
+                ])
+              : _c("p", { staticClass: "bg-white p-2 rounded" }, [
+                  _vm._v("not set")
+                ])
+          ])
+        ]),
         _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass: "mb-2 rounded bg-gray-100 px-6 p-4 w-2/5 inline-block"
-          },
-          [
-            _c("strong", [_vm._v("Where")]),
-            _c("p", { staticClass: "bg-white p-2 rounded" }, [
-              _vm._v(_vm._s(_vm.event.event_place))
-            ])
-          ]
-        ),
+        _c("div", { staticClass: "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded" }, [
+          _vm._m(1),
+          _vm._v(" "),
+          _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
+            _vm._v(
+              "\n                " +
+                _vm._s(_vm.event.event_place) +
+                "\n            "
+            )
+          ])
+        ]),
         _vm._v(" "),
         _vm.event.description
           ? _c(
               "div",
               { staticClass: "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded" },
               [
-                _vm._m(1),
+                _vm._m(2),
                 _vm._v(" "),
                 _c(
                   "div",
                   { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" },
                   [
                     _vm._v(
-                      "\r\n                " +
+                      "\n                " +
                         _vm._s(_vm.event.description) +
-                        "\r\n            "
+                        "\n            "
                     )
                   ]
                 )
@@ -35104,41 +35197,45 @@ var render = function() {
             )
           : _vm._e(),
         _vm._v(" "),
-        _c("div", { staticClass: "pt-6 px-6 mr-2 bg-gray-100 rounded" }, [
-          _vm._m(2),
+        _c("div", { staticClass: "pt-6 pb-1 px-6 mr-2 bg-gray-100 rounded" }, [
+          _vm._m(3),
           _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "bg-white rounded mb-4 pt-4 pb-2" },
-            _vm._l(_vm.pageOfItems, function(goingUser) {
-              return _c("ul", { key: goingUser.name }, [
-                _c("li", { staticClass: "flex items-center ml-2 mb-2" }, [
-                  _c("img", {
-                    staticClass: "w-10 h-10 object-cover rounded-full mr-2",
-                    attrs: { src: goingUser.avatar, alt: "" }
+          _c("div", { staticClass: "bg-white rounded mb-4 py-4" }, [
+            _vm.savedUsers.length > 0
+              ? _c(
+                  "div",
+                  _vm._l(_vm.pageOfItems, function(goingUser) {
+                    return _c("ul", { key: goingUser.name }, [
+                      _c("li", { staticClass: "flex items-center ml-2 mb-2" }, [
+                        _c("img", {
+                          staticClass:
+                            "w-10 h-10 object-cover rounded-full mr-2",
+                          attrs: { src: goingUser.avatar, alt: "" }
+                        }),
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(goingUser.name) +
+                            "\n                        "
+                        )
+                      ])
+                    ])
                   }),
-                  _vm._v(
-                    "\r\n                        " +
-                      _vm._s(goingUser.name) +
-                      "\r\n                    "
-                  )
-                ])
-              ])
-            }),
-            0
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "text-center text-sm" },
-            [
-              _c("jw-pagination", {
-                attrs: { items: _vm.savedUsers, pageSize: 10 },
-                on: { changePage: _vm.onChangePage }
-              })
-            ],
-            1
-          )
+                  0
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "text-center text-sm" },
+              [
+                _c("jw-pagination", {
+                  attrs: { items: _vm.savedUsers, pageSize: 10 },
+                  on: { changePage: _vm.onChangePage }
+                })
+              ],
+              1
+            )
+          ])
         ])
       ]),
       _vm._v(" "),
@@ -35152,14 +35249,22 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("p", { staticClass: "mb-2" }, [_c("strong", [_vm._v("Host")])])
+    return _c("p", { staticClass: "mb-2" }, [
+      _c("strong", [_vm._v("Hosted by:")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", { staticClass: "mb-2" }, [_c("strong", [_vm._v("Where:")])])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("p", { staticClass: "mb-2" }, [
-      _c("strong", [_vm._v("What about")])
+      _c("strong", [_vm._v("Description:")])
     ])
   },
   function() {
@@ -35167,7 +35272,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("p", { staticClass: "mb-2" }, [
-      _c("strong", [_vm._v("Who's coming")])
+      _c("strong", [_vm._v("Who's coming:")])
     ])
   }
 ]
@@ -35596,7 +35701,7 @@ var render = function() {
                       _c(
                         "label",
                         { staticClass: "mb-2", attrs: { for: "name" } },
-                        [_vm._v("Name")]
+                        [_vm._v("Name:")]
                       ),
                       _vm._v(" "),
                       _c("br"),
@@ -35677,7 +35782,7 @@ var render = function() {
                       _c(
                         "label",
                         { staticClass: "mb-2", attrs: { for: "event_time" } },
-                        [_vm._v("When")]
+                        [_vm._v("When:")]
                       ),
                       _vm._v(" "),
                       _c("br"),
@@ -35758,11 +35863,26 @@ var render = function() {
                       })
                     ]),
                     _vm._v(" "),
+                    _vm.wrongDatesError
+                      ? _c(
+                          "div",
+                          {
+                            staticClass:
+                              "flex items-center justify-between w-full mb-10 p-2 bg-red-500 shadow text-white"
+                          },
+                          [
+                            _vm._v(
+                              "\n                    Oops. An event can not end before it starts. \n                 "
+                            )
+                          ]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
                     _c("p", { staticClass: "mb-4" }, [
                       _c(
                         "label",
                         { staticClass: "mb-2", attrs: { for: "event_place" } },
-                        [_vm._v("Place")]
+                        [_vm._v("Place:")]
                       ),
                       _vm._v(" "),
                       _c("br"),

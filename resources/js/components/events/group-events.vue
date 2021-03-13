@@ -24,7 +24,7 @@
 
                 <div class="mx-auto w-full mb-10">
                     <p class="mb-4">
-                        <label class="mb-2" for="name">Name</label>
+                        <label class="mb-2" for="name">Name:</label>
                         <br />
                         <input
                             id="name"
@@ -50,7 +50,7 @@
                         </textarea>
                     </div>
                     <p class="mb-4">
-                        <label class="mb-2" for="event_time">When</label>
+                        <label class="mb-2" for="event_time">When:</label>
                         <br />
                         <input
                             id="event_time"
@@ -75,8 +75,11 @@
                             class="border p-2"
                         />
                     </div>
+                    <div class="flex items-center justify-between w-full mb-10 p-2 bg-red-500 shadow text-white" v-if="wrongDatesError">
+                        Oops. An event can not end before it starts. 
+                     </div>
                     <p class="mb-4">
-                        <label class="mb-2" for="event_place">Place</label>
+                        <label class="mb-2" for="event_place">Place:</label>
                         <br />
                         <input
                             id="event_place"
@@ -120,13 +123,14 @@ export default {
             createNewEvent: false,
             newEventCreated: false,
             savedEvents: this.events,
+            wrongDatesError: false,
         };
     },
     methods: {
         submit() {
             if(this.fields.eventEnding){
                 if (Date.parse(this.fields.eventTime) > Date.parse(this.fields.eventEnding)) {
-                    //TODO alert user
+                    this.wrongDatesError = true;
                     return;
                 } 
             }
