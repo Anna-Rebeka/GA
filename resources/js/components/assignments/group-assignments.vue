@@ -57,8 +57,20 @@
                         <input type="radio" v-model="fields.on_time" id="true" name="on_time" :value="true" required>
                         <label for="true">on time</label><br>
                     </div>
+
+                    <div class="mb-6">
+                        <p class="text-sm text-gray-500">(optional)</p>
+                        <p>For how long :</p>
+                        <label class="mb-2 text-md"  for="duration_hours">Hours</label>
+                        <input type="number" v-model="fields.duration_hours" id="duration_hours" name="duration_hours" min="0" class="border w-16 p-2">
+                        <label class="mb-2 text-md" for="duration_minutes">Minutes</label>
+                        <input type="number" v-model="fields.duration_minutes" id="duration_minutes" name="duration_minutes" min="0" max="59" class="border w-16 p-2">
+                        <p class="text-sm">0h 0min = not set</p>
+                    </div>
+                    
                         <div class="mb-4">
-                            <label class="mb-2" for="event_place">Assign this task to</label>
+                            <p class="text-sm text-gray-500">(optional)</p>
+                            <label class="mb-2" for="event_place">Assign this task to:</label>
                             <div 
                                 v-for="member in members" :key="member.id" 
                                 :value="member.id"
@@ -67,7 +79,7 @@
                                 <label :for="member.id"> {{ member.name }}</label><br>
                             </div>
                         </div>
-                        
+                        <p class="text-sm mt-2 text-gray-500">(optional)</p>
                         <label for="quantity">Maximum number of assignees:</label>
                         <p class="text-sm">0 = not set</p>
                         <input 

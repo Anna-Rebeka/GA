@@ -20,6 +20,7 @@ class Assignment extends Model
         'group_id',
         'due',
         'on_time',
+        'duration',
         'done',
         'description',
         'max_assignees',

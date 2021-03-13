@@ -50,9 +50,26 @@ class AssignmentsController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:255'],
             'on_time' => ['required', 'boolean'],
+            'duration_hours' => ['integer', 'min:0'],
+            'duration_minutes' => ['integer', 'min:0', 'max:59'], 
             'due' => ['required'],
             'max_assignees' => ['integer'] 
             ]);
+        
+        
+        $attributes['duration'] = '';
+        
+        if($fields['duration_hours'] != null && $fields['duration_hours'] > 0){
+            $attributes['duration'] = $attributes['duration'] . ' ' . $fields['duration_hours'] . 'h';
+        }
+
+        if($fields['duration_minutes'] != null && $fields['duration_minutes'] > 0){
+            $attributes['duration'] =  $attributes['duration'] . ' ' . $fields['duration_minutes'] . 'min';
+        }
+        
+        if($attributes['duration'] == ''){
+            $attributes['duration'] = null;
+        }
         
         $user = auth()->user();
 
@@ -71,6 +88,7 @@ class AssignmentsController extends Controller
             'description' => $attributes['description'],
             'max_assignees' =>  $attributes['max_assignees'],
             'on_time' => $attributes['on_time'],
+            'duration' => $attributes['duration'],
             'due' => $attributes['due'],
         ]);
 

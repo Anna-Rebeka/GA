@@ -6,7 +6,7 @@
                     <button
                         v-if="!showedAssignment.done"
                         @click="checkWithUser(showedAssignment, 'done')"
-                        class="rounded-lg py-2 px-4 mr-2 text-white text-sm bg-green-400 hover: hover:bg-green-300 focus:outline-none"
+                        class="rounded-lg py-2 px-4 mr-2 text-white text-sm bg-green-400 hover:bg-green-300 focus:outline-none"
                     >
                         Done
                     </button>
@@ -20,7 +20,13 @@
             </div>
             <div class="float-right">
                 <div v-if="!takenAssignment">
-                    <div v-if="showedAssignment.max_assignees == null || showedAssignment.users.length  < showedAssignment.max_assignees">
+                    <div
+                        v-if="
+                            showedAssignment.max_assignees == null ||
+                            showedAssignment.users.length <
+                                showedAssignment.max_assignees
+                        "
+                    >
                         <button
                             @click="checkWithUser(showedAssignment, 'take')"
                             class="text-sm bg-blue-400 text-white rounded-lg w-16 py-2 hover:bg-blue-500 mr-3 focus:outline-none"
@@ -29,16 +35,36 @@
                         </button>
                     </div>
                 </div>
-                
             </div>
-            <div class="overflow-ellipsis overflow-hidden ...  max-w-sm">
-                <h2 v-if="showedAssignment.done" style="color: #6cc2bd;" class="font-bold text-2xl mb-4">{{ showedAssignment.name }}</h2>
-                <h2 v-else style="color: #f67e7d;" class="font-bold text-2xl mb-4">{{ showedAssignment.name }}</h2>
+            <div class="overflow-ellipsis overflow-hidden ... max-w-sm">
+                <h2
+                    v-if="showedAssignment.done"
+                    style="color: #6cc2bd"
+                    class="font-bold text-2xl mb-4"
+                >
+                    {{ showedAssignment.name }}
+                </h2>
+                <h2
+                    v-else
+                    style="color: #f67e7d"
+                    class="font-bold text-2xl mb-4"
+                >
+                    {{ showedAssignment.name }}
+                </h2>
             </div>
-            <div class="py-2 px-6 mb-2 mr-2 bg-gray-100 rounded w-2/5 inline-block">
-
-                <p v-if="showedAssignment.on_time" style="color: #f67e7d;" class="mb-2"><strong>On time</strong></p>
-                <p v-else style="color: #5a819e;" class="mb-2"><strong>Deadline</strong></p>
+            <div
+                class="py-2 px-6 mb-2 mr-2 bg-gray-100 rounded w-2/5 inline-block"
+            >
+                <p
+                    v-if="showedAssignment.on_time"
+                    style="color: #f67e7d"
+                    class="mb-2"
+                >
+                    <strong>On time</strong>
+                </p>
+                <p v-else style="color: #5a819e" class="mb-2">
+                    <strong>Deadline</strong>
+                </p>
 
                 <div class="bg-white rounded mb-2 pl-2 pt-2 pb-2">
                     {{
@@ -54,12 +80,35 @@
                 </p>
             </div>
             <div
+                class="py-2 px-6 mb-2 mr-2 bg-gray-100 rounded w-2/5 inline-block"
+            >
+                <p class="mb-2">
+                    <strong>For how long:</strong>
+                </p>
+                <div class="bg-white rounded mb-2 pl-2 pt-2 pb-2">
+                    <p v-if="showedAssignment.duration">{{ showedAssignment.duration }}</p>
+                    <p v-else>not set</p>
+                    
+                </div>
+            </div>
+            <div class="mb-2 rounded bg-gray-100 px-6 p-4 w-2/5 inline-block">
+                <strong>Max participants:</strong>
+                <div class="bg-white p-2 rounded">
+                    <p v-if="showedAssignment.max_assignees && showedAssignment.max_assignees > showedAssignment.users.length"> {{ showedAssignment.max_assignees }} (free to take) </p>
+                    <p v-if="showedAssignment.max_assignees && showedAssignment.max_assignees <= showedAssignment.users.length"> {{ showedAssignment.max_assignees }} (already taken) </p>
+                    <p v-if="showedAssignment.max_assignees == null">not set</p>    
+                </div>
+            </div>
+            <div
                 v-if="showedAssignment.users"
                 class="mb-2 rounded bg-gray-100 px-6 p-4"
             >
                 <strong>For Who</strong>
                 <div class="bg-white p-2 rounded">
-                    <p v-for="assignee in showedAssignment.users" :key="assignee.id">
+                    <p
+                        v-for="assignee in showedAssignment.users"
+                        :key="assignee.id"
+                    >
                         {{ assignee.name }}
                     </p>
                 </div>
@@ -71,9 +120,11 @@
                 </div>
             </div>
         </div>
-        
-        <assignment-show-file-upload :user="user" :assignment="assignment"></assignment-show-file-upload>
 
+        <assignment-show-file-upload
+            :user="user"
+            :assignment="assignment"
+        ></assignment-show-file-upload>
     </div>
 </template>
 

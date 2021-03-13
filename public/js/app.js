@@ -2212,6 +2212,57 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "assignment"],
   data: function data() {
@@ -2470,7 +2521,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     filterFree: function filterFree() {
       this.savedAssignments = this.savedAssignments.filter(function (e) {
-        if (e.users.length == 0) {
+        if (e.users.length == 0 || e.users.length < e.max_assignees) {
           return true;
         }
 
@@ -2509,6 +2560,18 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -32937,7 +33000,7 @@ var render = function() {
                       "button",
                       {
                         staticClass:
-                          "rounded-lg py-2 px-4 mr-2 text-white text-sm bg-green-400 hover: hover:bg-green-300 focus:outline-none",
+                          "rounded-lg py-2 px-4 mr-2 text-white text-sm bg-green-400 hover:bg-green-300 focus:outline-none",
                         on: {
                           click: function($event) {
                             return _vm.checkWithUser(
@@ -33003,7 +33066,7 @@ var render = function() {
         _vm._v(" "),
         _c(
           "div",
-          { staticClass: "overflow-ellipsis overflow-hidden ...  max-w-sm" },
+          { staticClass: "overflow-ellipsis overflow-hidden ... max-w-sm" },
           [
             _vm.showedAssignment.done
               ? _c(
@@ -33012,7 +33075,13 @@ var render = function() {
                     staticClass: "font-bold text-2xl mb-4",
                     staticStyle: { color: "#6cc2bd" }
                   },
-                  [_vm._v(_vm._s(_vm.showedAssignment.name))]
+                  [
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(_vm.showedAssignment.name) +
+                        "\n            "
+                    )
+                  ]
                 )
               : _c(
                   "h2",
@@ -33020,7 +33089,13 @@ var render = function() {
                     staticClass: "font-bold text-2xl mb-4",
                     staticStyle: { color: "#f67e7d" }
                   },
-                  [_vm._v(_vm._s(_vm.showedAssignment.name))]
+                  [
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(_vm.showedAssignment.name) +
+                        "\n            "
+                    )
+                  ]
                 )
           ]
         ),
@@ -33077,6 +33152,63 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass:
+              "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded w-2/5 inline-block"
+          },
+          [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
+              _vm.showedAssignment.duration
+                ? _c("p", [_vm._v(_vm._s(_vm.showedAssignment.duration))])
+                : _c("p", [_vm._v("not set")])
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "mb-2 rounded bg-gray-100 px-6 p-4 w-2/5 inline-block"
+          },
+          [
+            _c("strong", [_vm._v("Max participants:")]),
+            _vm._v(" "),
+            _c("div", { staticClass: "bg-white p-2 rounded" }, [
+              _vm.showedAssignment.max_assignees &&
+              _vm.showedAssignment.max_assignees >
+                _vm.showedAssignment.users.length
+                ? _c("p", [
+                    _vm._v(
+                      " " +
+                        _vm._s(_vm.showedAssignment.max_assignees) +
+                        " (free to take) "
+                    )
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.showedAssignment.max_assignees &&
+              _vm.showedAssignment.max_assignees <=
+                _vm.showedAssignment.users.length
+                ? _c("p", [
+                    _vm._v(
+                      " " +
+                        _vm._s(_vm.showedAssignment.max_assignees) +
+                        " (already taken) "
+                    )
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.showedAssignment.max_assignees == null
+                ? _c("p", [_vm._v("not set")])
+                : _vm._e()
+            ])
+          ]
+        ),
+        _vm._v(" "),
         _vm.showedAssignment.users
           ? _c("div", { staticClass: "mb-2 rounded bg-gray-100 px-6 p-4" }, [
               _c("strong", [_vm._v("For Who")]),
@@ -33099,7 +33231,7 @@ var render = function() {
           : _vm._e(),
         _vm._v(" "),
         _c("div", { staticClass: "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded" }, [
-          _vm._m(0),
+          _vm._m(1),
           _vm._v(" "),
           _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
             _vm._v(
@@ -33119,6 +33251,14 @@ var render = function() {
   )
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", { staticClass: "mb-2" }, [
+      _c("strong", [_vm._v("For how long:")])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -33721,17 +33861,114 @@ var render = function() {
                       _c("br")
                     ]),
                     _vm._v(" "),
+                    _c("div", { staticClass: "mb-6" }, [
+                      _c("p", { staticClass: "text-sm text-gray-500" }, [
+                        _vm._v("(optional)")
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [_vm._v("For how long :")]),
+                      _vm._v(" "),
+                      _c(
+                        "label",
+                        {
+                          staticClass: "mb-2 text-md",
+                          attrs: { for: "duration_hours" }
+                        },
+                        [_vm._v("Hours")]
+                      ),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.fields.duration_hours,
+                            expression: "fields.duration_hours"
+                          }
+                        ],
+                        staticClass: "border w-16 p-2",
+                        attrs: {
+                          type: "number",
+                          id: "duration_hours",
+                          name: "duration_hours",
+                          min: "0"
+                        },
+                        domProps: { value: _vm.fields.duration_hours },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.fields,
+                              "duration_hours",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "label",
+                        {
+                          staticClass: "mb-2 text-md",
+                          attrs: { for: "duration_minutes" }
+                        },
+                        [_vm._v("Minutes")]
+                      ),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.fields.duration_minutes,
+                            expression: "fields.duration_minutes"
+                          }
+                        ],
+                        staticClass: "border w-16 p-2",
+                        attrs: {
+                          type: "number",
+                          id: "duration_minutes",
+                          name: "duration_minutes",
+                          min: "0",
+                          max: "59"
+                        },
+                        domProps: { value: _vm.fields.duration_minutes },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.fields,
+                              "duration_minutes",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "text-sm" }, [
+                        _vm._v("0h 0min = not set")
+                      ])
+                    ]),
+                    _vm._v(" "),
                     _c(
                       "div",
                       { staticClass: "mb-4" },
                       [
+                        _c("p", { staticClass: "text-sm text-gray-500" }, [
+                          _vm._v("(optional)")
+                        ]),
+                        _vm._v(" "),
                         _c(
                           "label",
                           {
                             staticClass: "mb-2",
                             attrs: { for: "event_place" }
                           },
-                          [_vm._v("Assign this task to")]
+                          [_vm._v("Assign this task to:")]
                         ),
                         _vm._v(" "),
                         _vm._l(_vm.members, function(member) {
@@ -33801,6 +34038,10 @@ var render = function() {
                       ],
                       2
                     ),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "text-sm mt-2 text-gray-500" }, [
+                      _vm._v("(optional)")
+                    ]),
                     _vm._v(" "),
                     _c("label", { attrs: { for: "quantity" } }, [
                       _vm._v("Maximum number of assignees:")
