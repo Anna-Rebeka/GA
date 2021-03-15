@@ -166,8 +166,6 @@ export default {
         getUsersAssignments() {
             axios.get(this.authUser.username + '/assignments/mine').then(response => {
                 this.assignments = response.data;
-                console.log(this.assignments);
-
                 this.filteredAssignments = this.assignments;
             }).catch(error => {
                 if (error.response.status == 422){

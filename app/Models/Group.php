@@ -16,9 +16,14 @@ class Group extends Model
      */
     protected $fillable = [
         'name',
+        'avatar',
         'admin_id',
         'board'
     ];
+
+    public function getAvatarAttribute($value){
+        return asset($value ? 'storage/'.$value : '/img/default_group.png');
+    }
 
     public function users(){
         return $this->belongsToMany(User::class);

@@ -87,8 +87,11 @@ class ChatroomsController extends Controller
     public function show(Chatroom $chatroom)
     {   
         $chatroom->users;
+        $user = auth()->user();
+        $user->group;
+
         return view('chatrooms.show', [
-            'user' => auth()->user(),
+            'user' => $user,
             'chatroom' => $chatroom,
         ]);
     }

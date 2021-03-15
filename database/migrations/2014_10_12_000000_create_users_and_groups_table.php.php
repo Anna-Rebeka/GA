@@ -36,6 +36,7 @@ class CreateUsersAndGroupsTable extends Migration
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->text('avatar')->nullable();
             $table->foreignId('admin_id');
             $table->string('board', 500)->nullable();
             $table->timestamps();

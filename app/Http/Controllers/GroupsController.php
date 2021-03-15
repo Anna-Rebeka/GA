@@ -76,7 +76,12 @@ class GroupsController extends Controller
      */
     public function edit(Group $group)
     {
-        //
+        $user = auth()->user();
+        return view('groups/edit', [
+            'user' => $user,
+            'group' => $user->group,
+            'members' => $group->users()->orderBy('name')->get()->except($user->id),
+        ]);
     }
 
     /**
@@ -94,9 +99,11 @@ class GroupsController extends Controller
                 'required', 
                 'max:255', 
             ],
+            'avatar' => [
+                'file',
+            ],
             'admin_id' => [
                 'exists:users,id',
-                'required',
             ],
             'board' => [
                 'string', 
@@ -105,6 +112,10 @@ class GroupsController extends Controller
             ],
         ]);
     
+        if(request('avatar')){
+            $attributes['avatar'] = request('avatar')->store('/groups/avatars');
+        }
+
         if(!request('board')){
             $attributes['board'] = $group->board;
         }
