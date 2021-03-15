@@ -48,6 +48,7 @@ Route::middleware('auth')->group(function() {
     Route::get('/{user:username}/groups', [UsersController::class, 'getAllUsersGroups']);
     Route::get('/all-members/{group:id}', [UsersController::class, 'index']);
     Route::get('/{user:username}/active-group', [UsersController::class, 'getActiveGroup']);
+    Route::get('/profile/{user:id}/settings', [UsersController::class, 'showSettings']);
 
     Route::patch('/activate-group/{id}', [UsersController::class, 'activateGroup']);
     

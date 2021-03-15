@@ -75,6 +75,14 @@ class UsersController extends Controller
         ]);
     }
 
+
+    public function showSettings(User $user)
+    {
+        return view('profile.settings', [
+            'user' => $user
+        ]);
+    }
+
     /**
      * Update the specified resource in storage.
      *
