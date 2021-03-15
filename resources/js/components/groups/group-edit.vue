@@ -62,11 +62,34 @@
                 </select>
             </div>
 
-            <div class="flex items-center justify-between w-full mb-12 p-2 bg-yellow-400 shadow text-white" v-if="fields.admin_id && fields.admin_id != user.id">
+            <div v-if="fields.admin_id && fields.admin_id != user.id">
+                <div class="flex items-center justify-between w-full mb-4 p-2 bg-yellow-400 shadow text-white">
                     Passing your admin rights is irreversible. 
             </div>
 
-            <div class="flex items-center justify-between w-full mb-10 p-2 bg-red-500 shadow text-white" v-if="emptyEditSubmitted">
+            <div class="mb-12">
+                <label
+                    class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700"
+                    for="checkAdminChange"
+                >
+                    Please type "yes" to pass your admin rights.
+                </label>
+
+                <input
+                    class="focus:outline-none border-b border-gray-400 p-2"
+                    type="text"
+                    name="checkAdminChange"
+                    id="checkAdminChange"
+                    placeholder="do you wish to proceed?"
+                />
+            </div>
+            </div>
+
+            <div class="flex items-center justify-between w-full mb-10 p-2 bg-red-500 shadow text-white" v-if="fields.admin_id != user.id && adminChangeFailed">
+                    Please type "yes" if you wish to pass your admin rights.
+            </div>
+
+            <div class="flex items-center justify-between w-full mb-10 p-2 bg-red-500 shadow text-white" v-if="!fields.admin_id && !fields.name && emptyEditSubmitted">
                     There are no changes to submit.
             </div>
 
@@ -92,13 +115,14 @@ export default {
             fields: [],
             avatar: null,
             emptyEditSubmitted: false,
-            checkAdminChange: "", //TODO
+            adminChangeFailed: false,
         };
     },
 
     methods: {
         handleAvatarUpload() {
             this.avatar = this.$refs.avatar.files[0];
+            this.emptyEditSubmitted = false;
         },
 
         submit() {
@@ -115,7 +139,12 @@ export default {
             } else {
                 formData.append("name", this.group.name);
             }
-            if (this.fields.admin_id) {
+            if (this.fields.admin_id && this.fields.admin_id != this.user.id) {
+                var checkAdminChange = document.getElementById("checkAdminChange").value;
+                if(checkAdminChange == null || checkAdminChange.trim().toLowerCase() != "yes"){
+                    this.adminChangeFailed = true;
+                    return;
+                }
                 formData.append("admin_id", this.fields.admin_id);
 
             } else {

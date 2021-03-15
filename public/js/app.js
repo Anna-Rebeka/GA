@@ -4357,6 +4357,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "group", "members"],
   data: function data() {
@@ -4364,13 +4387,13 @@ __webpack_require__.r(__webpack_exports__);
       fields: [],
       avatar: null,
       emptyEditSubmitted: false,
-      checkAdminChange: "" //TODO
-
+      adminChangeFailed: false
     };
   },
   methods: {
     handleAvatarUpload: function handleAvatarUpload() {
       this.avatar = this.$refs.avatar.files[0];
+      this.emptyEditSubmitted = false;
     },
     submit: function submit() {
       var _this = this;
@@ -4392,7 +4415,14 @@ __webpack_require__.r(__webpack_exports__);
         formData.append("name", this.group.name);
       }
 
-      if (this.fields.admin_id) {
+      if (this.fields.admin_id && this.fields.admin_id != this.user.id) {
+        var checkAdminChange = document.getElementById("checkAdminChange").value;
+
+        if (checkAdminChange == null || checkAdminChange.trim().toLowerCase() != "yes") {
+          this.adminChangeFailed = true;
+          return;
+        }
+
         formData.append("admin_id", this.fields.admin_id);
       } else {
         formData.append("admin_id", this.user.id);
@@ -36558,21 +36588,40 @@ var render = function() {
         ]),
         _vm._v(" "),
         _vm.fields.admin_id && _vm.fields.admin_id != _vm.user.id
+          ? _c("div", [
+              _c(
+                "div",
+                {
+                  staticClass:
+                    "flex items-center justify-between w-full mb-4 p-2 bg-yellow-400 shadow text-white"
+                },
+                [
+                  _vm._v(
+                    "\n                Passing your admin rights is irreversible. \n        "
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _vm._m(0)
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.fields.admin_id != _vm.user.id && _vm.adminChangeFailed
           ? _c(
               "div",
               {
                 staticClass:
-                  "flex items-center justify-between w-full mb-12 p-2 bg-yellow-400 shadow text-white"
+                  "flex items-center justify-between w-full mb-10 p-2 bg-red-500 shadow text-white"
               },
               [
                 _vm._v(
-                  "\n                Passing your admin rights is irreversible. \n        "
+                  '\n                Please type "yes" if you wish to pass your admin rights.\n        '
                 )
               ]
             )
           : _vm._e(),
         _vm._v(" "),
-        _vm.emptyEditSubmitted
+        !_vm.fields.admin_id && !_vm.fields.name && _vm.emptyEditSubmitted
           ? _c(
               "div",
               {
@@ -36611,7 +36660,38 @@ var render = function() {
     )
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "mb-12" }, [
+      _c(
+        "label",
+        {
+          staticClass:
+            "mt-4 block mb-2 uppercase font-bold text-xs text-gray-700",
+          attrs: { for: "checkAdminChange" }
+        },
+        [
+          _vm._v(
+            '\n                Please type "yes" to pass your admin rights.\n            '
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c("input", {
+        staticClass: "focus:outline-none border-b border-gray-400 p-2",
+        attrs: {
+          type: "text",
+          name: "checkAdminChange",
+          id: "checkAdminChange",
+          placeholder: "do you wish to proceed?"
+        }
+      })
+    ])
+  }
+]
 render._withStripped = true
 
 
