@@ -18,7 +18,7 @@
                     v-model="fields.name"
                 />
             </div>
-            <div class="mb-12">
+            <div class="mb-8">
                 <label
                     class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700"
                     for="avatar"
@@ -43,6 +43,33 @@
                 </div>
             </div>
 
+            <div class="mb-8">
+                 <label
+                    class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700"
+                    for="admin_id"
+                >
+                    Pick a new admin
+                </label>
+                <select name="admin_id" id="admin_id" v-model="fields.admin_id" class="border-b border-gray-400">
+                    <option :value="user.id">{{ user.name }}</option>
+                    <option
+                        v-for="member in members"
+                        :key="member.id"
+                        :value="member.id"
+                    >
+                        {{ member.name }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="flex items-center justify-between w-full mb-12 p-2 bg-yellow-400 shadow text-white" v-if="fields.admin_id && fields.admin_id != user.id">
+                    Passing your admin rights is irreversible. 
+            </div>
+
+            <div class="flex items-center justify-between w-full mb-10 p-2 bg-red-500 shadow text-white" v-if="emptyEditSubmitted">
+                    There are no changes to submit.
+            </div>
+
             <div class="mb-6">
                 <button
                     type="submit"
@@ -59,11 +86,13 @@
 
 <script>
 export default {
-    props: ["user", "group"],
+    props: ["user", "group", "members"],
     data() {
         return {
             fields: [],
             avatar: null,
+            emptyEditSubmitted: false,
+            checkAdminChange: "", //TODO
         };
     },
 
@@ -72,33 +101,33 @@ export default {
             this.avatar = this.$refs.avatar.files[0];
         },
 
-        submit(){
-            if(!this.fields.name && this.avatar == null){
+        submit() {
+            if (!this.fields.name && this.avatar == null && !this.fields.admin_id) {
+                this.emptyEditSubmitted = true;
                 return;
             }
             var formData = new FormData();
             if (this.avatar) {
                 formData.append("avatar", this.avatar);
             }
-            if (this.fields.name){
+            if (this.fields.name) {
                 formData.append("name", this.fields.name);
-            }
-            else{
+            } else {
                 formData.append("name", this.group.name);
             }
+            if (this.fields.admin_id) {
+                formData.append("admin_id", this.fields.admin_id);
 
-            //TODO select!!!
-            formData.append("admin_id", this.user.id);
+            } else {
+                formData.append("admin_id", this.user.id);
+            }
+            
             axios
-                .post(
-                    "/groups/" + this.group.id + "/edit-group",
-                    formData,
-                    {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
-                    }
-                )
+                .post("/groups/" + this.group.id + "/edit-group", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                })
                 .then((response) => {
                     window.location.href = "/profile/" + this.user.username;
                 })
@@ -106,7 +135,7 @@ export default {
                     console.log(error.message);
                 });
         },
-        },
+    },
 };
 </script>
 

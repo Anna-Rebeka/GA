@@ -26,7 +26,7 @@
                 <div class="lg:flex lg:justify-between">
                     <div class="pt-4 p-4 lg:w-1/6 mb-6 sm:w-2/5 sm:mx-auto" style="max-width: 700px;">
                         @if(auth()->user()->group)
-                            <group-panel :user="{{ auth()->user() }}" :group="{{ auth()->user()->group }}"></group-panel>
+                            <group-panel class="mx-5" :user="{{ auth()->user() }}" :group="{{ auth()->user()->group }}"></group-panel>
                         @else
                             <empty-group-panel :user="{{ auth()->user() }}"></empty-group-panel>
                         @endif

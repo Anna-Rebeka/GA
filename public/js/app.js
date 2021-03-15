@@ -4330,12 +4330,42 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["user", "group"],
+  props: ["user", "group", "members"],
   data: function data() {
     return {
       fields: [],
-      avatar: null
+      avatar: null,
+      emptyEditSubmitted: false,
+      checkAdminChange: "" //TODO
+
     };
   },
   methods: {
@@ -4345,7 +4375,8 @@ __webpack_require__.r(__webpack_exports__);
     submit: function submit() {
       var _this = this;
 
-      if (!this.fields.name && this.avatar == null) {
+      if (!this.fields.name && this.avatar == null && !this.fields.admin_id) {
+        this.emptyEditSubmitted = true;
         return;
       }
 
@@ -4359,10 +4390,14 @@ __webpack_require__.r(__webpack_exports__);
         formData.append("name", this.fields.name);
       } else {
         formData.append("name", this.group.name);
-      } //TODO select!!!
+      }
 
+      if (this.fields.admin_id) {
+        formData.append("admin_id", this.fields.admin_id);
+      } else {
+        formData.append("admin_id", this.user.id);
+      }
 
-      formData.append("admin_id", this.user.id);
       axios.post("/groups/" + this.group.id + "/edit-group", formData, {
         headers: {
           "Content-Type": "multipart/form-data"
@@ -36427,7 +36462,7 @@ var render = function() {
           })
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "mb-12" }, [
+        _c("div", { staticClass: "mb-8" }, [
           _c(
             "label",
             {
@@ -36456,6 +36491,101 @@ var render = function() {
             })
           ])
         ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "mb-8" }, [
+          _c(
+            "label",
+            {
+              staticClass:
+                "mt-4 block mb-2 uppercase font-bold text-xs text-gray-700",
+              attrs: { for: "admin_id" }
+            },
+            [_vm._v("\n                Pick a new admin\n            ")]
+          ),
+          _vm._v(" "),
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.fields.admin_id,
+                  expression: "fields.admin_id"
+                }
+              ],
+              staticClass: "border-b border-gray-400",
+              attrs: { name: "admin_id", id: "admin_id" },
+              on: {
+                change: function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.$set(
+                    _vm.fields,
+                    "admin_id",
+                    $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                  )
+                }
+              }
+            },
+            [
+              _c("option", { domProps: { value: _vm.user.id } }, [
+                _vm._v(_vm._s(_vm.user.name))
+              ]),
+              _vm._v(" "),
+              _vm._l(_vm.members, function(member) {
+                return _c(
+                  "option",
+                  { key: member.id, domProps: { value: member.id } },
+                  [
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(member.name) +
+                        "\n                "
+                    )
+                  ]
+                )
+              })
+            ],
+            2
+          )
+        ]),
+        _vm._v(" "),
+        _vm.fields.admin_id && _vm.fields.admin_id != _vm.user.id
+          ? _c(
+              "div",
+              {
+                staticClass:
+                  "flex items-center justify-between w-full mb-12 p-2 bg-yellow-400 shadow text-white"
+              },
+              [
+                _vm._v(
+                  "\n                Passing your admin rights is irreversible. \n        "
+                )
+              ]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.emptyEditSubmitted
+          ? _c(
+              "div",
+              {
+                staticClass:
+                  "flex items-center justify-between w-full mb-10 p-2 bg-red-500 shadow text-white"
+              },
+              [
+                _vm._v(
+                  "\n                There are no changes to submit.\n        "
+                )
+              ]
+            )
+          : _vm._e(),
         _vm._v(" "),
         _c("div", { staticClass: "mb-6" }, [
           _c(
