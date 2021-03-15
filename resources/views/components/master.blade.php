@@ -25,7 +25,11 @@
             <main class="container mx-auto">
                 <div class="lg:flex lg:justify-between">
                     <div class="pt-4 p-4 lg:w-1/6 mb-6 sm:w-2/5 sm:mx-auto" style="max-width: 700px;">
-                        <group-panel :user="{{ auth()->user() }}"></group-panel>
+                        @if(auth()->user()->group)
+                            <group-panel :user="{{ auth()->user() }}" :group="{{ auth()->user()->group }}"></group-panel>
+                        @else
+                            <empty-group-panel :user="{{ auth()->user() }}"></empty-group-panel>
+                        @endif
                     </div>
                     
                     <div class="lg:w-4/6 pt-7 mx-7 mb-2 sm:mb-12 bg-white shadow-lg rounded-b pt-10 pb-4 px-7 border border-gray-200" >

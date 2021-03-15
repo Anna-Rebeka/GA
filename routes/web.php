@@ -47,6 +47,8 @@ Route::middleware('auth')->group(function() {
     Route::get('/profile/{user:username}/assignments/mine', [UsersController::class, 'getUsersAssignments']);
     Route::get('/{user:username}/groups', [UsersController::class, 'getAllUsersGroups']);
     Route::get('/all-members/{group:id}', [UsersController::class, 'index']);
+    Route::get('/{user:username}/active-group', [UsersController::class, 'getActiveGroup']);
+
     Route::patch('/activate-group/{id}', [UsersController::class, 'activateGroup']);
     
     Route::get('/{user:username}/notes', [NotesController::class, 'index']);
@@ -58,6 +60,8 @@ Route::middleware('auth')->group(function() {
 
     Route::get('/create-group', [GroupsController::class, 'create']);
     Route::post('/create-group', [GroupsController::class, 'store']);
+    Route::get('/groups/{group:id}/edit-group', [GroupsController::class, 'edit']);
+    Route::post('/groups/{group:id}/edit-group', [GroupsController::class, 'update']);
     Route::get('/group/{group:id}/members/get', [GroupsController::class, 'getMembers']);
     Route::get('/groups/{group:id}/whiteboard', [GroupsController::class, 'showWhiteboard']);
     

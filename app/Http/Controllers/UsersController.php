@@ -158,6 +158,10 @@ class UsersController extends Controller
             $user->save();
         }
     }
+
+    public function getActiveGroup(User $user){
+        return $user->group;
+    }
     
     public function getAllUsersGroups(User $user){
         if(!$user->group){

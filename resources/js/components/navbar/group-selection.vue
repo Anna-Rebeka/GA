@@ -52,6 +52,9 @@ export default {
         },
 
         selected() {
+            if(this.lastSelectValue == null || this.select == null){
+                return;
+            }
             if (this.lastSelectValue != this.select.value) {
                 this.lastSelectValue = this.select.value;
                 this.changeActiveGroup(this.lastSelectValue);

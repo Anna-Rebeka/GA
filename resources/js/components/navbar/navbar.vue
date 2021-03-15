@@ -4,8 +4,8 @@
             <div class="container flex justify-between">
                 <a :href="route_dashboard" class="mr-6">
                     <img src="/img/logo.png" width="45px" alt="logo" />
-                </a>
-                <group-selection class="mt-1" :user="user"></group-selection>
+                </a>   
+                <group-selection class="mt-1" :user="auth"></group-selection>
             </div>
             <form action="/logout" method="post">
                 <input type="hidden" name="_token" :value="csrf" />
@@ -34,11 +34,32 @@ export default {
         return {
             csrf: document.head.querySelector('meta[name="csrf-token"]')
                 .content,
+            userActiveGroup: null,
+            auth: this.user,
         };
     },
-};
 
-//select on click axios get user groups - <a href="redirect to this exact page but set active group to another one">  
+    mounted(){
+        this.getUsersActiveGroup();
+    },
+    
+    methods: {
+        getUsersActiveGroup(){
+            axios
+                .get("/" + this.user.username + "/active-group")
+                .then((response) => {
+                    this.auth.group = response.data;
+                })
+                .catch((error) => {
+                    if (error.response.status == 422) {
+                        this.errors = error.response.data.errors;
+                        console.log(this.errors);
+                    }
+                    console.log(error.message);
+                });
+        }
+    },
+};
 </script>
 
 
