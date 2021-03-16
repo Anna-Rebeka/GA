@@ -75,7 +75,9 @@
                     </p>
                 </div>
 
-                <div class="mb-6 clear-both">
+                <div class="clear-both"></div>
+
+                <div class="mb-6 mt-6">
                     <button
                         type="submit"
                         v-on:submit.prevent="submit()"

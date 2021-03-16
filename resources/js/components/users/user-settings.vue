@@ -4,7 +4,7 @@
             <p
                 class="-ml-8 mt-4 block mb-7 font-bold text-lg text-center text-gray-700"
             >
-                Settings for e-mail notifications (this group "{{
+                Settings for e-mail notifications (for this group "{{
                     user.group.name
                 }}"" )
             </p>
@@ -51,7 +51,7 @@
         <p
             class="-ml-8 mt-4 block mb-7 font-bold text-lg text-center text-gray-700"
         >
-            Settings for e-mail notifications (all groups)
+            Settings for e-mail notifications (for all groups)
         </p>
 
         <div class="mb-4">

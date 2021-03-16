@@ -1,13 +1,13 @@
 <template>
     <div class="mb-6">
         <div class="h-12">
-            <button @click="createNewAssignment = !createNewAssignment" class="shadow absolute w-min rounded-lg border border-gray-300 px-4 py-2 mb-8 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
+            <button @click="createNewAssignment = !createNewAssignment" class="shadow absolute w-min rounded border border-gray-300 px-4 py-2 mb-8 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
                 New Assignment
             </button>
         </div>
 
         <form v-if="createNewAssignment" @submit.prevent="submit">
-            <div class="md:w-3/4 m-auto bg-white shadow border rounded-lg py-6 px-8 mb-8">
+            <div class="md:w-3/4 m-auto bg-white shadow border rounded py-6 px-8 mb-8">
                 <input type="hidden" name="_token" :value="csrf" /> 
                 
                 <div class="flex items-center justify-between w-full mb-4 p-2 bg-red-500 shadow text-white" v-if="errors.text">
@@ -88,7 +88,7 @@
                             class="border p-2"
                         >
                 </div>
-                <button type="submit" class="shadow float-right -mt-6 rounded-lg border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
+                <button type="submit" class="shadow float-right -mt-6 rounded border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100">
                     Create an assignment
                 </button>
             </div>    

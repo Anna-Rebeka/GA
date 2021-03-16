@@ -2046,6 +2046,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "assignment"],
   data: function data() {
@@ -33743,7 +33745,9 @@ var render = function() {
           _vm._v(" "),
           _vm._m(0),
           _vm._v(" "),
-          _c("div", { staticClass: "mb-6 clear-both" }, [
+          _c("div", { staticClass: "clear-both" }),
+          _vm._v(" "),
+          _c("div", { staticClass: "mb-6 mt-6" }, [
             _c(
               "button",
               {
@@ -33939,7 +33943,10 @@ var render = function() {
         _c("div", { staticClass: "grid grid-cols-2 gap-2" }, [
           _c(
             "div",
-            { staticClass: "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded" },
+            {
+              staticClass:
+                "py-2 px-6 mb-2 mr-2  border-b border-gray-200 rounded  "
+            },
             [
               _vm.showedAssignment.on_time
                 ? _c(
@@ -33972,25 +33979,35 @@ var render = function() {
             ]
           ),
           _vm._v(" "),
-          _c("div", { staticClass: "mb-2 rounded bg-gray-100 px-6 py-4" }, [
-            _c("strong", [_vm._v("By Who")]),
-            _vm._v(" "),
-            _c("p", { staticClass: "bg-white p-2 rounded" }, [
-              _vm._v(
-                "\n                    " +
-                  _vm._s(_vm.author) +
-                  "\n                "
-              )
-            ])
-          ])
+          _c(
+            "div",
+            {
+              staticClass:
+                "mb-2 rounded  border-b border-gray-200   px-6 pl-6 pt-2 pb-2"
+            },
+            [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("p", { staticClass: "bg-white p-2 rounded" }, [
+                _vm._v(
+                  "\n                    " +
+                    _vm._s(_vm.author) +
+                    "\n                "
+                )
+              ])
+            ]
+          )
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "grid grid-cols-2 gap-2" }, [
           _c(
             "div",
-            { staticClass: "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded" },
+            {
+              staticClass:
+                "py-2 px-6 mb-2 mr-2  border-b border-gray-200   rounded"
+            },
             [
-              _vm._m(0),
+              _vm._m(1),
               _vm._v(" "),
               _c(
                 "div",
@@ -34010,77 +34027,95 @@ var render = function() {
             ]
           ),
           _vm._v(" "),
-          _c("div", { staticClass: "mb-2 rounded bg-gray-100 px-6 py-4" }, [
-            _c("strong", [_vm._v("Max participants:")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "bg-white p-2 rounded" }, [
-              _vm.showedAssignment.max_assignees &&
-              _vm.showedAssignment.max_assignees >
-                _vm.showedAssignment.users.length
-                ? _c("p", [
-                    _vm._v(
-                      "\n                        " +
-                        _vm._s(_vm.showedAssignment.max_assignees) +
-                        " (free to take)\n                    "
-                    )
-                  ])
-                : _vm._e(),
+          _c(
+            "div",
+            {
+              staticClass:
+                "mb-2 rounded  border-b border-gray-200   px-6 pl-6 pt-2 pb-2"
+            },
+            [
+              _vm._m(2),
               _vm._v(" "),
-              _vm.showedAssignment.max_assignees &&
-              _vm.showedAssignment.max_assignees <=
-                _vm.showedAssignment.users.length
-                ? _c("p", [
-                    _vm._v(
-                      "\n                        " +
-                        _vm._s(_vm.showedAssignment.max_assignees) +
-                        " (already taken)\n                    "
-                    )
-                  ])
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.showedAssignment.max_assignees == null
-                ? _c("p", [
-                    _vm._v(
-                      "\n                        not set\n                    "
-                    )
-                  ])
-                : _vm._e()
-            ])
-          ])
+              _c("div", { staticClass: "bg-white p-2 rounded" }, [
+                _vm.showedAssignment.max_assignees &&
+                _vm.showedAssignment.max_assignees >
+                  _vm.showedAssignment.users.length
+                  ? _c("p", [
+                      _vm._v(
+                        "\n                        " +
+                          _vm._s(_vm.showedAssignment.max_assignees) +
+                          " (free to take)\n                    "
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.showedAssignment.max_assignees &&
+                _vm.showedAssignment.max_assignees <=
+                  _vm.showedAssignment.users.length
+                  ? _c("p", [
+                      _vm._v(
+                        "\n                        " +
+                          _vm._s(_vm.showedAssignment.max_assignees) +
+                          " (already taken)\n                    "
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.showedAssignment.max_assignees == null
+                  ? _c("p", [
+                      _vm._v(
+                        "\n                        not set\n                    "
+                      )
+                    ])
+                  : _vm._e()
+              ])
+            ]
+          )
         ]),
         _vm._v(" "),
         _vm.showedAssignment.users
-          ? _c("div", { staticClass: "mb-2 rounded bg-gray-100 px-6 p-4" }, [
-              _c("strong", [_vm._v("For Who")]),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "bg-white p-2 rounded" },
-                _vm._l(_vm.showedAssignment.users, function(assignee) {
-                  return _c("p", { key: assignee.id }, [
-                    _vm._v(
-                      "\n                    " +
-                        _vm._s(assignee.name) +
-                        "\n                "
-                    )
-                  ])
-                }),
-                0
-              )
-            ])
+          ? _c(
+              "div",
+              {
+                staticClass:
+                  "mb-2 rounded  border-b border-gray-200  px-6 pl-6 pt-2 pb-4"
+              },
+              [
+                _vm._m(3),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "bg-white p-2 rounded" },
+                  _vm._l(_vm.showedAssignment.users, function(assignee) {
+                    return _c("p", { key: assignee.id }, [
+                      _vm._v(
+                        "\n                    " +
+                          _vm._s(assignee.name) +
+                          "\n                "
+                      )
+                    ])
+                  }),
+                  0
+                )
+              ]
+            )
           : _vm._e(),
         _vm._v(" "),
-        _c("div", { staticClass: "py-4 px-6 mb-2 bg-gray-100 rounded" }, [
-          _vm._m(1),
-          _vm._v(" "),
-          _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
-            _vm._v(
-              "\n                " +
-                _vm._s(_vm.showedAssignment.description) +
-                "\n            "
-            )
-          ])
-        ])
+        _c(
+          "div",
+          { staticClass: "py-4 px-6 mb-2  border-b border-gray-200  rounded" },
+          [
+            _vm._m(4),
+            _vm._v(" "),
+            _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
+              _vm._v(
+                "\n                " +
+                  _vm._s(_vm.showedAssignment.description) +
+                  "\n            "
+              )
+            ])
+          ]
+        )
       ]),
       _vm._v(" "),
       _c("assignment-show-file-upload", {
@@ -34095,9 +34130,29 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c("p", { staticClass: "mb-2" }, [_c("strong", [_vm._v("By Who")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("p", { staticClass: "mb-2" }, [
       _c("strong", [_vm._v("For how long:")])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", { staticClass: "mb-2" }, [
+      _c("strong", [_vm._v("Max participants:")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", { staticClass: "mb-2" }, [_c("strong", [_vm._v("For Who")])])
   },
   function() {
     var _vm = this
@@ -34463,7 +34518,7 @@ var render = function() {
           "button",
           {
             staticClass:
-              "shadow absolute w-min rounded-lg border border-gray-300 px-4 py-2 mb-8 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none",
+              "shadow absolute w-min rounded border border-gray-300 px-4 py-2 mb-8 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none",
             on: {
               click: function($event) {
                 _vm.createNewAssignment = !_vm.createNewAssignment
@@ -34490,7 +34545,7 @@ var render = function() {
                 "div",
                 {
                   staticClass:
-                    "md:w-3/4 m-auto bg-white shadow border rounded-lg py-6 px-8 mb-8"
+                    "md:w-3/4 m-auto bg-white shadow border rounded py-6 px-8 mb-8"
                 },
                 [
                   _c("input", {
@@ -34927,7 +34982,7 @@ var render = function() {
                     "button",
                     {
                       staticClass:
-                        "shadow float-right -mt-6 rounded-lg border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+                        "shadow float-right -mt-6 rounded border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
                       attrs: { type: "submit" }
                     },
                     [
@@ -35886,7 +35941,7 @@ var render = function() {
                 "button",
                 {
                   staticClass:
-                    "rounded-lg border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none",
+                    "rounded-lg py-2 px-4 mr-2 w-16 text-white text-sm bg-green-400 hover:bg-green-300 focus:outline-none",
                   on: {
                     click: function($event) {
                       return _vm.joinEvent()
@@ -35899,7 +35954,7 @@ var render = function() {
                 "button",
                 {
                   staticClass:
-                    "rounded-lg border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-red-200 hover:text-gray-500 hover:bg-red-100 focus:outline-none",
+                    "text-sm bg-blue-400 text-white rounded-lg w-16 py-2 hover:bg-blue-500 mr-2 focus:outline-none",
                   on: {
                     click: function($event) {
                       return _vm.leaveEvent()
@@ -35914,7 +35969,7 @@ var render = function() {
                 "button",
                 {
                   staticClass:
-                    "rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none",
+                    "rounded-lg w-16 px-2 py-2 mr-2 text-white text-sm bg-red-400 hover:bg-red-300 focus:outline-none",
                   on: {
                     click: function($event) {
                       return _vm.checkWithUser()
@@ -35936,70 +35991,96 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _c("div", { staticClass: "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded" }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
-            _vm._v("\n                " + _vm._s(_vm.host) + "\n            ")
-          ])
-        ]),
+        _c(
+          "div",
+          {
+            staticClass: "py-2 px-6 mb-2 mr-2 border-b border-gray-200  rounded"
+          },
+          [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
+              _vm._v("\n                " + _vm._s(_vm.host) + "\n            ")
+            ])
+          ]
+        ),
         _vm._v(" "),
         _c("div", { staticClass: "grid grid-cols-2 gap-2" }, [
-          _c("div", { staticClass: "mb-2 rounded bg-gray-100 px-6 p-4" }, [
-            _c("strong", [_vm._v("When:")]),
-            _vm._v(" "),
-            _c("p", { staticClass: "bg-white p-2 rounded" }, [
-              _vm._v(
-                "\n                    " +
-                  _vm._s(
-                    _vm._f("dateFormat")(
-                      new Date(_vm.event.event_time),
-                      "DD.MM.YYYY , HH:mm"
-                    )
-                  ) +
-                  "\n                "
-              )
-            ])
-          ]),
+          _c(
+            "div",
+            { staticClass: "mb-2 rounded border-b border-gray-200  px-6 p-4" },
+            [
+              _c("strong", [_vm._v("When:")]),
+              _vm._v(" "),
+              _c("p", { staticClass: "bg-white p-2 rounded" }, [
+                _vm._v(
+                  "\n                    " +
+                    _vm._s(
+                      _vm._f("dateFormat")(
+                        new Date(_vm.event.event_time),
+                        "DD.MM.YYYY , HH:mm"
+                      )
+                    ) +
+                    "\n                "
+                )
+              ])
+            ]
+          ),
           _vm._v(" "),
-          _c("div", { staticClass: "mb-2 mr-2 rounded bg-gray-100 px-6 p-4" }, [
-            _c("strong", [_vm._v("Event ends:")]),
-            _vm._v(" "),
-            _vm.event.event_ending
-              ? _c("p", { staticClass: "bg-white p-2 rounded" }, [
-                  _vm._v(
-                    "\n                    " +
-                      _vm._s(
-                        _vm._f("dateFormat")(
-                          new Date(_vm.event.event_ending),
-                          "DD.MM.YYYY , HH:mm"
-                        )
-                      ) +
-                      "\n                "
-                  )
-                ])
-              : _c("p", { staticClass: "bg-white p-2 rounded" }, [
-                  _vm._v("not set")
-                ])
-          ])
+          _c(
+            "div",
+            {
+              staticClass:
+                "mb-2 mr-2 rounded border-b border-gray-200  px-6 p-4"
+            },
+            [
+              _c("strong", [_vm._v("Event ends:")]),
+              _vm._v(" "),
+              _vm.event.event_ending
+                ? _c("p", { staticClass: "bg-white p-2 rounded" }, [
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(
+                          _vm._f("dateFormat")(
+                            new Date(_vm.event.event_ending),
+                            "DD.MM.YYYY , HH:mm"
+                          )
+                        ) +
+                        "\n                "
+                    )
+                  ])
+                : _c("p", { staticClass: "bg-white p-2 rounded" }, [
+                    _vm._v("not set")
+                  ])
+            ]
+          )
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded" }, [
-          _vm._m(1),
-          _vm._v(" "),
-          _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
-            _vm._v(
-              "\n                " +
-                _vm._s(_vm.event.event_place) +
-                "\n            "
-            )
-          ])
-        ]),
+        _c(
+          "div",
+          {
+            staticClass: "py-2 px-6 mb-2 mr-2 border-b border-gray-200  rounded"
+          },
+          [
+            _vm._m(1),
+            _vm._v(" "),
+            _c("div", { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" }, [
+              _vm._v(
+                "\n                " +
+                  _vm._s(_vm.event.event_place) +
+                  "\n            "
+              )
+            ])
+          ]
+        ),
         _vm._v(" "),
         _vm.event.description
           ? _c(
               "div",
-              { staticClass: "py-2 px-6 mb-2 mr-2 bg-gray-100 rounded" },
+              {
+                staticClass:
+                  "py-2 px-6 mb-2 mr-2 border-b border-gray-200  rounded"
+              },
               [
                 _vm._m(2),
                 _vm._v(" "),
@@ -36018,46 +36099,56 @@ var render = function() {
             )
           : _vm._e(),
         _vm._v(" "),
-        _c("div", { staticClass: "pt-6 pb-1 px-6 mr-2 bg-gray-100 rounded" }, [
-          _vm._m(3),
-          _vm._v(" "),
-          _c("div", { staticClass: "bg-white rounded mb-4 py-4" }, [
-            _vm.savedUsers.length > 0
-              ? _c(
-                  "div",
-                  _vm._l(_vm.pageOfItems, function(goingUser) {
-                    return _c("ul", { key: goingUser.name }, [
-                      _c("li", { staticClass: "flex items-center ml-2 mb-2" }, [
-                        _c("img", {
-                          staticClass:
-                            "w-10 h-10 object-cover rounded-full mr-2",
-                          attrs: { src: goingUser.avatar, alt: "" }
-                        }),
-                        _vm._v(
-                          "\n                            " +
-                            _vm._s(goingUser.name) +
-                            "\n                        "
+        _c(
+          "div",
+          {
+            staticClass: "pt-6 pb-1 px-6 mr-2 border-b border-gray-200  rounded"
+          },
+          [
+            _vm._m(3),
+            _vm._v(" "),
+            _c("div", { staticClass: "bg-white rounded mb-4 py-4" }, [
+              _vm.savedUsers.length > 0
+                ? _c(
+                    "div",
+                    _vm._l(_vm.pageOfItems, function(goingUser) {
+                      return _c("ul", { key: goingUser.name }, [
+                        _c(
+                          "li",
+                          { staticClass: "flex items-center ml-2 mb-2" },
+                          [
+                            _c("img", {
+                              staticClass:
+                                "w-10 h-10 object-cover rounded-full mr-2",
+                              attrs: { src: goingUser.avatar, alt: "" }
+                            }),
+                            _vm._v(
+                              "\n                            " +
+                                _vm._s(goingUser.name) +
+                                "\n                        "
+                            )
+                          ]
                         )
                       ])
-                    ])
-                  }),
-                  0
-                )
-              : _vm._e(),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "text-center text-sm" },
-              [
-                _c("jw-pagination", {
-                  attrs: { items: _vm.savedUsers, pageSize: 10 },
-                  on: { changePage: _vm.onChangePage }
-                })
-              ],
-              1
-            )
-          ])
-        ])
+                    }),
+                    0
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "text-center text-sm" },
+                [
+                  _c("jw-pagination", {
+                    attrs: { items: _vm.savedUsers, pageSize: 10 },
+                    on: { changePage: _vm.onChangePage }
+                  })
+                ],
+                1
+              )
+            ])
+          ]
+        )
       ]),
       _vm._v(" "),
       _c("event-comments", { attrs: { user: this.user, event: this.event } })
@@ -36465,7 +36556,7 @@ var render = function() {
           "button",
           {
             staticClass:
-              "shadow absolute r-0 w-min rounded-lg border border-gray-300 px-4 py-2 mb-8 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none",
+              "shadow absolute r-0 w-min rounded border border-gray-300 px-4 py-2 mb-8 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none",
             on: {
               click: function($event) {
                 _vm.createNewEvent = !_vm.createNewEvent
@@ -36492,7 +36583,7 @@ var render = function() {
                 "div",
                 {
                   staticClass:
-                    "md:w-3/4 m-auto bg-white shadow border rounded-lg py-6 px-8 mb-8"
+                    "md:w-3/4 m-auto bg-white shadow border rounded py-6 px-8 mb-8"
                 },
                 [
                   _c("input", {
@@ -36745,7 +36836,7 @@ var render = function() {
                     "button",
                     {
                       staticClass:
-                        "shadow float-right -mt-6 rounded-lg border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+                        "shadow float-right -mt-6 rounded border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
                       attrs: { type: "submit" }
                     },
                     [_vm._v("\n                Create an event\n            ")]
@@ -39376,7 +39467,7 @@ var render = function() {
             },
             [
               _vm._v(
-                '\n            Settings for e-mail notifications (this group "' +
+                '\n            Settings for e-mail notifications (for this group "' +
                   _vm._s(_vm.user.group.name) +
                   '"" )\n        '
               )
@@ -39547,7 +39638,11 @@ var render = function() {
         staticClass:
           "-ml-8 mt-4 block mb-7 font-bold text-lg text-center text-gray-700"
       },
-      [_vm._v("\n        Settings for e-mail notifications (all groups)\n    ")]
+      [
+        _vm._v(
+          "\n        Settings for e-mail notifications (for all groups)\n    "
+        )
+      ]
     ),
     _vm._v(" "),
     _c("div", { staticClass: "mb-4" }, [

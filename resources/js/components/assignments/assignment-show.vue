@@ -53,7 +53,7 @@
                 </h2>
             </div>
             <div class="grid grid-cols-2 gap-2">
-                <div class="py-2 px-6 mb-2 mr-2 bg-gray-100 rounded">
+                <div class="py-2 px-6 mb-2 mr-2  border-b border-gray-200 rounded  ">
                     <p
                         v-if="showedAssignment.on_time"
                         style="color: #f67e7d"
@@ -72,15 +72,15 @@
                         }}
                     </div>
                 </div>
-                <div class="mb-2 rounded bg-gray-100 px-6 py-4">
-                    <strong>By Who</strong>
+                <div class="mb-2 rounded  border-b border-gray-200   px-6 pl-6 pt-2 pb-2">
+                    <p class="mb-2"><strong>By Who</strong></p>
                     <p class="bg-white p-2 rounded">
                         {{ author }}
                     </p>
                 </div>
             </div>
             <div class="grid grid-cols-2 gap-2">
-                <div class="py-2 px-6 mb-2 mr-2 bg-gray-100 rounded">
+                <div class="py-2 px-6 mb-2 mr-2  border-b border-gray-200   rounded">
                     <p class="mb-2">
                         <strong>For how long:</strong>
                     </p>
@@ -91,8 +91,8 @@
                         <p v-else>not set</p>
                     </div>
                 </div>
-                <div class="mb-2 rounded bg-gray-100 px-6 py-4">
-                    <strong>Max participants:</strong>
+                <div class="mb-2 rounded  border-b border-gray-200   px-6 pl-6 pt-2 pb-2">
+                    <p class="mb-2"><strong>Max participants:</strong></p>
                     <div class="bg-white p-2 rounded">
                         <p
                             v-if="
@@ -121,9 +121,9 @@
 
             <div
                 v-if="showedAssignment.users"
-                class="mb-2 rounded bg-gray-100 px-6 p-4"
+                class="mb-2 rounded  border-b border-gray-200  px-6 pl-6 pt-2 pb-4"
             >
-                <strong>For Who</strong>
+                <p class="mb-2"><strong>For Who</strong></p>
                 <div class="bg-white p-2 rounded">
                     <p
                         v-for="assignee in showedAssignment.users"
@@ -133,7 +133,7 @@
                     </p>
                 </div>
             </div>
-            <div class="py-4 px-6 mb-2 bg-gray-100 rounded">
+            <div class="py-4 px-6 mb-2  border-b border-gray-200  rounded">
                 <p class="mb-2"><strong>What about</strong></p>
                 <div class="bg-white rounded mb-2 pl-2 pt-2 pb-2">
                     {{ showedAssignment.description }}

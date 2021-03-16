@@ -5,21 +5,21 @@
                 <button
                     v-if="going && !going.includes(user.id)"
                     @click="joinEvent()"
-                    class="rounded-lg border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-green-200 hover:text-gray-500 hover:bg-green-100 focus:outline-none"
+                    class="rounded-lg py-2 px-4 mr-2 w-16 text-white text-sm bg-green-400 hover:bg-green-300 focus:outline-none"
                 >
                     Join
                 </button>
                 <button
                     v-else
                     @click="leaveEvent()"
-                    class="rounded-lg border border-gray-300 py-2 px-4 mr-2 text-black text-xs bg-red-200 hover:text-gray-500 hover:bg-red-100 focus:outline-none"
+                    class="text-sm bg-blue-400 text-white rounded-lg w-16 py-2 hover:bg-blue-500 mr-2 focus:outline-none"
                 >
                     Leave
                 </button>
                 <button
                     v-if="event.host_id == user.id"
                     @click="checkWithUser()"
-                    class="rounded-lg border border-gray-300 py-2 px-4 mr-2 text-white text-xs bg-red-400 hover:text-gray-500 hover:bg-red-200 focus:outline-none"
+                    class="rounded-lg w-16 px-2 py-2 mr-2 text-white text-sm bg-red-400 hover:bg-red-300 focus:outline-none"
                 >
                     Delete
                 </button>
@@ -27,7 +27,7 @@
             <div class="overflow-ellipsis overflow-hidden ... max-w-sm">
                 <h2 class="font-bold text-2xl mb-4">{{ event.name }}</h2>
             </div>
-            <div class="py-2 px-6 mb-2 mr-2 bg-gray-100 rounded">
+            <div class="py-2 px-6 mb-2 mr-2 border-b border-gray-200  rounded">
                 <p class="mb-2"><strong>Hosted by:</strong></p>
                 <div class="bg-white rounded mb-2 pl-2 pt-2 pb-2">
                     {{ host }}
@@ -35,7 +35,7 @@
             </div>
             <div class="grid grid-cols-2 gap-2">
                 <div
-                    class="mb-2 rounded bg-gray-100 px-6 p-4"
+                    class="mb-2 rounded border-b border-gray-200  px-6 p-4"
                 >
                     <strong>When:</strong>
                     <p class="bg-white p-2 rounded">
@@ -46,7 +46,7 @@
                     </p>
                 </div>
                 <div
-                    class="mb-2 mr-2 rounded bg-gray-100 px-6 p-4"
+                    class="mb-2 mr-2 rounded border-b border-gray-200  px-6 p-4"
                 >
                     <strong>Event ends:</strong>
                     <p v-if="event.event_ending" class="bg-white p-2 rounded">
@@ -59,7 +59,7 @@
                 </div>
             </div>
 
-            <div class="py-2 px-6 mb-2 mr-2 bg-gray-100 rounded">
+            <div class="py-2 px-6 mb-2 mr-2 border-b border-gray-200  rounded">
                 <p class="mb-2"><strong>Where:</strong></p>
                 <div class="bg-white rounded mb-2 pl-2 pt-2 pb-2">
                     {{ event.event_place }}
@@ -67,14 +67,14 @@
             </div>
             <div
                 v-if="event.description"
-                class="py-2 px-6 mb-2 mr-2 bg-gray-100 rounded"
+                class="py-2 px-6 mb-2 mr-2 border-b border-gray-200  rounded"
             >
                 <p class="mb-2"><strong>Description:</strong></p>
                 <div class="bg-white rounded mb-2 pl-2 pt-2 pb-2">
                     {{ event.description }}
                 </div>
             </div>
-            <div class="pt-6 pb-1 px-6 mr-2 bg-gray-100 rounded">
+            <div class="pt-6 pb-1 px-6 mr-2 border-b border-gray-200  rounded">
                 <p class="mb-2"><strong>Who's coming:</strong></p>
                 <div class="bg-white rounded mb-4 py-4">
                     <div v-if="savedUsers.length > 0">
