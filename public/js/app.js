@@ -6287,7 +6287,205 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["user"],
+  data: function data() {
+    return {
+      fields: {},
+      checkedNotifications: [],
+      errors: {},
+      createNewAssignment: false,
+      newAssignmentCreated: false
+    };
+  }
+});
 
 /***/ }),
 
@@ -38965,7 +39163,551 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("settings page")])
+  return _c("div", { staticClass: "ml-8 mb-12" }, [
+    _vm.user.group
+      ? _c("div", [
+          _c(
+            "p",
+            {
+              staticClass:
+                "-ml-8 mt-4 block mb-7 font-bold text-lg text-center text-gray-700"
+            },
+            [
+              _vm._v(
+                '\n            Settings for e-mail notifications (this group "' +
+                  _vm._s(_vm.user.group.name) +
+                  '"" )\n        '
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "p",
+            {
+              staticClass:
+                "mt-4 block mb-2 uppercase font-bold text-sm text-purple-800"
+            },
+            [_vm._v("\n            Notify me if there is a new:\n        ")]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "mb-12" }, [
+            _c("div", { staticClass: "mb-2" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.checkedNotifications,
+                    expression: "checkedNotifications"
+                  }
+                ],
+                attrs: {
+                  type: "checkbox",
+                  id: "assignments",
+                  value: "assignments"
+                },
+                domProps: {
+                  checked: Array.isArray(_vm.checkedNotifications)
+                    ? _vm._i(_vm.checkedNotifications, "assignments") > -1
+                    : _vm.checkedNotifications
+                },
+                on: {
+                  change: function($event) {
+                    var $$a = _vm.checkedNotifications,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = "assignments",
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 &&
+                          (_vm.checkedNotifications = $$a.concat([$$v]))
+                      } else {
+                        $$i > -1 &&
+                          (_vm.checkedNotifications = $$a
+                            .slice(0, $$i)
+                            .concat($$a.slice($$i + 1)))
+                      }
+                    } else {
+                      _vm.checkedNotifications = $$c
+                    }
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("label", { attrs: { for: "assignments" } }, [
+                _vm._v("Assignment")
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "mb-2" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.checkedNotifications,
+                    expression: "checkedNotifications"
+                  }
+                ],
+                attrs: { type: "checkbox", id: "events", value: "events" },
+                domProps: {
+                  checked: Array.isArray(_vm.checkedNotifications)
+                    ? _vm._i(_vm.checkedNotifications, "events") > -1
+                    : _vm.checkedNotifications
+                },
+                on: {
+                  change: function($event) {
+                    var $$a = _vm.checkedNotifications,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = "events",
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 &&
+                          (_vm.checkedNotifications = $$a.concat([$$v]))
+                      } else {
+                        $$i > -1 &&
+                          (_vm.checkedNotifications = $$a
+                            .slice(0, $$i)
+                            .concat($$a.slice($$i + 1)))
+                      }
+                    } else {
+                      _vm.checkedNotifications = $$c
+                    }
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("label", { attrs: { for: "events" } }, [_vm._v("Event")])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "mb-2" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.checkedNotifications,
+                    expression: "checkedNotifications"
+                  }
+                ],
+                attrs: {
+                  type: "checkbox",
+                  id: "whiteboard_posts",
+                  value: "whiteboard_posts"
+                },
+                domProps: {
+                  checked: Array.isArray(_vm.checkedNotifications)
+                    ? _vm._i(_vm.checkedNotifications, "whiteboard_posts") > -1
+                    : _vm.checkedNotifications
+                },
+                on: {
+                  change: function($event) {
+                    var $$a = _vm.checkedNotifications,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = "whiteboard_posts",
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 &&
+                          (_vm.checkedNotifications = $$a.concat([$$v]))
+                      } else {
+                        $$i > -1 &&
+                          (_vm.checkedNotifications = $$a
+                            .slice(0, $$i)
+                            .concat($$a.slice($$i + 1)))
+                      }
+                    } else {
+                      _vm.checkedNotifications = $$c
+                    }
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("label", { attrs: { for: "whiteboard_posts" } }, [
+                _vm._v("Whiteboard post")
+              ])
+            ])
+          ])
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _c("hr", {
+      staticClass: "w-full -ml-5 bg-gray-500 border-2 mb-12 rounded-full"
+    }),
+    _vm._v(" "),
+    _c(
+      "p",
+      {
+        staticClass:
+          "-ml-8 mt-4 block mb-7 font-bold text-lg text-center text-gray-700"
+      },
+      [_vm._v("\n        Settings for e-mail notifications (all groups)\n    ")]
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "mb-4" }, [
+      _c(
+        "p",
+        {
+          staticClass: "block mb-2 uppercase font-bold text-sm text-orange-600"
+        },
+        [_vm._v("\n            Notify me if I get an assignment:\n        ")]
+      ),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.fields.getting_assignment,
+            expression: "fields.getting_assignment"
+          }
+        ],
+        attrs: {
+          type: "radio",
+          id: "true",
+          name: "getting_assignment",
+          required: ""
+        },
+        domProps: {
+          value: true,
+          checked: _vm._q(_vm.fields.getting_assignment, true)
+        },
+        on: {
+          change: function($event) {
+            return _vm.$set(_vm.fields, "getting_assignment", true)
+          }
+        }
+      }),
+      _vm._v(" "),
+      _c("label", { attrs: { for: "true" } }, [_vm._v("Yes")]),
+      _c("br"),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.fields.getting_assignment,
+            expression: "fields.getting_assignment"
+          }
+        ],
+        attrs: {
+          type: "radio",
+          id: "false",
+          name: "getting_assignment",
+          required: ""
+        },
+        domProps: {
+          value: false,
+          checked: _vm._q(_vm.fields.getting_assignment, false)
+        },
+        on: {
+          change: function($event) {
+            return _vm.$set(_vm.fields, "getting_assignment", false)
+          }
+        }
+      }),
+      _vm._v(" "),
+      _c("label", { attrs: { for: "false" } }, [_vm._v("No")]),
+      _c("br")
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "mb-4" }, [
+      _c(
+        "p",
+        {
+          staticClass:
+            "mt-4 block mb-2 uppercase font-bold text-sm text-green-700"
+        },
+        [
+          _vm._v(
+            "\n            Notify me about any updates on my assignments:\n        "
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.fields.assignment_mine,
+            expression: "fields.assignment_mine"
+          }
+        ],
+        attrs: {
+          type: "radio",
+          id: "true",
+          name: "assignment_mine",
+          required: ""
+        },
+        domProps: {
+          value: true,
+          checked: _vm._q(_vm.fields.assignment_mine, true)
+        },
+        on: {
+          change: function($event) {
+            return _vm.$set(_vm.fields, "assignment_mine", true)
+          }
+        }
+      }),
+      _vm._v(" "),
+      _c("label", { attrs: { for: "true" } }, [_vm._v("Yes")]),
+      _c("br"),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.fields.assignment_mine,
+            expression: "fields.assignment_mine"
+          }
+        ],
+        attrs: {
+          type: "radio",
+          id: "false",
+          name: "assignment_mine",
+          required: ""
+        },
+        domProps: {
+          value: false,
+          checked: _vm._q(_vm.fields.assignment_mine, false)
+        },
+        on: {
+          change: function($event) {
+            return _vm.$set(_vm.fields, "assignment_mine", false)
+          }
+        }
+      }),
+      _vm._v(" "),
+      _c("label", { attrs: { for: "false" } }, [_vm._v("No")]),
+      _c("br")
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "mb-4" }, [
+      _c(
+        "p",
+        {
+          staticClass:
+            "mt-4 block mb-2 uppercase font-bold text-sm text-green-700"
+        },
+        [
+          _vm._v(
+            "\n            Notify me about any updates on events that I'm going to:\n        "
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.fields.event_joined,
+            expression: "fields.event_joined"
+          }
+        ],
+        attrs: {
+          type: "radio",
+          id: "true",
+          name: "event_joined",
+          required: ""
+        },
+        domProps: {
+          value: true,
+          checked: _vm._q(_vm.fields.event_joined, true)
+        },
+        on: {
+          change: function($event) {
+            return _vm.$set(_vm.fields, "event_joined", true)
+          }
+        }
+      }),
+      _vm._v(" "),
+      _c("label", { attrs: { for: "true" } }, [_vm._v("Yes")]),
+      _c("br"),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.fields.event_joined,
+            expression: "fields.event_joined"
+          }
+        ],
+        attrs: {
+          type: "radio",
+          id: "false",
+          name: "event_joined",
+          required: ""
+        },
+        domProps: {
+          value: false,
+          checked: _vm._q(_vm.fields.event_joined, false)
+        },
+        on: {
+          change: function($event) {
+            return _vm.$set(_vm.fields, "event_joined", false)
+          }
+        }
+      }),
+      _vm._v(" "),
+      _c("label", { attrs: { for: "false" } }, [_vm._v("No")]),
+      _c("br")
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "mb-4" }, [
+      _c(
+        "p",
+        {
+          staticClass:
+            "mt-4 block mb-2 uppercase font-bold text-sm text-blue-700"
+        },
+        [
+          _vm._v(
+            "\n            Notify me about any updates on assignments that are created by\n            me:\n        "
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.fields.assignment_created_by_me,
+            expression: "fields.assignment_created_by_me"
+          }
+        ],
+        attrs: {
+          type: "radio",
+          id: "true",
+          name: "assignment_created_by_me",
+          required: ""
+        },
+        domProps: {
+          value: true,
+          checked: _vm._q(_vm.fields.assignment_created_by_me, true)
+        },
+        on: {
+          change: function($event) {
+            return _vm.$set(_vm.fields, "assignment_created_by_me", true)
+          }
+        }
+      }),
+      _vm._v(" "),
+      _c("label", { attrs: { for: "true" } }, [_vm._v("Yes")]),
+      _c("br"),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.fields.assignment_created_by_me,
+            expression: "fields.assignment_created_by_me"
+          }
+        ],
+        attrs: {
+          type: "radio",
+          id: "false",
+          name: "assignment_created_by_me",
+          required: ""
+        },
+        domProps: {
+          value: false,
+          checked: _vm._q(_vm.fields.assignment_created_by_me, false)
+        },
+        on: {
+          change: function($event) {
+            return _vm.$set(_vm.fields, "assignment_created_by_me", false)
+          }
+        }
+      }),
+      _vm._v(" "),
+      _c("label", { attrs: { for: "false" } }, [_vm._v("No")]),
+      _c("br")
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "mb-4" }, [
+      _c(
+        "p",
+        {
+          staticClass:
+            "mt-4 block mb-2 uppercase font-bold text-sm text-blue-700"
+        },
+        [
+          _vm._v(
+            "\n            Notify me about any updates on events that are created by me:\n        "
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.fields.event_created_by_me,
+            expression: "fields.event_created_by_me"
+          }
+        ],
+        attrs: {
+          type: "radio",
+          id: "true",
+          name: "event_created_by_me",
+          required: ""
+        },
+        domProps: {
+          value: true,
+          checked: _vm._q(_vm.fields.event_created_by_me, true)
+        },
+        on: {
+          change: function($event) {
+            return _vm.$set(_vm.fields, "event_created_by_me", true)
+          }
+        }
+      }),
+      _vm._v(" "),
+      _c("label", { attrs: { for: "true" } }, [_vm._v("Yes")]),
+      _c("br"),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.fields.event_created_by_me,
+            expression: "fields.event_created_by_me"
+          }
+        ],
+        attrs: {
+          type: "radio",
+          id: "false",
+          name: "event_created_by_me",
+          required: ""
+        },
+        domProps: {
+          value: false,
+          checked: _vm._q(_vm.fields.event_created_by_me, false)
+        },
+        on: {
+          change: function($event) {
+            return _vm.$set(_vm.fields, "event_created_by_me", false)
+          }
+        }
+      }),
+      _vm._v(" "),
+      _c("label", { attrs: { for: "false" } }, [_vm._v("No")]),
+      _c("br")
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true

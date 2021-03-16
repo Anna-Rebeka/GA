@@ -78,8 +78,9 @@ class UsersController extends Controller
 
     public function showSettings(User $user)
     {
+        $user->group;
         return view('profile.settings', [
-            'user' => $user
+            'user' => $user,
         ]);
     }
 
