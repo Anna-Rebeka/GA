@@ -1,7 +1,6 @@
 <template>
     <div class="ml-8 mb-12">
         <div v-if="user.group">
-            
             <p
                 class="-ml-8 mt-4 block mb-7 font-bold text-lg text-center text-gray-700"
             >
@@ -46,8 +45,8 @@
                 </div>
             </div>
         </div>
-        
-        <hr class="w-full -ml-5 bg-gray-500 border-2 mb-12 rounded-full"/>
+
+        <hr class="w-full -ml-5 bg-gray-500 border-2 mb-12 rounded-full" />
 
         <p
             class="-ml-8 mt-4 block mb-7 font-bold text-lg text-center text-gray-700"
@@ -183,13 +182,59 @@
             />
             <label for="false">No</label><br />
         </div>
+                <div class="clear-both"></div>
 
+        <div class="mb-6">
+                <button
+                    type="submit"
+                    @submit.prevent="submit"
+                    v-on:click="submit()"
+                    class="float-right mr-12 bg-blue-400 text-white rounded py-2 px-4 hover:bg-blue-500 mr-4 focus:outline-none"
+                >
+                    Submit
+                </button>
+            </div>
 
-        <hr class="w-full mt-12 -ml-5 bg-gray-500 border-2 mb-12 rounded-full"/>
+        <div class="clear-both"></div>
 
+        <hr
+            class="w-full mt-12 -ml-5 bg-gray-500 border-2 mb-12 rounded-full"
+        />
 
+        <button
+            @click="deleteAccount()"
+            class="rounded px-2 py-3 mr-2 uppercase text-white text-sm border bg-red-300 border-red-400 hover:bg-red-500 focus:outline-none"
+        >
+            Delete my account
+        </button>
 
+        <div v-if="deletingAccount">
+            <div
+                class="flex items-center justify-between w-full mt-6 mb-6 p-2 bg-yellow-400 shadow text-white"
+            >
+                Deleting your account is irreversible. <br/> 
+                The groups you administer will be deleted too. <br/>
+                If you wish to save these groups pass your admin rights to another member. <br/>
+                You can do so by editing each group that you want to save.
+            </div>
 
+            <div class="mb-12">
+                <label
+                    class="mt-4 block mb-2 uppercase font-bold text-sm text-red-500"
+                    for="checkDeleting"
+                >
+                    Please type "yes" to delete your account.
+                </label>
+
+                <input
+                    class="focus:outline-none border-b border-gray-400 p-2"
+                    type="text"
+                    name="checkDeleting"
+                    id="checkDeleting"
+                    placeholder="do you wish to proceed?"
+                />
+            </div>
+        </div>
     </div>
 </template>
 
@@ -201,10 +246,35 @@ export default {
             fields: {},
             checkedNotifications: [],
             errors: {},
-            createNewAssignment: false,
-            newAssignmentCreated: false,
+            deletingAccount: false,
         };
     },
+
+    methods: {
+        deleteAccount(){
+            if(!this.deletingAccount){
+                this.deletingAccount = true;
+                return;
+            }
+            if (document.getElementById('checkDeleting').value.trim().toLowerCase() != "yes"){
+                return;
+            }
+            axios
+                .delete("/profile/" + this.user.id + "/delete-profile")
+                .then((response) => {
+                    window.location.href = "/";
+                })
+                .catch((error) => {
+                    if (error.response.status == 422) {
+                        this.errors = error.response.data.errors;
+                        console.log(this.errors);
+                    }
+                    console.log(error.message);
+                });
+        }
+
+        
+    }
 };
 </script>
 

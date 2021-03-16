@@ -105,6 +105,7 @@ export default {
     mounted() {
         if (this.user.group) {
             this.getGroupMembers();
+            this.autocomplete(document.getElementById("memberInput"), this.members, this.lettersCounter);
             this.showedChatroom.forEach((chatroom) => {
                 window.Echo.private("chatrooms." + chatroom.id).listen(
                     "MessageSent",

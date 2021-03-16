@@ -2839,6 +2839,7 @@ __webpack_require__.r(__webpack_exports__);
 
     if (this.user.group) {
       this.getGroupMembers();
+      this.autocomplete(document.getElementById("memberInput"), this.members, this.lettersCounter);
       this.showedChatroom.forEach(function (chatroom) {
         window.Echo["private"]("chatrooms." + chatroom.id).listen("MessageSent", function (e) {
           _this.getLatestMessage(chatroom);
@@ -4336,6 +4337,19 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -6543,6 +6557,51 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user"],
   data: function data() {
@@ -6550,9 +6609,33 @@ __webpack_require__.r(__webpack_exports__);
       fields: {},
       checkedNotifications: [],
       errors: {},
-      createNewAssignment: false,
-      newAssignmentCreated: false
+      deletingAccount: false
     };
+  },
+  methods: {
+    deleteAccount: function deleteAccount() {
+      var _this = this;
+
+      if (!this.deletingAccount) {
+        this.deletingAccount = true;
+        return;
+      }
+
+      if (document.getElementById('checkDeleting').value.trim().toLowerCase() != "yes") {
+        return;
+      }
+
+      axios["delete"]("/profile/" + this.user.id + "/delete-profile").then(function (response) {
+        window.location.href = "/";
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this.errors = error.response.data.errors;
+          console.log(_this.errors);
+        }
+
+        console.log(error.message);
+      });
+    }
   }
 });
 
@@ -36989,7 +37072,7 @@ var render = function() {
                 },
                 [
                   _vm._v(
-                    "\n                Passing your admin rights is irreversible. \n        "
+                    "\n                Passing your admin rights is irreversible.\n            "
                   )
                 ]
               ),
@@ -37007,7 +37090,7 @@ var render = function() {
               },
               [
                 _vm._v(
-                  '\n                Please type "yes" if you wish to pass your admin rights.\n        '
+                  '\n            Please type "yes" if you wish to pass your admin rights.\n        '
                 )
               ]
             )
@@ -37022,7 +37105,7 @@ var render = function() {
               },
               [
                 _vm._v(
-                  "\n                There are no changes to submit.\n        "
+                  "\n            There are no changes to submit.\n        "
                 )
               ]
             )
@@ -37067,7 +37150,7 @@ var staticRenderFns = [
         },
         [
           _vm._v(
-            '\n                Please type "yes" to pass your admin rights.\n            '
+            '\n                    Please type "yes" to pass your admin rights.\n                '
           )
         ]
       ),
@@ -39827,12 +39910,113 @@ var render = function() {
       _c("br")
     ]),
     _vm._v(" "),
+    _c("div", { staticClass: "clear-both" }),
+    _vm._v(" "),
+    _c("div", { staticClass: "mb-6" }, [
+      _c(
+        "button",
+        {
+          staticClass:
+            "float-right mr-12 bg-blue-400 text-white rounded py-2 px-4 hover:bg-blue-500 mr-4 focus:outline-none",
+          attrs: { type: "submit" },
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              return _vm.submit($event)
+            },
+            click: function($event) {
+              return _vm.submit()
+            }
+          }
+        },
+        [_vm._v("\n                Submit\n            ")]
+      )
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "clear-both" }),
+    _vm._v(" "),
     _c("hr", {
       staticClass: "w-full mt-12 -ml-5 bg-gray-500 border-2 mb-12 rounded-full"
-    })
+    }),
+    _vm._v(" "),
+    _c(
+      "button",
+      {
+        staticClass:
+          "rounded px-2 py-3 mr-2 uppercase text-white text-sm border bg-red-300 border-red-400 hover:bg-red-500 focus:outline-none",
+        on: {
+          click: function($event) {
+            return _vm.deleteAccount()
+          }
+        }
+      },
+      [_vm._v("\n        Delete my account\n    ")]
+    ),
+    _vm._v(" "),
+    _vm.deletingAccount
+      ? _c("div", [_vm._m(0), _vm._v(" "), _vm._m(1)])
+      : _vm._e()
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass:
+          "flex items-center justify-between w-full mt-6 mb-6 p-2 bg-yellow-400 shadow text-white"
+      },
+      [
+        _vm._v("\n            Deleting your account is irreversible. "),
+        _c("br"),
+        _vm._v(
+          " \n            The groups you administer will be deleted too. "
+        ),
+        _c("br"),
+        _vm._v(
+          "\n            If you wish to save these groups pass your admin rights to another member. "
+        ),
+        _c("br"),
+        _vm._v(
+          "\n            You can do so by editing each group that you want to save.\n        "
+        )
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "mb-12" }, [
+      _c(
+        "label",
+        {
+          staticClass:
+            "mt-4 block mb-2 uppercase font-bold text-sm text-red-500",
+          attrs: { for: "checkDeleting" }
+        },
+        [
+          _vm._v(
+            '\n                Please type "yes" to delete your account.\n            '
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c("input", {
+        staticClass: "focus:outline-none border-b border-gray-400 p-2",
+        attrs: {
+          type: "text",
+          name: "checkDeleting",
+          id: "checkDeleting",
+          placeholder: "do you wish to proceed?"
+        }
+      })
+    ])
+  }
+]
 render._withStripped = true
 
 
