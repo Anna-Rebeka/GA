@@ -185,6 +185,10 @@
         </div>
 
 
+        <hr class="w-full mt-12 -ml-5 bg-gray-500 border-2 mb-12 rounded-full"/>
+
+
+
 
     </div>
 </template>

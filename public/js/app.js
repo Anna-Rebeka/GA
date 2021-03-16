@@ -2284,7 +2284,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["user", "assignment"],
+  props: ["user", "assignment", "author"],
   data: function data() {
     return {
       showedAssignment: this.assignment,
@@ -2352,6 +2352,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
 //
 //
 //
@@ -2781,8 +2783,50 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user', 'chatrooms'],
+  props: ["user", "chatrooms"],
   data: function data() {
     return {
       members: [],
@@ -2796,7 +2840,7 @@ __webpack_require__.r(__webpack_exports__);
     if (this.user.group) {
       this.getGroupMembers();
       this.showedChatroom.forEach(function (chatroom) {
-        window.Echo["private"]('chatrooms.' + chatroom.id).listen('MessageSent', function (e) {
+        window.Echo["private"]("chatrooms." + chatroom.id).listen("MessageSent", function (e) {
           _this.getLatestMessage(chatroom);
         });
       });
@@ -2806,7 +2850,7 @@ __webpack_require__.r(__webpack_exports__);
     getLatestMessage: function getLatestMessage(chatroom) {
       var _this2 = this;
 
-      axios.get('/chats/' + chatroom.id + '/latestMessage').then(function (response) {
+      axios.get("/chats/" + chatroom.id + "/latestMessage").then(function (response) {
         chatroom.latest_message = response.data;
         chatroom.latest_message.sender_id = chatroom.latest_message.sender.id;
       })["catch"](function (error) {
@@ -2821,7 +2865,7 @@ __webpack_require__.r(__webpack_exports__);
     getGroupMembers: function getGroupMembers() {
       var _this3 = this;
 
-      axios.get('/group/' + this.user.active_group + '/members/get').then(function (response) {
+      axios.get("/group/" + this.user.active_group + "/members/get").then(function (response) {
         _this3.members = response.data;
 
         _this3.autocomplete(document.getElementById("memberInput"), _this3.members, _this3.lettersCounter);
@@ -2895,6 +2939,27 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -6474,6 +6539,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user"],
   data: function data() {
@@ -6569,7 +6638,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, ".autocomplete-items {\n  position: absolute;\n  z-index: 99;\n  top: 100%;\n  left: 0;\n  right: 0;\n  font-size: 14px;\n  border: solid #d1d5db 0.5px;\n  border-radius: 8px;\n  background-color: #d1d5db\n}\n.autocomplete-items div {\n  padding: 8px;\n  cursor: pointer;\n}\n.autocomplete-items div:hover {\n  background-color:#6366f1;\n  color: white;\n}\n.autocomplete-active {\n  background-color: #6366f1 !important;\n  color: white;\n}\r\n", ""]);
+exports.push([module.i, ".autocomplete-items {\n  position: absolute;\n  z-index: 99;\n  top: 100%;\n  left: 0;\n  right: 0;\n  font-size: 14px;\n  border: solid #d1d5db 0.5px;\n  border-radius: 8px;\n  background-color: #d1d5db;\n}\n.autocomplete-items div {\n  padding: 8px;\n  cursor: pointer;\n}\n.autocomplete-items div:hover {\n  background-color: #6366f1;\n  color: white;\n}\n.autocomplete-active {\n  background-color: #6366f1 !important;\n  color: white;\n}\r\n", ""]);
 
 // exports
 
@@ -33826,7 +33895,7 @@ var render = function() {
             _c("p", { staticClass: "bg-white p-2 rounded" }, [
               _vm._v(
                 "\n                    " +
-                  _vm._s(_vm.showedAssignment.author.name) +
+                  _vm._s(_vm.author) +
                   "\n                "
               )
             ])
@@ -34108,11 +34177,11 @@ var render = function() {
                                   "div",
                                   { staticClass: "text-sm text-gray-900" },
                                   [
-                                    _vm._v(
-                                      "\n                                " +
-                                        _vm._s(assignment.author.name) +
-                                        "\n                        "
-                                    )
+                                    assignment.author
+                                      ? _c("p", [
+                                          _vm._v(_vm._s(assignment.author.name))
+                                        ])
+                                      : _c("p", [_vm._v("*deleted account*")])
                                   ]
                                 )
                               ]
@@ -34852,27 +34921,48 @@ var render = function() {
                   },
                   [
                     _c("div", { staticClass: "mr-2" }, [
-                      _c("img", {
-                        staticClass: "rounded-full object-cover h-15 w-15 mr-2",
-                        attrs: { src: chat.users[0].avatar, alt: "avatar" }
-                      })
+                      chat.users[0]
+                        ? _c("img", {
+                            staticClass:
+                              "rounded-full object-cover h-15 w-15 mr-2",
+                            attrs: { src: chat.users[0].avatar, alt: "avatar" }
+                          })
+                        : _c("img", {
+                            staticClass:
+                              "rounded-full object-cover h-15 w-15 mr-2",
+                            attrs: { src: "img/default.jpg", alt: "avatar" }
+                          })
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "w-full" }, [
-                      _c("h5", { staticClass: "font-bold mb-2 ml-4" }, [
-                        _vm._v(" " + _vm._s(chat.users[0].name) + " ")
-                      ]),
+                      chat.users[0]
+                        ? _c("h5", { staticClass: "font-bold mb-2 ml-4" }, [
+                            _vm._v(
+                              "\n                        " +
+                                _vm._s(chat.users[0].name) +
+                                "\n                    "
+                            )
+                          ])
+                        : _c("h5", { staticClass: "font-bold mb-2 ml-4" }, [
+                            _vm._v(
+                              "\n                        *deleted account*\n                    "
+                            )
+                          ]),
                       _vm._v(" "),
                       chat.latest_message.sender_id != _vm.user.id
                         ? _c(
                             "div",
                             { staticClass: "text-sm mb-3 mx-4 float-left" },
                             [
-                              _vm._v(
-                                "\n                        " +
-                                  _vm._s(chat.users[0].name) +
-                                  ":\n                    "
-                              )
+                              chat.users[0]
+                                ? _c("p", [
+                                    _vm._v(
+                                      "\n                            " +
+                                        _vm._s(chat.users[0].name) +
+                                        ":\n                        "
+                                    )
+                                  ])
+                                : _c("p", [_vm._v("*deleted account*")])
                             ]
                           )
                         : _c(
@@ -34934,14 +35024,14 @@ var render = function() {
                       _vm._v(" "),
                       _c("p", { staticClass: "text-xs float-right" }, [
                         _vm._v(
-                          " " +
+                          "\n                        " +
                             _vm._s(
                               _vm._f("dateFormat")(
                                 new Date(chat.latest_message.created_at),
                                 "HH:mm , DD.MM.YYYY"
                               )
                             ) +
-                            " "
+                            "\n                    "
                         )
                       ])
                     ])
@@ -35003,11 +35093,19 @@ var render = function() {
           "h5",
           {
             key: chatUser.id,
-            staticClass: "text-lg font-bold text-center h-14 w-full -mt-4 mb-6"
+            staticClass: "text-lg font-bold text-center h-14 w-full"
           },
           [_vm._v("\n        " + _vm._s(chatUser.name) + "\n    ")]
         )
       }),
+      _vm._v(" "),
+      _vm.users.length == 0
+        ? _c(
+            "h5",
+            { staticClass: "text-lg font-bold text-center h-14 w-full" },
+            [_vm._v("\n        *deleted account*\n    ")]
+          )
+        : _vm._e(),
       _vm._v(" "),
       _c(
         "div",
@@ -35039,30 +35137,51 @@ var render = function() {
                 staticClass:
                   "bg-white relative clear-both w-full md:w-3/4 lg:w-1/2 px-4 pt-4 mb-2 border border-gray-300 rounded-lg",
                 class: {
-                  "float-right bg-purple-100": message.sender.id == _vm.user.id,
-                  "pb-6": message.sender.id != _vm.user.id
+                  "float-right bg-purple-100":
+                    message.sender && message.sender.id == _vm.user.id,
+                  "pb-6": !message.sender || message.sender.id != _vm.user.id
                 }
               },
               [
                 _c("div", [
-                  _c(
-                    "h5",
-                    { staticClass: "text-xs text-gray-500 absolute bottom-0" },
-                    [
-                      _vm._v(
-                        "\n                    " +
-                          _vm._s(message.sender.name) +
-                          "\n                "
+                  message.sender
+                    ? _c(
+                        "h5",
+                        {
+                          staticClass: "text-xs text-gray-500 absolute bottom-0"
+                        },
+                        [
+                          _vm._v(
+                            "\n                    " +
+                              _vm._s(message.sender.name) +
+                              "\n                "
+                          )
+                        ]
                       )
-                    ]
-                  ),
+                    : _c(
+                        "h5",
+                        {
+                          staticClass: "text-xs text-gray-500 absolute bottom-0"
+                        },
+                        [
+                          _vm._v(
+                            "\n                    *deleted account*\n                "
+                          )
+                        ]
+                      ),
                   _vm._v(" "),
                   _c("div", { staticClass: "float-left mr-2" }, [
-                    _c("img", {
-                      staticClass:
-                        "rounded-full object-cover h-15 w-15 mr-2 mb-3",
-                      attrs: { src: message.sender.avatar, alt: "avatar" }
-                    })
+                    message.sender
+                      ? _c("img", {
+                          staticClass:
+                            "rounded-full object-cover h-15 w-15 mr-2 mb-3",
+                          attrs: { src: message.sender.avatar, alt: "avatar" }
+                        })
+                      : _c("img", {
+                          staticClass:
+                            "rounded-full object-cover h-15 w-15 mr-2 mb-3",
+                          attrs: { src: "/img/default.jpg", alt: "avatar" }
+                        })
                   ]),
                   _vm._v(" "),
                   _c("div", [
@@ -39706,7 +39825,11 @@ var render = function() {
       _vm._v(" "),
       _c("label", { attrs: { for: "false" } }, [_vm._v("No")]),
       _c("br")
-    ])
+    ]),
+    _vm._v(" "),
+    _c("hr", {
+      staticClass: "w-full mt-12 -ml-5 bg-gray-500 border-2 mb-12 rounded-full"
+    })
   ])
 }
 var staticRenderFns = []

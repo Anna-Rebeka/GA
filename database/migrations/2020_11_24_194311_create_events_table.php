@@ -16,7 +16,7 @@ class CreateEventsTable extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('host_id');
+            $table->foreignId('host_id')->nullable();
             $table->foreignId('group_id');
             $table->string('description')->nullable();
             $table->dateTime('event_time');
@@ -27,7 +27,7 @@ class CreateEventsTable extends Migration
             $table->foreign('host_id')
                 ->references('id')
                 ->on('users')
-                ->onDelete('cascade');
+                ->onDelete('set null');
             
             $table->foreign('group_id')
                 ->references('id')

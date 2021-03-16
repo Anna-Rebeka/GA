@@ -108,7 +108,11 @@ class AssignmentsController extends Controller
      */
     public function show(Assignment $assignment)
     {
-        $assignment->author;
+        $author = "*deleted account*";
+        if($assignment->author){
+            $author = $assignment->author->name;
+        }
+
         $assignment->users;
 
         $assignment->taken = $assignment->isAssigned(auth()->user());
@@ -116,6 +120,7 @@ class AssignmentsController extends Controller
         return view('assignments.show', [
             'user' => auth()->user(),
             'assignment' => $assignment,
+            'author' => $author,
         ]);
     }
 

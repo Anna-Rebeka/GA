@@ -63,7 +63,9 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="text-sm text-gray-900">
-                                    {{ assignment.author.name }}
+                                    <p v-if="assignment.author">{{ assignment.author.name }}</p>
+                                    <p v-else>*deleted account*</p>
+                                    
                             </div>
                         </td>
                         <td> 

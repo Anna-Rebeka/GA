@@ -3,9 +3,15 @@
         <h5
             v-for="chatUser in users"
             :key="chatUser.id"
-            class="text-lg font-bold text-center h-14 w-full -mt-4 mb-6"
+            class="text-lg font-bold text-center h-14 w-full"
         >
             {{ chatUser.name }}
+        </h5>
+        <h5
+            v-if="users.length == 0"
+            class="text-lg font-bold text-center h-14 w-full"
+        >
+            *deleted account*
         </h5>
         <div
             id="chatWindow"
@@ -23,21 +29,36 @@
                 :key="message.id"
                 class="bg-white relative clear-both w-full md:w-3/4 lg:w-1/2 px-4 pt-4 mb-2 border border-gray-300 rounded-lg"
                 v-bind:class="{
-                    'float-right bg-purple-100': message.sender.id == user.id,
-                    'pb-6': message.sender.id != user.id,
+                    'float-right bg-purple-100': message.sender && message.sender.id == user.id,
+                    'pb-6': !message.sender || message.sender.id != user.id,
                 }"
             >
                 <div>
-                    <h5 class="text-xs text-gray-500 absolute bottom-0">
+                    <h5 
+                        v-if="message.sender"
+                        class="text-xs text-gray-500 absolute bottom-0">
                         {{ message.sender.name }}
+                    </h5>
+                    <h5 
+                        v-else
+                        class="text-xs text-gray-500 absolute bottom-0">
+                        *deleted account*
                     </h5>
                     <div class="float-left mr-2">
                         <img
+                            v-if="message.sender"
                             :src="message.sender.avatar"
                             alt="avatar"
                             class="rounded-full object-cover h-15 w-15 mr-2 mb-3"
                         />
+                        <img
+                            v-else
+                            src="/img/default.jpg"
+                            alt="avatar"
+                            class="rounded-full object-cover h-15 w-15 mr-2 mb-3"
+                        />
                     </div>
+                    
                     <div>
                         <div class="text-sm mb-3 break-words p-4">
                             {{ message.text }}

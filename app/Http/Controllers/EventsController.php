@@ -86,11 +86,17 @@ class EventsController extends Controller
     {
         $event->users;
         $event->group;
+        $name = "*deleted account*";
+
+        if($event->host){
+            $name = $event->host->name;
+        }
+
         return view('events.show', [
             'user' => auth()->user(),
             'going' => $event->users()->pluck('users.id'),
             'event' => $event,
-            'host' => $event->host->name
+            'host' => $name
         ]);
     }
 

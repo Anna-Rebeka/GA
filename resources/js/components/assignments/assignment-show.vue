@@ -75,7 +75,7 @@
                 <div class="mb-2 rounded bg-gray-100 px-6 py-4">
                     <strong>By Who</strong>
                     <p class="bg-white p-2 rounded">
-                        {{ showedAssignment.author.name }}
+                        {{ author }}
                     </p>
                 </div>
             </div>
@@ -150,7 +150,7 @@
 
 <script>
 export default {
-    props: ["user", "assignment"],
+    props: ["user", "assignment", "author"],
     data() {
         return {
             showedAssignment: this.assignment,
