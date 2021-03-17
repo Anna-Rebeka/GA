@@ -24,6 +24,11 @@ class CreateUsersAndGroupsTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->boolean('got_assignment_notify')->default(true);
+            $table->boolean('my_assignment_updated_notify')->default(true);
+            $table->boolean('joined_event_updated_notify')->default(false);
+            $table->boolean('created_by_me_assignment_updated_notify')->default(false);
+            $table->boolean('created_by_me_event_updated_notify')->default(false);
             $table->rememberToken();
             $table->foreignId('active_group')->nullable();
             $table->timestamps();

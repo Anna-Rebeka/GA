@@ -92,6 +92,34 @@ class UsersController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+    public function updateSettings(User $user){
+        $attributes = request()->validate([
+            'got_assignment_notify' => [
+                'boolean', 
+                'required',
+            ],
+            'my_assignment_updated_notify' => [
+                'boolean', 
+                'required', 
+            ],
+            'joined_event_updated_notify' => [
+                'boolean', 
+                'required',
+            ],
+            'created_by_me_assignment_updated_notify' => [
+                'boolean', 
+                'required',
+            ],
+            'created_by_me_event_updated_notify' => [
+                'boolean', 
+                'required',
+            ],
+        ]);
+        
+        $user->update($attributes);
+        return $user;
+    }
+
      
     public function update(User $user){
         $attributes = request()->validate([

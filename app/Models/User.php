@@ -32,7 +32,12 @@ class User extends Authenticatable
         'bio',
         'email',
         'password',
-        'active_group'
+        'active_group',
+        'got_assignment_notify',
+        'my_assignment_updated_notify',
+        'joined_event_updated_notify',
+        'created_by_me_assignment_updated_notify',
+        'created_by_me_event_updated_notify'
     ];
 
     /**

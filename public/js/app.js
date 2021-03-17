@@ -6604,26 +6604,48 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user"],
   data: function data() {
     return {
       fields: {},
+      getting_assignment: this.user.got_assignment_notify == 1,
+      assignment_mine: this.user.my_assignment_updated_notify == 1,
+      event_joined: this.user.joined_event_updated_notify == 1,
+      assignment_created_by_me: this.user.created_by_me_assignment_updated_notify == 1,
+      event_created_by_me: this.user.created_by_me_event_updated_notify == 1,
       checkedNotifications: [],
       errors: {},
       deletingAccount: false
     };
   },
   methods: {
-    deleteAccount: function deleteAccount() {
+    submit: function submit() {
       var _this = this;
+
+      this.fields.got_assignment_notify = this.getting_assignment;
+      this.fields.my_assignment_updated_notify = this.assignment_mine;
+      this.fields.joined_event_updated_notify = this.event_joined;
+      this.fields.created_by_me_assignment_updated_notify = this.assignment_created_by_me;
+      this.fields.created_by_me_event_updated_notify = this.event_created_by_me;
+      console.log(this.fields.my_assignment_updated_notify);
+      axios.post("/profile/" + this.user.id + "/settings", this.fields).then(function (response) {
+        _this.fields = {};
+      })["catch"](function (error) {
+        console.log(error.message);
+      });
+    },
+    deleteAccount: function deleteAccount() {
+      var _this2 = this;
 
       if (!this.deletingAccount) {
         this.deletingAccount = true;
         return;
       }
 
-      if (document.getElementById('checkDeleting').value.trim().toLowerCase() != "yes") {
+      if (document.getElementById("checkDeleting").value.trim().toLowerCase() != "yes") {
         return;
       }
 
@@ -6631,8 +6653,8 @@ __webpack_require__.r(__webpack_exports__);
         window.location.href = "/";
       })["catch"](function (error) {
         if (error.response.status == 422) {
-          _this.errors = error.response.data.errors;
-          console.log(_this.errors);
+          _this2.errors = error.response.data.errors;
+          console.log(_this2.errors);
         }
 
         console.log(error.message);
@@ -39496,6 +39518,55 @@ var render = function() {
                 ],
                 attrs: {
                   type: "checkbox",
+                  id: "whiteboard_posts",
+                  value: "whiteboard_posts"
+                },
+                domProps: {
+                  checked: Array.isArray(_vm.checkedNotifications)
+                    ? _vm._i(_vm.checkedNotifications, "whiteboard_posts") > -1
+                    : _vm.checkedNotifications
+                },
+                on: {
+                  change: function($event) {
+                    var $$a = _vm.checkedNotifications,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = "whiteboard_posts",
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 &&
+                          (_vm.checkedNotifications = $$a.concat([$$v]))
+                      } else {
+                        $$i > -1 &&
+                          (_vm.checkedNotifications = $$a
+                            .slice(0, $$i)
+                            .concat($$a.slice($$i + 1)))
+                      }
+                    } else {
+                      _vm.checkedNotifications = $$c
+                    }
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("label", { attrs: { for: "whiteboard_posts" } }, [
+                _vm._v("Whiteboard post")
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "mb-2" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.checkedNotifications,
+                    expression: "checkedNotifications"
+                  }
+                ],
+                attrs: {
+                  type: "checkbox",
                   id: "assignments",
                   value: "assignments"
                 },
@@ -39574,55 +39645,6 @@ var render = function() {
               }),
               _vm._v(" "),
               _c("label", { attrs: { for: "events" } }, [_vm._v("Event")])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "mb-2" }, [
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.checkedNotifications,
-                    expression: "checkedNotifications"
-                  }
-                ],
-                attrs: {
-                  type: "checkbox",
-                  id: "whiteboard_posts",
-                  value: "whiteboard_posts"
-                },
-                domProps: {
-                  checked: Array.isArray(_vm.checkedNotifications)
-                    ? _vm._i(_vm.checkedNotifications, "whiteboard_posts") > -1
-                    : _vm.checkedNotifications
-                },
-                on: {
-                  change: function($event) {
-                    var $$a = _vm.checkedNotifications,
-                      $$el = $event.target,
-                      $$c = $$el.checked ? true : false
-                    if (Array.isArray($$a)) {
-                      var $$v = "whiteboard_posts",
-                        $$i = _vm._i($$a, $$v)
-                      if ($$el.checked) {
-                        $$i < 0 &&
-                          (_vm.checkedNotifications = $$a.concat([$$v]))
-                      } else {
-                        $$i > -1 &&
-                          (_vm.checkedNotifications = $$a
-                            .slice(0, $$i)
-                            .concat($$a.slice($$i + 1)))
-                      }
-                    } else {
-                      _vm.checkedNotifications = $$c
-                    }
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c("label", { attrs: { for: "whiteboard_posts" } }, [
-                _vm._v("Whiteboard post")
-              ])
             ])
           ])
         ])
@@ -39659,23 +39681,23 @@ var render = function() {
           {
             name: "model",
             rawName: "v-model",
-            value: _vm.fields.getting_assignment,
-            expression: "fields.getting_assignment"
+            value: _vm.getting_assignment,
+            expression: "getting_assignment"
           }
         ],
         attrs: {
           type: "radio",
-          id: "true",
+          id: "getting_assignment",
           name: "getting_assignment",
           required: ""
         },
         domProps: {
           value: true,
-          checked: _vm._q(_vm.fields.getting_assignment, true)
+          checked: _vm._q(_vm.getting_assignment, true)
         },
         on: {
           change: function($event) {
-            return _vm.$set(_vm.fields, "getting_assignment", true)
+            _vm.getting_assignment = true
           }
         }
       }),
@@ -39688,23 +39710,24 @@ var render = function() {
           {
             name: "model",
             rawName: "v-model",
-            value: _vm.fields.getting_assignment,
-            expression: "fields.getting_assignment"
+            value: _vm.getting_assignment,
+            expression: "getting_assignment"
           }
         ],
         attrs: {
           type: "radio",
-          id: "false",
+          id: "getting_assignment",
           name: "getting_assignment",
+          checked: "",
           required: ""
         },
         domProps: {
           value: false,
-          checked: _vm._q(_vm.fields.getting_assignment, false)
+          checked: _vm._q(_vm.getting_assignment, false)
         },
         on: {
           change: function($event) {
-            return _vm.$set(_vm.fields, "getting_assignment", false)
+            _vm.getting_assignment = false
           }
         }
       }),
@@ -39732,23 +39755,20 @@ var render = function() {
           {
             name: "model",
             rawName: "v-model",
-            value: _vm.fields.assignment_mine,
-            expression: "fields.assignment_mine"
+            value: _vm.assignment_mine,
+            expression: "assignment_mine"
           }
         ],
         attrs: {
           type: "radio",
-          id: "true",
+          id: "assignment_mine",
           name: "assignment_mine",
           required: ""
         },
-        domProps: {
-          value: true,
-          checked: _vm._q(_vm.fields.assignment_mine, true)
-        },
+        domProps: { value: true, checked: _vm._q(_vm.assignment_mine, true) },
         on: {
           change: function($event) {
-            return _vm.$set(_vm.fields, "assignment_mine", true)
+            _vm.assignment_mine = true
           }
         }
       }),
@@ -39761,23 +39781,20 @@ var render = function() {
           {
             name: "model",
             rawName: "v-model",
-            value: _vm.fields.assignment_mine,
-            expression: "fields.assignment_mine"
+            value: _vm.assignment_mine,
+            expression: "assignment_mine"
           }
         ],
         attrs: {
           type: "radio",
-          id: "false",
+          id: "assignment_mine",
           name: "assignment_mine",
           required: ""
         },
-        domProps: {
-          value: false,
-          checked: _vm._q(_vm.fields.assignment_mine, false)
-        },
+        domProps: { value: false, checked: _vm._q(_vm.assignment_mine, false) },
         on: {
           change: function($event) {
-            return _vm.$set(_vm.fields, "assignment_mine", false)
+            _vm.assignment_mine = false
           }
         }
       }),
@@ -39805,23 +39822,20 @@ var render = function() {
           {
             name: "model",
             rawName: "v-model",
-            value: _vm.fields.event_joined,
-            expression: "fields.event_joined"
+            value: _vm.event_joined,
+            expression: "event_joined"
           }
         ],
         attrs: {
           type: "radio",
-          id: "true",
+          id: "event_joined",
           name: "event_joined",
           required: ""
         },
-        domProps: {
-          value: true,
-          checked: _vm._q(_vm.fields.event_joined, true)
-        },
+        domProps: { value: true, checked: _vm._q(_vm.event_joined, true) },
         on: {
           change: function($event) {
-            return _vm.$set(_vm.fields, "event_joined", true)
+            _vm.event_joined = true
           }
         }
       }),
@@ -39834,23 +39848,20 @@ var render = function() {
           {
             name: "model",
             rawName: "v-model",
-            value: _vm.fields.event_joined,
-            expression: "fields.event_joined"
+            value: _vm.event_joined,
+            expression: "event_joined"
           }
         ],
         attrs: {
           type: "radio",
-          id: "false",
+          id: "event_joined",
           name: "event_joined",
           required: ""
         },
-        domProps: {
-          value: false,
-          checked: _vm._q(_vm.fields.event_joined, false)
-        },
+        domProps: { value: false, checked: _vm._q(_vm.event_joined, false) },
         on: {
           change: function($event) {
-            return _vm.$set(_vm.fields, "event_joined", false)
+            _vm.event_joined = false
           }
         }
       }),
@@ -39878,23 +39889,23 @@ var render = function() {
           {
             name: "model",
             rawName: "v-model",
-            value: _vm.fields.assignment_created_by_me,
-            expression: "fields.assignment_created_by_me"
+            value: _vm.assignment_created_by_me,
+            expression: "assignment_created_by_me"
           }
         ],
         attrs: {
           type: "radio",
-          id: "true",
+          id: "assignment_created_by_me",
           name: "assignment_created_by_me",
           required: ""
         },
         domProps: {
           value: true,
-          checked: _vm._q(_vm.fields.assignment_created_by_me, true)
+          checked: _vm._q(_vm.assignment_created_by_me, true)
         },
         on: {
           change: function($event) {
-            return _vm.$set(_vm.fields, "assignment_created_by_me", true)
+            _vm.assignment_created_by_me = true
           }
         }
       }),
@@ -39907,23 +39918,23 @@ var render = function() {
           {
             name: "model",
             rawName: "v-model",
-            value: _vm.fields.assignment_created_by_me,
-            expression: "fields.assignment_created_by_me"
+            value: _vm.assignment_created_by_me,
+            expression: "assignment_created_by_me"
           }
         ],
         attrs: {
           type: "radio",
-          id: "false",
+          id: "assignment_created_by_me",
           name: "assignment_created_by_me",
           required: ""
         },
         domProps: {
           value: false,
-          checked: _vm._q(_vm.fields.assignment_created_by_me, false)
+          checked: _vm._q(_vm.assignment_created_by_me, false)
         },
         on: {
           change: function($event) {
-            return _vm.$set(_vm.fields, "assignment_created_by_me", false)
+            _vm.assignment_created_by_me = false
           }
         }
       }),
@@ -39951,23 +39962,23 @@ var render = function() {
           {
             name: "model",
             rawName: "v-model",
-            value: _vm.fields.event_created_by_me,
-            expression: "fields.event_created_by_me"
+            value: _vm.event_created_by_me,
+            expression: "event_created_by_me"
           }
         ],
         attrs: {
           type: "radio",
-          id: "true",
+          id: "event_created_by_me",
           name: "event_created_by_me",
           required: ""
         },
         domProps: {
           value: true,
-          checked: _vm._q(_vm.fields.event_created_by_me, true)
+          checked: _vm._q(_vm.event_created_by_me, true)
         },
         on: {
           change: function($event) {
-            return _vm.$set(_vm.fields, "event_created_by_me", true)
+            _vm.event_created_by_me = true
           }
         }
       }),
@@ -39980,23 +39991,23 @@ var render = function() {
           {
             name: "model",
             rawName: "v-model",
-            value: _vm.fields.event_created_by_me,
-            expression: "fields.event_created_by_me"
+            value: _vm.event_created_by_me,
+            expression: "event_created_by_me"
           }
         ],
         attrs: {
           type: "radio",
-          id: "false",
+          id: "event_created_by_me",
           name: "event_created_by_me",
           required: ""
         },
         domProps: {
           value: false,
-          checked: _vm._q(_vm.fields.event_created_by_me, false)
+          checked: _vm._q(_vm.event_created_by_me, false)
         },
         on: {
           change: function($event) {
-            return _vm.$set(_vm.fields, "event_created_by_me", false)
+            _vm.event_created_by_me = false
           }
         }
       }),
@@ -40024,7 +40035,7 @@ var render = function() {
             }
           }
         },
-        [_vm._v("\n                Submit\n            ")]
+        [_vm._v("\n            Submit\n        ")]
       )
     ]),
     _vm._v(" "),
@@ -40067,12 +40078,10 @@ var staticRenderFns = [
       [
         _vm._v("\n            Deleting your account is irreversible. "),
         _c("br"),
-        _vm._v(
-          " \n            The groups you administer will be deleted too. "
-        ),
+        _vm._v("\n            The groups you administer will be deleted too. "),
         _c("br"),
         _vm._v(
-          "\n            If you wish to save these groups pass your admin rights to another member. "
+          "\n            If you wish to save these groups pass your admin rights to\n            another member. "
         ),
         _c("br"),
         _vm._v(

@@ -18,6 +18,15 @@
                 <div class="mb-2">
                     <input
                         type="checkbox"
+                        id="whiteboard_posts"
+                        value="whiteboard_posts"
+                        v-model="checkedNotifications"
+                    />
+                    <label for="whiteboard_posts">Whiteboard post</label>
+                </div>
+                <div class="mb-2">
+                    <input
+                        type="checkbox"
                         id="assignments"
                         value="assignments"
                         v-model="checkedNotifications"
@@ -33,15 +42,6 @@
                         v-model="checkedNotifications"
                     />
                     <label for="events">Event</label>
-                </div>
-                <div class="mb-2">
-                    <input
-                        type="checkbox"
-                        id="whiteboard_posts"
-                        value="whiteboard_posts"
-                        v-model="checkedNotifications"
-                    />
-                    <label for="whiteboard_posts">Whiteboard post</label>
                 </div>
             </div>
         </div>
@@ -60,8 +60,8 @@
             </p>
             <input
                 type="radio"
-                v-model="fields.getting_assignment"
-                id="true"
+                v-model="getting_assignment"
+                id="getting_assignment"
                 name="getting_assignment"
                 :value="true"
                 required
@@ -69,10 +69,11 @@
             <label for="true">Yes</label><br />
             <input
                 type="radio"
-                v-model="fields.getting_assignment"
-                id="false"
+                v-model="getting_assignment"
+                id="getting_assignment"
                 name="getting_assignment"
                 :value="false"
+                checked
                 required
             />
             <label for="false">No</label><br />
@@ -86,8 +87,8 @@
             </p>
             <input
                 type="radio"
-                v-model="fields.assignment_mine"
-                id="true"
+                v-model="assignment_mine"
+                id="assignment_mine"
                 name="assignment_mine"
                 :value="true"
                 required
@@ -95,8 +96,8 @@
             <label for="true">Yes</label><br />
             <input
                 type="radio"
-                v-model="fields.assignment_mine"
-                id="false"
+                v-model="assignment_mine"
+                id="assignment_mine"
                 name="assignment_mine"
                 :value="false"
                 required
@@ -112,8 +113,8 @@
             </p>
             <input
                 type="radio"
-                v-model="fields.event_joined"
-                id="true"
+                v-model="event_joined"
+                id="event_joined"
                 name="event_joined"
                 :value="true"
                 required
@@ -121,8 +122,8 @@
             <label for="true">Yes</label><br />
             <input
                 type="radio"
-                v-model="fields.event_joined"
-                id="false"
+                v-model="event_joined"
+                id="event_joined"
                 name="event_joined"
                 :value="false"
                 required
@@ -139,8 +140,8 @@
             </p>
             <input
                 type="radio"
-                v-model="fields.assignment_created_by_me"
-                id="true"
+                v-model="assignment_created_by_me"
+                id="assignment_created_by_me"
                 name="assignment_created_by_me"
                 :value="true"
                 required
@@ -148,8 +149,8 @@
             <label for="true">Yes</label><br />
             <input
                 type="radio"
-                v-model="fields.assignment_created_by_me"
-                id="false"
+                v-model="assignment_created_by_me"
+                id="assignment_created_by_me"
                 name="assignment_created_by_me"
                 :value="false"
                 required
@@ -165,8 +166,8 @@
             </p>
             <input
                 type="radio"
-                v-model="fields.event_created_by_me"
-                id="true"
+                v-model="event_created_by_me"
+                id="event_created_by_me"
                 name="event_created_by_me"
                 :value="true"
                 required
@@ -174,26 +175,26 @@
             <label for="true">Yes</label><br />
             <input
                 type="radio"
-                v-model="fields.event_created_by_me"
-                id="false"
+                v-model="event_created_by_me"
+                id="event_created_by_me"
                 name="event_created_by_me"
                 :value="false"
                 required
             />
             <label for="false">No</label><br />
         </div>
-                <div class="clear-both"></div>
+        <div class="clear-both"></div>
 
         <div class="mb-6">
-                <button
-                    type="submit"
-                    @submit.prevent="submit"
-                    v-on:click="submit()"
-                    class="float-right mr-12 bg-blue-400 text-white rounded py-2 px-4 hover:bg-blue-500 mr-4 focus:outline-none"
-                >
-                    Submit
-                </button>
-            </div>
+            <button
+                type="submit"
+                @submit.prevent="submit"
+                v-on:click="submit()"
+                class="float-right mr-12 bg-blue-400 text-white rounded py-2 px-4 hover:bg-blue-500 mr-4 focus:outline-none"
+            >
+                Submit
+            </button>
+        </div>
 
         <div class="clear-both"></div>
 
@@ -212,9 +213,10 @@
             <div
                 class="flex items-center justify-between w-full mt-6 mb-6 p-2 bg-yellow-400 shadow text-white"
             >
-                Deleting your account is irreversible. <br/> 
-                The groups you administer will be deleted too. <br/>
-                If you wish to save these groups pass your admin rights to another member. <br/>
+                Deleting your account is irreversible. <br />
+                The groups you administer will be deleted too. <br />
+                If you wish to save these groups pass your admin rights to
+                another member. <br />
                 You can do so by editing each group that you want to save.
             </div>
 
@@ -244,6 +246,13 @@ export default {
     data() {
         return {
             fields: {},
+            getting_assignment: this.user.got_assignment_notify == 1,
+            assignment_mine: this.user.my_assignment_updated_notify == 1,
+            event_joined: this.user.joined_event_updated_notify == 1,
+            assignment_created_by_me:
+                this.user.created_by_me_assignment_updated_notify == 1,
+            event_created_by_me:
+                this.user.created_by_me_event_updated_notify == 1,
             checkedNotifications: [],
             errors: {},
             deletingAccount: false,
@@ -251,12 +260,34 @@ export default {
     },
 
     methods: {
-        deleteAccount(){
-            if(!this.deletingAccount){
+        submit() {
+            this.fields.got_assignment_notify = this.getting_assignment;
+            this.fields.my_assignment_updated_notify = this.assignment_mine;
+            this.fields.joined_event_updated_notify = this.event_joined;
+            this.fields.created_by_me_assignment_updated_notify = this.assignment_created_by_me;
+            this.fields.created_by_me_event_updated_notify = this.event_created_by_me;
+            console.log(this.fields.my_assignment_updated_notify);
+            axios
+                .post("/profile/" + this.user.id + "/settings", this.fields)
+                .then((response) => {
+                    this.fields = {};
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                });
+        },
+
+        deleteAccount() {
+            if (!this.deletingAccount) {
                 this.deletingAccount = true;
                 return;
             }
-            if (document.getElementById('checkDeleting').value.trim().toLowerCase() != "yes"){
+            if (
+                document
+                    .getElementById("checkDeleting")
+                    .value.trim()
+                    .toLowerCase() != "yes"
+            ) {
                 return;
             }
             axios
@@ -271,10 +302,8 @@ export default {
                     }
                     console.log(error.message);
                 });
-        }
-
-        
-    }
+        },
+    },
 };
 </script>
 
