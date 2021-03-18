@@ -78,9 +78,16 @@ class UsersController extends Controller
 
     public function showSettings(User $user)
     {
-        $user->group;
+        $group = $user->group;
+        $new_whiteboard_notify = $user->groups()->where('groups.id', $group->id)->first()->pivot->new_whiteboard_notify;
+        $new_assignment_notify = $user->groups()->where('groups.id', $group->id)->first()->pivot->new_assignment_notify;
+        $new_event_notify = $user->groups()->where('groups.id', $group->id)->first()->pivot->new_event_notify;
+
         return view('profile.settings', [
             'user' => $user,
+            'new_whiteboard_notify' => $new_whiteboard_notify,
+            'new_assignment_notify' => $new_assignment_notify,
+            'new_event_notify' => $new_event_notify,
         ]);
     }
 
@@ -93,7 +100,7 @@ class UsersController extends Controller
      */
 
     public function updateSettings(User $user){
-        $attributes = request()->validate([
+        $user_attributes = request()->validate([
             'got_assignment_notify' => [
                 'boolean', 
                 'required',
@@ -116,7 +123,26 @@ class UsersController extends Controller
             ],
         ]);
         
-        $user->update($attributes);
+        
+        $pivot_attributes = request()->validate([
+            'new_whiteboard_notify' => [
+                'boolean', 
+                'required',
+            ],
+            'new_assignment_notify' => [
+                'boolean', 
+                'required', 
+            ],
+            'new_event_notify' => [
+                'boolean', 
+                'required',
+            ],
+        ]);
+        
+        
+        $user->update($user_attributes);
+        $user->groups()->updateExistingPivot($user->group->id, $pivot_attributes);
+
         return $user;
     }
 

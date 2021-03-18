@@ -20,7 +20,7 @@
                         type="checkbox"
                         id="whiteboard_posts"
                         value="whiteboard_posts"
-                        v-model="checkedNotifications"
+                        v-model="whiteboard_posts"
                     />
                     <label for="whiteboard_posts">Whiteboard post</label>
                 </div>
@@ -29,7 +29,7 @@
                         type="checkbox"
                         id="assignments"
                         value="assignments"
-                        v-model="checkedNotifications"
+                        v-model="assignments"
                     />
                     <label for="assignments">Assignment</label>
                 </div>
@@ -39,7 +39,7 @@
                         type="checkbox"
                         id="events"
                         value="events"
-                        v-model="checkedNotifications"
+                        v-model="events"
                     />
                     <label for="events">Event</label>
                 </div>
@@ -198,6 +198,10 @@
 
         <div class="clear-both"></div>
 
+        <div class="flex items-center justify-between w-full -ml-4 mt-10 p-2 bg-green-500 shadow text-white" v-if="settingsSubmitted">
+                    Your changes have been saved!
+        </div>
+
         <hr
             class="w-full mt-12 -ml-5 bg-gray-500 border-2 mb-12 rounded-full"
         />
@@ -242,10 +246,18 @@
 
 <script>
 export default {
-    props: ["user"],
+    props: [
+        "user",
+        "new_whiteboard_notify",
+        "new_assignment_notify",
+        "new_event_notify",
+    ],
     data() {
         return {
             fields: {},
+            whiteboard_posts: this.new_whiteboard_notify == 1,
+            assignments: this.new_assignment_notify == 1,
+            events: this.new_event_notify == 1,
             getting_assignment: this.user.got_assignment_notify == 1,
             assignment_mine: this.user.my_assignment_updated_notify == 1,
             event_joined: this.user.joined_event_updated_notify == 1,
@@ -253,24 +265,29 @@ export default {
                 this.user.created_by_me_assignment_updated_notify == 1,
             event_created_by_me:
                 this.user.created_by_me_event_updated_notify == 1,
-            checkedNotifications: [],
             errors: {},
             deletingAccount: false,
+            settingsSubmitted: false,
         };
     },
 
     methods: {
         submit() {
+            this.fields.new_whiteboard_notify = this.whiteboard_posts;
+            this.fields.new_assignment_notify = this.assignments;
+            this.fields.new_event_notify = this.events;
+
             this.fields.got_assignment_notify = this.getting_assignment;
             this.fields.my_assignment_updated_notify = this.assignment_mine;
             this.fields.joined_event_updated_notify = this.event_joined;
             this.fields.created_by_me_assignment_updated_notify = this.assignment_created_by_me;
             this.fields.created_by_me_event_updated_notify = this.event_created_by_me;
-            console.log(this.fields.my_assignment_updated_notify);
+
             axios
                 .post("/profile/" + this.user.id + "/settings", this.fields)
                 .then((response) => {
                     this.fields = {};
+                    this.settingsSubmitted = true;
                 })
                 .catch((error) => {
                     console.log(error.message);

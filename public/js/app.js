@@ -6606,33 +6606,43 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["user"],
+  props: ["user", "new_whiteboard_notify", "new_assignment_notify", "new_event_notify"],
   data: function data() {
     return {
       fields: {},
+      whiteboard_posts: this.new_whiteboard_notify == 1,
+      assignments: this.new_assignment_notify == 1,
+      events: this.new_event_notify == 1,
       getting_assignment: this.user.got_assignment_notify == 1,
       assignment_mine: this.user.my_assignment_updated_notify == 1,
       event_joined: this.user.joined_event_updated_notify == 1,
       assignment_created_by_me: this.user.created_by_me_assignment_updated_notify == 1,
       event_created_by_me: this.user.created_by_me_event_updated_notify == 1,
-      checkedNotifications: [],
       errors: {},
-      deletingAccount: false
+      deletingAccount: false,
+      settingsSubmitted: false
     };
   },
   methods: {
     submit: function submit() {
       var _this = this;
 
+      this.fields.new_whiteboard_notify = this.whiteboard_posts;
+      this.fields.new_assignment_notify = this.assignments;
+      this.fields.new_event_notify = this.events;
       this.fields.got_assignment_notify = this.getting_assignment;
       this.fields.my_assignment_updated_notify = this.assignment_mine;
       this.fields.joined_event_updated_notify = this.event_joined;
       this.fields.created_by_me_assignment_updated_notify = this.assignment_created_by_me;
       this.fields.created_by_me_event_updated_notify = this.event_created_by_me;
-      console.log(this.fields.my_assignment_updated_notify);
       axios.post("/profile/" + this.user.id + "/settings", this.fields).then(function (response) {
         _this.fields = {};
+        _this.settingsSubmitted = true;
       })["catch"](function (error) {
         console.log(error.message);
       });
@@ -39512,8 +39522,8 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.checkedNotifications,
-                    expression: "checkedNotifications"
+                    value: _vm.whiteboard_posts,
+                    expression: "whiteboard_posts"
                   }
                 ],
                 attrs: {
@@ -39522,29 +39532,28 @@ var render = function() {
                   value: "whiteboard_posts"
                 },
                 domProps: {
-                  checked: Array.isArray(_vm.checkedNotifications)
-                    ? _vm._i(_vm.checkedNotifications, "whiteboard_posts") > -1
-                    : _vm.checkedNotifications
+                  checked: Array.isArray(_vm.whiteboard_posts)
+                    ? _vm._i(_vm.whiteboard_posts, "whiteboard_posts") > -1
+                    : _vm.whiteboard_posts
                 },
                 on: {
                   change: function($event) {
-                    var $$a = _vm.checkedNotifications,
+                    var $$a = _vm.whiteboard_posts,
                       $$el = $event.target,
                       $$c = $$el.checked ? true : false
                     if (Array.isArray($$a)) {
                       var $$v = "whiteboard_posts",
                         $$i = _vm._i($$a, $$v)
                       if ($$el.checked) {
-                        $$i < 0 &&
-                          (_vm.checkedNotifications = $$a.concat([$$v]))
+                        $$i < 0 && (_vm.whiteboard_posts = $$a.concat([$$v]))
                       } else {
                         $$i > -1 &&
-                          (_vm.checkedNotifications = $$a
+                          (_vm.whiteboard_posts = $$a
                             .slice(0, $$i)
                             .concat($$a.slice($$i + 1)))
                       }
                     } else {
-                      _vm.checkedNotifications = $$c
+                      _vm.whiteboard_posts = $$c
                     }
                   }
                 }
@@ -39561,8 +39570,8 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.checkedNotifications,
-                    expression: "checkedNotifications"
+                    value: _vm.assignments,
+                    expression: "assignments"
                   }
                 ],
                 attrs: {
@@ -39571,29 +39580,28 @@ var render = function() {
                   value: "assignments"
                 },
                 domProps: {
-                  checked: Array.isArray(_vm.checkedNotifications)
-                    ? _vm._i(_vm.checkedNotifications, "assignments") > -1
-                    : _vm.checkedNotifications
+                  checked: Array.isArray(_vm.assignments)
+                    ? _vm._i(_vm.assignments, "assignments") > -1
+                    : _vm.assignments
                 },
                 on: {
                   change: function($event) {
-                    var $$a = _vm.checkedNotifications,
+                    var $$a = _vm.assignments,
                       $$el = $event.target,
                       $$c = $$el.checked ? true : false
                     if (Array.isArray($$a)) {
                       var $$v = "assignments",
                         $$i = _vm._i($$a, $$v)
                       if ($$el.checked) {
-                        $$i < 0 &&
-                          (_vm.checkedNotifications = $$a.concat([$$v]))
+                        $$i < 0 && (_vm.assignments = $$a.concat([$$v]))
                       } else {
                         $$i > -1 &&
-                          (_vm.checkedNotifications = $$a
+                          (_vm.assignments = $$a
                             .slice(0, $$i)
                             .concat($$a.slice($$i + 1)))
                       }
                     } else {
-                      _vm.checkedNotifications = $$c
+                      _vm.assignments = $$c
                     }
                   }
                 }
@@ -39610,35 +39618,34 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.checkedNotifications,
-                    expression: "checkedNotifications"
+                    value: _vm.events,
+                    expression: "events"
                   }
                 ],
                 attrs: { type: "checkbox", id: "events", value: "events" },
                 domProps: {
-                  checked: Array.isArray(_vm.checkedNotifications)
-                    ? _vm._i(_vm.checkedNotifications, "events") > -1
-                    : _vm.checkedNotifications
+                  checked: Array.isArray(_vm.events)
+                    ? _vm._i(_vm.events, "events") > -1
+                    : _vm.events
                 },
                 on: {
                   change: function($event) {
-                    var $$a = _vm.checkedNotifications,
+                    var $$a = _vm.events,
                       $$el = $event.target,
                       $$c = $$el.checked ? true : false
                     if (Array.isArray($$a)) {
                       var $$v = "events",
                         $$i = _vm._i($$a, $$v)
                       if ($$el.checked) {
-                        $$i < 0 &&
-                          (_vm.checkedNotifications = $$a.concat([$$v]))
+                        $$i < 0 && (_vm.events = $$a.concat([$$v]))
                       } else {
                         $$i > -1 &&
-                          (_vm.checkedNotifications = $$a
+                          (_vm.events = $$a
                             .slice(0, $$i)
                             .concat($$a.slice($$i + 1)))
                       }
                     } else {
-                      _vm.checkedNotifications = $$c
+                      _vm.events = $$c
                     }
                   }
                 }
@@ -40040,6 +40047,17 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "clear-both" }),
+    _vm._v(" "),
+    _vm.settingsSubmitted
+      ? _c(
+          "div",
+          {
+            staticClass:
+              "flex items-center justify-between w-full -ml-4 mt-10 p-2 bg-green-500 shadow text-white"
+          },
+          [_vm._v("\n                Your changes have been saved!\n    ")]
+        )
+      : _vm._e(),
     _vm._v(" "),
     _c("hr", {
       staticClass: "w-full mt-12 -ml-5 bg-gray-500 border-2 mb-12 rounded-full"

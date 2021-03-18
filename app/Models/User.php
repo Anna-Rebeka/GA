@@ -75,7 +75,7 @@ class User extends Authenticatable
     }
 
     public function groups(){
-        return $this->belongsToMany(Group::class);
+        return $this->belongsToMany(Group::class)->withPivot('new_whiteboard_notify', 'new_assignment_notify', 'new_event_notify');
     }
 
     public function group(){
