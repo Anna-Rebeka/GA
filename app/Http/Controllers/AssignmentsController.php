@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Assignment;
 use App\Models\Group;
 use App\Models\User;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewWhiteboardEventAssignmentMail;
 
 
 use Illuminate\Http\Request;
@@ -94,10 +96,23 @@ class AssignmentsController extends Controller
 
         //for each assignee attach this assignment
         $assignment->users()->attach($fields['users']);
+        //notify users
+        $this->notifyUsers($assignment);
 
         $assignment->users;
         
         return $assignment;
+    }
+
+
+    public function notifyUsers(Assignment $assignment){
+        $notify_users = $assignment->group->users()->where('new_assignment_notify', true)->get();
+        foreach($notify_users as $notify_user){
+            Mail::to($notify_user->email)
+                ->send(new NewWhiteboardEventAssignmentMail($assignment->group->name, auth()->user()->name, 'assignments', $assignment))
+            ;
+        }
+        return;
     }
 
     /**

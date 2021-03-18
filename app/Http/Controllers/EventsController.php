@@ -6,6 +6,8 @@ use App\Models\Event;
 use App\Models\Group;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewWhiteboardEventAssignmentMail;
 
 class EventsController extends Controller
 {
@@ -72,9 +74,23 @@ class EventsController extends Controller
         ]);
         
         $user->events()->attach($event->id);
+        $this->notifyUsers($event);
+
         $event->users;
         return $event;
     }
+
+
+    public function notifyUsers(Event $event){
+        $notify_users = $event->group->users()->where('new_event_notify', true)->get();
+        foreach($notify_users as $notify_user){
+            Mail::to($notify_user->email)
+                ->send(new NewWhiteboardEventAssignmentMail($event->group->name, auth()->user()->name, 'events', $event))
+            ;
+        }
+        return;
+    }
+
 
     /**
      * Display the specified resource.

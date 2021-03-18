@@ -66,7 +66,7 @@ Route::middleware('auth')->group(function() {
     Route::get('/groups/{group:id}/edit-group', [GroupsController::class, 'edit']);
     Route::post('/groups/{group:id}/edit-group', [GroupsController::class, 'update']);
     Route::get('/group/{group:id}/members/get', [GroupsController::class, 'getMembers']);
-    Route::get('/groups/{group:id}/whiteboard', [GroupsController::class, 'showWhiteboard']);
+    Route::get('/whiteboard', [GroupsController::class, 'showWhiteboard']);
     
     Route::get('/groups/{group:id}/get-whiteboard-posts', [GroupWhiteboardPostsController::class, 'getPosts']);
     Route::post('/groups/{group:id}/whiteboard-post', [GroupWhiteboardPostsController::class, 'store']);

@@ -7,6 +7,8 @@ use App\Models\Group;
 
 use App\Events\NewWhiteboardPost;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewWhiteboardEventAssignmentMail;
 
 use Illuminate\Http\Request;
 
@@ -75,10 +77,22 @@ class GroupWhiteboardPostsController extends Controller
         ]);
                 
         broadcast(new NewWhiteboardPost($post, Group::find($post->group_id), auth()->user()))->toOthers();
-        
+        $this->notifyUsers($post);
+
         $post->sender;
 
         return $post;
+    }
+
+
+    public function notifyUsers(GroupWhiteboardPost $post){
+        $notify_users = $post->group->users()->where('new_whiteboard_notify', true)->get();
+        foreach($notify_users as $notify_user){
+            Mail::to($notify_user->email)
+                ->send(new NewWhiteboardEventAssignmentMail($post->group->name, auth()->user()->name, 'whiteboard posts', $post))
+            ;
+        }
+        return;
     }
 
 

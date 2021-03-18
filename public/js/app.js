@@ -36972,7 +36972,7 @@ var render = function() {
               {
                 staticClass:
                   "bg-white block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
-                attrs: { href: "/groups/" + _vm.group.id + "/whiteboard" }
+                attrs: { href: "/whiteboard" }
               },
               [_vm._v("Whiteboard\n            ")]
             ),

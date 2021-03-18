@@ -157,10 +157,10 @@ class GroupsController extends Controller
         return $group->users->except(auth()->user()->id);
     }
 
-    public function showWhiteboard(Group $group){
+    public function showWhiteboard(){
         return view('groups.group-whiteboard', [
             'user' => auth()->user(),
-            'group' => $group,
+            'group' => auth()->user()->group,
         ]);
     }
 }
