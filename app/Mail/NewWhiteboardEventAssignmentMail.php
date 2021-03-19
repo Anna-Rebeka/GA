@@ -12,7 +12,6 @@ class NewWhiteboardEventAssignmentMail extends Mailable
     use Queueable, SerializesModels;
 
     public $group;
-    public $user;
     public $what;
     public $the_new_thing;
     public $url;
@@ -22,10 +21,9 @@ class NewWhiteboardEventAssignmentMail extends Mailable
      *
      * @return void
      */
-    public function __construct($group, $user, $what, $the_new_thing = null)
+    public function __construct($group, $what, $the_new_thing = null)
     {
         $this->group = $group;
-        $this->user = $user;
         $this->what = $what;
         $this->the_new_thing = $the_new_thing;
         if($what == 'whiteboard posts'){

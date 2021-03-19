@@ -7,6 +7,7 @@ use App\Models\Group;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NewWhiteboardEventAssignmentMail;
+use App\Mail\FromAllGroupsNotificationMail;
 
 
 use Illuminate\Http\Request;
@@ -97,7 +98,7 @@ class AssignmentsController extends Controller
         //for each assignee attach this assignment
         $assignment->users()->attach($fields['users']);
         //notify users
-        $this->notifyUsers($assignment);
+        $this->newAssignmentNotifyUsers($assignment);
 
         $assignment->users;
         
@@ -105,13 +106,22 @@ class AssignmentsController extends Controller
     }
 
 
-    public function notifyUsers(Assignment $assignment){
-        $notify_users = $assignment->group->users()->where('new_assignment_notify', true)->get();
-        foreach($notify_users as $notify_user){
-            Mail::to($notify_user->email)
-                ->send(new NewWhiteboardEventAssignmentMail($assignment->group->name, auth()->user()->name, 'assignments', $assignment))
-            ;
-        }
+    public function newAssignmentNotifyUsers(Assignment $assignment){
+        $notify_members = $assignment->group->users()->select('email')->where('new_assignment_notify', true)->get();
+        $notify_assignees = $assignment->users()->select('email')->where('got_assignment_notify', true)->get();
+        
+        Mail::to($notify_members)
+                ->send(new NewWhiteboardEventAssignmentMail($assignment->group->name, 'assignments', $assignment))
+        ;
+        Mail::to($notify_assignees)
+                ->send(new FromAllGroupsNotificationMail($assignment->group->name, 'You have a new assignment', 'assignments/' . $assignment->id))
+        ;
+        return;
+    }
+
+
+    public function updatedAssignmentNotifyUsers(Assignment $assignment){
+        
         return;
     }
 
@@ -177,6 +187,8 @@ class AssignmentsController extends Controller
     public function take(Assignment $assignment)
     {
         $assignment->users()->attach(auth()->user()->id);
+        $this->updatedAssignmentNotifyUsers($assignment);
+
     }
 
     public function done(Assignment $assignment)
