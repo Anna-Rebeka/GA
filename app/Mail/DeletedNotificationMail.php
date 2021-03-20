@@ -7,12 +7,13 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class FromAllGroupsNotificationMail extends Mailable
+class DeletedNotificationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $group;
     public $text;
+    public $user;
     public $url;
     
     /**
@@ -20,10 +21,11 @@ class FromAllGroupsNotificationMail extends Mailable
      *
      * @return void
      */
-    public function __construct($group, $text, $url)
+    public function __construct($group, $text, $user = 'deleted account', $url = '')
     {
         $this->group = $group;
         $this->text = $text;
+        $this->user = $user;
         $this->url = 'http://127.0.0.1:8000/' . $url;
     }
 
@@ -34,7 +36,7 @@ class FromAllGroupsNotificationMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.notify-from-all-groups')
+        return $this->markdown('emails.deleted-from-all-groups')
             ->subject($this->group . ': ' . $this->text);
     }
 }

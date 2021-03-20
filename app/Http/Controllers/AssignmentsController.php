@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NewWhiteboardEventAssignmentMail;
 use App\Mail\FromAllGroupsNotificationMail;
+use App\Mail\DeletedNotificationMail;
 
 
 use Illuminate\Http\Request;
@@ -107,8 +108,8 @@ class AssignmentsController extends Controller
 
 
     public function newAssignmentNotifyUsers(Assignment $assignment){
-        $notify_members = $assignment->group->users()->select('email')->where('new_assignment_notify', true)->get();
-        $notify_assignees = $assignment->users()->select('email')->where('got_assignment_notify', true)->get();
+        $notify_members = $assignment->group->users()->select('email')->where('new_assignment_notify', true)->where('users.id', '!=', auth()->user()->id)->get();
+        $notify_assignees = $assignment->users()->select('email')->where('got_assignment_notify', true)->where('users.id', '!=', auth()->user()->id)->get();
         
         Mail::to($notify_members)
                 ->send(new NewWhiteboardEventAssignmentMail($assignment->group->name, 'assignments', $assignment))
@@ -121,7 +122,24 @@ class AssignmentsController extends Controller
 
 
     public function updatedAssignmentNotifyUsers(Assignment $assignment){
-        
+        if($assignment->author && auth()->user()->id != $assignment->author->id && $assignment->author->created_by_me_assignment_updated_notify){
+            Mail::to($assignment->author->email)
+                ->send(new FromAllGroupsNotificationMail($assignment->group->name, 'Update on the "' . $assignment->name . '" assignment', 'assignments/' . $assignment->id))
+        ;
+        }
+        $author_email = ''; 
+        if($assignment->author){
+            $author_email = $assignment->author->email;
+        }
+        $notify_assignees = $assignment->users()
+            ->select('email')
+            ->where('my_assignment_updated_notify', true)
+            ->where('users.id', '!=', auth()->user()->id)
+            ->where('users.email', '!=', $author_email)
+            ->get();
+        Mail::to($notify_assignees)
+            ->send(new FromAllGroupsNotificationMail($assignment->group->name, 'Update on the "' . $assignment->name . '" assignment', 'assignments/' . $assignment->id))
+        ;
         return;
     }
 
@@ -180,6 +198,15 @@ class AssignmentsController extends Controller
      */
     public function destroy(Assignment $assignment)
     {
+        $notify_assignees = $assignment->users()->select('email')->where('my_assignment_updated_notify', true)->where('users.id', '!=', auth()->user()->id)->get();
+        Mail::to($notify_assignees)
+                ->send(new DeletedNotificationMail(
+                    $assignment->group->name, 
+                    'Your assignment "' . $assignment->name . '" has been deleted', 
+                    $assignment->author->name, 
+                    'profile/' . $assignment->author->username
+                ))
+        ;
         $assignment->users()->detach();
         $assignment->delete();
     }
@@ -188,12 +215,12 @@ class AssignmentsController extends Controller
     {
         $assignment->users()->attach(auth()->user()->id);
         $this->updatedAssignmentNotifyUsers($assignment);
-
     }
 
     public function done(Assignment $assignment)
     {
         $assignment->update(array('done' => true));
+        $this->updatedAssignmentNotifyUsers($assignment);
     }
 
     public function loadOlderAssignments(Group $group, $howManyDisplayed){

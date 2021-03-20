@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\AssignmentsFile;
 use App\Models\Assignment;
 use App\Models\User;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewWhiteboardEventAssignmentMail;
+use App\Mail\FromAllGroupsNotificationMail;
 
 use Illuminate\Support\Facades\Storage;
 
@@ -59,7 +62,34 @@ class AssignmentsFilesController extends Controller
             'assignment_id' => $assignment->id,
         ]);
 
+        $this->updatedAssignmentNotifyUsers($assignmentFile);
+
         return $assignmentFile;
+    }
+
+
+    public function updatedAssignmentNotifyUsers($assignmentFile){
+        $assignment = $assignmentFile->assignment;
+        if($assignment->author && auth()->user()->id != $assignment->author->id && $assignment->author->created_by_me_assignment_updated_notify){
+            Mail::to($assignment->author->email)
+                ->send(new FromAllGroupsNotificationMail($assignment->group->name, 'A new file upload for "' . $assignment->name . '" assignment', 'assignments/' . $assignment->id))
+        ;
+        }
+        $author_email = ''; 
+        if($assignment->author){
+            $author_email = $assignment->author->email;
+        }
+        $notify_assignees = $assignment->users()
+            ->select('email')
+            ->where('my_assignment_updated_notify', true)
+            ->where('users.id', '!=', auth()->user()->id)
+            ->where('users.email', '!=', $author_email)
+            ->get()
+            ;
+        Mail::to($notify_assignees)
+            ->send(new FromAllGroupsNotificationMail($assignment->group->name, 'A new file upload for "' . $assignment->name . '" assignment', 'assignments/' . $assignment->id))
+        ;
+        return;
     }
 
     /**

@@ -1,11 +1,11 @@
 @component('mail::message')
-# {{ $text }} waiting in the "{{ $group }}" group.
+# {{ $text }} from the "{{ $group }}" group.
 
-Hello, check out the new updates from your "{{ $group }}" group.
+For more information contact "{{ $user }}".
 
 
 @component('mail::button', ['url' => $url])
-Show
+Show profile
 @endcomponent
 
 Your,<br>
