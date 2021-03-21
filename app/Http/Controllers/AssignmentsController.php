@@ -125,7 +125,7 @@ class AssignmentsController extends Controller
         if($assignment->author && auth()->user()->id != $assignment->author->id && $assignment->author->created_by_me_assignment_updated_notify){
             Mail::to($assignment->author->email)
                 ->send(new FromAllGroupsNotificationMail($assignment->group->name, 'Update on the "' . $assignment->name . '" assignment', 'assignments/' . $assignment->id))
-        ;
+            ;
         }
         $author_email = ''; 
         if($assignment->author){
@@ -175,7 +175,15 @@ class AssignmentsController extends Controller
      */
     public function edit(Assignment $assignment)
     {
-        //
+        $assignment->users;
+        $group = $assignment->group;
+        $group->users;
+
+        return view('assignments.edit', [
+            'user' => auth()->user(),
+            'assignment' => $assignment,
+            'group' => $assignment->group,
+        ]);
     }
 
     /**
@@ -199,12 +207,20 @@ class AssignmentsController extends Controller
     public function destroy(Assignment $assignment)
     {
         $notify_assignees = $assignment->users()->select('email')->where('my_assignment_updated_notify', true)->where('users.id', '!=', auth()->user()->id)->get();
+        
+        $author_name = "";
+        $author_url = "";
+        
+        if($assignment->author){
+            $author_name = $assignment->author->name;
+            $author_url = 'profile/' . $assignment->author->username;
+        }
         Mail::to($notify_assignees)
                 ->send(new DeletedNotificationMail(
                     $assignment->group->name, 
                     'Your assignment "' . $assignment->name . '" has been deleted', 
-                    $assignment->author->name, 
-                    'profile/' . $assignment->author->username
+                    $author_name,
+                    $author_url
                 ))
         ;
         $assignment->users()->detach();
@@ -213,8 +229,8 @@ class AssignmentsController extends Controller
     
     public function take(Assignment $assignment)
     {
-        $assignment->users()->attach(auth()->user()->id);
         $this->updatedAssignmentNotifyUsers($assignment);
+        $assignment->users()->attach(auth()->user()->id);
     }
 
     public function done(Assignment $assignment)

@@ -19,7 +19,7 @@ class CreateGroupUserTable extends Migration
             $table->foreignId('user_id');
             $table->boolean('new_whiteboard_notify')->default(false);
             $table->boolean('new_assignment_notify')->default(false);
-            $table->boolean('new_event_notify')->default(false);
+            $table->boolean('new_event_notify')->default(true);
             $table->timestamps();
 
             $table->foreign('group_id')

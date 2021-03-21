@@ -2,7 +2,7 @@
     <div>
         <div class="p-8 mr-2 mb-2">
             <div class="float-right">
-                <div v-if="showedAssignment.author_id == user.id">
+                <div v-if="showedAssignment.author_id == user.id" class="mb-5">
                     <button
                         v-if="!showedAssignment.done"
                         @click="checkWithUser(showedAssignment, 'done')"
@@ -10,6 +10,12 @@
                     >
                         Done
                     </button>
+                    <div
+                        class="float-right rounded-lg w-16 px-2 text-center py-2 mr-2 text-white text-sm bg-gray-400 hover:bg-gray-500 focus:outline-none"
+                    >
+                        <a :href="showedAssignment.id + '/edit'" class="p-3"> Edit </a>
+                    </div>
+
                     <button
                         @click="checkWithUser(showedAssignment, 'delete')"
                         class="rounded-lg w-16 px-2 py-2 mr-2 text-white text-sm bg-red-400 hover:bg-red-300 focus:outline-none"
@@ -36,7 +42,9 @@
                     </div>
                 </div>
             </div>
-            <div class="overflow-ellipsis overflow-hidden ... max-w-sm">
+            <div
+                class="mt-5 clear-both overflow-ellipsis overflow-hidden ... max-w-sm"
+            >
                 <h2
                     v-if="showedAssignment.done"
                     style="color: #6cc2bd"
@@ -52,8 +60,10 @@
                     {{ showedAssignment.name }}
                 </h2>
             </div>
-            <div class="grid grid-cols-2 gap-2">
-                <div class="py-2 px-6 mb-2 mr-2  border-b border-gray-200 rounded  ">
+            <div class="mt-7 grid grid-cols-2 gap-2">
+                <div
+                    class="py-2 px-6 mb-2 mr-2 border-b border-gray-200 rounded"
+                >
                     <p
                         v-if="showedAssignment.on_time"
                         style="color: #f67e7d"
@@ -72,7 +82,9 @@
                         }}
                     </div>
                 </div>
-                <div class="mb-2 rounded  border-b border-gray-200   px-6 pl-6 pt-2 pb-2">
+                <div
+                    class="mb-2 rounded border-b border-gray-200 px-6 pl-6 pt-2 pb-2"
+                >
                     <p class="mb-2"><strong>By Who</strong></p>
                     <p class="bg-white p-2 rounded">
                         {{ author }}
@@ -80,7 +92,9 @@
                 </div>
             </div>
             <div class="grid grid-cols-2 gap-2">
-                <div class="py-2 px-6 mb-2 mr-2  border-b border-gray-200   rounded">
+                <div
+                    class="py-2 px-6 mb-2 mr-2 border-b border-gray-200 rounded"
+                >
                     <p class="mb-2">
                         <strong>For how long:</strong>
                     </p>
@@ -91,7 +105,9 @@
                         <p v-else>not set</p>
                     </div>
                 </div>
-                <div class="mb-2 rounded  border-b border-gray-200   px-6 pl-6 pt-2 pb-2">
+                <div
+                    class="mb-2 rounded border-b border-gray-200 px-6 pl-6 pt-2 pb-2"
+                >
                     <p class="mb-2"><strong>Max participants:</strong></p>
                     <div class="bg-white p-2 rounded">
                         <p
@@ -121,7 +137,7 @@
 
             <div
                 v-if="showedAssignment.users"
-                class="mb-2 rounded  border-b border-gray-200  px-6 pl-6 pt-2 pb-4"
+                class="mb-2 rounded border-b border-gray-200 px-6 pl-6 pt-2 pb-4"
             >
                 <p class="mb-2"><strong>For Who</strong></p>
                 <div class="bg-white p-2 rounded">
@@ -133,7 +149,7 @@
                     </p>
                 </div>
             </div>
-            <div class="py-4 px-6 mb-2  border-b border-gray-200  rounded">
+            <div class="py-4 px-6 mb-2 border-b border-gray-200 rounded">
                 <p class="mb-2"><strong>What about</strong></p>
                 <div class="bg-white rounded mb-2 pl-2 pt-2 pb-2">
                     {{ showedAssignment.description }}
