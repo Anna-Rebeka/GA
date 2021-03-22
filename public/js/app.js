@@ -2043,23 +2043,102 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["user", "assignment", "group"],
+  props: ["user", "assignment", "group", "free_members"],
   data: function data() {
     return {
+      assignees: this.assignment.users,
       members: this.group.users,
       showedAssignment: this.assignment,
       onTime: this.assignment.on_time == 1,
       due: this.assignment.due,
-      hours: Number(this.assignment.duration.slice(0, this.assignment.duration.lastIndexOf("h"))),
-      minutes: Number(this.assignment.duration.slice(this.assignment.duration.lastIndexOf("h") + 2, this.assignment.duration.lastIndexOf("m"))),
+      hours: this.assignment.duration,
+      minutes: this.assignment.duration,
       takenAssignment: false,
       csrf: document.head.querySelector('meta[name="csrf-token"]').content,
       pageOfItems: [],
       errors: {}
     };
   },
-  mounted: function mounted() {},
+  mounted: function mounted() {
+    if (this.due) {
+      this.due = this.assignment.due.slice(0, this.assignment.due.lastIndexOf(" ")) + "T" + this.assignment.due.slice(this.assignment.due.lastIndexOf(" ") + 1);
+    }
+
+    if (this.hours && this.minutes) {
+      this.hours = Number(this.assignment.duration.slice(0, this.assignment.duration.lastIndexOf("h")));
+      this.minutes = Number(this.assignment.duration.slice(this.assignment.duration.lastIndexOf("h") + 2, this.assignment.duration.lastIndexOf("m")));
+    }
+  },
   methods: {}
 });
 
@@ -2605,7 +2684,6 @@ __webpack_require__.r(__webpack_exports__);
     document.getElementById("searchButton").addEventListener("click", this.findAssignmentByName);
     this.searchBar = document.getElementById("searchBar");
     this.searchBar.addEventListener("keypress", this.searchOnEnter);
-    console.log(this.howManyLoaded);
   },
   methods: {
     searchOnEnter: function searchOnEnter(event) {
@@ -5071,8 +5149,6 @@ __webpack_require__.r(__webpack_exports__);
       _this.posts.push(e.post);
 
       _this.scrollPosts();
-
-      console.log('uhu');
     });
   },
   methods: {
@@ -33922,9 +33998,7 @@ var render = function() {
               })
             ]),
             _vm._v(" "),
-            _c("p", { staticClass: "mb-1" }, [
-              _vm._v("\n                    Do assignment :\n                ")
-            ]),
+            _c("p", { staticClass: "mb-1" }, [_vm._v("Do assignment :")]),
             _vm._v(" "),
             _c("div", { staticClass: "mb-4" }, [
               _c("input", {
@@ -34079,63 +34153,53 @@ var render = function() {
                   [_vm._v("Assign this task to:")]
                 ),
                 _vm._v(" "),
-                _vm._l(_vm.members, function(member) {
+                _vm._l(_vm.assignees, function(assignee) {
                   return _c(
                     "div",
-                    { key: member.id, attrs: { value: member.id } },
+                    { key: assignee.id, attrs: { value: assignee.id } },
                     [
                       _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.showedAssignment.users,
-                            expression: "showedAssignment.users"
-                          }
-                        ],
                         attrs: {
                           type: "checkbox",
-                          id: member.id,
-                          name: member.id
+                          checked: "true",
+                          id: assignee.id,
+                          name: assignee.id
                         },
-                        domProps: {
-                          value: member.id,
-                          checked: Array.isArray(_vm.showedAssignment.users)
-                            ? _vm._i(_vm.showedAssignment.users, member.id) > -1
-                            : _vm.showedAssignment.users
-                        },
-                        on: {
-                          change: function($event) {
-                            var $$a = _vm.showedAssignment.users,
-                              $$el = $event.target,
-                              $$c = $$el.checked ? true : false
-                            if (Array.isArray($$a)) {
-                              var $$v = member.id,
-                                $$i = _vm._i($$a, $$v)
-                              if ($$el.checked) {
-                                $$i < 0 &&
-                                  _vm.$set(
-                                    _vm.showedAssignment,
-                                    "users",
-                                    $$a.concat([$$v])
-                                  )
-                              } else {
-                                $$i > -1 &&
-                                  _vm.$set(
-                                    _vm.showedAssignment,
-                                    "users",
-                                    $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                                  )
-                              }
-                            } else {
-                              _vm.$set(_vm.showedAssignment, "users", $$c)
-                            }
-                          }
-                        }
+                        domProps: { value: assignee.id }
                       }),
                       _vm._v(" "),
-                      _c("label", { attrs: { for: member.id } }, [
-                        _vm._v(" " + _vm._s(member.name))
+                      _c("label", { attrs: { for: assignee.id } }, [
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(assignee.name)
+                        )
+                      ]),
+                      _c("br")
+                    ]
+                  )
+                }),
+                _vm._v(" "),
+                _vm._l(_vm.free_members, function(free_member) {
+                  return _c(
+                    "div",
+                    { key: free_member.id, attrs: { value: free_member.id } },
+                    [
+                      _c("div"),
+                      _vm._v(" "),
+                      _c("input", {
+                        attrs: {
+                          type: "checkbox",
+                          id: free_member.id,
+                          name: free_member.id
+                        },
+                        domProps: { value: free_member.id }
+                      }),
+                      _vm._v(" "),
+                      _c("label", { attrs: { for: free_member.id } }, [
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(free_member.name)
+                        )
                       ]),
                       _c("br")
                     ]

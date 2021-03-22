@@ -176,13 +176,12 @@ class AssignmentsController extends Controller
     public function edit(Assignment $assignment)
     {
         $assignment->users;
-        $group = $assignment->group;
-        $group->users;
-
+        $free_members = $assignment->group->users->diff($assignment->users);
         return view('assignments.edit', [
             'user' => auth()->user(),
             'assignment' => $assignment,
             'group' => $assignment->group,
+            'free_members' => $free_members,
         ]);
     }
 

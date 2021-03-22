@@ -225,7 +225,6 @@ export default {
                 e.post.sender = e.sender;
                 this.posts.push(e.post);
                 this.scrollPosts();
-                console.log('uhu');
             }
         );
         

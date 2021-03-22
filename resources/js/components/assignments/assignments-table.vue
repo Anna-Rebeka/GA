@@ -116,7 +116,6 @@ export default {
         document.getElementById("searchButton").addEventListener("click", this.findAssignmentByName);
         this.searchBar = document.getElementById("searchBar");
         this.searchBar.addEventListener("keypress", this.searchOnEnter);
-        console.log(this.howManyLoaded);
     },
 
     methods: {
