@@ -77,10 +77,6 @@ class AssignmentsController extends Controller
         
         $user = auth()->user();
 
-        if($fields['assignee'] == null){
-            $attributes['assignee'] = null;
-        }
-
         if($fields['max_assignees'] == 0){
             $attributes['max_assignees'] = null;
         }
@@ -194,7 +190,41 @@ class AssignmentsController extends Controller
      */
     public function update(Request $request, Assignment $assignment)
     {
-        //
+        $attributes = request()->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string', 'max:255'],
+            'on_time' => ['required', 'boolean'],
+            'duration_hours' => ['integer', 'min:0'],
+            'duration_minutes' => ['integer', 'min:0', 'max:59'], 
+            'due' => ['required'],
+            'max_assignees' => ['integer'] 
+            ]);
+        
+        
+        $attributes['duration'] = '';
+        
+        if($request['duration_hours'] != null && $request['duration_hours'] > 0){
+            $attributes['duration'] = $attributes['duration'] . ' ' . $request['duration_hours'] . 'h';
+        }
+
+        if($request['duration_minutes'] != null && $request['duration_minutes'] > 0){
+            $attributes['duration'] =  $attributes['duration'] . ' ' . $request['duration_minutes'] . 'min';
+        }
+        
+        if($attributes['duration'] == ''){
+            $attributes['duration'] = null;
+        }
+        
+        $user = auth()->user();
+
+        if($request['max_assignees'] == 0){
+            $attributes['max_assignees'] = null;
+        }
+
+        $assignment->update($attributes);
+        $assignment->users()->detach();
+        $assignment->users()->attach($request['users']);
+        return $assignment;
     }
 
     /**

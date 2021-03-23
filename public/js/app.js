@@ -2112,6 +2112,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "assignment", "group", "free_members"],
   data: function data() {
@@ -2125,6 +2126,9 @@ __webpack_require__.r(__webpack_exports__);
       minutes: this.assignment.duration,
       takenAssignment: false,
       csrf: document.head.querySelector('meta[name="csrf-token"]').content,
+      users: this.assignment.users.map(function (u) {
+        return u.id;
+      }),
       pageOfItems: [],
       errors: {}
     };
@@ -2139,7 +2143,22 @@ __webpack_require__.r(__webpack_exports__);
       this.minutes = Number(this.assignment.duration.slice(this.assignment.duration.lastIndexOf("h") + 2, this.assignment.duration.lastIndexOf("m")));
     }
   },
-  methods: {}
+  methods: {
+    submit: function submit() {
+      var _this = this;
+
+      this.showedAssignment.on_time = this.onTime;
+      this.showedAssignment.due = this.due;
+      this.showedAssignment.duration_hours = this.hours;
+      this.showedAssignment.duration_minutes = this.minutes;
+      this.showedAssignment.users = this.users;
+      axios.patch("/assignments/" + this.assignment.id + "/edit", this.showedAssignment).then(function (response) {
+        window.location.href = "/assignments/" + _this.assignment.id;
+      })["catch"](function (error) {
+        console.log(error.message);
+      });
+    }
+  }
 });
 
 /***/ }),
@@ -33893,9 +33912,14 @@ var render = function() {
           _vm._v(" "),
           _c("div", { staticClass: "mx-auto w-full mb-10" }, [
             _c("p", { staticClass: "mb-4" }, [
-              _c("label", { staticClass: "mb-2", attrs: { for: "name" } }, [
-                _vm._v("Name")
-              ]),
+              _c(
+                "label",
+                {
+                  staticClass: "mb-2  uppercase font-bold text-sm",
+                  attrs: { for: "name" }
+                },
+                [_vm._v("Name")]
+              ),
               _vm._v(" "),
               _c("br"),
               _vm._v(" "),
@@ -33925,7 +33949,10 @@ var render = function() {
             _c("p", { staticClass: "mb-4" }, [
               _c(
                 "label",
-                { staticClass: "mb-2", attrs: { for: "description" } },
+                {
+                  staticClass: "mb-2  uppercase font-bold text-sm",
+                  attrs: { for: "description" }
+                },
                 [_vm._v("Description")]
               ),
               _vm._v(" "),
@@ -33964,9 +33991,14 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("p", { staticClass: "mb-6" }, [
-              _c("label", { staticClass: "mb-2", attrs: { for: "due" } }, [
-                _vm._v("When")
-              ]),
+              _c(
+                "label",
+                {
+                  staticClass: "mb-2  uppercase font-bold text-sm",
+                  attrs: { for: "due" }
+                },
+                [_vm._v("When")]
+              ),
               _vm._v(" "),
               _c("br"),
               _vm._v(" "),
@@ -33998,7 +34030,9 @@ var render = function() {
               })
             ]),
             _vm._v(" "),
-            _c("p", { staticClass: "mb-1" }, [_vm._v("Do assignment :")]),
+            _c("p", { staticClass: "mb-1  uppercase font-bold text-sm" }, [
+              _vm._v("Do assignment :")
+            ]),
             _vm._v(" "),
             _c("div", { staticClass: "mb-4" }, [
               _c("input", {
@@ -34061,7 +34095,9 @@ var render = function() {
                 _vm._v("(optional)")
               ]),
               _vm._v(" "),
-              _c("p", [_vm._v("For how long :")]),
+              _c("p", { staticClass: " uppercase font-bold text-sm" }, [
+                _vm._v("For how long :")
+              ]),
               _vm._v(" "),
               _c(
                 "label",
@@ -34149,7 +34185,10 @@ var render = function() {
                 _vm._v(" "),
                 _c(
                   "label",
-                  { staticClass: "mb-2", attrs: { for: "event_place" } },
+                  {
+                    staticClass: "mb-2 uppercase font-bold text-sm",
+                    attrs: { for: "event_place" }
+                  },
                   [_vm._v("Assign this task to:")]
                 ),
                 _vm._v(" "),
@@ -34159,13 +34198,46 @@ var render = function() {
                     { key: assignee.id, attrs: { value: assignee.id } },
                     [
                       _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.users,
+                            expression: "users"
+                          }
+                        ],
                         attrs: {
                           type: "checkbox",
-                          checked: "true",
                           id: assignee.id,
                           name: assignee.id
                         },
-                        domProps: { value: assignee.id }
+                        domProps: {
+                          value: assignee.id,
+                          checked: Array.isArray(_vm.users)
+                            ? _vm._i(_vm.users, assignee.id) > -1
+                            : _vm.users
+                        },
+                        on: {
+                          change: function($event) {
+                            var $$a = _vm.users,
+                              $$el = $event.target,
+                              $$c = $$el.checked ? true : false
+                            if (Array.isArray($$a)) {
+                              var $$v = assignee.id,
+                                $$i = _vm._i($$a, $$v)
+                              if ($$el.checked) {
+                                $$i < 0 && (_vm.users = $$a.concat([$$v]))
+                              } else {
+                                $$i > -1 &&
+                                  (_vm.users = $$a
+                                    .slice(0, $$i)
+                                    .concat($$a.slice($$i + 1)))
+                              }
+                            } else {
+                              _vm.users = $$c
+                            }
+                          }
+                        }
                       }),
                       _vm._v(" "),
                       _c("label", { attrs: { for: assignee.id } }, [
@@ -34187,12 +34259,46 @@ var render = function() {
                       _c("div"),
                       _vm._v(" "),
                       _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.users,
+                            expression: "users"
+                          }
+                        ],
                         attrs: {
                           type: "checkbox",
                           id: free_member.id,
                           name: free_member.id
                         },
-                        domProps: { value: free_member.id }
+                        domProps: {
+                          value: free_member.id,
+                          checked: Array.isArray(_vm.users)
+                            ? _vm._i(_vm.users, free_member.id) > -1
+                            : _vm.users
+                        },
+                        on: {
+                          change: function($event) {
+                            var $$a = _vm.users,
+                              $$el = $event.target,
+                              $$c = $$el.checked ? true : false
+                            if (Array.isArray($$a)) {
+                              var $$v = free_member.id,
+                                $$i = _vm._i($$a, $$v)
+                              if ($$el.checked) {
+                                $$i < 0 && (_vm.users = $$a.concat([$$v]))
+                              } else {
+                                $$i > -1 &&
+                                  (_vm.users = $$a
+                                    .slice(0, $$i)
+                                    .concat($$a.slice($$i + 1)))
+                              }
+                            } else {
+                              _vm.users = $$c
+                            }
+                          }
+                        }
                       }),
                       _vm._v(" "),
                       _c("label", { attrs: { for: free_member.id } }, [
@@ -34213,9 +34319,14 @@ var render = function() {
               _vm._v("(optional)")
             ]),
             _vm._v(" "),
-            _c("label", { attrs: { for: "quantity" } }, [
-              _vm._v("Maximum number of assignees:")
-            ]),
+            _c(
+              "label",
+              {
+                staticClass: " uppercase font-bold text-sm",
+                attrs: { for: "quantity" }
+              },
+              [_vm._v("Maximum number of assignees:")]
+            ),
             _vm._v(" "),
             _c("p", { staticClass: "text-sm" }, [_vm._v("0 = not set")]),
             _vm._v(" "),
@@ -34258,7 +34369,7 @@ var render = function() {
                 "shadow float-right -mt-6 rounded border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
               attrs: { type: "submit" }
             },
-            [_vm._v("\n                Create an assignment\n            ")]
+            [_vm._v("\n                Save changes\n            ")]
           )
         ])
       ]
@@ -35252,7 +35363,10 @@ var render = function() {
                     _c("p", { staticClass: "mb-4" }, [
                       _c(
                         "label",
-                        { staticClass: "mb-2", attrs: { for: "name" } },
+                        {
+                          staticClass: "mb-2 uppercase font-bold text-sm",
+                          attrs: { for: "name" }
+                        },
                         [_vm._v("Name")]
                       ),
                       _vm._v(" "),
@@ -35289,7 +35403,10 @@ var render = function() {
                     _c("p", { staticClass: "mb-4" }, [
                       _c(
                         "label",
-                        { staticClass: "mb-2", attrs: { for: "description" } },
+                        {
+                          staticClass: "mb-2 uppercase font-bold text-sm",
+                          attrs: { for: "description" }
+                        },
                         [_vm._v("Description")]
                       ),
                       _vm._v(" "),
@@ -35330,7 +35447,10 @@ var render = function() {
                     _c("p", { staticClass: "mb-6" }, [
                       _c(
                         "label",
-                        { staticClass: "mb-2", attrs: { for: "due" } },
+                        {
+                          staticClass: "mb-2 uppercase font-bold text-sm",
+                          attrs: { for: "due" }
+                        },
                         [_vm._v("When")]
                       ),
                       _vm._v(" "),
@@ -35364,11 +35484,15 @@ var render = function() {
                       })
                     ]),
                     _vm._v(" "),
-                    _c("p", { staticClass: "mb-1" }, [
-                      _vm._v(
-                        "\n                    Do assignment :\n                "
-                      )
-                    ]),
+                    _c(
+                      "p",
+                      { staticClass: "mb-1  uppercase font-bold text-sm" },
+                      [
+                        _vm._v(
+                          "\n                    Do assignment :\n                "
+                        )
+                      ]
+                    ),
                     _vm._v(" "),
                     _c("div", { staticClass: "mb-4" }, [
                       _c("input", {
@@ -35439,7 +35563,9 @@ var render = function() {
                         _vm._v("(optional)")
                       ]),
                       _vm._v(" "),
-                      _c("p", [_vm._v("For how long :")]),
+                      _c("p", { staticClass: " uppercase font-bold text-sm" }, [
+                        _vm._v("For how long :")
+                      ]),
                       _vm._v(" "),
                       _c(
                         "label",
@@ -35538,7 +35664,7 @@ var render = function() {
                         _c(
                           "label",
                           {
-                            staticClass: "mb-2",
+                            staticClass: "mb-2 uppercase font-bold text-sm",
                             attrs: { for: "event_place" }
                           },
                           [_vm._v("Assign this task to:")]
@@ -35616,9 +35742,14 @@ var render = function() {
                       _vm._v("(optional)")
                     ]),
                     _vm._v(" "),
-                    _c("label", { attrs: { for: "quantity" } }, [
-                      _vm._v("Maximum number of assignees:")
-                    ]),
+                    _c(
+                      "label",
+                      {
+                        staticClass: " uppercase font-bold text-sm",
+                        attrs: { for: "quantity" }
+                      },
+                      [_vm._v("Maximum number of assignees:")]
+                    ),
                     _vm._v(" "),
                     _c("p", { staticClass: "text-sm" }, [
                       _vm._v("0 = not set")

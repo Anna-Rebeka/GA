@@ -94,6 +94,7 @@ Route::middleware('auth')->group(function() {
 
     Route::delete('/assignments/{assignment:id}', [AssignmentsController::class, 'destroy']);
     Route::get('/assignments/{assignment:id}/edit', [AssignmentsController::class, 'edit']);
+    Route::patch('/assignments/{assignment:id}/edit', [AssignmentsController::class, 'update']);
     Route::patch('/assignments/{assignment:id}/take', [AssignmentsController::class, 'take']);
     Route::patch('/assignments/{assignment:id}/done', [AssignmentsController::class, 'done']);
 

@@ -16,7 +16,7 @@
 
                 <div class="mx-auto w-full mb-10">
                     <p class="mb-4">
-                        <label class="mb-2" for="name">Name</label>
+                        <label class="mb-2 uppercase font-bold text-sm" for="name">Name</label>
                         <br>
                         <input
                             id="name"
@@ -28,7 +28,7 @@
                         >
                     </p>
                     <p class="mb-4"> 
-                        <label class="mb-2" for="description">Description</label>
+                        <label class="mb-2 uppercase font-bold text-sm" for="description">Description</label>
                         <br>
                         <textarea name="description" placeholder="specify this task..."
                             class="w-full border p-2 h-24 resize-none focus:outline-none"
@@ -37,7 +37,7 @@
                         </textarea>
                     </p>
                     <p class="mb-6">
-                        <label class="mb-2" for="due">When</label>
+                        <label class="mb-2 uppercase font-bold text-sm" for="due">When</label>
                         <br>
                         <input
                             id="due"
@@ -48,7 +48,7 @@
                             required
                         >
                     </p>
-                    <p class="mb-1">
+                    <p class="mb-1  uppercase font-bold text-sm">
                         Do assignment :
                     </p>
                     <div class="mb-4">
@@ -60,7 +60,7 @@
 
                     <div class="mb-6">
                         <p class="text-sm text-gray-500">(optional)</p>
-                        <p>For how long :</p>
+                        <p class=" uppercase font-bold text-sm">For how long :</p>
                         <label class="mb-2 text-md"  for="duration_hours">Hours</label>
                         <input type="number" v-model="fields.duration_hours" id="duration_hours" name="duration_hours" min="0" class="border w-16 p-2">
                         <label class="mb-2 text-md" for="duration_minutes">Minutes</label>
@@ -70,7 +70,7 @@
                     
                         <div class="mb-4">
                             <p class="text-sm text-gray-500">(optional)</p>
-                            <label class="mb-2" for="event_place">Assign this task to:</label>
+                            <label class="mb-2 uppercase font-bold text-sm" for="event_place">Assign this task to:</label>
                             <div 
                                 v-for="member in members" :key="member.id" 
                                 :value="member.id"
@@ -80,7 +80,7 @@
                             </div>
                         </div>
                         <p class="text-sm mt-2 text-gray-500">(optional)</p>
-                        <label for="quantity">Maximum number of assignees:</label>
+                        <label class=" uppercase font-bold text-sm" for="quantity">Maximum number of assignees:</label>
                         <p class="text-sm">0 = not set</p>
                         <input 
                             v-model="fields.max_assignees" 

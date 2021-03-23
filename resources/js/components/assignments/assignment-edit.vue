@@ -6,7 +6,7 @@
 
                 <div class="mx-auto w-full mb-10">
                     <p class="mb-4">
-                        <label class="mb-2" for="name">Name</label>
+                        <label class="mb-2  uppercase font-bold text-sm" for="name">Name</label>
                         <br />
                         <input
                             id="name"
@@ -18,7 +18,7 @@
                         />
                     </p>
                     <p class="mb-4">
-                        <label class="mb-2" for="description"
+                        <label class="mb-2  uppercase font-bold text-sm" for="description"
                             >Description</label
                         >
                         <br />
@@ -32,7 +32,7 @@
                         </textarea>
                     </p>
                     <p class="mb-6">
-                        <label class="mb-2" for="due">When</label>
+                        <label class="mb-2  uppercase font-bold text-sm" for="due">When</label>
                         <br />
                         <input
                             id="due"
@@ -43,7 +43,7 @@
                             required
                         />
                     </p>
-                    <p class="mb-1">Do assignment :</p>
+                    <p class="mb-1  uppercase font-bold text-sm">Do assignment :</p>
                     <div class="mb-4">
                         <input
                             type="radio"
@@ -67,7 +67,7 @@
 
                     <div class="mb-6">
                         <p class="text-sm text-gray-500">(optional)</p>
-                        <p>For how long :</p>
+                        <p class=" uppercase font-bold text-sm">For how long :</p>
                         <label class="mb-2 text-md" for="duration_hours"
                             >Hours</label
                         >
@@ -96,7 +96,7 @@
 
                     <div class="mb-4">
                         <p class="text-sm text-gray-500">(optional)</p>
-                        <label class="mb-2" for="event_place"
+                        <label class="mb-2 uppercase font-bold text-sm" for="event_place"
                             >Assign this task to:</label
                         >
                         <div
@@ -106,10 +106,10 @@
                         >
                             <input
                                 type="checkbox"
-                                checked="true"
                                 :id="assignee.id"
                                 :name="assignee.id"
                                 :value="assignee.id"
+                                v-model="users"
                             />
                             <label :for="assignee.id">
                                 {{ assignee.name }}</label
@@ -126,6 +126,7 @@
                                 :id="free_member.id"
                                 :name="free_member.id"
                                 :value="free_member.id"
+                                v-model="users"
                             />
                             <label :for="free_member.id">
                                 {{ free_member.name }}</label
@@ -133,7 +134,7 @@
                         </div>
                     </div>
                     <p class="text-sm mt-2 text-gray-500">(optional)</p>
-                    <label for="quantity">Maximum number of assignees:</label>
+                    <label class=" uppercase font-bold text-sm" for="quantity">Maximum number of assignees:</label>
                     <p class="text-sm">0 = not set</p>
                     <input
                         v-model="showedAssignment.max_assignees"
@@ -148,7 +149,7 @@
                     type="submit"
                     class="shadow float-right -mt-6 rounded border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100"
                 >
-                    Create an assignment
+                    Save changes
                 </button>
             </div>
         </form>
@@ -170,6 +171,7 @@ export default {
             takenAssignment: false,
             csrf: document.head.querySelector('meta[name="csrf-token"]')
                 .content,
+            users: this.assignment.users.map(u => u.id),
             pageOfItems: [],
             errors: {},
         };
@@ -203,7 +205,23 @@ export default {
         }
     },
 
-    methods: {},
+    methods: {
+        submit(){
+            this.showedAssignment.on_time = this.onTime;
+            this.showedAssignment.due = this.due;
+            this.showedAssignment.duration_hours = this.hours;
+            this.showedAssignment.duration_minutes = this.minutes;
+            this.showedAssignment.users = this.users;
+
+            axios.patch("/assignments/" + this.assignment.id + "/edit", 
+                this.showedAssignment).then(response => {
+                window.location.href = "/assignments/" + this.assignment.id;
+            }).catch(error => {
+                console.log(error.message);
+            });
+        }
+
+    },
 };
 </script>
 
