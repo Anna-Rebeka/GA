@@ -79,6 +79,8 @@ Route::middleware('auth')->group(function() {
     Route::post('/events', [EventsController::class, 'store']);
     Route::get('/events/{group:id}/loadOlderEvents/{howManyDisplayed}', [EventsController::class, 'loadOlderEvents']);
 
+    Route::get('/events/{event:id}/edit', [EventsController::class, 'edit']);
+    Route::patch('/events/{event:id}/edit', [EventsController::class, 'update']);
     Route::delete('/events/{event:id}', [EventsController::class, 'destroy']);
     Route::post('/events/{event:id}/join', [EventsController::class, 'join']);
     Route::post('/events/{event:id}/leave', [EventsController::class, 'leave']);

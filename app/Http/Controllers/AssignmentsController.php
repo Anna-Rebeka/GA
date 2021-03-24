@@ -194,10 +194,10 @@ class AssignmentsController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:255'],
             'on_time' => ['required', 'boolean'],
-            'duration_hours' => ['integer', 'min:0'],
-            'duration_minutes' => ['integer', 'min:0', 'max:59'], 
+            'duration_hours' => ['integer', 'min:0', 'nullable'],
+            'duration_minutes' => ['integer', 'min:0', 'max:59', 'nullable'], 
             'due' => ['required'],
-            'max_assignees' => ['integer'] 
+            'max_assignees' => ['integer', 'nullable'] 
             ]);
         
         
@@ -222,8 +222,14 @@ class AssignmentsController extends Controller
         }
 
         $assignment->update($attributes);
+
+        $users_before = $assignment->users;
         $assignment->users()->detach();
         $assignment->users()->attach($request['users']);
+        $all_users_emails =  $assignment->users->merge($users_before)->where('got_assignment_notify', true)->pluck('email');
+        Mail::to($all_users_emails)
+                ->send(new FromAllGroupsNotificationMail($assignment->group->name, 'Update on the "' . $assignment->name . '" assignment', 'assignments/' . $assignment->id))
+        ;
         return $assignment;
     }
 

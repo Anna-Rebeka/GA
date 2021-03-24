@@ -24,7 +24,7 @@
 
                 <div class="mx-auto w-full mb-10">
                     <p class="mb-4">
-                        <label class="mb-2" for="name">Name:</label>
+                        <label class="mb-2 uppercase font-bold text-sm" for="name">Name:</label>
                         <br />
                         <input
                             id="name"
@@ -37,7 +37,7 @@
                     </p>
                     <div class="mb-4">
                         <p class="text-sm text-gray-500">(optional)</p>
-                        <label class="mb-2" for="description"
+                        <label class="mb-2 uppercase font-bold text-sm" for="description"
                             >Description:</label
                         >
                         <br />
@@ -50,7 +50,7 @@
                         </textarea>
                     </div>
                     <p class="mb-4">
-                        <label class="mb-2" for="event_time">When:</label>
+                        <label class="mb-2 uppercase font-bold text-sm" for="event_time">When:</label>
                         <br />
                         <input
                             id="event_time"
@@ -63,7 +63,7 @@
                     </p>
                     <div class="mb-6">
                         <p class="text-sm text-gray-500">(optional)</p>
-                        <label class="mb-2" for="event_ending"
+                        <label class="mb-2 uppercase font-bold text-sm" for="event_ending"
                             >Ending at:</label
                         >
                         <br />
@@ -79,7 +79,7 @@
                         Oops. An event can not end before it starts. 
                      </div>
                     <p class="mb-4">
-                        <label class="mb-2" for="event_place">Place:</label>
+                        <label class="mb-2 uppercase font-bold text-sm" for="event_place">Place:</label>
                         <br />
                         <input
                             id="event_place"

@@ -100,7 +100,7 @@ class EventsController extends Controller
         if($event->host){
             $host_email = $event->host->email;
         }
-        $notify_joined_users = $host->users()
+        $notify_joined_users = $event->users()
             ->select('email')
             ->where('joined_event_updated_notify', true)
             ->where('users.id', '!=', auth()->user()->id)
@@ -145,7 +145,10 @@ class EventsController extends Controller
      */
     public function edit(Event $event)
     {
-        //
+        return view('events.edit', [
+            'user' => auth()->user(),
+            'event' => $event,
+        ]);
     }
 
     /**
@@ -157,7 +160,29 @@ class EventsController extends Controller
      */
     public function update(Request $request, Event $event)
     {
-        //
+        $attributes = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:255'],
+            'event_time' => ['required', 'date_format:"Y-m-d\TH:i:s"'],
+            'event_ending' => ['date_format:"Y-m-d\TH:i:s"', 'nullable'],
+            'event_place' => ['required', 'string', 'max:255']
+            ]);
+        
+        $event->host_id = auth()->user()->id;
+        
+        if($request['description'] == null){
+            $attributes['description'] = null;
+        }
+
+        if($request['event_ending'] == null){
+            $attributes['event_ending'] = null;
+        }
+
+        $event->update($attributes);        
+        $this->updatedEventNotifyUsers($event);
+
+        $event->users;
+        return $event;
     }
 
     /**
@@ -168,11 +193,10 @@ class EventsController extends Controller
      */
     public function destroy(Event $event)
     {
-        $notify_joined_users = $host->users()
+        $notify_joined_users = $event->users()
             ->select('email')
             ->where('joined_event_updated_notify', true)
             ->where('users.id', '!=', auth()->user()->id)
-            ->where('users.email', '!=', $host_email)
             ->get();
         
         $host_name = "";
