@@ -40,7 +40,7 @@ Route::middleware('auth')->group(function() {
 
     Route::get('/profile/{user:username}', [UsersController::class, 'show'])->name('profile');
     Route::get('/profile/{user:username}/edit', [UsersController::class, 'edit']);
-    Route::patch('/profile/{user:username}', [UsersController::class, 'update']);
+    Route::post('/profile/{user:username}/edit', [UsersController::class, 'update']);
     Route::get('/profile/{user:username}/events/all', [UsersController::class, 'getAllUserEvents']);
     Route::get('/profile/{user:username}/events/joined', [UsersController::class, 'getUserJoinedEvents']);
     Route::get('/profile/{user:username}/assignments/all', [UsersController::class, 'getAllUsersAssignments']);

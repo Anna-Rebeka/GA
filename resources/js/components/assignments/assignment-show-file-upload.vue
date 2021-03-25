@@ -96,7 +96,6 @@ export default {
     props: ["user", "assignment"],
     data() {
         return {
-            showedAssignment: this.assignment,
             takenAssignment: false,
             assignmentsFiles: [],
             newFile: null,

@@ -10,7 +10,7 @@
                         <br />
                         <input
                             id="name"
-                            v-model="showedAssignment.name"
+                            v-model="shownAssignment.name"
                             type="text"
                             name="name"
                             class="border-b w-full p-2"
@@ -26,7 +26,7 @@
                             name="description"
                             placeholder="specify this task..."
                             class="w-full border-b p-2 h-24 resize-none focus:outline-none"
-                            v-model="showedAssignment.description"
+                            v-model="shownAssignment.description"
                             required
                         >
                         </textarea>
@@ -137,7 +137,7 @@
                     <label class=" uppercase font-bold text-sm" for="quantity">Maximum number of assignees:</label>
                     <p class="text-sm">0 = not set</p>
                     <input
-                        v-model="showedAssignment.max_assignees"
+                        v-model="shownAssignment.max_assignees"
                         type="number"
                         id="max_assignees"
                         min="0"
@@ -163,7 +163,7 @@ export default {
         return {
             assignees: this.assignment.users,
             members: this.group.users,
-            showedAssignment: this.assignment,
+            shownAssignment: this.assignment,
             onTime: this.assignment.on_time == 1,
             due: this.assignment.due,
             hours: this.assignment.duration,
@@ -207,14 +207,14 @@ export default {
 
     methods: {
         submit(){
-            this.showedAssignment.on_time = this.onTime;
-            this.showedAssignment.due = this.due;
-            this.showedAssignment.duration_hours = this.hours;
-            this.showedAssignment.duration_minutes = this.minutes;
-            this.showedAssignment.users = this.users;
+            this.shownAssignment.on_time = this.onTime;
+            this.shownAssignment.due = this.due;
+            this.shownAssignment.duration_hours = this.hours;
+            this.shownAssignment.duration_minutes = this.minutes;
+            this.shownAssignment.users = this.users;
 
             axios.patch("/assignments/" + this.assignment.id + "/edit", 
-                this.showedAssignment).then(response => {
+                this.shownAssignment).then(response => {
                 window.location.href = "/assignments/" + this.assignment.id;
             }).catch(error => {
                 console.log(error.message);

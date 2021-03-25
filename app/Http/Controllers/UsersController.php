@@ -6,6 +6,9 @@ use App\Models\User;
 use App\Models\Group;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+
 
 class UsersController extends Controller
 {
@@ -147,7 +150,7 @@ class UsersController extends Controller
     }
 
      
-    public function update(User $user){
+    public function update(Request $request, User $user){
         $attributes = request()->validate([
             'username' => [
                 'string', 
@@ -188,6 +191,10 @@ class UsersController extends Controller
             ]
         ]);
         
+        if(request('password')){
+            $attributes['password'] = Hash::make(request('password'));
+        }
+
         if(request('avatar')){
             $attributes['avatar'] = request('avatar')->store('/users/avatars');
         }
@@ -196,11 +203,9 @@ class UsersController extends Controller
             $attributes['banner'] = request('banner')->store('/users/banners');
         }
         
-        if(!request('password')){
-            $attributes['password'] = $user->password;
-        }
         $user->update($attributes);
-        return redirect($user->path());
+        Auth::login($user);
+        return $user->path();
     }
 
     /**

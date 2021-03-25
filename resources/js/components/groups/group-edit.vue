@@ -36,7 +36,7 @@
                         v-on:change="handleAvatarUpload()"
                     />
                     <img
-                        :src="this.group.avatar"
+                        :src="avatar"
                         alt="avatar"
                         class="w-16 h-16 object-cover border-2 border-gray-400"
                     />
@@ -126,7 +126,8 @@ export default {
     data() {
         return {
             fields: [],
-            avatar: null,
+            avatar: this.group.avatar,
+            changedAvatar: false,
             emptyEditSubmitted: false,
             adminChangeFailed: false,
         };
@@ -134,22 +135,23 @@ export default {
 
     methods: {
         handleAvatarUpload() {
-            this.avatar = this.$refs.avatar.files[0];
+            this.avatar = URL.createObjectURL(this.$refs.avatar.files[0]);
+            this.changedAvatar = true;
             this.emptyEditSubmitted = false;
         },
 
         submit() {
             if (
                 !this.fields.name &&
-                this.avatar == null &&
+                !this.changedAvatar &&
                 !this.fields.admin_id
             ) {
                 this.emptyEditSubmitted = true;
                 return;
             }
             var formData = new FormData();
-            if (this.avatar) {
-                formData.append("avatar", this.avatar);
+            if (this.avatar != this.group.avatar) {
+                formData.append("avatar", this.$refs.avatar.files[0]);
             }
             if (this.fields.name) {
                 formData.append("name", this.fields.name);

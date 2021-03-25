@@ -98,7 +98,7 @@ export default {
         return {
             members: [],
             lettersCounter: 0,
-            showedChatroom: this.chatrooms,
+            shownChatroom: this.chatrooms,
         };
     },
 
@@ -106,7 +106,7 @@ export default {
         if (this.user.group) {
             this.getGroupMembers();
             this.autocomplete(document.getElementById("memberInput"), this.members, this.lettersCounter);
-            this.showedChatroom.forEach((chatroom) => {
+            this.shownChatroom.forEach((chatroom) => {
                 window.Echo.private("chatrooms." + chatroom.id).listen(
                     "MessageSent",
                     (e) => {
