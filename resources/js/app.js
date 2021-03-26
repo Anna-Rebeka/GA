@@ -73,6 +73,17 @@ Vue.component('group-edit', groupEdit);
 Vue.component('group-whiteboard', groupWhiteboard);
 Vue.component('group-statistics', groupStatistics);
 
+let token = document.head.querySelector('meta[name="csrf-token"]');
+
+/*
+if (token) {
+    window.axios.defaults.headers.common["X-CSRF-TOKEN"] = token.content;
+    $.ajaxSetup({ headers: { "X-CSRF-TOKEN": token.content } });
+} else {
+    console.error(
+        "CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token"
+    );
+}*/
 
 var app = new Vue({
    el: '#app',

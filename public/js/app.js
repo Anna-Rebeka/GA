@@ -6556,7 +6556,6 @@ __webpack_require__.r(__webpack_exports__);
   props: ["user", "user_path"],
   data: function data() {
     return {
-      csrf: document.head.querySelector('meta[name="csrf-token"]').content,
       shownUser: this.user,
       newPassword: null,
       confirmPassword: null,
@@ -51604,11 +51603,6 @@ var render = function() {
         }
       },
       [
-        _c("input", {
-          attrs: { type: "hidden", name: "_token" },
-          domProps: { value: _vm.csrf }
-        }),
-        _vm._v(" "),
         _c("div", [
           _c(
             "label",
@@ -65341,6 +65335,17 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('chatrooms-show', _componen
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('group-edit', _components_groups_group_edit_vue__WEBPACK_IMPORTED_MODULE_28__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('group-whiteboard', _components_groups_group_whiteboard_vue__WEBPACK_IMPORTED_MODULE_29__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('group-statistics', _components_groups_group_statistics_vue__WEBPACK_IMPORTED_MODULE_30__["default"]);
+var token = document.head.querySelector('meta[name="csrf-token"]');
+/*
+if (token) {
+    window.axios.defaults.headers.common["X-CSRF-TOKEN"] = token.content;
+    $.ajaxSetup({ headers: { "X-CSRF-TOKEN": token.content } });
+} else {
+    console.error(
+        "CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token"
+    );
+}*/
+
 var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#app'
 });

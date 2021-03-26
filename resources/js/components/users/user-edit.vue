@@ -1,7 +1,7 @@
 <template>
     <div>
         <form @submit.prevent="submit">
-            <input type="hidden" name="_token" :value="csrf" />
+            
             
             <div>
                 <label
@@ -189,8 +189,6 @@ export default {
 
     data() {
         return {
-            csrf: document.head.querySelector('meta[name="csrf-token"]')
-                .content,
             shownUser: this.user,
             newPassword: null,
             confirmPassword: null,
