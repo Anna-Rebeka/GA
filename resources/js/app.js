@@ -33,11 +33,13 @@ import groupStatistics from './components/groups/group-statistics.vue';
 import JwPagination from 'jw-vue-pagination';
 
 import VueFilterDateFormat from 'vue-filter-date-format';
+import VeeValidate from 'vee-validate';
 
 require('masonry-layout');
 require('./bootstrap');
 
 Vue.use(VueFilterDateFormat);
+Vue.use(VeeValidate);
 
 Vue.component('navbar', navbar);
 Vue.component('messages-link', messagesLink);

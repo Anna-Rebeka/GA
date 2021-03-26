@@ -2,12 +2,7 @@
     <div>
         <form @submit.prevent="submit">
             <input type="hidden" name="_token" :value="csrf" />
-            <div
-                class="flex items-center justify-between w-full mb-4 p-2 bg-red-500 shadow text-white"
-                v-if="errors.text"
-            >
-                {{ errors.text[0] }}
-            </div>
+            
             <div>
                 <label
                     class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700"
@@ -71,11 +66,16 @@
                     <input
                         class="text-sm p-2 my-auto w-full"
                         type="file"
+                        v-validate="'ext:jpeg,jpg'"
+                        data-vv-as="image"
                         name="avatar"
                         id="avatar"
                         ref="avatar"
                         v-on:change="handleAvatarUpload()"
                     />
+
+                    <span>{{ errors.first('avatar') }}</span>
+
 
                     <img
                         :src="avatar"
@@ -191,7 +191,6 @@ export default {
         return {
             csrf: document.head.querySelector('meta[name="csrf-token"]')
                 .content,
-            errors: {},
             shownUser: this.user,
             newPassword: null,
             confirmPassword: null,
@@ -218,7 +217,10 @@ export default {
                 } else {
                     this.passwordsDoNotMatch = false;
                     formData.append("password", this.newPassword);
-                    formData.append("password_confirmation", this.confirmPassword);
+                    formData.append(
+                        "password_confirmation",
+                        this.confirmPassword
+                    );
                 }
             }
 
