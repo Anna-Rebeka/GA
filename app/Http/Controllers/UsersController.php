@@ -6,6 +6,9 @@ use App\Models\User;
 use App\Models\Group;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+
 
 class UsersController extends Controller
 {
@@ -75,6 +78,22 @@ class UsersController extends Controller
         ]);
     }
 
+
+    public function showSettings(User $user)
+    {
+        $group = $user->group;
+        $new_whiteboard_notify = $user->groups()->where('groups.id', $group->id)->first()->pivot->new_whiteboard_notify;
+        $new_assignment_notify = $user->groups()->where('groups.id', $group->id)->first()->pivot->new_assignment_notify;
+        $new_event_notify = $user->groups()->where('groups.id', $group->id)->first()->pivot->new_event_notify;
+
+        return view('profile.settings', [
+            'user' => $user,
+            'new_whiteboard_notify' => $new_whiteboard_notify,
+            'new_assignment_notify' => $new_assignment_notify,
+            'new_event_notify' => $new_event_notify,
+        ]);
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -83,8 +102,55 @@ class UsersController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+    public function updateSettings(User $user){
+        $user_attributes = request()->validate([
+            'got_assignment_notify' => [
+                'boolean', 
+                'required',
+            ],
+            'my_assignment_updated_notify' => [
+                'boolean', 
+                'required', 
+            ],
+            'joined_event_updated_notify' => [
+                'boolean', 
+                'required',
+            ],
+            'created_by_me_assignment_updated_notify' => [
+                'boolean', 
+                'required',
+            ],
+            'created_by_me_event_updated_notify' => [
+                'boolean', 
+                'required',
+            ],
+        ]);
+        
+        
+        $pivot_attributes = request()->validate([
+            'new_whiteboard_notify' => [
+                'boolean', 
+                'required',
+            ],
+            'new_assignment_notify' => [
+                'boolean', 
+                'required', 
+            ],
+            'new_event_notify' => [
+                'boolean', 
+                'required',
+            ],
+        ]);
+        
+        
+        $user->update($user_attributes);
+        $user->groups()->updateExistingPivot($user->group->id, $pivot_attributes);
+
+        return $user;
+    }
+
      
-    public function update(User $user){
+    public function update(Request $request, User $user){
         $attributes = request()->validate([
             'username' => [
                 'string', 
@@ -125,6 +191,10 @@ class UsersController extends Controller
             ]
         ]);
         
+        if(request('password')){
+            $attributes['password'] = Hash::make(request('password'));
+        }
+
         if(request('avatar')){
             $attributes['avatar'] = request('avatar')->store('/users/avatars');
         }
@@ -133,11 +203,9 @@ class UsersController extends Controller
             $attributes['banner'] = request('banner')->store('/users/banners');
         }
         
-        if(!request('password')){
-            $attributes['password'] = $user->password;
-        }
         $user->update($attributes);
-        return redirect($user->path());
+        Auth::login($user);
+        return $user->path();
     }
 
     /**
@@ -148,7 +216,7 @@ class UsersController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $user->delete();
     }
 
     public function activateGroup($id){

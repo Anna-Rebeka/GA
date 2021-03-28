@@ -32,7 +32,12 @@ class User extends Authenticatable
         'bio',
         'email',
         'password',
-        'active_group'
+        'active_group',
+        'got_assignment_notify',
+        'my_assignment_updated_notify',
+        'joined_event_updated_notify',
+        'created_by_me_assignment_updated_notify',
+        'created_by_me_event_updated_notify'
     ];
 
     /**
@@ -70,7 +75,7 @@ class User extends Authenticatable
     }
 
     public function groups(){
-        return $this->belongsToMany(Group::class);
+        return $this->belongsToMany(Group::class)->withPivot('new_whiteboard_notify', 'new_assignment_notify', 'new_event_notify');
     }
 
     public function group(){

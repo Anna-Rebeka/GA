@@ -16,7 +16,7 @@ class CreateAssignmentsTable extends Migration
         Schema::create('assignments', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('author_id');
+            $table->foreignId('author_id')->nullable();
             $table->foreignId('group_id');
             $table->boolean('on_time'); 
             //assignment is etiher due some date (on_time = false) or must be done on time (true; on time = due time) 
@@ -30,7 +30,7 @@ class CreateAssignmentsTable extends Migration
             $table->foreign('author_id')
                 ->references('id')
                 ->on('users')
-                ->onDelete('cascade');
+                ->onDelete('set null');
             
             $table->foreign('group_id')
                 ->references('id')

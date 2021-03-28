@@ -26,7 +26,7 @@ class Group extends Model
     }
 
     public function users(){
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class)->withPivot('new_whiteboard_notify', 'new_assignment_notify', 'new_event_notify');
     }
 
     public function hasUser($user) {

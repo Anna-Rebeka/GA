@@ -2,16 +2,22 @@
     <div>
         <div class="p-8 mr-2 mb-2">
             <div class="float-right">
-                <div v-if="showedAssignment.author_id == user.id">
+                <div v-if="shownAssignment.author_id == user.id" class="mb-5">
                     <button
-                        v-if="!showedAssignment.done"
-                        @click="checkWithUser(showedAssignment, 'done')"
+                        v-if="!shownAssignment.done"
+                        @click="checkWithUser(shownAssignment, 'done')"
                         class="rounded-lg py-2 px-4 mr-2 text-white text-sm bg-green-400 hover:bg-green-300 focus:outline-none"
                     >
                         Done
                     </button>
+                    <div
+                        class="float-right rounded-lg w-16 px-2 text-center py-2 mr-2 text-white text-sm bg-gray-400 hover:bg-gray-500 focus:outline-none"
+                    >
+                        <a :href="shownAssignment.id + '/edit'" class="p-3"> Edit </a>
+                    </div>
+
                     <button
-                        @click="checkWithUser(showedAssignment, 'delete')"
+                        @click="checkWithUser(shownAssignment, 'delete')"
                         class="rounded-lg w-16 px-2 py-2 mr-2 text-white text-sm bg-red-400 hover:bg-red-300 focus:outline-none"
                     >
                         Delete
@@ -22,13 +28,13 @@
                 <div v-if="!takenAssignment">
                     <div
                         v-if="
-                            showedAssignment.max_assignees == null ||
-                            showedAssignment.users.length <
-                                showedAssignment.max_assignees
+                            shownAssignment.max_assignees == null ||
+                            shownAssignment.users.length <
+                                shownAssignment.max_assignees
                         "
                     >
                         <button
-                            @click="checkWithUser(showedAssignment, 'take')"
+                            @click="checkWithUser(shownAssignment, 'take')"
                             class="text-sm bg-blue-400 text-white rounded-lg w-16 py-2 hover:bg-blue-500 mr-3 focus:outline-none"
                         >
                             Take
@@ -36,26 +42,30 @@
                     </div>
                 </div>
             </div>
-            <div class="overflow-ellipsis overflow-hidden ... max-w-sm">
+            <div
+                class="mt-5 clear-both overflow-ellipsis overflow-hidden ... max-w-sm"
+            >
                 <h2
-                    v-if="showedAssignment.done"
+                    v-if="shownAssignment.done"
                     style="color: #6cc2bd"
                     class="font-bold text-2xl mb-4"
                 >
-                    {{ showedAssignment.name }}
+                    {{ shownAssignment.name }}
                 </h2>
                 <h2
                     v-else
                     style="color: #f67e7d"
                     class="font-bold text-2xl mb-4"
                 >
-                    {{ showedAssignment.name }}
+                    {{ shownAssignment.name }}
                 </h2>
             </div>
-            <div class="grid grid-cols-2 gap-2">
-                <div class="py-2 px-6 mb-2 mr-2 bg-gray-100 rounded">
+            <div class="mt-7 grid grid-cols-2 gap-2">
+                <div
+                    class="py-2 px-6 mb-2 mr-2 border-b border-gray-200 rounded"
+                >
                     <p
-                        v-if="showedAssignment.on_time"
+                        v-if="shownAssignment.on_time"
                         style="color: #f67e7d"
                         class="mb-2"
                     >
@@ -67,52 +77,58 @@
 
                     <div class="bg-white rounded mb-2 pl-2 pt-2 pb-2">
                         {{
-                            new Date(showedAssignment.due)
+                            new Date(shownAssignment.due)
                                 | dateFormat("DD.MM.YYYY , HH:mm")
                         }}
                     </div>
                 </div>
-                <div class="mb-2 rounded bg-gray-100 px-6 py-4">
-                    <strong>By Who</strong>
+                <div
+                    class="mb-2 rounded border-b border-gray-200 px-6 pl-6 pt-2 pb-2"
+                >
+                    <p class="mb-2"><strong>By Who</strong></p>
                     <p class="bg-white p-2 rounded">
-                        {{ showedAssignment.author.name }}
+                        {{ author }}
                     </p>
                 </div>
             </div>
             <div class="grid grid-cols-2 gap-2">
-                <div class="py-2 px-6 mb-2 mr-2 bg-gray-100 rounded">
+                <div
+                    class="py-2 px-6 mb-2 mr-2 border-b border-gray-200 rounded"
+                >
                     <p class="mb-2">
                         <strong>For how long:</strong>
                     </p>
                     <div class="bg-white rounded mb-2 pl-2 pt-2 pb-2">
-                        <p v-if="showedAssignment.duration">
-                            {{ showedAssignment.duration }}
+                        <p v-if="shownAssignment.duration">
+                            {{ shownAssignment.duration }}
                         </p>
                         <p v-else>not set</p>
                     </div>
                 </div>
-                <div class="mb-2 rounded bg-gray-100 px-6 py-4">
-                    <strong>Max participants:</strong>
+                <div
+                    class="mb-2 rounded border-b border-gray-200 px-6 pl-6 pt-2 pb-2"
+                >
+                    <p class="mb-2"><strong>Max participants:</strong></p>
                     <div class="bg-white p-2 rounded">
                         <p
                             v-if="
-                                showedAssignment.max_assignees &&
-                                showedAssignment.max_assignees >
-                                    showedAssignment.users.length
+                                shownAssignment.max_assignees &&
+                                shownAssignment.max_assignees >
+                                    shownAssignment.users.length
                             "
                         >
-                            {{ showedAssignment.max_assignees }} (free to take)
+                            {{ shownAssignment.max_assignees }} (free to take)
                         </p>
                         <p
                             v-if="
-                                showedAssignment.max_assignees &&
-                                showedAssignment.max_assignees <=
-                                    showedAssignment.users.length
+                                shownAssignment.max_assignees &&
+                                shownAssignment.max_assignees <=
+                                    shownAssignment.users.length
                             "
                         >
-                            {{ showedAssignment.max_assignees }} (already taken)
+                            {{ shownAssignment.max_assignees }} (already taken)
                         </p>
-                        <p v-if="showedAssignment.max_assignees == null">
+                        <p v-if="shownAssignment.max_assignees == null">
                             not set
                         </p>
                     </div>
@@ -120,23 +136,23 @@
             </div>
 
             <div
-                v-if="showedAssignment.users"
-                class="mb-2 rounded bg-gray-100 px-6 p-4"
+                v-if="shownAssignment.users"
+                class="mb-2 rounded border-b border-gray-200 px-6 pl-6 pt-2 pb-4"
             >
-                <strong>For Who</strong>
+                <p class="mb-2"><strong>For Who</strong></p>
                 <div class="bg-white p-2 rounded">
                     <p
-                        v-for="assignee in showedAssignment.users"
+                        v-for="assignee in shownAssignment.users"
                         :key="assignee.id"
                     >
                         {{ assignee.name }}
                     </p>
                 </div>
             </div>
-            <div class="py-4 px-6 mb-2 bg-gray-100 rounded">
+            <div class="py-4 px-6 mb-2 border-b border-gray-200 rounded">
                 <p class="mb-2"><strong>What about</strong></p>
                 <div class="bg-white rounded mb-2 pl-2 pt-2 pb-2">
-                    {{ showedAssignment.description }}
+                    {{ shownAssignment.description }}
                 </div>
             </div>
         </div>
@@ -150,10 +166,10 @@
 
 <script>
 export default {
-    props: ["user", "assignment"],
+    props: ["user", "assignment", "author"],
     data() {
         return {
-            showedAssignment: this.assignment,
+            shownAssignment: this.assignment,
             takenAssignment: this.assignment.taken,
         };
     },
@@ -175,7 +191,7 @@ export default {
             axios
                 .patch("/assignments/" + $assignment.id + "/take")
                 .then((response) => {
-                    this.showedAssignment.users.push(this.user);
+                    this.shownAssignment.users.push(this.user);
                     this.takenAssignment = true;
                 })
                 .catch((error) => {
@@ -191,7 +207,7 @@ export default {
             axios
                 .patch("/assignments/" + $assignment.id + "/done")
                 .then((response) => {
-                    this.showedAssignment.done = true;
+                    this.shownAssignment.done = true;
                 })
                 .catch((error) => {
                     if (error.response.status == 422) {

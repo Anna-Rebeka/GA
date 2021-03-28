@@ -15,7 +15,7 @@ class CreateMessagesTable extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sender_id');
+            $table->foreignId('sender_id')->nullable();
             $table->foreignId('chatroom_id');
             $table->string('text', 1000)->nullable();
             $table->text('image_path')->nullable();
@@ -27,7 +27,7 @@ class CreateMessagesTable extends Migration
             $table->foreign('sender_id')
                 ->references('id')
                 ->on('users')
-                ->onDelete('cascade');
+                ->onDelete('set null');
 
             
             $table->foreign('chatroom_id')

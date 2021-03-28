@@ -1,174 +1,259 @@
 <template>
-    <div></div>
-    <!--
     <div>
-        <form @submit.prevent="submit" enctype="multipart/form-data">
-        <input type="hidden" name="_token" :value="csrf" /> 
-
-        <div>
-            <label class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700" 
-                for="name"
+        <form @submit.prevent="submit">
+            <input type="hidden" name="_token" :value="csrf" />
+            <div
+                class="flex items-center justify-between w-full mb-4 p-2 bg-red-500 shadow text-white"
+                v-if="errors.text"
             >
-                Name
-            </label>
-
-            <input class="border border-gray-400 p-2 w-full" type="text" name="name" id="name" 
-                :value="user.name"
-                v-model="fields.name"
-            >
-
-                <p class="text-red-500 text-xs mt-2">error message</p>
-
-        </div>
-
-
-        <div>
-            <label class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700" 
-                for="username"
-            >
-                Username
-            </label>
-
-            <input class="border border-gray-400 p-2 w-full" type="text" name="username" id="username" 
-                :value="user.username"
-                v-model="fields.username"
-            >
-
-            <p class="text-red-500 text-xs mt-2">error message</p>
-
-        </div>
-        
-        <div>
-            <label class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700" 
-                for="email"
-            >
-                Email
-            </label>
-
-            <input class="border border-gray-400 p-2 w-full" type="email" name="email" id="email" 
-                :value="user.email"
-                v-model="fields.email"
-            >
-
-            <p class="text-red-500 text-xs mt-2">error message</p>
-        </div>
-
-
-        <div>
-            <label class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700" 
-                for="avatar"
-            >
-                Avatar
-            </label>
-            
-            <div class="flex">
-                <input class="border border-gray-400 p-2 my-auto w-full" type="file" name="avatar" id="avatar"
+                {{ errors.text[0] }}
+            </div>
+            <div>
+                <label
+                    class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700"
+                    for="name"
                 >
+                    Name
+                </label>
 
-                <img :src="user.avatar" alt="avatar" class="w-16 h-16 object-cover border-2 border-gray-400">
+                <input
+                    class="border-b border-gray-400 p-2 w-full"
+                    type="text"
+                    name="name"
+                    id="name"
+                    v-model="shownUser.name"
+                />
             </div>
-            
-            <p class="text-red-500 text-xs mt-2">error message</p>
 
-        </div>
+            <div>
+                <label
+                    class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700"
+                    for="username"
+                >
+                    Username
+                </label>
 
-        <div>
-            <label class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700" 
-                for="banner"
-            >
-                Banner
-            </label>
-            
-            <div class="flex">
-                <input class="border border-gray-400 p-2 my-auto w-full" type="file" name="banner" id="banner">
-
-                <img :src="user.banner" alt="banner" class="w-32 h-16 object-cover border-2 border-gray-400">
+                <input
+                    class="border-b border-gray-400 p-2 w-full"
+                    type="text"
+                    name="username"
+                    id="username"
+                    v-model="shownUser.username"
+                />
             </div>
-            
-            <p class="text-red-500 text-xs mt-2">error message</p>
 
-        </div>
+            <div>
+                <label
+                    class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700"
+                    for="email"
+                >
+                    Email
+                </label>
 
-        <div>
-            <label class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700" 
-                for="bio"
+                <input
+                    class="border-b border-gray-400 p-2 w-full"
+                    type="email"
+                    name="email"
+                    id="email"
+                    v-model="shownUser.email"
+                />
+            </div>
+
+            <div>
+                <label
+                    class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700"
+                    for="avatar"
+                >
+                    Avatar
+                </label>
+
+                <div class="flex">
+                    <input
+                        class="text-sm p-2 my-auto w-full"
+                        type="file"
+                        name="avatar"
+                        id="avatar"
+                        ref="avatar"
+                        v-on:change="handleAvatarUpload()"
+                    />
+
+                    <img
+                        :src="avatar"
+                        alt="avatar"
+                        class="w-16 h-16 object-cover border-2 border-gray-400"
+                    />
+                </div>
+            </div>
+
+            <div>
+                <label
+                    class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700"
+                    for="banner"
+                >
+                    Banner
+                </label>
+
+                <div class="flex">
+                    <input
+                        class="text-sm p-2 my-auto w-full"
+                        type="file"
+                        name="banner"
+                        id="banner"
+                        ref="banner"
+                        v-on:change="handleBannerUpload()"
+                    />
+
+                    <img
+                        :src="banner"
+                        alt="banner"
+                        class="w-32 h-16 object-cover border-2 border-gray-400"
+                    />
+                </div>
+            </div>
+
+            <div>
+                <label
+                    class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700"
+                    for="bio"
+                >
+                    Bio
+                </label>
+
+                <input
+                    class="border-b border-gray-400 p-2 w-full"
+                    type="text"
+                    name="bio"
+                    id="bio"
+                    v-model="shownUser.bio"
+                />
+            </div>
+
+            <div>
+                <label
+                    class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700"
+                    for="password"
+                >
+                    Password
+                </label>
+
+                <input
+                    v-model="newPassword"
+                    class="border-b border-gray-400 p-2 w-full"
+                    type="password"
+                    name="password"
+                    id="password"
+                />
+            </div>
+
+            <div class="mb-6">
+                <label
+                    class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700"
+                    for="password_confirmation"
+                >
+                    Password Confirmation
+                </label>
+
+                <input
+                    v-model="confirmPassword"
+                    class="border-b border-gray-400 p-2 w-full"
+                    type="password"
+                    name="password_confirmation"
+                    id="password_confirmation"
+                />
+            </div>
+
+            <div
+                class="flex items-center justify-between w-full mb-10 p-2 bg-red-500 shadow text-white"
+                v-if="passwordsDoNotMatch"
             >
-                Bio
-            </label>
+                Passwords do not match.
+            </div>
 
-            <input class="border border-gray-400 p-2 w-full" type="text" name="bio" id="bio" 
-                :value="user.bio">
+            <div class="mb-6">
+                <button
+                    type="submit"
+                    class="bg-blue-400 text-white rounded py-2 px-4 hover:bg-blue-500 mr-4 focus:outline-none"
+                >
+                    Submit
+                </button>
 
-            <p class="text-red-500 text-xs mt-2">error message</p>
-
-        </div>
-
-        <div>
-            <label class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700" 
-                for="password"
-            >
-                Password
-            </label>
-
-            <input class="border border-gray-400 p-2 w-full" type="password" name="password" id="password">
-
-            <p class="text-red-500 text-xs mt-2">error message</p>
-
-        </div>
-
-        <div class="mb-6">
-            <label class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700" 
-                for="password_confirmation"
-            >
-                Password Confirmation
-            </label>
-
-            <input class="border border-gray-400 p-2 w-full" type="password" name="password_confirmation" id="password_confirmation">
-
-            <p class="text-red-500 text-xs mt-2">error message</p>
-
-        </div>
-
-        <div class="mb-6">
-            <button type="submit" class="bg-blue-400 text-white rounded py-2 px-4 hover:bg-blue-500 mr-4 focus:outline-none">
-                Submit
-            </button>
-
-            <a :href="userPath" class="hover:underline">Cancel</a>
-        </div>
-    </form>    
+                <a :href="user_path" class="hover:underline">Cancel</a>
+            </div>
+        </form>
     </div>
-    -->
 </template>
 
 <script>
 export default {
-    props: ['user', 'userPath'],
-    
+    props: ["user", "user_path"],
+
     data() {
         return {
-            csrf: document.head.querySelector('meta[name="csrf-token"]').content,
-            fields: {},
+            csrf: document.head.querySelector('meta[name="csrf-token"]')
+                .content,
             errors: {},
+            shownUser: this.user,
+            newPassword: null,
+            confirmPassword: null,
+            avatar: this.user.avatar,
+            banner: this.user.banner,
+            passwordsDoNotMatch: false,
         };
     },
     methods: {
-        submit() {
-            axios.post('/events', this.fields).then(response => {
-                this.fields = {};
-                this.createNewEvent = false;
-                this.newEventCreated = true;
-                this.events.unshift(response.data);    
-                this.eusers[response.data.id] = [response.data.host_id];
+        handleAvatarUpload() {
+            this.avatar = URL.createObjectURL(this.$refs.avatar.files[0]);
+        },
 
-            }).catch(error => {
-                console.log(error.message);
-            });
+        handleBannerUpload() {
+            this.banner = URL.createObjectURL(this.$refs.banner.files[0]);
+        },
+
+        submit() {
+            var formData = new FormData();
+            if (this.newPassword || this.confirmPassword) {
+                if (this.newPassword != this.confirmPassword) {
+                    this.passwordsDoNotMatch = true;
+                    return;
+                } else {
+                    this.passwordsDoNotMatch = false;
+                    formData.append("password", this.newPassword);
+                    formData.append("password_confirmation", this.confirmPassword);
+                }
+            }
+
+            if (this.avatar != this.user.avatar) {
+                formData.append("avatar", this.$refs.avatar.files[0]);
+            }
+
+            if (this.banner != this.user.banner) {
+                formData.append("banner", this.$refs.banner.files[0]);
+            }
+
+            if (this.shownUser.bio) {
+                formData.append("bio", this.shownUser.bio);
+            }
+
+            formData.append("name", this.shownUser.name);
+            formData.append("username", this.shownUser.username);
+            formData.append("email", this.shownUser.email);
+
+            axios
+                .post(this.user_path + "/edit", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                })
+                .then((response) => {
+                    window.location.href = response.data;
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                });
         },
     },
-}
+};
 </script>
 
 <style>
-
 </style>

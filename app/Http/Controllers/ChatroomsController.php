@@ -21,6 +21,7 @@ class ChatroomsController extends Controller
     public function index()
     {
         $user = auth()->user();
+        $user->group;
         $chatrooms = $user->chatrooms;
         $messages = [];
 
@@ -30,7 +31,7 @@ class ChatroomsController extends Controller
         }
 
         return view('chatrooms.index', [
-            'user' => auth()->user(),
+            'user' => $user,
             'chatrooms' => $chatrooms,
         ]);
     }

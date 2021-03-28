@@ -3,7 +3,7 @@
         <div class="h-12">
             <button
                 @click="createNewEvent = !createNewEvent"
-                class="shadow absolute r-0 w-min rounded-lg border border-gray-300 px-4 py-2 mb-8 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
+                class="shadow absolute r-0 w-min rounded border border-gray-300 px-4 py-2 mb-8 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
             >
                 New Event
             </button>
@@ -11,7 +11,7 @@
 
         <form v-if="createNewEvent" @submit.prevent="submit">
             <div
-                class="md:w-3/4 m-auto bg-white shadow border rounded-lg py-6 px-8 mb-8"
+                class="md:w-3/4 m-auto bg-white shadow border rounded py-6 px-8 mb-8"
             >
                 <input type="hidden" name="_token" :value="csrf" />
 
@@ -24,7 +24,7 @@
 
                 <div class="mx-auto w-full mb-10">
                     <p class="mb-4">
-                        <label class="mb-2" for="name">Name:</label>
+                        <label class="mb-2 uppercase font-bold text-sm" for="name">Name:</label>
                         <br />
                         <input
                             id="name"
@@ -37,7 +37,7 @@
                     </p>
                     <div class="mb-4">
                         <p class="text-sm text-gray-500">(optional)</p>
-                        <label class="mb-2" for="description"
+                        <label class="mb-2 uppercase font-bold text-sm" for="description"
                             >Description:</label
                         >
                         <br />
@@ -50,7 +50,7 @@
                         </textarea>
                     </div>
                     <p class="mb-4">
-                        <label class="mb-2" for="event_time">When:</label>
+                        <label class="mb-2 uppercase font-bold text-sm" for="event_time">When:</label>
                         <br />
                         <input
                             id="event_time"
@@ -63,7 +63,7 @@
                     </p>
                     <div class="mb-6">
                         <p class="text-sm text-gray-500">(optional)</p>
-                        <label class="mb-2" for="event_ending"
+                        <label class="mb-2 uppercase font-bold text-sm" for="event_ending"
                             >Ending at:</label
                         >
                         <br />
@@ -79,7 +79,7 @@
                         Oops. An event can not end before it starts. 
                      </div>
                     <p class="mb-4">
-                        <label class="mb-2" for="event_place">Place:</label>
+                        <label class="mb-2 uppercase font-bold text-sm" for="event_place">Place:</label>
                         <br />
                         <input
                             id="event_place"
@@ -93,7 +93,7 @@
                 </div>
                 <button
                     type="submit"
-                    class="shadow float-right -mt-6 rounded-lg border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100"
+                    class="shadow float-right -mt-6 rounded border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100"
                 >
                     Create an event
                 </button>

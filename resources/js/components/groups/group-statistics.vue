@@ -80,6 +80,7 @@ export default {
             pageOfItems: [],
             allUsers: this.allUsers = this.free_users.concat(this.stats),
             shownUsers: this.allUsers = this.free_users.concat(this.stats),
+            lettersCounter: 0,
         };
     },
 
@@ -87,6 +88,7 @@ export default {
         document.getElementById("searchButton").addEventListener("click", this.findUserByName);
         this.searchBar = document.getElementById("searchBar");
         this.searchBar.addEventListener("keypress", this.searchOnEnter);
+        this.autocomplete(document.getElementById("searchBar"), this.allUsers, this.lettersCounter);
     },
 
     methods: {
@@ -121,6 +123,43 @@ export default {
             var newPath = '/storage/users/avatars/'.concat(oldPath.substring(index));
             return newPath;
         },
+
+        autocomplete(inp, members, counter) {            
+            inp.addEventListener("input", function(e) {
+                if (counter < 2){
+                    counter += 1;
+                    return false;
+                }
+                counter = 0;
+                var a, b, i, val = this.value;
+                closeAllLists();
+                if (!val) { return false;}
+                a = document.createElement("DIV");
+                a.setAttribute("id", this.id + "autocomplete-list");
+                a.setAttribute("class", "autocomplete-items");
+                this.parentNode.appendChild(a);
+                for (i = 0; i < members.length; i++) {
+                    if (members[i].name.toLowerCase().includes(val.toLowerCase())){
+                        b = document.createElement("DIV");
+                        b.setAttribute("class", "w-full h-full");
+                        b.innerHTML += "<a class='block border-none w-full' href='/profile/" + members[i].username + "'>" + members[i].name + "</a>";
+                        a.appendChild(b);
+                    }
+                }
+            });
+            
+            function closeAllLists(elmnt) {
+                var x = document.getElementsByClassName("autocomplete-items");
+                for (var i = 0; i < x.length; i++) {
+                    if (elmnt != x[i] && elmnt != inp) {
+                        x[i].parentNode.removeChild(x[i]);
+                    }
+                }
+            }
+            document.addEventListener("click", function (e) {
+                closeAllLists(e.target);
+            });
+        }
     },
 };
 </script>

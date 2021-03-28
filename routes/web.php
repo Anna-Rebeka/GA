@@ -40,7 +40,7 @@ Route::middleware('auth')->group(function() {
 
     Route::get('/profile/{user:username}', [UsersController::class, 'show'])->name('profile');
     Route::get('/profile/{user:username}/edit', [UsersController::class, 'edit']);
-    Route::patch('/profile/{user:username}', [UsersController::class, 'update']);
+    Route::post('/profile/{user:username}/edit', [UsersController::class, 'update']);
     Route::get('/profile/{user:username}/events/all', [UsersController::class, 'getAllUserEvents']);
     Route::get('/profile/{user:username}/events/joined', [UsersController::class, 'getUserJoinedEvents']);
     Route::get('/profile/{user:username}/assignments/all', [UsersController::class, 'getAllUsersAssignments']);
@@ -48,6 +48,9 @@ Route::middleware('auth')->group(function() {
     Route::get('/{user:username}/groups', [UsersController::class, 'getAllUsersGroups']);
     Route::get('/all-members/{group:id}', [UsersController::class, 'index']);
     Route::get('/{user:username}/active-group', [UsersController::class, 'getActiveGroup']);
+    Route::get('/profile/{user:id}/settings', [UsersController::class, 'showSettings']);
+    Route::post('/profile/{user:id}/settings', [UsersController::class, 'updateSettings']);
+    Route::delete('/profile/{user:id}/delete-profile', [UsersController::class, 'destroy']);
 
     Route::patch('/activate-group/{id}', [UsersController::class, 'activateGroup']);
     
@@ -63,7 +66,7 @@ Route::middleware('auth')->group(function() {
     Route::get('/groups/{group:id}/edit-group', [GroupsController::class, 'edit']);
     Route::post('/groups/{group:id}/edit-group', [GroupsController::class, 'update']);
     Route::get('/group/{group:id}/members/get', [GroupsController::class, 'getMembers']);
-    Route::get('/groups/{group:id}/whiteboard', [GroupsController::class, 'showWhiteboard']);
+    Route::get('/whiteboard', [GroupsController::class, 'showWhiteboard']);
     
     Route::get('/groups/{group:id}/get-whiteboard-posts', [GroupWhiteboardPostsController::class, 'getPosts']);
     Route::post('/groups/{group:id}/whiteboard-post', [GroupWhiteboardPostsController::class, 'store']);
@@ -76,6 +79,8 @@ Route::middleware('auth')->group(function() {
     Route::post('/events', [EventsController::class, 'store']);
     Route::get('/events/{group:id}/loadOlderEvents/{howManyDisplayed}', [EventsController::class, 'loadOlderEvents']);
 
+    Route::get('/events/{event:id}/edit', [EventsController::class, 'edit']);
+    Route::patch('/events/{event:id}/edit', [EventsController::class, 'update']);
     Route::delete('/events/{event:id}', [EventsController::class, 'destroy']);
     Route::post('/events/{event:id}/join', [EventsController::class, 'join']);
     Route::post('/events/{event:id}/leave', [EventsController::class, 'leave']);
@@ -90,6 +95,8 @@ Route::middleware('auth')->group(function() {
     Route::get('/assignments/{group:id}/loadOlderAssignments/{howManyDisplayed}', [AssignmentsController::class, 'loadOlderAssignments']);
 
     Route::delete('/assignments/{assignment:id}', [AssignmentsController::class, 'destroy']);
+    Route::get('/assignments/{assignment:id}/edit', [AssignmentsController::class, 'edit']);
+    Route::patch('/assignments/{assignment:id}/edit', [AssignmentsController::class, 'update']);
     Route::patch('/assignments/{assignment:id}/take', [AssignmentsController::class, 'take']);
     Route::patch('/assignments/{assignment:id}/done', [AssignmentsController::class, 'done']);
 
