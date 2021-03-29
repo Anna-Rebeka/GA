@@ -6569,7 +6569,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "user_path"],
   data: function data() {
@@ -6579,14 +6578,28 @@ __webpack_require__.r(__webpack_exports__);
       confirmPassword: null,
       avatar: this.user.avatar,
       banner: this.user.banner,
-      passwordsDoNotMatch: false
+      passwordsDoNotMatch: false,
+      avatarTooBig: false,
+      bannerTooBig: false
     };
   },
   methods: {
     handleAvatarUpload: function handleAvatarUpload() {
+      if (this.$refs.avatar.files[0].size > 5000000) {
+        this.avatarTooBig = true;
+        return;
+      }
+
+      this.avatarTooBig = false;
       this.avatar = URL.createObjectURL(this.$refs.avatar.files[0]);
     },
     handleBannerUpload: function handleBannerUpload() {
+      if (this.$refs.banner.files[0].size > 5000000) {
+        this.bannerTooBig = true;
+        return;
+      }
+
+      this.bannerTooBig = false;
       this.banner = URL.createObjectURL(this.$refs.banner.files[0]);
     },
     submit: function submit() {
@@ -51766,19 +51779,11 @@ var render = function() {
           _vm._v(" "),
           _c("div", { staticClass: "flex" }, [
             _c("input", {
-              directives: [
-                {
-                  name: "validate",
-                  rawName: "v-validate",
-                  value: "ext:jpeg,jpg",
-                  expression: "'ext:jpeg,jpg'"
-                }
-              ],
               ref: "avatar",
               staticClass: "text-sm p-2 my-auto w-full",
               attrs: {
                 type: "file",
-                "data-vv-as": "image",
+                accept: ".jpg, .jpeg, .png",
                 name: "avatar",
                 id: "avatar"
               },
@@ -51789,13 +51794,22 @@ var render = function() {
               }
             }),
             _vm._v(" "),
-            _c("span", [_vm._v(_vm._s(_vm.errors.first("avatar")))]),
-            _vm._v(" "),
             _c("img", {
               staticClass: "w-16 h-16 object-cover border-2 border-gray-400",
               attrs: { src: _vm.avatar, alt: "avatar" }
             })
-          ])
+          ]),
+          _vm._v(" "),
+          _vm.avatarTooBig
+            ? _c(
+                "p",
+                {
+                  staticClass:
+                    "flex items-center justify-between w-full my-5 p-2 bg-red-500 shadow text-white"
+                },
+                [_vm._v("Please choose a picture under 5MB.")]
+              )
+            : _vm._e()
         ]),
         _vm._v(" "),
         _c("div", [
@@ -51825,7 +51839,18 @@ var render = function() {
               staticClass: "w-32 h-16 object-cover border-2 border-gray-400",
               attrs: { src: _vm.banner, alt: "banner" }
             })
-          ])
+          ]),
+          _vm._v(" "),
+          _vm.bannerTooBig
+            ? _c(
+                "p",
+                {
+                  staticClass:
+                    "flex items-center justify-between w-full my-5 p-2 bg-red-500 shadow text-white"
+                },
+                [_vm._v("Please choose a picture under 5MB.")]
+              )
+            : _vm._e()
         ]),
         _vm._v(" "),
         _c("div", [

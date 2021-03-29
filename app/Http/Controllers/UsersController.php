@@ -178,10 +178,17 @@ class UsersController extends Controller
                 Rule::unique('users')->ignore($user),
             ],
             'avatar' => [
-                'file'
+                'file',
+                'mimes:jpeg,jpg,png',
+                'nullable',
+                'max:500000',
             ],
             'banner' => [
-                'file'
+                'file',
+                'nullable',
+                'mimes:jpeg,jpg,png',
+                'nullable',
+                'max:500000',
             ],
             'bio' => [
                 'string', 

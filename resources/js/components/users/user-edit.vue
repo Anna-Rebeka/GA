@@ -66,23 +66,19 @@
                     <input
                         class="text-sm p-2 my-auto w-full"
                         type="file"
-                        v-validate="'ext:jpeg,jpg'"
-                        data-vv-as="image"
+                        accept=".jpg, .jpeg, .png"
                         name="avatar"
                         id="avatar"
                         ref="avatar"
                         v-on:change="handleAvatarUpload()"
                     />
-
-                    <span>{{ errors.first('avatar') }}</span>
-
-
                     <img
                         :src="avatar"
                         alt="avatar"
                         class="w-16 h-16 object-cover border-2 border-gray-400"
                     />
                 </div>
+                <p class="flex items-center justify-between w-full my-5 p-2 bg-red-500 shadow text-white" v-if="avatarTooBig">Please choose a picture under 5MB.</p>
             </div>
 
             <div>
@@ -109,6 +105,9 @@
                         class="w-32 h-16 object-cover border-2 border-gray-400"
                     />
                 </div>
+
+                <p class="flex items-center justify-between w-full my-5 p-2 bg-red-500 shadow text-white" v-if="bannerTooBig">Please choose a picture under 5MB.</p>
+
             </div>
 
             <div>
@@ -195,14 +194,26 @@ export default {
             avatar: this.user.avatar,
             banner: this.user.banner,
             passwordsDoNotMatch: false,
+            avatarTooBig: false,
+            bannerTooBig: false,
         };
     },
     methods: {
         handleAvatarUpload() {
+            if(this.$refs.avatar.files[0].size > 5000000){
+                this.avatarTooBig = true;
+                return;
+            }
+            this.avatarTooBig = false;
             this.avatar = URL.createObjectURL(this.$refs.avatar.files[0]);
         },
 
         handleBannerUpload() {
+            if(this.$refs.banner.files[0].size > 5000000){
+                this.bannerTooBig = true;
+                return;
+            }
+            this.bannerTooBig = false;
             this.banner = URL.createObjectURL(this.$refs.banner.files[0]);
         },
 
