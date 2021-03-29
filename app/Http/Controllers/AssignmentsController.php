@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\NewWhiteboardEventAssignmentMail;
 use App\Mail\FromAllGroupsNotificationMail;
 use App\Mail\DeletedNotificationMail;
+use Illuminate\Support\Facades\DB;
 
 
 use Illuminate\Http\Request;
@@ -81,24 +82,24 @@ class AssignmentsController extends Controller
             $attributes['max_assignees'] = null;
         }
 
-        $assignment = Assignment::create([
-            'name' => $attributes['name'],
-            'author_id' => $user->id,
-            'group_id' => $user->group->id,
-            'description' => $attributes['description'],
-            'max_assignees' =>  $attributes['max_assignees'],
-            'on_time' => $attributes['on_time'],
-            'duration' => $attributes['duration'],
-            'due' => $attributes['due'],
-        ]);
-
-        //for each assignee attach this assignment
-        $assignment->users()->attach($fields['users']);
-        //notify users
-        $this->newAssignmentNotifyUsers($assignment);
-
-        $assignment->users;
-        
+        $assignment = DB::transaction(function () use(&$assignment, &$user, $attributes){
+            $assignment = Assignment::create([
+                'name' => $attributes['name'],
+                'author_id' => $user->id,
+                'group_id' => $user->group->id,
+                'description' => $attributes['description'],
+                'max_assignees' =>  $attributes['max_assignees'],
+                'on_time' => $attributes['on_time'],
+                'duration' => $attributes['duration'],
+                'due' => $attributes['due'],
+            ]);
+            //for each assignee attach this assignment
+            $assignment->users()->attach($fields['users']);
+            //notify users
+            $this->newAssignmentNotifyUsers($assignment);
+            $assignment->users;
+            return $assignment;
+        });
         return $assignment;
     }
 
@@ -214,22 +215,23 @@ class AssignmentsController extends Controller
         if($attributes['duration'] == ''){
             $attributes['duration'] = null;
         }
-        
-        $user = auth()->user();
 
         if($request['max_assignees'] == 0){
             $attributes['max_assignees'] = null;
         }
-
-        $assignment->update($attributes);
-
-        $users_before = $assignment->users;
-        $assignment->users()->detach();
-        $assignment->users()->attach($request['users']);
-        $all_users_emails =  $assignment->users->merge($users_before)->where('got_assignment_notify', true)->pluck('email');
-        Mail::to($all_users_emails)
-                ->send(new FromAllGroupsNotificationMail($assignment->group->name, 'Update on the "' . $assignment->name . '" assignment', 'assignments/' . $assignment->id))
-        ;
+        
+        $assignment = DB::transaction(function () use(&$assignment, &$attributes) {
+            $user = auth()->user();
+            $assignment->update($attributes);
+            $users_before = $assignment->users;
+            $assignment->users()->detach();
+            $assignment->users()->attach($request['users']);
+            $all_users_emails =  $assignment->users->merge($users_before)->where('got_assignment_notify', true)->pluck('email');
+            Mail::to($all_users_emails)
+                    ->send(new FromAllGroupsNotificationMail($assignment->group->name, 'Update on the "' . $assignment->name . '" assignment', 'assignments/' . $assignment->id))
+            ;
+            return $assignment;
+        });
         return $assignment;
     }
 
@@ -241,37 +243,43 @@ class AssignmentsController extends Controller
      */
     public function destroy(Assignment $assignment)
     {
-        $notify_assignees = $assignment->users()->select('email')->where('my_assignment_updated_notify', true)->where('users.id', '!=', auth()->user()->id)->get();
-        
-        $author_name = "";
-        $author_url = "";
-        
-        if($assignment->author){
-            $author_name = $assignment->author->name;
-            $author_url = 'profile/' . $assignment->author->username;
-        }
-        Mail::to($notify_assignees)
-                ->send(new DeletedNotificationMail(
-                    $assignment->group->name, 
-                    'Your assignment "' . $assignment->name . '" has been deleted', 
-                    $author_name,
-                    $author_url
-                ))
-        ;
-        $assignment->users()->detach();
-        $assignment->delete();
+        DB::transaction(function () use(&$assignment) {
+            $notify_assignees = $assignment->users()->select('email')->where('my_assignment_updated_notify', true)->where('users.id', '!=', auth()->user()->id)->get();
+            
+            $author_name = "";
+            $author_url = "";
+            
+            if($assignment->author){
+                $author_name = $assignment->author->name;
+                $author_url = 'profile/' . $assignment->author->username;
+            }
+            Mail::to($notify_assignees)
+                    ->send(new DeletedNotificationMail(
+                        $assignment->group->name, 
+                        'Your assignment "' . $assignment->name . '" has been deleted', 
+                        $author_name,
+                        $author_url
+                    ))
+            ;
+            $assignment->users()->detach();
+            $assignment->delete();
+        });
     }
     
     public function take(Assignment $assignment)
     {
-        $this->updatedAssignmentNotifyUsers($assignment);
-        $assignment->users()->attach(auth()->user()->id);
+        DB::transaction(function () use(&$assignment) {
+            $this->updatedAssignmentNotifyUsers($assignment);
+            $assignment->users()->attach(auth()->user()->id);
+        });
     }
 
     public function done(Assignment $assignment)
     {
-        $assignment->update(array('done' => true));
-        $this->updatedAssignmentNotifyUsers($assignment);
+        DB::transaction(function () use(&$assignment) {
+            $assignment->update(array('done' => true));
+            $this->updatedAssignmentNotifyUsers($assignment);
+        });
     }
 
     public function loadOlderAssignments(Group $group, $howManyDisplayed){

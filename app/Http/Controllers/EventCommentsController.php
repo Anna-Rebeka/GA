@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\EventComment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 use App\Events\EventCommented;
 
@@ -46,15 +47,18 @@ class EventCommentsController extends Controller
             'text' => ['required', 'max:300'],
             'event_id' => ['required'],
             ]);
-        $comment = EventComment::create([
-            'user_id' => auth()->user()->id,
-            'event_id' => $attributes['event_id'],
-            'text' => $attributes['text'],
-        ]);
 
-        $event = Event::find($comment->event_id);
-        broadcast(new EventCommented(auth()->user(), $comment, $event, $event->group))->toOthers();
+        $comment = DB::transaction(function () use(&$attributes){
+            $comment = EventComment::create([
+                'user_id' => auth()->user()->id,
+                'event_id' => $attributes['event_id'],
+                'text' => $attributes['text'],
+            ]);
 
+            $event = Event::find($comment->event_id);
+            broadcast(new EventCommented(auth()->user(), $comment, $event, $event->group))->toOthers();
+            return $comment;
+        });
         return $comment;
     }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Note;
+use Illuminate\Support\Facades\DB;
 
 class NotesController extends Controller
 {
@@ -24,7 +25,9 @@ class NotesController extends Controller
     }
 
     public function destroy($user, int $id) {
-        $note = Note::findOrFail($id);
-        $note->delete();
+        DB::transaction(function () use(&$user, &$id){
+            $note = Note::findOrFail($id);
+            $note->delete();
+        });
     }
 }

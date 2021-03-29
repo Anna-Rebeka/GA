@@ -9,6 +9,7 @@ use App\Models\Invite;
 use App\Models\User;
 use App\Models\Group;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Validator;
 
@@ -30,33 +31,35 @@ class InviteMemberController extends Controller
             return 'wrong email address';
         };
 
-        $group_id = auth()->user()->group->id;
-        $group = Group::find($group_id);
+        DB::transaction(function () use(&$fields){
+            $group_id = auth()->user()->group->id;
+            $group = Group::find($group_id);
 
-        $emails = $fields->all();
+            $emails = $fields->all();
 
-        foreach($emails as $invite_email){
-            $user = User::where('email', $invite_email)->first();
-            //if the user is already in the group inform and do nothing
-            if ($user != null && $group->hasUser($user)){
-                continue;
+            foreach($emails as $invite_email){
+                $user = User::where('email', $invite_email)->first();
+                //if the user is already in the group inform and do nothing
+                if ($user != null && $group->hasUser($user)){
+                    continue;
+                }
+                do {
+                    $token = Str::random(16);
+                } 
+
+                while (Invite::where('token', $token)->first());
+                
+                $invite = Invite::create([
+                    'email' => $invite_email,
+                    'token' => $token,
+                    'group' => $group_id
+                ]);
+        
+                Mail::to($invite_email)
+                    ->send(new InviteMemberMail($group->name, auth()->user()->name, $invite))
+                ;
             }
-            do {
-                $token = Str::random(16);
-            } 
-
-            while (Invite::where('token', $token)->first());
-            
-            $invite = Invite::create([
-                'email' => $invite_email,
-                'token' => $token,
-                'group' => $group_id
-            ]);
-    
-            Mail::to($invite_email)
-                ->send(new InviteMemberMail($group->name, auth()->user()->name, $invite))
-            ;
-        }
+        });
         return 'All invitations sent';
     }
 
@@ -70,12 +73,15 @@ class InviteMemberController extends Controller
         $user = User::where('email', $invite->email)->first();
 
         if ($user != null){
-            $user->active_group = $invite->group;
-            $user->save();
-            //pivot table
-            $user->groups()->attach($invite->group);
-            //delete all invitations for this user to this group after completing registration
-            Invite::where([['email', '=', $invite->email], ['group', '=', $invite->group]])->delete();
+            $user = DB::transaction(function () use(&$user, &$invite){
+                $user->active_group = $invite->group;
+                $user->save();
+                //pivot table
+                $user->groups()->attach($invite->group);
+                //delete all invitations for this user to this group after completing registration
+                Invite::where([['email', '=', $invite->email], ['group', '=', $invite->group]])->delete();
+                return $user;
+            });
             return redirect($user->path());
         }
 

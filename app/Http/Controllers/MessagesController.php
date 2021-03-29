@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Chatroom;
 use Illuminate\Http\Request;
 use App\Events\MessageSent;
+use Illuminate\Support\Facades\DB;
 
 class MessagesController extends Controller
 {
@@ -75,18 +76,20 @@ class MessagesController extends Controller
             $attributes['file_name'] .= '.' . $ext;
         }
 
-        $message = Message::create([
-            'sender_id' => auth()->user()->id,
-            'chatroom_id' => $attributes['chatroom_id'],
-            'text' => $attributes['text'],
-            'image_path' => $attributes['image'],
-            'file_path' => $attributes['file'],
-            'file_name' => $attributes['file_name'],
-            'read' => false,
-        ]);
-        
-        broadcast(new MessageSent($message, Chatroom::find($message->chatroom_id), auth()->user()))->toOthers();
-        
+        $message = DB::transaction(function () use(&$attributes){
+            $message = Message::create([
+                'sender_id' => auth()->user()->id,
+                'chatroom_id' => $attributes['chatroom_id'],
+                'text' => $attributes['text'],
+                'image_path' => $attributes['image'],
+                'file_path' => $attributes['file'],
+                'file_name' => $attributes['file_name'],
+                'read' => false,
+            ]);
+            
+            broadcast(new MessageSent($message, Chatroom::find($message->chatroom_id), auth()->user()))->toOthers();
+            return $message;
+        });
         return $message;
     }
 

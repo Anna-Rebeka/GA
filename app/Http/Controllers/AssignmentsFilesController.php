@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\NewWhiteboardEventAssignmentMail;
 use App\Mail\FromAllGroupsNotificationMail;
 use ImageOptimizer;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Storage;
 
@@ -49,22 +50,20 @@ class AssignmentsFilesController extends Controller
             'file_name' => ['string','alpha_dash', 'required'],
             ]);
         
-        $user = auth()->user();
-
-        $attributes['file_path'] = request('file_path')->store('assignment_file');
-        $ext = pathinfo($attributes['file_path'], PATHINFO_EXTENSION);
-        
-        $attributes['file_name'] .= '.' . $ext;
-
-        $assignmentFile = AssignmentsFile::create([
-            'user_id' => $user->id,
-            'file_path' => $attributes['file_path'],
-            'file_name' => $attributes['file_name'], 
-            'assignment_id' => $assignment->id,
-        ]);
-
-        $this->updatedAssignmentNotifyUsers($assignmentFile);
-
+        $assignmentFile = DB::transaction(function () use(&$assignment, &$attributes){
+            $user = auth()->user();
+            $attributes['file_path'] = request('file_path')->store('assignment_file');
+            $ext = pathinfo($attributes['file_path'], PATHINFO_EXTENSION);
+            $attributes['file_name'] .= '.' . $ext;
+            $assignmentFile = AssignmentsFile::create([
+                'user_id' => $user->id,
+                'file_path' => $attributes['file_path'],
+                'file_name' => $attributes['file_name'], 
+                'assignment_id' => $assignment->id,
+            ]);
+            $this->updatedAssignmentNotifyUsers($assignmentFile);
+            return $assignmentFile;
+        });
         return $assignmentFile;
     }
 
@@ -135,8 +134,10 @@ class AssignmentsFilesController extends Controller
      */
     public function destroy(int $id)
     {
-        $assignmentsFile = AssignmentsFile::findOrFail($id);
-        Storage::delete($assignmentsFile->file_path);
-        $assignmentsFile->delete();
+        DB::transaction(function () use(&$id){
+            $assignmentsFile = AssignmentsFile::findOrFail($id);
+            Storage::delete($assignmentsFile->file_path);
+            $assignmentsFile->delete();
+        });
     }
 }

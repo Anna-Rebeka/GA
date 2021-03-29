@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 use ImageOptimizer;
 
 
@@ -145,9 +147,11 @@ class UsersController extends Controller
         ]);
         
         
-        $user->update($user_attributes);
-        $user->groups()->updateExistingPivot($user->group->id, $pivot_attributes);
-
+        $user = DB::transaction(function () use(&$user, &$user_attributes, &$pivot_attributes){
+            $user->update($user_attributes);
+            $user->groups()->updateExistingPivot($user->group->id, $pivot_attributes);
+            return $user;
+        });
         return $user;
     }
 
