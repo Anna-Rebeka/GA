@@ -4142,12 +4142,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "going", "event", "host"],
   data: function data() {
     return {
       savedUsers: this.event.users,
-      pageOfItems: []
+      pageOfItems: [],
+      cannotJoinOldEventError: false,
+      cannotLeaveOldEventError: false
     };
   },
   methods: {
@@ -4164,6 +4172,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     joinEvent: function joinEvent() {
       var _this = this;
+
+      if (new Date(this.event.event_time) < Date.now()) {
+        this.cannotJoinOldEventError = true;
+        return;
+      }
 
       axios.post("/events/" + this.event.id + "/join").then(function (response) {
         _this.going.push(_this.user.id);
@@ -4182,6 +4195,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     leaveEvent: function leaveEvent() {
       var _this2 = this;
+
+      if (new Date(this.event.event_time) < Date.now()) {
+        this.cannotLeaveOldEventError = true;
+        return;
+      }
 
       axios.post("/events/" + this.event.id + "/leave").then(function (response) {
         var indexEU = _this2.event.users.indexOf(_this2.user);
@@ -48483,6 +48501,36 @@ var render = function() {
             ])
           ]
         ),
+        _vm._v(" "),
+        _vm.cannotJoinOldEventError
+          ? _c(
+              "div",
+              {
+                staticClass:
+                  "flex items-center justify-between w-full mt-5 mb-10 py-2 pl-5 bg-red-500 shadow text-white"
+              },
+              [
+                _vm._v(
+                  "\n                You can't join an event that already happened.\n        "
+                )
+              ]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.cannotLeaveOldEventError
+          ? _c(
+              "div",
+              {
+                staticClass:
+                  "flex items-center justify-between w-full mt-5 mb-10 py-2 pl-5 bg-red-500 shadow text-white"
+              },
+              [
+                _vm._v(
+                  "\n                You can't leave an event that already happened.\n        "
+                )
+              ]
+            )
+          : _vm._e(),
         _vm._v(" "),
         _c(
           "div",
