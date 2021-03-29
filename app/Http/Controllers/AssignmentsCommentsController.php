@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Assignment;
 use App\Models\AssignmentsComments;
 use App\Events\AssignmentCommented;
+use Illuminate\Support\Facades\DB;
 
 
 class AssignmentsCommentsController extends Controller
@@ -23,16 +24,18 @@ class AssignmentsCommentsController extends Controller
         $attributes = $fields->validate([
             'text' => ['required', 'max:300'],
             'assignment_id' => ['required'],
-            ]);
-        $comment = AssignmentsComments::create([
-            'user_id' => auth()->user()->id,
-            'assignment_id' => $attributes['assignment_id'],
-            'text' => $attributes['text'],
         ]);
-
-        $assignment = Assignment::find($comment->assignment_id);
-        broadcast(new AssignmentCommented(auth()->user(), $comment, $assignment, $assignment->group))->toOthers();
-
+        
+        $comment = DB::transaction(function () use($attributes) {
+            $comment = AssignmentsComments::create([
+                'user_id' => auth()->user()->id,
+                'assignment_id' => $attributes['assignment_id'],
+                'text' => $attributes['text'],
+            ]);
+            $assignment = Assignment::find($comment->assignment_id);
+            broadcast(new AssignmentCommented(auth()->user(), $comment, $assignment, $assignment->group))->toOthers();
+            return $comment;
+        });
         return $comment;
     }
 }

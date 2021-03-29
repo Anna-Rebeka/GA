@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Group;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class GroupsController extends Controller
 {
@@ -42,17 +43,20 @@ class GroupsController extends Controller
                 'max:255', 
             ],
         ]);
-
-        $user = auth()->user();
-
-        $group = Group::create([
-            'name' => $attributes['name'],
-            'admin_id' => $user->id
-        ]);
         
-        $user->active_group = $group->id;
-        $user->save();
-        $user->groups()->attach($group->id);
+        
+        $user = auth()->user();
+        
+        DB::transaction(function () use(&$user, &$attributes){
+            $group = Group::create([
+                'name' => $attributes['name'],
+                'admin_id' => $user->id
+            ]);
+            
+            $user->active_group = $group->id;
+            $user->save();
+            $user->groups()->attach($group->id);
+        });
 
         return redirect($user->path());
     }
@@ -101,6 +105,9 @@ class GroupsController extends Controller
             ],
             'avatar' => [
                 'file',
+                'mimes:jpeg,jpg,png',
+                'nullable',
+                'max:500000',
             ],
             'admin_id' => [
                 'exists:users,id',

@@ -33,11 +33,13 @@ import groupStatistics from './components/groups/group-statistics.vue';
 import JwPagination from 'jw-vue-pagination';
 
 import VueFilterDateFormat from 'vue-filter-date-format';
+import VeeValidate from 'vee-validate';
 
 require('masonry-layout');
 require('./bootstrap');
 
 Vue.use(VueFilterDateFormat);
+Vue.use(VeeValidate);
 
 Vue.component('navbar', navbar);
 Vue.component('messages-link', messagesLink);
@@ -71,6 +73,17 @@ Vue.component('group-edit', groupEdit);
 Vue.component('group-whiteboard', groupWhiteboard);
 Vue.component('group-statistics', groupStatistics);
 
+let token = document.head.querySelector('meta[name="csrf-token"]');
+
+/*
+if (token) {
+    window.axios.defaults.headers.common["X-CSRF-TOKEN"] = token.content;
+    $.ajaxSetup({ headers: { "X-CSRF-TOKEN": token.content } });
+} else {
+    console.error(
+        "CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token"
+    );
+}*/
 
 var app = new Vue({
    el: '#app',

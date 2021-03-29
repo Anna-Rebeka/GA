@@ -132,20 +132,23 @@ class ChatroomsController extends Controller
     }
 
     public function findOrCreateChatroom(User $user){
-        $authed = auth()->user();
-        $chatrooms = $authed->chatrooms()->with('users')->get();
-        foreach($chatrooms as $chatroom){
-            if( count($chatroom->users) == 2 
-                && $chatroom->users->contains($authed) 
-                && $chatroom->users->contains($user)){
-                    return redirect()->route('showchat', ['chatroom' => $chatroom->id]);
-                }
-        }
-        $new_chatroom = Chatroom::create([
-        ]);
-        $new_chatroom->users()->attach($authed->id);
-        $new_chatroom->users()->attach($user->id);
-        return redirect()->route('showchat', ['chatroom' => $new_chatroom->id]);
+        $chatroom = DB::transaction(function () use(&$user){
+            $authed = auth()->user();
+            $chatrooms = $authed->chatrooms()->with('users')->get();
+            foreach($chatrooms as $chatroom){
+                if( count($chatroom->users) == 2 
+                    && $chatroom->users->contains($authed) 
+                    && $chatroom->users->contains($user)){
+                        return $chatroom;
+                    }
+            }
+            $new_chatroom = Chatroom::create([
+            ]);
+            $new_chatroom->users()->attach($authed->id);
+            $new_chatroom->users()->attach($user->id);
+            return $new_chatroom;
+        });
+        return redirect()->route('showchat', ['chatroom' => $chatroom->id]);
     }
 
     public function markAsReadMessages(Chatroom $chatroom){
@@ -167,10 +170,13 @@ class ChatroomsController extends Controller
     }
 
     public function checkForNewMessages(){
-        $user = auth()->user();
-        $chatrooms = $user->chatrooms()->pluck('chatrooms.id');
-        $howManyMessages = DB::table('messages')->whereIn('chatroom_id', $chatrooms)->where('read', 0)->where('sender_id', '!=', $user->id)->selectRaw('count(*) as count')->get();
-        return $howManyMessages;
+        $howManyMessages = DB::transaction(function (){
+            $user = auth()->user();
+            $chatrooms = $user->chatrooms()->pluck('chatrooms.id');
+            $howManyMessages = DB::table('messages')->whereIn('chatroom_id', $chatrooms)->where('read', 0)->where('sender_id', '!=', $user->id)->selectRaw('count(*) as count')->get();
+            return $howManyMessages;
+        });
+            return $howManyMessages;
     }
 
     public function getAllUserChatrooms(){

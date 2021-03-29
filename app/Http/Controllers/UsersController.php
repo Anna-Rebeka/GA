@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
+use ImageOptimizer;
+
 
 
 class UsersController extends Controller
@@ -143,9 +147,11 @@ class UsersController extends Controller
         ]);
         
         
-        $user->update($user_attributes);
-        $user->groups()->updateExistingPivot($user->group->id, $pivot_attributes);
-
+        $user = DB::transaction(function () use(&$user, &$user_attributes, &$pivot_attributes){
+            $user->update($user_attributes);
+            $user->groups()->updateExistingPivot($user->group->id, $pivot_attributes);
+            return $user;
+        });
         return $user;
     }
 
@@ -172,10 +178,17 @@ class UsersController extends Controller
                 Rule::unique('users')->ignore($user),
             ],
             'avatar' => [
-                'file'
+                'file',
+                'mimes:jpeg,jpg,png',
+                'nullable',
+                'max:500000',
             ],
             'banner' => [
-                'file'
+                'file',
+                'nullable',
+                'mimes:jpeg,jpg,png',
+                'nullable',
+                'max:500000',
             ],
             'bio' => [
                 'string', 
@@ -197,10 +210,12 @@ class UsersController extends Controller
 
         if(request('avatar')){
             $attributes['avatar'] = request('avatar')->store('/users/avatars');
+            ImageOptimizer::optimize('storage/' . $attributes['avatar']);
         }
 
         if(request('banner')){
             $attributes['banner'] = request('banner')->store('/users/banners');
+            ImageOptimizer::optimize('storage/' . $attributes['banner']);
         }
         
         $user->update($attributes);

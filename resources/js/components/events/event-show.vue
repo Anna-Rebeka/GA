@@ -34,6 +34,12 @@
             <div class="overflow-ellipsis overflow-hidden ... max-w-sm">
                 <h2 class="font-bold text-2xl mb-4">{{ event.name }}</h2>
             </div>
+            <div class="flex items-center justify-between w-full mt-5 mb-10 py-2 pl-5 bg-red-500 shadow text-white" v-if="cannotJoinOldEventError">
+                    You can't join an event that already happened.
+            </div>
+            <div class="flex items-center justify-between w-full mt-5 mb-10 py-2 pl-5 bg-red-500 shadow text-white" v-if="cannotLeaveOldEventError">
+                    You can't leave an event that already happened.
+            </div>
             <div class="py-2 px-6 mb-2 mr-2 border-b border-gray-200 rounded">
                 <p class="mb-2"><strong>Hosted by:</strong></p>
                 <div class="bg-white rounded mb-2 pl-2 pt-2 pb-2">
@@ -119,6 +125,8 @@ export default {
         return {
             savedUsers: this.event.users,
             pageOfItems: [],
+            cannotJoinOldEventError: false,
+            cannotLeaveOldEventError: false,
         };
     },
 
@@ -138,6 +146,10 @@ export default {
         },
 
         joinEvent() {
+            if(new Date(this.event.event_time) <  Date.now()){
+                this.cannotJoinOldEventError = true;
+                return;
+            }
             axios
                 .post("/events/" + this.event.id + "/join")
                 .then((response) => {
@@ -155,6 +167,10 @@ export default {
         },
 
         leaveEvent() {
+            if(new Date(this.event.event_time) <  Date.now()){
+                this.cannotLeaveOldEventError = true;
+                return;
+            }
             axios
                 .post("/events/" + this.event.id + "/leave")
                 .then((response) => {

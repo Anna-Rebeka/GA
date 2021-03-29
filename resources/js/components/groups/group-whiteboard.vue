@@ -149,6 +149,7 @@
                     </div>
                 </div>
             </div>
+            <p class="flex items-center justify-between w-full my-5 p-2 bg-red-500 shadow text-white" v-if="imageTooBig">Please choose a picture under 5MB.</p>
 
             <div class="clear-both mb-6"></div>
             <div v-if="uploadFile">
@@ -190,6 +191,7 @@
                     <br />
                     <p class="text-xs mb-2">(max 1000 chars)</p>
                 </div>
+                <p class="flex items-center justify-between w-full my-5 p-2 bg-red-500 shadow text-white" v-if="fileTooBig">Please choose a file under 25MB.</p>
             </div>
         </div>
     </div>
@@ -209,6 +211,8 @@ export default {
             editingBoard: false,
             csrf: document.head.querySelector('meta[name="csrf-token"]')
                 .content,
+            imageTooBig: false,
+            fileTooBig: false,
         };
     },
 
@@ -294,10 +298,20 @@ export default {
         },
 
         handleImageUpload() {
+            if(this.$refs.image.files[0].size > 5000000){
+                this.imageTooBig = true;
+                return;
+            }
+            this.imageTooBig = false;
             this.image = this.$refs.image.files[0];
         },
 
         handleFileUpload() {
+            if(this.$refs.file.files[0].size > 25000000){
+                this.fileTooBig = true;
+                return;
+            }
+            this.fileTooBig = false;
             this.file = this.$refs.file.files[0];
         },
 
@@ -310,11 +324,11 @@ export default {
             document.getElementById("postArea").value = "";
             
             var formData = new FormData();
-            if (this.image) {
+            if (this.image && document.getElementById("image")) {
                 formData.append("image", this.image);
                 document.getElementById("image").value = "";
             }
-            if (this.file) {
+            if (this.file && document.getElementById("file_name")) {
                 formData.append("file", this.file);
                 var fileName = document.getElementById("file_name").value;
                 document.getElementById("file").value = "";
@@ -339,6 +353,8 @@ export default {
                     this.uploadImage = false;
                     this.uploadFile = false;
                     this.$nextTick(() => {
+                        this.imageTooBig = false;
+                        this.fileTooBig = false;
                         this.$refs.whiteboard.scrollTop = 9999;
                     });
                 })
@@ -365,10 +381,10 @@ export default {
                     console.log(response);
                 })
                 .catch((error) => {
-                    /*if (error.response.status == 422) {
+                    if (error.response.status == 422) {
                         this.errors = error.response.data.errors;
                         console.log(this.errors);
-                    }*/
+                    }
                     console.log(error.message);
                 });
         },

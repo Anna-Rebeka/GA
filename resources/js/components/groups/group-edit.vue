@@ -33,6 +33,7 @@
                         name="avatar"
                         id="avatar"
                         ref="avatar"
+                        accept=".jpg, .jpeg, .png"
                         v-on:change="handleAvatarUpload()"
                     />
                     <img
@@ -41,6 +42,7 @@
                         class="w-16 h-16 object-cover border-2 border-gray-400"
                     />
                 </div>
+                <p class="flex items-center justify-between w-full my-5 p-2 bg-red-500 shadow text-white" v-if="avatarTooBig">Please choose a picture under 5MB.</p>
             </div>
 
             <div class="mb-8">
@@ -130,11 +132,17 @@ export default {
             changedAvatar: false,
             emptyEditSubmitted: false,
             adminChangeFailed: false,
+            avatarTooBig: false,
         };
     },
 
     methods: {
         handleAvatarUpload() {
+            if(this.$refs.avatar.files[0].size > 5000000){
+                this.avatarTooBig = true;
+                return;
+            }
+            this.avatarTooBig = false;
             this.avatar = URL.createObjectURL(this.$refs.avatar.files[0]);
             this.changedAvatar = true;
             this.emptyEditSubmitted = false;
