@@ -74,6 +74,7 @@
                         (please use only letters, numbers, "_" and "-")
                     </p>
                 </div>
+                <p class="clear-both flex items-center justify-between w-full my-5 p-2 bg-red-500 shadow text-white" v-if="fileTooBig">Please choose a file under 25MB.</p>
 
                 <div class="clear-both"></div>
 
@@ -102,6 +103,7 @@ export default {
             csrf: document.head.querySelector('meta[name="csrf-token"]')
                 .content,
             pageOfItems: [],
+            fileTooBig: false,
         };
     },
 
@@ -131,6 +133,11 @@ export default {
         },
 
         handleFileUpload() {
+             if(this.$refs.file_path.files[0].size > 25000000){
+                this.fileTooBig = true;
+                return;
+            }
+            this.fileTooBig = false;
             this.newFile = this.$refs.file_path.files[0];
         },
 

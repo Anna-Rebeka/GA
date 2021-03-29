@@ -2265,6 +2265,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "assignment"],
   data: function data() {
@@ -2273,7 +2274,8 @@ __webpack_require__.r(__webpack_exports__);
       assignmentsFiles: [],
       newFile: null,
       csrf: document.head.querySelector('meta[name="csrf-token"]').content,
-      pageOfItems: []
+      pageOfItems: [],
+      fileTooBig: false
     };
   },
   mounted: function mounted() {
@@ -2299,6 +2301,12 @@ __webpack_require__.r(__webpack_exports__);
       this.pageOfItems = pageOfItems;
     },
     handleFileUpload: function handleFileUpload() {
+      if (this.$refs.file_path.files[0].size > 25000000) {
+        this.fileTooBig = true;
+        return;
+      }
+
+      this.fileTooBig = false;
       this.newFile = this.$refs.file_path.files[0];
     },
     deleteFile: function deleteFile(file) {
@@ -3365,6 +3373,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "chatroom"],
   data: function data() {
@@ -3375,7 +3387,9 @@ __webpack_require__.r(__webpack_exports__);
       image: "",
       uploadImage: false,
       uploadFile: false,
-      csrf: document.head.querySelector('meta[name="csrf-token"]').content
+      csrf: document.head.querySelector('meta[name="csrf-token"]').content,
+      imageTooBig: false,
+      fileTooBig: false
     };
   },
   mounted: function mounted() {
@@ -3465,9 +3479,21 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     handleImageUpload: function handleImageUpload() {
+      if (this.$refs.image.files[0].size > 5000000) {
+        this.imageTooBig = true;
+        return;
+      }
+
+      this.imageTooBig = false;
       this.image = this.$refs.image.files[0];
     },
     handleFileUpload: function handleFileUpload() {
+      if (this.$refs.file.files[0].size > 25000000) {
+        this.fileTooBig = true;
+        return;
+      }
+
+      this.fileTooBig = false;
       this.file = this.$refs.file.files[0];
     },
     submit: function submit() {
@@ -3482,12 +3508,12 @@ __webpack_require__.r(__webpack_exports__);
       document.getElementById("messageArea").value = "";
       var formData = new FormData();
 
-      if (this.image) {
+      if (this.image && document.getElementById("image")) {
         formData.append("image", this.image);
         document.getElementById("image").value = "";
       }
 
-      if (this.file) {
+      if (this.file && document.getElementById("file_name")) {
         formData.append("file", this.file);
         var fileName = document.getElementById("file_name").value;
         document.getElementById("file").value = "";
@@ -3515,6 +3541,8 @@ __webpack_require__.r(__webpack_exports__);
         _this6.uploadFile = false;
 
         _this6.$nextTick(function () {
+          _this6.imageTooBig = false;
+          _this6.fileTooBig = false;
           _this6.$refs.chat.scrollTop = 9999;
         });
       })["catch"](function (error) {
@@ -4892,6 +4920,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "group", "members"],
   data: function data() {
@@ -4900,11 +4930,18 @@ __webpack_require__.r(__webpack_exports__);
       avatar: this.group.avatar,
       changedAvatar: false,
       emptyEditSubmitted: false,
-      adminChangeFailed: false
+      adminChangeFailed: false,
+      avatarTooBig: false
     };
   },
   methods: {
     handleAvatarUpload: function handleAvatarUpload() {
+      if (this.$refs.avatar.files[0].size > 5000000) {
+        this.avatarTooBig = true;
+        return;
+      }
+
+      this.avatarTooBig = false;
       this.avatar = URL.createObjectURL(this.$refs.avatar.files[0]);
       this.changedAvatar = true;
       this.emptyEditSubmitted = false;
@@ -5344,6 +5381,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "group"],
   data: function data() {
@@ -5355,7 +5394,9 @@ __webpack_require__.r(__webpack_exports__);
       uploadImage: false,
       uploadFile: false,
       editingBoard: false,
-      csrf: document.head.querySelector('meta[name="csrf-token"]').content
+      csrf: document.head.querySelector('meta[name="csrf-token"]').content,
+      imageTooBig: false,
+      fileTooBig: false
     };
   },
   mounted: function mounted() {
@@ -5427,9 +5468,21 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     handleImageUpload: function handleImageUpload() {
+      if (this.$refs.image.files[0].size > 5000000) {
+        this.imageTooBig = true;
+        return;
+      }
+
+      this.imageTooBig = false;
       this.image = this.$refs.image.files[0];
     },
     handleFileUpload: function handleFileUpload() {
+      if (this.$refs.file.files[0].size > 25000000) {
+        this.fileTooBig = true;
+        return;
+      }
+
+      this.fileTooBig = false;
       this.file = this.$refs.file.files[0];
     },
     submit: function submit() {
@@ -5444,12 +5497,12 @@ __webpack_require__.r(__webpack_exports__);
       document.getElementById("postArea").value = "";
       var formData = new FormData();
 
-      if (this.image) {
+      if (this.image && document.getElementById("image")) {
         formData.append("image", this.image);
         document.getElementById("image").value = "";
       }
 
-      if (this.file) {
+      if (this.file && document.getElementById("file_name")) {
         formData.append("file", this.file);
         var fileName = document.getElementById("file_name").value;
         document.getElementById("file").value = "";
@@ -5476,6 +5529,8 @@ __webpack_require__.r(__webpack_exports__);
         _this6.uploadFile = false;
 
         _this6.$nextTick(function () {
+          _this6.imageTooBig = false;
+          _this6.fileTooBig = false;
           _this6.$refs.whiteboard.scrollTop = 9999;
         });
       })["catch"](function (error) {
@@ -5496,10 +5551,11 @@ __webpack_require__.r(__webpack_exports__);
         });
         console.log(response);
       })["catch"](function (error) {
-        /*if (error.response.status == 422) {
-            this.errors = error.response.data.errors;
-            console.log(this.errors);
-        }*/
+        if (error.response.status == 422) {
+          _this7.errors = error.response.data.errors;
+          console.log(_this7.errors);
+        }
+
         console.log(error.message);
       });
     }
@@ -45916,6 +45972,17 @@ var render = function() {
           _vm._v(" "),
           _vm._m(0),
           _vm._v(" "),
+          _vm.fileTooBig
+            ? _c(
+                "p",
+                {
+                  staticClass:
+                    "clear-both flex items-center justify-between w-full my-5 p-2 bg-red-500 shadow text-white"
+                },
+                [_vm._v("Please choose a file under 25MB.")]
+              )
+            : _vm._e(),
+          _vm._v(" "),
           _c("div", { staticClass: "clear-both" }),
           _vm._v(" "),
           _c("div", { staticClass: "mb-6 mt-6" }, [
@@ -47741,6 +47808,17 @@ var render = function() {
               ])
             : _vm._e(),
           _vm._v(" "),
+          _vm.imageTooBig
+            ? _c(
+                "p",
+                {
+                  staticClass:
+                    "flex items-center justify-between w-full my-5 p-2 bg-red-500 shadow text-white"
+                },
+                [_vm._v("Please choose a picture under 5MB.")]
+              )
+            : _vm._e(),
+          _vm._v(" "),
           _c("div", { staticClass: "clear-both mb-6" }),
           _vm._v(" "),
           _vm.uploadFile
@@ -47779,7 +47857,18 @@ var render = function() {
                   )
                 ]),
                 _vm._v(" "),
-                _vm._m(0)
+                _vm._m(0),
+                _vm._v(" "),
+                _vm.fileTooBig
+                  ? _c(
+                      "p",
+                      {
+                        staticClass:
+                          "flex items-center justify-between w-full my-5 p-2 bg-red-500 shadow text-white"
+                      },
+                      [_vm._v("Please choose a file under 25MB.")]
+                    )
+                  : _vm._e()
               ])
             : _vm._e()
         ]
@@ -49641,7 +49730,12 @@ var render = function() {
             _c("input", {
               ref: "avatar",
               staticClass: "p-2 my-auto w-full",
-              attrs: { type: "file", name: "avatar", id: "avatar" },
+              attrs: {
+                type: "file",
+                name: "avatar",
+                id: "avatar",
+                accept: ".jpg, .jpeg, .png"
+              },
               on: {
                 change: function($event) {
                   return _vm.handleAvatarUpload()
@@ -49653,7 +49747,18 @@ var render = function() {
               staticClass: "w-16 h-16 object-cover border-2 border-gray-400",
               attrs: { src: _vm.avatar, alt: "avatar" }
             })
-          ])
+          ]),
+          _vm._v(" "),
+          _vm.avatarTooBig
+            ? _c(
+                "p",
+                {
+                  staticClass:
+                    "flex items-center justify-between w-full my-5 p-2 bg-red-500 shadow text-white"
+                },
+                [_vm._v("Please choose a picture under 5MB.")]
+              )
+            : _vm._e()
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "mb-8" }, [
@@ -50423,6 +50528,17 @@ var render = function() {
             ])
           : _vm._e(),
         _vm._v(" "),
+        _vm.imageTooBig
+          ? _c(
+              "p",
+              {
+                staticClass:
+                  "flex items-center justify-between w-full my-5 p-2 bg-red-500 shadow text-white"
+              },
+              [_vm._v("Please choose a picture under 5MB.")]
+            )
+          : _vm._e(),
+        _vm._v(" "),
         _c("div", { staticClass: "clear-both mb-6" }),
         _vm._v(" "),
         _vm.uploadFile
@@ -50461,7 +50577,18 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _vm._m(0)
+              _vm._m(0),
+              _vm._v(" "),
+              _vm.fileTooBig
+                ? _c(
+                    "p",
+                    {
+                      staticClass:
+                        "flex items-center justify-between w-full my-5 p-2 bg-red-500 shadow text-white"
+                    },
+                    [_vm._v("Please choose a file under 25MB.")]
+                  )
+                : _vm._e()
             ])
           : _vm._e()
       ]

@@ -42,8 +42,8 @@ class GroupWhiteboardPostsController extends Controller
         $attributes = $fields->validate([
             'group_id' => ['required'],
             'text' => ['nullable', 'max:1000'],
-            'image' => ['nullable', 'file'],
-            'file' => ['nullable', 'file'],
+            'image' => ['nullable', 'file', 'mimes:jpeg,jpg,png', 'max:500000'],
+            'file' => ['nullable', 'file', 'max:2500000'],
             'file_name' => ['nullable', 'string', 'max:1000'],
             ]);
         
@@ -92,7 +92,7 @@ class GroupWhiteboardPostsController extends Controller
         $notify_users = $post->group->users()->where('new_whiteboard_notify', true)->get();
         foreach($notify_users as $notify_user){
             Mail::to($notify_user->email)
-                ->send(new NewWhiteboardEventAssignmentMail($post->group->name, auth()->user()->name, 'whiteboard posts', $post))
+                ->send(new NewWhiteboardEventAssignmentMail($post->group->name, 'whiteboard posts', $post))
             ;
         }
         return;

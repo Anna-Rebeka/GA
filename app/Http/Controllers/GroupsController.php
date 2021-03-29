@@ -105,6 +105,9 @@ class GroupsController extends Controller
             ],
             'avatar' => [
                 'file',
+                'mimes:jpeg,jpg,png',
+                'nullable',
+                'max:500000',
             ],
             'admin_id' => [
                 'exists:users,id',

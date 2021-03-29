@@ -46,7 +46,7 @@ class AssignmentsFilesController extends Controller
     public function store(Request $request, Assignment $assignment)
     {
         $attributes = $request->validate([
-            'file_path' => ['file', 'required'],
+            'file_path' => ['file', 'required', 'max:2500000'],
             'file_name' => ['string','alpha_dash', 'required'],
             ]);
         
