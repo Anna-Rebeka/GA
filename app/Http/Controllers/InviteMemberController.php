@@ -16,13 +16,19 @@ use Illuminate\Support\Facades\Validator;
 
 class InviteMemberController extends Controller
 {
-    public function show(){
+    public function show(Group $group){
+        if($group->admin_id != auth()->user()->id){
+            Abort(401);
+        }
         return view('invite-member' , [
             'user' => auth()->user(),
         ]);
     }
 
     public function process(Request $fields){
+        if($group->admin_id != auth()->user()->id){
+            Abort(401);
+        }
         $validator = Validator::make($fields->all(), [
             'required|email',  
         ]);

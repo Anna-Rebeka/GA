@@ -2266,8 +2266,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["user", "assignment"],
+  props: ["user", "assignment", "assignment_users_ids"],
   data: function data() {
     return {
       takenAssignment: false,
@@ -2280,7 +2292,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.getAssignmentFiles();
-    console.log(this.assignmentsFiles);
   },
   methods: {
     getAssignmentFiles: function getAssignmentFiles() {
@@ -2525,8 +2536,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["user", "assignment", "author"],
+  props: ["user", "assignment", "author", "assignment_users_ids"],
   data: function data() {
     return {
       shownAssignment: this.assignment,
@@ -4725,6 +4737,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "group"],
   data: function data() {
@@ -5618,7 +5631,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["user", "members", "groupid"],
+  props: ["user", "members", "group"],
   data: function data() {
     return {
       visibleMembers: null
@@ -45857,155 +45870,170 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("div", { staticClass: "px-8 mr-2 mb-16" }, [
-      _vm.assignmentsFiles.length > 0
-        ? _c(
-            "div",
-            { staticClass: "mb-10" },
-            [
-              _vm._l(_vm.pageOfItems, function(file) {
-                return _c("div", { key: file.id }, [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "float-left mb-1",
-                      attrs: { href: "/storage/" + file.file_path }
-                    },
-                    [_vm._v(_vm._s(file.file_name))]
-                  ),
-                  _vm._v(" "),
-                  file.user_id == _vm.user.id
-                    ? _c("div", [
-                        _c(
-                          "button",
-                          {
-                            staticClass:
-                              "ml-6 float-left text-red-500 font-bold focus:outline-none",
-                            on: {
-                              click: function($event) {
-                                return _vm.deleteFile(file)
-                              }
-                            }
-                          },
-                          [
-                            _vm._v(
-                              "\n                        x\n                    "
-                            )
-                          ]
-                        )
-                      ])
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "clear-both" })
-                ])
-              }),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "mb-10 clear-both w-full text-center text-sm" },
-                [
-                  _c("jw-pagination", {
-                    attrs: { items: _vm.assignmentsFiles, pageSize: 5 },
-                    on: { changePage: _vm.onChangePage }
-                  })
-                ],
-                1
-              )
-            ],
-            2
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      _c(
-        "form",
-        {
-          staticClass: "clear-both",
-          on: {
-            submit: function($event) {
-              $event.preventDefault()
-              return _vm.submit()
-            }
-          }
-        },
-        [
-          _c("input", {
-            attrs: { type: "hidden", name: "_token" },
-            domProps: { value: _vm.csrf }
-          }),
-          _vm._v(" "),
-          _c("div", { staticClass: "float-left" }, [
-            _c(
-              "label",
-              {
-                staticClass: "font-bold mb-4 text-underlined",
-                attrs: { for: "file_path" }
-              },
-              [_vm._v("\n                    File upload\n                ")]
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticClass: "text-sm mt-4 file-upload-wrapper",
-                attrs: { "data-text": "Select your file!" }
-              },
-              [
-                _c("input", {
-                  ref: "file_path",
-                  attrs: {
-                    name: "file_path",
-                    id: "file_path",
-                    type: "file",
-                    value: "file_path",
-                    required: ""
-                  },
-                  on: {
-                    change: function($event) {
-                      return _vm.handleFileUpload()
-                    }
-                  }
-                })
-              ]
-            )
-          ]),
-          _vm._v(" "),
-          _vm._m(0),
-          _vm._v(" "),
-          _vm.fileTooBig
+  return _vm.assignment.group.admin_id == _vm.user.id ||
+    _vm.assignment.author_id == _vm.user.id ||
+    _vm.user in _vm.assignment.users ||
+    _vm.assignment_users_ids.includes(_vm.user.id)
+    ? _c("div", [
+        _c("div", { staticClass: "px-8 mr-2 mb-16" }, [
+          _vm.assignmentsFiles.length > 0
             ? _c(
-                "p",
-                {
-                  staticClass:
-                    "clear-both flex items-center justify-between w-full my-5 p-2 bg-red-500 shadow text-white"
-                },
-                [_vm._v("Please choose a file under 25MB.")]
+                "div",
+                { staticClass: "mb-10" },
+                [
+                  _vm._l(_vm.pageOfItems, function(file) {
+                    return _c("div", { key: file.id }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "float-left mb-1",
+                          attrs: { href: "/storage/" + file.file_path }
+                        },
+                        [_vm._v(_vm._s(file.file_name))]
+                      ),
+                      _vm._v(" "),
+                      file.user_id == _vm.user.id
+                        ? _c("div", [
+                            _c(
+                              "button",
+                              {
+                                staticClass:
+                                  "ml-6 float-left text-red-500 font-bold focus:outline-none",
+                                on: {
+                                  click: function($event) {
+                                    return _vm.deleteFile(file)
+                                  }
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                        x\n                    "
+                                )
+                              ]
+                            )
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "clear-both" })
+                    ])
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "mb-10 clear-both w-full text-center text-sm"
+                    },
+                    [
+                      _c("jw-pagination", {
+                        attrs: { items: _vm.assignmentsFiles, pageSize: 5 },
+                        on: { changePage: _vm.onChangePage }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                2
               )
             : _vm._e(),
           _vm._v(" "),
-          _c("div", { staticClass: "clear-both" }),
-          _vm._v(" "),
-          _c("div", { staticClass: "mb-6 mt-6" }, [
-            _c(
-              "button",
-              {
-                staticClass:
-                  "float-right text-sm bg-blue-400 text-white rounded-lg px-2 w-16 py-2 hover:bg-blue-500 mr-4 focus:outline-none",
-                attrs: { type: "submit" },
-                on: {
-                  submit: function($event) {
-                    $event.preventDefault()
-                    return _vm.submit()
-                  }
+          _c(
+            "form",
+            {
+              staticClass: "clear-both",
+              on: {
+                submit: function($event) {
+                  $event.preventDefault()
+                  return _vm.submit()
                 }
-              },
-              [_vm._v("\n                    Submit\n                ")]
-            )
-          ])
-        ]
-      )
-    ])
-  ])
+              }
+            },
+            [
+              _c("input", {
+                attrs: { type: "hidden", name: "_token" },
+                domProps: { value: _vm.csrf }
+              }),
+              _vm._v(" "),
+              _c("div", { staticClass: "float-left" }, [
+                _c(
+                  "label",
+                  {
+                    staticClass: "font-bold mb-4 text-underlined",
+                    attrs: { for: "file_path" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                    File upload\n                "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "text-sm mt-4 file-upload-wrapper",
+                    attrs: { "data-text": "Select your file!" }
+                  },
+                  [
+                    _c("input", {
+                      ref: "file_path",
+                      attrs: {
+                        name: "file_path",
+                        id: "file_path",
+                        type: "file",
+                        value: "file_path",
+                        required: ""
+                      },
+                      on: {
+                        change: function($event) {
+                          return _vm.handleFileUpload()
+                        }
+                      }
+                    })
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _vm._m(0),
+              _vm._v(" "),
+              _vm.fileTooBig
+                ? _c(
+                    "p",
+                    {
+                      staticClass:
+                        "clear-both flex items-center justify-between w-full my-5 p-2 bg-red-500 shadow text-white"
+                    },
+                    [
+                      _vm._v(
+                        "\n                Please choose a file under 25MB.\n            "
+                      )
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c("div", { staticClass: "clear-both" }),
+              _vm._v(" "),
+              _c("div", { staticClass: "mb-6 mt-6" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass:
+                      "float-right text-sm bg-blue-400 text-white rounded-lg px-2 w-16 py-2 hover:bg-blue-500 mr-4 focus:outline-none",
+                    attrs: { type: "submit" },
+                    on: {
+                      submit: function($event) {
+                        $event.preventDefault()
+                        return _vm.submit()
+                      }
+                    }
+                  },
+                  [_vm._v("\n                    Submit\n                ")]
+                )
+              ])
+            ]
+          )
+        ])
+      ])
+    : _vm._e()
 }
 var staticRenderFns = [
   function() {
@@ -46071,6 +46099,7 @@ var render = function() {
     [
       _c("div", { staticClass: "p-8 mr-2 mb-2" }, [
         _c("div", { staticClass: "float-right" }, [
+          _vm.user.id == _vm.assignment.group.admin_id ||
           _vm.shownAssignment.author_id == _vm.user.id
             ? _c("div", { staticClass: "mb-5" }, [
                 !_vm.shownAssignment.done
@@ -46378,7 +46407,11 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("assignment-show-file-upload", {
-        attrs: { user: _vm.user, assignment: _vm.assignment }
+        attrs: {
+          user: _vm.user,
+          assignment: _vm.assignment,
+          assignment_users_ids: _vm.assignment_users_ids
+        }
       })
     ],
     1
@@ -49622,15 +49655,19 @@ var render = function() {
               [_vm._v("Events\n            ")]
             ),
             _vm._v(" "),
-            _c(
-              "a",
-              {
-                staticClass:
-                  "bg-white block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
-                attrs: { href: "/groups/" + _vm.group.id + "/group-statistics" }
-              },
-              [_vm._v("Workload\n            ")]
-            )
+            _vm.user.id == _vm.group.admin_id
+              ? _c(
+                  "a",
+                  {
+                    staticClass:
+                      "bg-white block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+                    attrs: {
+                      href: "/groups/" + _vm.group.id + "/group-statistics"
+                    }
+                  },
+                  [_vm._v("Workload\n            ")]
+                )
+              : _vm._e()
           ])
         : _c("div", [
             _c("h2", { staticClass: "font-bold text-2xl mb-6" }, [
@@ -50283,7 +50320,7 @@ var render = function() {
               }
             },
             [
-              post.sender_id == _vm.user.id
+              post.sender_id == _vm.user.id || _vm.user.id == _vm.group.admin_id
                 ? _c(
                     "button",
                     {
@@ -50703,15 +50740,17 @@ var render = function() {
       : _c("p", [_vm._v("No members")]),
     _vm._v(" "),
     _c("div", { staticClass: "flex w-full justify-between" }, [
-      _c(
-        "a",
-        {
-          staticClass:
-            "bg-white w-24 float-left m-2 shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 rounded-lg",
-          attrs: { href: "/groups/" + _vm.groupid + "/invite-member" }
-        },
-        [_vm._v("Ivite\n        ")]
-      ),
+      _vm.user.id == _vm.group.admin_id
+        ? _c(
+            "a",
+            {
+              staticClass:
+                "bg-white w-24 float-left m-2 shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 rounded-lg",
+              attrs: { href: "/groups/" + _vm.group.id + "/invite-member" }
+            },
+            [_vm._v("Ivite\n        ")]
+          )
+        : _vm._e(),
       _vm._v(" "),
       _vm.members.length > 0
         ? _c(
@@ -50719,7 +50758,7 @@ var render = function() {
             {
               staticClass:
                 "bg-white w-24 float-right m-2 shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 rounded-lg",
-              attrs: { href: "/groups/" + _vm.groupid + "/all-members/" }
+              attrs: { href: "/groups/" + _vm.group.id + "/all-members/" }
             },
             [_vm._v("Show all\n        ")]
           )

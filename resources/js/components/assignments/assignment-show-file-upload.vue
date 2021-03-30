@@ -1,5 +1,12 @@
 <template>
-    <div>
+    <div
+        v-if="
+            assignment.group.admin_id == user.id ||
+            assignment.author_id == user.id ||
+            user in assignment.users ||
+            assignment_users_ids.includes(user.id)
+        "
+    >
         <div class="px-8 mr-2 mb-16">
             <div class="mb-10" v-if="assignmentsFiles.length > 0">
                 <div v-for="file in pageOfItems" :key="file.id">
@@ -74,7 +81,12 @@
                         (please use only letters, numbers, "_" and "-")
                     </p>
                 </div>
-                <p class="clear-both flex items-center justify-between w-full my-5 p-2 bg-red-500 shadow text-white" v-if="fileTooBig">Please choose a file under 25MB.</p>
+                <p
+                    class="clear-both flex items-center justify-between w-full my-5 p-2 bg-red-500 shadow text-white"
+                    v-if="fileTooBig"
+                >
+                    Please choose a file under 25MB.
+                </p>
 
                 <div class="clear-both"></div>
 
@@ -94,7 +106,7 @@
 
 <script>
 export default {
-    props: ["user", "assignment"],
+    props: ["user", "assignment", "assignment_users_ids"],
     data() {
         return {
             takenAssignment: false,
@@ -109,7 +121,6 @@ export default {
 
     mounted() {
         this.getAssignmentFiles();
-        console.log(this.assignmentsFiles);
     },
 
     methods: {
@@ -133,7 +144,7 @@ export default {
         },
 
         handleFileUpload() {
-             if(this.$refs.file_path.files[0].size > 25000000){
+            if (this.$refs.file_path.files[0].size > 25000000) {
                 this.fileTooBig = true;
                 return;
             }

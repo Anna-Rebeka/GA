@@ -80,6 +80,9 @@ class GroupsController extends Controller
      */
     public function edit(Group $group)
     {
+        if($group->admin_id != auth()->user()->id){
+            Abort(401);
+        }
         $user = auth()->user();
         return view('groups/edit', [
             'user' => $user,
@@ -97,6 +100,9 @@ class GroupsController extends Controller
      */
     public function update(Request $request, Group $group)
     {
+        if($group->admin_id != auth()->user()->id){
+            Abort(401);
+        }
         $attributes = request()->validate([
             'name' => [
                 'string', 
@@ -132,6 +138,9 @@ class GroupsController extends Controller
 
     public function updateBoard(Request $request, Group $group)
     {
+        if($group->admin_id != auth()->user()->id){
+            Abort(401);
+        }
         $attributes = request()->validate([
             'board' => [
                 'string', 

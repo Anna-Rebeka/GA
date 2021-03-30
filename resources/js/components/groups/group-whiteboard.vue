@@ -50,7 +50,7 @@
                 }"
             >
                 <button 
-                    v-if="post.sender_id == user.id"
+                    v-if="post.sender_id == user.id || user.id == group.admin_id"
                     v-on:click="deletePost(post)" class="absolute top-3 right-3"><img class="w-4" src="/img/bin.png" alt="delete"></button>
                 <div>
                     <h5 class="text-xs text-gray-500 absolute bottom-0">

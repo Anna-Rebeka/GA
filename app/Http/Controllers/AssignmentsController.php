@@ -85,7 +85,7 @@ class AssignmentsController extends Controller
             $attributes['max_assignees'] = null;
         }
 
-        $assignment = DB::transaction(function () use(&$assignment, &$user, $attributes){
+        $assignment = DB::transaction(function () use(&$assignment, &$user, $attributes, &$fields){
             $assignment = Assignment::create([
                 'name' => $attributes['name'],
                 'author_id' => $user->id,
@@ -157,13 +157,14 @@ class AssignmentsController extends Controller
         }
 
         $assignment->users;
-
+        $assignment->group;
         $assignment->taken = $assignment->isAssigned(auth()->user());
 
         return view('assignments.show', [
             'user' => auth()->user(),
             'assignment' => $assignment,
             'author' => $author,
+            'assignment_users_ids' => $assignment->users->pluck('id'),
         ]);
     }
 
@@ -175,6 +176,9 @@ class AssignmentsController extends Controller
      */
     public function edit(Assignment $assignment)
     {
+        if($assignment->group->admin_id != auth()->user()->id && $assignment->author_id != auth()->user()->id){
+            Abort(401);
+        }
         $assignment->users;
         $free_members = $assignment->group->users->diff($assignment->users);
         return view('assignments.edit', [
@@ -194,6 +198,9 @@ class AssignmentsController extends Controller
      */
     public function update(Request $request, Assignment $assignment)
     {
+        if($assignment->group->admin_id != auth()->user()->id && $assignment->author_id != auth()->user()->id){
+            Abort(401);
+        }
         $attributes = request()->validate([
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:255'],
@@ -246,6 +253,9 @@ class AssignmentsController extends Controller
      */
     public function destroy(Assignment $assignment)
     {
+        if($assignment->group->admin_id != auth()->user()->id && $assignment->author_id != auth()->user()->id){
+            Abort(401);
+        }
         DB::transaction(function () use(&$assignment) {
             $notify_assignees = $assignment->users()->select('email')->where('my_assignment_updated_notify', true)->where('users.id', '!=', auth()->user()->id)->get();
             
@@ -271,6 +281,13 @@ class AssignmentsController extends Controller
     
     public function take(Assignment $assignment)
     {
+        if ($assignment->group->admin_id != auth()->user()->id && 
+            $assignment->author_id != auth()->user()->id ||
+            !$assignment->group->hasUser(auth()->user())
+            )
+        {
+            Abort(401);
+        }
         DB::transaction(function () use(&$assignment) {
             $this->updatedAssignmentNotifyUsers($assignment);
             $assignment->users()->attach(auth()->user()->id);
@@ -279,6 +296,9 @@ class AssignmentsController extends Controller
 
     public function done(Assignment $assignment)
     {
+        if($assignment->group->admin_id != auth()->user()->id && $assignment->author_id != auth()->user()->id){
+            Abort(401);
+        }
         DB::transaction(function () use(&$assignment) {
             $assignment->update(array('done' => true));
             $this->updatedAssignmentNotifyUsers($assignment);

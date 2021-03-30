@@ -2,7 +2,7 @@
     <div>
         <div class="p-8 mr-2 mb-2">
             <div class="float-right">
-                <div v-if="shownAssignment.author_id == user.id" class="mb-5">
+                <div v-if="user.id == assignment.group.admin_id || shownAssignment.author_id == user.id" class="mb-5">
                     <button
                         v-if="!shownAssignment.done"
                         @click="checkWithUser(shownAssignment, 'done')"
@@ -160,13 +160,14 @@
         <assignment-show-file-upload
             :user="user"
             :assignment="assignment"
+            :assignment_users_ids="assignment_users_ids"
         ></assignment-show-file-upload>
     </div>
 </template>
 
 <script>
 export default {
-    props: ["user", "assignment", "author"],
+    props: ["user", "assignment", "author", "assignment_users_ids"],
     data() {
         return {
             shownAssignment: this.assignment,
