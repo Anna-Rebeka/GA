@@ -131,16 +131,19 @@ class EventsController extends Controller
         $event->users;
         $event->group;
         $name = "*deleted account*";
+        $host_id = 0;
 
         if($event->host){
             $name = $event->host->name;
+            $host_id = $event->host->id;
         }
 
         return view('events.show', [
             'user' => auth()->user(),
             'going' => $event->users()->pluck('users.id'),
             'event' => $event,
-            'host' => $name
+            'host' => $name,
+            'host_id' => $host_id
         ]);
     }
 
@@ -152,6 +155,9 @@ class EventsController extends Controller
      */
     public function edit(Event $event)
     {
+        if($event->group->admin_id != auth()->user()->id && $event->host_id != auth()->user()->id){
+            Abort(401);
+        }
         return view('events.edit', [
             'user' => auth()->user(),
             'event' => $event,
@@ -201,6 +207,9 @@ class EventsController extends Controller
      */
     public function destroy(Event $event)
     {
+        if($event->group->admin_id != auth()->user()->id && $event->host_id != auth()->user()->id){
+            Abort(401);
+        }
         DB::transaction(function () use(&$event){
             $notify_joined_users = $event->users()
                 ->select('email')
@@ -231,6 +240,10 @@ class EventsController extends Controller
 
     public function join(Event $event)
     {
+        if (!$event->group->hasUser(auth()->user()))
+        {
+            Abort(401);
+        }
         DB::transaction(function () use(&$event){
             $this->updatedEventNotifyUsers($event);
             $event->users()->attach(auth()->user()->id);
@@ -239,6 +252,10 @@ class EventsController extends Controller
 
     public function leave(Event $event)
     {
+        if (!$event->group->hasUser(auth()->user()))
+        {
+            Abort(401);
+        }
         DB::transaction(function () use(&$event){
             $event->users()->detach(auth()->user()->id);
             $this->updatedEventNotifyUsers($event);

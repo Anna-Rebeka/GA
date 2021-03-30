@@ -4188,8 +4188,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["user", "going", "event", "host"],
+  props: ["user", "going", "event", "host", "host_id"],
   data: function data() {
     return {
       savedUsers: this.event.users,
@@ -48595,21 +48596,28 @@ var render = function() {
                 [_vm._v("\n                Leave\n            ")]
               ),
           _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass:
-                "float-right rounded-lg w-16 px-2 text-center py-2 mr-2 text-white text-sm bg-gray-400 hover:bg-gray-500 focus:outline-none"
-            },
-            [
-              _c(
-                "a",
-                { staticClass: "p-3", attrs: { href: _vm.event.id + "/edit" } },
-                [_vm._v("\n                    Edit\n                ")]
+          _vm.event.group.admin_id == _vm.user.id ||
+          _vm.event.host_id == _vm.user.id
+            ? _c(
+                "div",
+                {
+                  staticClass:
+                    "float-right rounded-lg w-16 px-2 text-center py-2 mr-2 text-white text-sm bg-gray-400 hover:bg-gray-500 focus:outline-none"
+                },
+                [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "p-3",
+                      attrs: { href: _vm.event.id + "/edit" }
+                    },
+                    [_vm._v("\n                    Edit\n                ")]
+                  )
+                ]
               )
-            ]
-          ),
+            : _vm._e(),
           _vm._v(" "),
+          _vm.event.group.admin_id == _vm.user.id ||
           _vm.event.host_id == _vm.user.id
             ? _c(
                 "button",
