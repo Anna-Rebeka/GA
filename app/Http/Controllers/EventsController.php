@@ -21,6 +21,9 @@ class EventsController extends Controller
      */
     public function index()
     {
+        if(!auth()->user()->group){
+            Abort('404');
+        }
         $group = auth()->user()->group;
         $events = $group->events()->with('users')->with('host')->orderBy('event_time')->where('events.event_time', '>=', now())->get();
 

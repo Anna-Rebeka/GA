@@ -3107,7 +3107,7 @@ __webpack_require__.r(__webpack_exports__);
     getGroupMembers: function getGroupMembers() {
       var _this3 = this;
 
-      axios.get("/group/" + this.user.active_group + "/members/get").then(function (response) {
+      axios.get("/groups/" + this.user.active_group + "/members/get").then(function (response) {
         _this3.members = response.data;
 
         _this3.autocomplete(document.getElementById("memberInput"), _this3.members, _this3.lettersCounter);
@@ -6212,7 +6212,7 @@ __webpack_require__.r(__webpack_exports__);
       this.fields = this.fields.map(function (field) {
         return field["email"];
       });
-      axios.post("/invite-member", this.fields).then(function (response) {
+      axios.post("/groups/" + this.user.active_group + "/invite-member", this.fields).then(function (response) {
         _this.fields = {};
         _this.invitesSent = true;
       })["catch"](function (error) {
@@ -49597,7 +49597,7 @@ var render = function() {
               {
                 staticClass:
                   "bg-white block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
-                attrs: { href: "/whiteboard" }
+                attrs: { href: "/groups/" + _vm.group.id + "/whiteboard" }
               },
               [_vm._v("Whiteboard\n            ")]
             ),
@@ -50708,7 +50708,7 @@ var render = function() {
         {
           staticClass:
             "bg-white w-24 float-left m-2 shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 rounded-lg",
-          attrs: { href: "/invite-member" }
+          attrs: { href: "/groups/" + _vm.groupid + "/invite-member" }
         },
         [_vm._v("Ivite\n        ")]
       ),
@@ -50719,7 +50719,7 @@ var render = function() {
             {
               staticClass:
                 "bg-white w-24 float-right m-2 shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 rounded-lg",
-              attrs: { href: "/all-members/" + _vm.groupid }
+              attrs: { href: "/groups/" + _vm.groupid + "/all-members/" }
             },
             [_vm._v("Show all\n        ")]
           )

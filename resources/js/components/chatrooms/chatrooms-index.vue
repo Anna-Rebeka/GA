@@ -137,7 +137,7 @@ export default {
 
         getGroupMembers() {
             axios
-                .get("/group/" + this.user.active_group + "/members/get")
+                .get("/groups/" + this.user.active_group + "/members/get")
                 .then((response) => {
                     this.members = response.data;
                     this.autocomplete(

@@ -33,7 +33,7 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::middleware('auth')->group(function() {
+Route::middleware(['auth', 'ingroup'])->group(function() {
     Route::get('/dashboard', function() {
         return redirect('/profile/' . auth()->user()->username);
     })->name('dashboard');
@@ -46,7 +46,7 @@ Route::middleware('auth')->group(function() {
     Route::get('/profile/{user:username}/assignments/all', [UsersController::class, 'getAllUsersAssignments']);
     Route::get('/profile/{user:username}/assignments/mine', [UsersController::class, 'getUsersAssignments']);
     Route::get('/{user:username}/groups', [UsersController::class, 'getAllUsersGroups']);
-    Route::get('/all-members/{group:id}', [UsersController::class, 'index']);
+    Route::get('/groups/{group:id}/all-members', [UsersController::class, 'index']);
     Route::get('/{user:username}/active-group', [UsersController::class, 'getActiveGroup']);
     Route::get('/profile/{user:id}/settings', [UsersController::class, 'showSettings']);
     Route::post('/profile/{user:id}/settings', [UsersController::class, 'updateSettings']);
@@ -58,15 +58,15 @@ Route::middleware('auth')->group(function() {
     Route::post('/{user:username}/notes', [NotesController::class, 'store']);
     Route::delete('/{user}/notes/{id}', [NotesController::class, 'destroy']);
     
-    Route::get('/invite-member', [InviteMemberController::class, 'show'])->name('invite');
-    Route::post('/invite-member', [InviteMemberController::class, 'process'])->name('process');
+    Route::get('/groups/{group:id}/invite-member', [InviteMemberController::class, 'show'])->name('invite');
+    Route::post('/groups/{group:id}/invite-member', [InviteMemberController::class, 'process'])->name('process');
 
     Route::get('/create-group', [GroupsController::class, 'create']);
     Route::post('/create-group', [GroupsController::class, 'store']);
     Route::get('/groups/{group:id}/edit-group', [GroupsController::class, 'edit']);
     Route::post('/groups/{group:id}/edit-group', [GroupsController::class, 'update']);
-    Route::get('/group/{group:id}/members/get', [GroupsController::class, 'getMembers']);
-    Route::get('/whiteboard', [GroupsController::class, 'showWhiteboard']);
+    Route::get('/groups/{group:id}/members/get', [GroupsController::class, 'getMembers']);
+    Route::get('/groups/{group:id}/whiteboard', [GroupsController::class, 'showWhiteboard']);
     
     Route::get('/groups/{group:id}/get-whiteboard-posts', [GroupWhiteboardPostsController::class, 'getPosts']);
     Route::post('/groups/{group:id}/whiteboard-post', [GroupWhiteboardPostsController::class, 'store']);
