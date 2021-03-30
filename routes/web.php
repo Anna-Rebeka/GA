@@ -33,7 +33,7 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::middleware(['auth', 'ingroup'])->group(function() {
+Route::middleware(['auth', 'can.see'])->group(function() {
     Route::get('/dashboard', function() {
         return redirect('/profile/' . auth()->user()->username);
     })->name('dashboard');

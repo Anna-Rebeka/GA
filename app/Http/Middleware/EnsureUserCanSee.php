@@ -6,7 +6,7 @@ use Closure;
 use App\Models\Group;
 use Illuminate\Http\Request;
 
-class EnsureUserInGroup
+class EnsureUserCanSee
 {
     /**
      * Handle an incoming request.
@@ -36,6 +36,11 @@ class EnsureUserInGroup
         }
         if($request->assignment){
             if(!$request->assignment->group->hasUser(auth()->user())){
+                Abort('401');
+            }
+        }
+        if($request->chatroom){
+            if(!$request->chatroom->hasUser(auth()->user())){
                 Abort('401');
             }
         }
