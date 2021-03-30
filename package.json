@@ -20,7 +20,10 @@
         "tailwindcss": "^1.8.0",
         "vue-template-compiler": "^2.6.12",
         "node-notifier": ">=8.0.1",
-        "elliptic": ">=6.5.4"
+        "elliptic": ">=6.5.4",
+        "y18n": ">=4.0.1",
+        "ssri": ">=8.0.1",
+        "is-svg": ">=4.2.2"
     },
     "dependencies": {
         "bootstrap": "^3.4.1",
