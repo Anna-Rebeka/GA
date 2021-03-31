@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Group;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -166,11 +167,46 @@ class GroupsController extends Controller
      */
     public function destroy(Group $group)
     {
-        //
+        if ($group->admin_id != auth()->user()->id){
+            Abort(401);
+        }
+        DB::transaction(function () use(&$group){
+            $group->delete();
+        });
     }
 
     public function getMembers(Group $group){
         return $group->users->except(auth()->user()->id);
+    }
+
+    public function excludeMember(Group $group, User $user){
+        if(auth()->user()->id != $group->admin_id && auth()->user()->id != $user->id){
+            Abort(401);
+        }
+        DB::transaction(function () use(&$group, &$user){
+            if($user->active_group == $group->id){
+                $user->active_group = null;
+                $user->save();
+            }
+            DB::table('event_user')
+                ->join('events', 'events.id', '=', 'event_user.event_id')
+                ->where('event_user.user_id', '=', $user->id)
+                ->where('events.group_id', '=', $group->id)
+                ->delete();
+            DB::table('assignment_user')
+                ->join('assignments', 'assignments.id', '=', 'assignment_user.assignment_id')
+                ->where('assignment_user.user_id', '=', $user->id)
+                ->where('assignments.group_id', '=', $group->id)
+                ->delete();
+            DB::table('events')
+                ->where('host_id', $user->id)
+                ->update(['host_id' => null]);
+            DB::table('assignments')
+                ->where('author_id', $user->id)
+                ->update(['author_id' => null]);
+            $group->users()->detach($user->id);
+        });
+        return $user;
     }
 
     public function showWhiteboard(){

@@ -26,7 +26,8 @@ class UsersController extends Controller
     {   
         $users = $group->users()->orderBy('name')->where('users.id', '!=', auth()->user()->id)->get();
         return view('profile.index', [
-            'users' => $users
+            'users' => $users,
+            'group' => $group
         ]);
     }
 
@@ -237,6 +238,9 @@ class UsersController extends Controller
      */
     public function destroy(User $user)
     {
+        if (auth()->user()->id != $user->id){
+            Abort(401);
+        }
         $user->delete();
     }
 

@@ -7,7 +7,9 @@
         </div>
         <ul>
             <li v-for="user in pageOfItems" :key="user.id" class="inline float-left mr-4">
-                <a :href="'/profile/' + user.username">
+                <div class="relative">
+                    <button @click="checkWithUser(user)" class="absolute top-0 right-0 rounded-full border "><img class="object-cover rounded-full h-8 w-8" src="/img/cancel.png" alt="exclude"></button>
+                    <a :href="'/profile/' + user.username">
                     <div class="max-w-xs lg:w-40 lg:h-60 w-20 h-30 rounded overflow-hidden shadow-lg mb-4">
                         <img class="lg:w-40 lg:h-40 w-20 h-20 object-cover" :src="user.avatar" :alt="user.username">
                         <div class="px-6 py-2 text-center">
@@ -19,7 +21,8 @@
                                 {{ user.email }}
                         </p>
                     </div>
-                </a>
+                </a></div>
+                
             </li>
         </ul>
         
@@ -31,7 +34,7 @@
 
 <script>
 export default {
-    props: ['users'],
+    props: ['users', 'group'],
     data() {
         return {
             pageOfItems: [],
@@ -45,6 +48,19 @@ export default {
     },
 
     methods: {
+        checkWithUser(user) {
+            if (confirm("Are you sure you want " + user.name + " to leave this group?")) {
+                this.excludeUserFromGroup(user);
+            }
+        },
+
+        excludeUserFromGroup(user){
+            axios.delete("/groups/" + this.group.id + "/exclude-member/" + user.id).then((response) => {
+                var index = this.users.indexOf(response.data);
+                this.users.splice(index, 1);
+            });
+        },
+
         onChangePage(pageOfItems) {
             this.pageOfItems = pageOfItems;
         },

@@ -60,9 +60,12 @@ Route::middleware(['auth', 'can.see'])->group(function() {
     
     Route::get('/groups/{group:id}/invite-member', [InviteMemberController::class, 'show'])->name('invite');
     Route::post('/groups/{group:id}/invite-member', [InviteMemberController::class, 'process'])->name('process');
+    Route::delete('/groups/{group:id}/exclude-member/{user:id}', [GroupsController::class, 'excludeMember']);
 
     Route::get('/create-group', [GroupsController::class, 'create']);
     Route::post('/create-group', [GroupsController::class, 'store']);
+    Route::delete('/groups/{group:id}/destroy', [GroupsController::class, 'destroy']);
+
     Route::get('/groups/{group:id}/edit-group', [GroupsController::class, 'edit']);
     Route::post('/groups/{group:id}/edit-group', [GroupsController::class, 'update']);
     Route::get('/groups/{group:id}/members/get', [GroupsController::class, 'getMembers']);

@@ -4936,6 +4936,48 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "group", "members"],
   data: function data() {
@@ -4945,7 +4987,8 @@ __webpack_require__.r(__webpack_exports__);
       changedAvatar: false,
       emptyEditSubmitted: false,
       adminChangeFailed: false,
-      avatarTooBig: false
+      avatarTooBig: false,
+      deletingGroup: false
     };
   },
   methods: {
@@ -5000,6 +5043,29 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         window.location.href = "/profile/" + _this.user.username;
       })["catch"](function (error) {
+        console.log(error.message);
+      });
+    },
+    deleteGroup: function deleteGroup() {
+      var _this2 = this;
+
+      if (!this.deletingGroup) {
+        this.deletingGroup = true;
+        return;
+      }
+
+      if (document.getElementById("checkDeleting").value.trim().toLowerCase() != "yes") {
+        return;
+      }
+
+      axios["delete"]("/groups/" + this.group.id + "/destroy").then(function (response) {
+        window.location.href = "/dashboard";
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this2.errors = error.response.data.errors;
+          console.log(_this2.errors);
+        }
+
         console.log(error.message);
       });
     }
@@ -5631,6 +5697,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "members", "group"],
   data: function data() {
@@ -5645,6 +5719,20 @@ __webpack_require__.r(__webpack_exports__);
 
     if (this.visibleMembers.length > 3) {
       this.visibleMembers = this.visibleMembers.slice(0, 4);
+    }
+  },
+  methods: {
+    checkWithUserPanel: function checkWithUserPanel() {
+      var retVal = prompt("Are you sure you want to leave this group?", 'type "yes" to continue');
+
+      if (retVal.trim().toLowerCase() == "yes") {
+        this.excludeUserFromGroupPanel();
+      }
+    },
+    excludeUserFromGroupPanel: function excludeUserFromGroupPanel() {
+      axios["delete"]("/groups/" + this.group.id + "/exclude-member/" + this.user.id).then(function (response) {
+        window.location.href = "/dashboard";
+      });
     }
   }
 });
@@ -6052,8 +6140,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['users'],
+  props: ['users', 'group'],
   data: function data() {
     return {
       pageOfItems: [],
@@ -6065,6 +6156,20 @@ __webpack_require__.r(__webpack_exports__);
     this.autocomplete(document.getElementById("memberInput"), this.savedUsers, this.lettersCounter);
   },
   methods: {
+    checkWithUser: function checkWithUser(user) {
+      if (confirm("Are you sure you want " + user.name + " to leave this group?")) {
+        this.excludeUserFromGroup(user);
+      }
+    },
+    excludeUserFromGroup: function excludeUserFromGroup(user) {
+      var _this = this;
+
+      axios["delete"]("/groups/" + this.group.id + "/exclude-member/" + user.id).then(function (response) {
+        var index = _this.users.indexOf(response.data);
+
+        _this.users.splice(index, 1);
+      });
+    },
     onChangePage: function onChangePage(pageOfItems) {
       this.pageOfItems = pageOfItems;
     },
@@ -7199,6 +7304,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "new_whiteboard_notify", "new_assignment_notify", "new_event_notify"],
   data: function data() {
@@ -7326,7 +7432,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['authUser', 'user', 'userCreatedAt', 'userEditPath'],
+  props: ["authUser", "user", "userCreatedAt", "userEditPath"],
   mounted: function mounted() {}
 });
 
@@ -49801,7 +49907,11 @@ var render = function() {
                   staticClass:
                     "flex items-center justify-between w-full my-5 p-2 bg-red-500 shadow text-white"
                 },
-                [_vm._v("Please choose a picture under 5MB.")]
+                [
+                  _vm._v(
+                    "\n                Please choose a picture under 5MB.\n            "
+                  )
+                ]
               )
             : _vm._e()
         ]),
@@ -49939,7 +50049,27 @@ var render = function() {
             },
             [_vm._v("\n                Submit\n            ")]
           )
-        ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "w-full mt-12 border-b mb-12 rounded-full" }),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass:
+              "rounded px-2 py-3 mr-2 mb-8 uppercase text-white text-sm border bg-red-300 border-red-400 hover:bg-red-500 focus:outline-none",
+            on: {
+              click: function($event) {
+                return _vm.deleteGroup()
+              }
+            }
+          },
+          [_vm._v("\n            Delete this group\n        ")]
+        ),
+        _vm._v(" "),
+        _vm.deletingGroup
+          ? _c("div", [_vm._m(1), _vm._v(" "), _vm._m(2)])
+          : _vm._e()
       ]
     )
   ])
@@ -49970,6 +50100,61 @@ var staticRenderFns = [
           type: "text",
           name: "checkAdminChange",
           id: "checkAdminChange",
+          placeholder: "do you wish to proceed?"
+        }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass:
+          "flex items-center justify-between w-full mt-6 mb-6 p-2 bg-yellow-400 shadow text-white"
+      },
+      [
+        _vm._v("\n                Deleting a group is irreversible. "),
+        _c("br"),
+        _vm._v(
+          "\n                If you wish to preserve this group you have to pass your admin rights "
+        ),
+        _c("br"),
+        _vm._v("\n                to another member BEFORE continuing. "),
+        _c("br"),
+        _vm._v(
+          "\n                Otherwise everything will be lost.\n            "
+        )
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "mb-12" }, [
+      _c(
+        "label",
+        {
+          staticClass:
+            "mt-4 block mb-2 uppercase font-bold text-sm text-red-500",
+          attrs: { for: "checkDeleting" }
+        },
+        [
+          _vm._v(
+            '\n                    Please type "yes" to delete this group.\n                '
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c("input", {
+        staticClass: "focus:outline-none border-b border-gray-400 p-2",
+        attrs: {
+          type: "text",
+          name: "checkDeleting",
+          id: "checkDeleting",
           placeholder: "do you wish to proceed?"
         }
       })
@@ -50770,6 +50955,23 @@ var render = function() {
             },
             [_vm._v("Show all\n        ")]
           )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.user.id != _vm.group.admin_id
+        ? _c(
+            "button",
+            {
+              staticClass:
+                "bg-white w-24 float-left m-2 shadow border border-red-400 py-2 px-4 text-white text-xs bg-red-300 hover:bg-red-500 rounded-lg focus:outline-none",
+              attrs: { href: "/groups/" + _vm.group.id + "/group-statistics" },
+              on: {
+                click: function($event) {
+                  return _vm.checkWithUserPanel()
+                }
+              }
+            },
+            [_vm._v("\n            Leave\n        ")]
+          )
         : _vm._e()
     ])
   ])
@@ -51166,45 +51368,65 @@ var render = function() {
           "li",
           { key: user.id, staticClass: "inline float-left mr-4" },
           [
-            _c("a", { attrs: { href: "/profile/" + user.username } }, [
+            _c("div", { staticClass: "relative" }, [
               _c(
-                "div",
+                "button",
                 {
-                  staticClass:
-                    "max-w-xs lg:w-40 lg:h-60 w-20 h-30 rounded overflow-hidden shadow-lg mb-4"
+                  staticClass: "absolute top-0 right-0 rounded-full border ",
+                  on: {
+                    click: function($event) {
+                      return _vm.checkWithUser(user)
+                    }
+                  }
                 },
                 [
                   _c("img", {
-                    staticClass: "lg:w-40 lg:h-40 w-20 h-20 object-cover",
-                    attrs: { src: user.avatar, alt: user.username }
-                  }),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "px-6 py-2 text-center" }, [
-                    _c("div", { staticClass: "font-bold text-sm mb-2" }, [
-                      _vm._v(
-                        "\n                            " +
-                          _vm._s(user.name) +
-                          "\n                        "
-                      )
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "p",
-                    {
-                      staticClass:
-                        "invisible text-gray-700 text-center mb-1 text-xs lg:visible xl:visible"
-                    },
-                    [
-                      _vm._v(
-                        "\n                            " +
-                          _vm._s(user.email) +
-                          "\n                    "
-                      )
-                    ]
-                  )
+                    staticClass: "object-cover rounded-full h-8 w-8",
+                    attrs: { src: "/img/cancel.png", alt: "exclude" }
+                  })
                 ]
-              )
+              ),
+              _vm._v(" "),
+              _c("a", { attrs: { href: "/profile/" + user.username } }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "max-w-xs lg:w-40 lg:h-60 w-20 h-30 rounded overflow-hidden shadow-lg mb-4"
+                  },
+                  [
+                    _c("img", {
+                      staticClass: "lg:w-40 lg:h-40 w-20 h-20 object-cover",
+                      attrs: { src: user.avatar, alt: user.username }
+                    }),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "px-6 py-2 text-center" }, [
+                      _c("div", { staticClass: "font-bold text-sm mb-2" }, [
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(user.name) +
+                            "\n                        "
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "p",
+                      {
+                        staticClass:
+                          "invisible text-gray-700 text-center mb-1 text-xs lg:visible xl:visible"
+                      },
+                      [
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(user.email) +
+                            "\n                    "
+                        )
+                      ]
+                    )
+                  ]
+                )
+              ])
             ])
           ]
         )
@@ -52704,9 +52926,7 @@ var render = function() {
         ])
       : _vm._e(),
     _vm._v(" "),
-    _c("hr", {
-      staticClass: "w-full -ml-5 bg-gray-500 border-2 mb-12 rounded-full"
-    }),
+    _c("div", { staticClass: "w-full mt-12 border-b mb-12 rounded-full" }),
     _vm._v(" "),
     _c(
       "p",
@@ -53102,13 +53322,11 @@ var render = function() {
             staticClass:
               "flex items-center justify-between w-full -ml-4 mt-10 p-2 bg-green-500 shadow text-white"
           },
-          [_vm._v("\n                Your changes have been saved!\n    ")]
+          [_vm._v("\n        Your changes have been saved!\n    ")]
         )
       : _vm._e(),
     _vm._v(" "),
-    _c("hr", {
-      staticClass: "w-full mt-12 -ml-5 bg-gray-500 border-2 mb-12 rounded-full"
-    }),
+    _c("div", { staticClass: "w-full mt-12 border-b mb-12 rounded-full" }),
     _vm._v(" "),
     _c(
       "button",
@@ -53228,7 +53446,7 @@ var render = function() {
       [
         _c("div", { staticClass: "w-14 md:w-44 2xl:w-64" }, [
           _c("h2", { staticClass: "font-bold text-2xl" }, [
-            _vm._v(" " + _vm._s(_vm.user.name) + " ")
+            _vm._v(_vm._s(_vm.user.name))
           ]),
           _vm._v(" "),
           _c("p", { staticClass: "text-sm" }, [
@@ -53245,7 +53463,7 @@ var render = function() {
                     "rounded-lg shadow border border-gray-300 py-2 px-4 mr-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
                   attrs: { href: _vm.userEditPath }
                 },
-                [_vm._v("\n                    Edit profile\n                ")]
+                [_vm._v("\n                Edit profile\n            ")]
               )
             ])
           : _c(
@@ -53255,7 +53473,7 @@ var render = function() {
                   "rounded-lg shadow border border-gray-300 py-2 px-4 mr-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
                 attrs: { href: "/chats/find/" + _vm.user.id }
               },
-              [_vm._v("  \n                Chat \n            ")]
+              [_vm._v("\n            Chat\n        ")]
             )
       ]
     ),
@@ -53264,9 +53482,7 @@ var render = function() {
       _vm._v("\n        " + _vm._s(_vm.user.bio) + "\n    ")
     ]),
     _vm._v(" "),
-    _c("hr", {
-      staticClass: "w-full h-1 bg-gray-100 border-none mb-10 rounded-full"
-    }),
+    _c("div", { staticClass: "w-full mt-12 border-b mb-12 rounded-full" }),
     _vm._v(" "),
     _vm.authUser.id == _vm.user.id
       ? _c(

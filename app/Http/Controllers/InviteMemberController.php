@@ -25,7 +25,7 @@ class InviteMemberController extends Controller
         ]);
     }
 
-    public function process(Request $fields){
+    public function process(Request $fields, Group $group){
         if($group->admin_id != auth()->user()->id){
             Abort(401);
         }

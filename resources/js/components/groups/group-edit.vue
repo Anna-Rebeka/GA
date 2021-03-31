@@ -42,7 +42,12 @@
                         class="w-16 h-16 object-cover border-2 border-gray-400"
                     />
                 </div>
-                <p class="flex items-center justify-between w-full my-5 p-2 bg-red-500 shadow text-white" v-if="avatarTooBig">Please choose a picture under 5MB.</p>
+                <p
+                    class="flex items-center justify-between w-full my-5 p-2 bg-red-500 shadow text-white"
+                    v-if="avatarTooBig"
+                >
+                    Please choose a picture under 5MB.
+                </p>
             </div>
 
             <div class="mb-8">
@@ -118,6 +123,43 @@
                     Submit
                 </button>
             </div>
+
+            <div class="w-full mt-12 border-b mb-12 rounded-full"></div>
+
+            <button
+                @click="deleteGroup()"
+                class="rounded px-2 py-3 mr-2 mb-8 uppercase text-white text-sm border bg-red-300 border-red-400 hover:bg-red-500 focus:outline-none"
+            >
+                Delete this group
+            </button>
+
+            <div v-if="deletingGroup">
+                <div
+                    class="flex items-center justify-between w-full mt-6 mb-6 p-2 bg-yellow-400 shadow text-white"
+                >
+                    Deleting a group is irreversible. <br />
+                    If you wish to preserve this group you have to pass your admin rights <br />
+                    to another member BEFORE continuing. <br />
+                    Otherwise everything will be lost.
+                </div>
+
+                <div class="mb-12">
+                    <label
+                        class="mt-4 block mb-2 uppercase font-bold text-sm text-red-500"
+                        for="checkDeleting"
+                    >
+                        Please type "yes" to delete this group.
+                    </label>
+
+                    <input
+                        class="focus:outline-none border-b border-gray-400 p-2"
+                        type="text"
+                        name="checkDeleting"
+                        id="checkDeleting"
+                        placeholder="do you wish to proceed?"
+                    />
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -133,12 +175,13 @@ export default {
             emptyEditSubmitted: false,
             adminChangeFailed: false,
             avatarTooBig: false,
+            deletingGroup: false,
         };
     },
 
     methods: {
         handleAvatarUpload() {
-            if(this.$refs.avatar.files[0].size > 5000000){
+            if (this.$refs.avatar.files[0].size > 5000000) {
                 this.avatarTooBig = true;
                 return;
             }
@@ -192,6 +235,33 @@ export default {
                     window.location.href = "/profile/" + this.user.username;
                 })
                 .catch((error) => {
+                    console.log(error.message);
+                });
+        },
+
+        deleteGroup() {
+            if (!this.deletingGroup) {
+                this.deletingGroup = true;
+                return;
+            }
+            if (
+                document
+                    .getElementById("checkDeleting")
+                    .value.trim()
+                    .toLowerCase() != "yes"
+            ) {
+                return;
+            }
+            axios
+                .delete("/groups/" + this.group.id + "/destroy")
+                .then((response) => {
+                    window.location.href = "/dashboard";
+                })
+                .catch((error) => {
+                    if (error.response.status == 422) {
+                        this.errors = error.response.data.errors;
+                        console.log(this.errors);
+                    }
                     console.log(error.message);
                 });
         },
