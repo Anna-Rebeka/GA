@@ -36,7 +36,9 @@
                 Chat
             </a>
         </div>
-
+        <p class="text-sm float-right mb-4">
+            {{ user.email }}
+        </p>
         <p class="text-sm mb-4">
             {{ user.bio }}
         </p>

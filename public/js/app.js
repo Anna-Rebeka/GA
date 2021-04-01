@@ -2537,12 +2537,86 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "assignment", "author", "assignment_users_ids"],
   data: function data() {
     return {
       shownAssignment: this.assignment,
-      takenAssignment: this.assignment.taken
+      takenAssignment: this.assignment.taken,
+      editingComment: false,
+      authorComment: this.assignment.author_comment
     };
   },
   methods: {
@@ -2562,6 +2636,8 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.patch("/assignments/" + $assignment.id + "/take").then(function (response) {
         _this.shownAssignment.users.push(_this.user);
+
+        _this.assignment_users_ids.push(_this.user.id);
 
         _this.takenAssignment = true;
       })["catch"](function (error) {
@@ -2590,6 +2666,18 @@ __webpack_require__.r(__webpack_exports__);
     deleteAssignment: function deleteAssignment($assignment) {
       axios["delete"]("/assignments/" + $assignment.id).then(function (response) {
         window.location.href = "/assignments";
+      });
+    },
+    editComment: function editComment() {
+      var _this3 = this;
+
+      axios.patch("/assignments/" + this.assignment.id + "/edit-comment", {
+        author_comment: document.getElementById("author_comment").value
+      }).then(function (response) {
+        _this3.authorComment = response.data;
+        _this3.editingComment = false;
+      })["catch"](function (error) {
+        console.log(error.message);
       });
     }
   }
@@ -7645,6 +7733,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
 //
 //
 //
@@ -46507,7 +46597,11 @@ var render = function() {
                         staticClass: "p-3",
                         attrs: { href: _vm.shownAssignment.id + "/edit" }
                       },
-                      [_vm._v(" Edit ")]
+                      [
+                        _vm._v(
+                          "\n                        Edit\n                    "
+                        )
+                      ]
                     )
                   ]
                 ),
@@ -46776,7 +46870,139 @@ var render = function() {
               )
             ])
           ]
-        )
+        ),
+        _vm._v(" "),
+        _vm.user.id == _vm.assignment.author_id ||
+        _vm.assignment_users_ids.includes(_vm.user.id) ||
+        _vm.user.id == _vm.assignment.group.admin_id
+          ? _c(
+              "div",
+              {
+                staticClass: "py-4 px-6 mb-2 border-b border-gray-200 rounded"
+              },
+              [
+                _vm._m(5),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" },
+                  [
+                    !_vm.editingComment
+                      ? _c(
+                          "div",
+                          {
+                            staticClass:
+                              "relative bg-purple-100 border-gray-300 rounded-lg p-5 mb-5"
+                          },
+                          [
+                            _vm.authorComment
+                              ? _c("p", [_vm._v(_vm._s(_vm.authorComment))])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.assignment.group.admin_id == _vm.user.id
+                              ? _c(
+                                  "div",
+                                  { staticClass: "absolute top-1 right-1" },
+                                  [
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass: "focus:outline-none",
+                                        on: {
+                                          click: function($event) {
+                                            _vm.editingComment = !_vm.editingComment
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c("img", {
+                                          staticClass:
+                                            "w-9 border border-gray-300 rounded-full",
+                                          attrs: {
+                                            src: "/img/edit.png",
+                                            alt: "edit"
+                                          }
+                                        })
+                                      ]
+                                    )
+                                  ]
+                                )
+                              : _vm._e()
+                          ]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.editingComment
+                      ? _c("div", { staticClass: "relative" }, [
+                          _c("textarea", {
+                            staticClass:
+                              "relative w-full resize-none bg-purple-100 border-gray-300 rounded-lg p-5 mb-5 focus:outline-none",
+                            attrs: {
+                              id: "author_comment",
+                              name: "text",
+                              placeholder: _vm.authorComment,
+                              maxlength: "500"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _vm.assignment.group.admin_id == _vm.user.id
+                            ? _c(
+                                "div",
+                                { staticClass: "absolute z-40 top-1 right-1" },
+                                [
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "focus:outline-none",
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.editComment()
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c("img", {
+                                        staticClass:
+                                          "w-9 border border-gray-300 rounded-full",
+                                        attrs: {
+                                          src: "/img/edit.png",
+                                          alt: "edit"
+                                        }
+                                      })
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "focus:outline-none",
+                                      on: {
+                                        click: function($event) {
+                                          _vm.editingComment = !_vm.editingComment
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c("img", {
+                                        staticClass:
+                                          "w-9 border border-gray-300 rounded-full",
+                                        attrs: {
+                                          src: "/img/cancel.png",
+                                          alt: "edit"
+                                        }
+                                      })
+                                    ]
+                                  )
+                                ]
+                              )
+                            : _vm._e()
+                        ])
+                      : _vm._e()
+                  ]
+                )
+              ]
+            )
+          : _vm._e()
       ]),
       _vm._v(" "),
       _c("assignment-show-file-upload", {
@@ -46825,6 +47051,14 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("p", { staticClass: "mb-2" }, [
       _c("strong", [_vm._v("What about")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", { staticClass: "mb-2" }, [
+      _c("strong", [_vm._v("Author commented (privatly)")])
     ])
   }
 ]
@@ -53891,6 +54125,10 @@ var render = function() {
             )
       ]
     ),
+    _vm._v(" "),
+    _c("p", { staticClass: "text-sm float-right mb-4" }, [
+      _vm._v("\n        " + _vm._s(_vm.user.email) + "\n    ")
+    ]),
     _vm._v(" "),
     _c("p", { staticClass: "text-sm mb-4" }, [
       _vm._v("\n        " + _vm._s(_vm.user.bio) + "\n    ")

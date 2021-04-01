@@ -2,7 +2,13 @@
     <div>
         <div class="p-8 mr-2 mb-2">
             <div class="float-right">
-                <div v-if="user.id == assignment.group.admin_id || shownAssignment.author_id == user.id" class="mb-5">
+                <div
+                    v-if="
+                        user.id == assignment.group.admin_id ||
+                        shownAssignment.author_id == user.id
+                    "
+                    class="mb-5"
+                >
                     <button
                         v-if="!shownAssignment.done"
                         @click="checkWithUser(shownAssignment, 'done')"
@@ -13,7 +19,9 @@
                     <div
                         class="float-right rounded-lg w-16 px-2 text-center py-2 mr-2 text-white text-sm bg-gray-400 hover:bg-gray-500 focus:outline-none"
                     >
-                        <a :href="shownAssignment.id + '/edit'" class="p-3"> Edit </a>
+                        <a :href="shownAssignment.id + '/edit'" class="p-3">
+                            Edit
+                        </a>
                     </div>
 
                     <button
@@ -155,6 +163,70 @@
                     {{ shownAssignment.description }}
                 </div>
             </div>
+            <div
+                v-if="user.id == assignment.author_id || assignment_users_ids.includes(user.id) || user.id == assignment.group.admin_id"
+                class="py-4 px-6 mb-2 border-b border-gray-200 rounded"
+            >
+                <p class="mb-2"><strong>Author commented (privatly)</strong></p>
+                <div class="bg-white rounded mb-2 pl-2 pt-2 pb-2">
+                    <div
+                        v-if="!editingComment"
+                        class="relative bg-purple-100 border-gray-300 rounded-lg p-5 mb-5"
+                    >
+                        <p v-if="authorComment">{{ authorComment }}</p>
+                        <div
+                            v-if="assignment.group.admin_id == user.id"
+                            class="absolute top-1 right-1"
+                        >
+                            <button
+                                v-on:click="editingComment = !editingComment"
+                                class="focus:outline-none"
+                            >
+                                <img
+                                    class="w-9 border border-gray-300 rounded-full"
+                                    src="/img/edit.png"
+                                    alt="edit"
+                                />
+                            </button>
+                        </div>
+                    </div>
+                    <div v-if="editingComment" class="relative">
+                        <textarea
+                            id="author_comment"
+                            name="text"
+                            :placeholder="authorComment"
+                            maxlength="500"
+                            class="relative w-full resize-none bg-purple-100 border-gray-300 rounded-lg p-5 mb-5 focus:outline-none"
+                        >
+                        </textarea>
+                        <div
+                            v-if="assignment.group.admin_id == user.id"
+                            class="absolute z-40 top-1 right-1"
+                        >
+                            <button
+                                v-on:click="editComment()"
+                                class="focus:outline-none"
+                            >
+                                <img
+                                    class="w-9 border border-gray-300 rounded-full"
+                                    src="/img/edit.png"
+                                    alt="edit"
+                                />
+                            </button>
+                            <button
+                                v-on:click="editingComment = !editingComment"
+                                class="focus:outline-none"
+                            >
+                                <img
+                                    class="w-9 border border-gray-300 rounded-full"
+                                    src="/img/cancel.png"
+                                    alt="edit"
+                                />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <assignment-show-file-upload
@@ -172,6 +244,8 @@ export default {
         return {
             shownAssignment: this.assignment,
             takenAssignment: this.assignment.taken,
+            editingComment: false,
+            authorComment: this.assignment.author_comment,
         };
     },
 
@@ -193,6 +267,7 @@ export default {
                 .patch("/assignments/" + $assignment.id + "/take")
                 .then((response) => {
                     this.shownAssignment.users.push(this.user);
+                    this.assignment_users_ids.push(this.user.id);
                     this.takenAssignment = true;
                 })
                 .catch((error) => {
@@ -223,6 +298,20 @@ export default {
             axios.delete("/assignments/" + $assignment.id).then((response) => {
                 window.location.href = "/assignments";
             });
+        },
+
+        editComment() {
+            axios
+                .patch("/assignments/" + this.assignment.id + "/edit-comment", {
+                    author_comment: document.getElementById("author_comment").value,
+                })
+                .then((response) => {
+                    this.authorComment = response.data;
+                    this.editingComment = false;
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                });
         },
     },
 };

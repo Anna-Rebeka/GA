@@ -97,9 +97,7 @@ class AssignmentsController extends Controller
                 'duration' => $attributes['duration'],
                 'due' => $attributes['due'],
             ]);
-            //for each assignee attach this assignment
             $assignment->users()->attach($fields['users']);
-            //notify users
             $this->newAssignmentNotifyUsers($assignment);
             $assignment->users;
             return $assignment;
@@ -282,10 +280,7 @@ class AssignmentsController extends Controller
     
     public function take(Assignment $assignment)
     {
-        if ($assignment->group->admin_id != auth()->user()->id && 
-            $assignment->author_id != auth()->user()->id ||
-            !$assignment->group->hasUser(auth()->user())
-            )
+        if (!$assignment->group->hasUser(auth()->user()))
         {
             Abort(401);
         }
@@ -309,6 +304,27 @@ class AssignmentsController extends Controller
     public function loadOlderAssignments(Group $group, $howManyDisplayed){
         $assignments = $group->assignments()->with('users')->with('author')->offset($howManyDisplayed)->limit(10)->orderByDesc('due')->get();
         return $assignments;
+    }
+
+    public function updateComment(Request $request, Assignment $assignment)
+    {
+        if($assignment->group->admin_id != auth()->user()->id || $assignment->author_id != auth()->user()->id){
+            Abort(401);
+        }
+        $attributes = request()->validate([
+            'author_comment' => [
+                'string', 
+                'nullable', 
+                'max:500', 
+            ],
+        ]);
+            
+        if(!request('author_comment')){
+            $attributes['author_comment'] = NULL;
+        }
+
+        $assignment->update($attributes);
+        return $assignment->author_comment;
     }
 }
 
