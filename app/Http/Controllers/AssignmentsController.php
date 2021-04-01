@@ -23,11 +23,15 @@ class AssignmentsController extends Controller
      */
     public function index()
     {
+        if(!auth()->user()->group){
+            Abort('404');
+        }
         $group = auth()->user()->group;
         $assignments = $group->assignments()->with('users')->with('author')->where('due', '>=', now())->orderBy('due')->get();
 
         return view('groups.assignments', [
             'user' => auth()->user(),
+            'group' => $group,
             'assignments' => $assignments,
             'members' => $group->users
         ]);
@@ -82,7 +86,7 @@ class AssignmentsController extends Controller
             $attributes['max_assignees'] = null;
         }
 
-        $assignment = DB::transaction(function () use(&$assignment, &$user, $attributes){
+        $assignment = DB::transaction(function () use(&$assignment, &$user, $attributes, &$fields){
             $assignment = Assignment::create([
                 'name' => $attributes['name'],
                 'author_id' => $user->id,
@@ -93,9 +97,7 @@ class AssignmentsController extends Controller
                 'duration' => $attributes['duration'],
                 'due' => $attributes['due'],
             ]);
-            //for each assignee attach this assignment
             $assignment->users()->attach($fields['users']);
-            //notify users
             $this->newAssignmentNotifyUsers($assignment);
             $assignment->users;
             return $assignment;
@@ -154,13 +156,14 @@ class AssignmentsController extends Controller
         }
 
         $assignment->users;
-
+        $assignment->group;
         $assignment->taken = $assignment->isAssigned(auth()->user());
 
         return view('assignments.show', [
             'user' => auth()->user(),
             'assignment' => $assignment,
             'author' => $author,
+            'assignment_users_ids' => $assignment->users->pluck('id'),
         ]);
     }
 
@@ -172,6 +175,9 @@ class AssignmentsController extends Controller
      */
     public function edit(Assignment $assignment)
     {
+        if($assignment->group->admin_id != auth()->user()->id && $assignment->author_id != auth()->user()->id){
+            Abort(401);
+        }
         $assignment->users;
         $free_members = $assignment->group->users->diff($assignment->users);
         return view('assignments.edit', [
@@ -191,6 +197,9 @@ class AssignmentsController extends Controller
      */
     public function update(Request $request, Assignment $assignment)
     {
+        if($assignment->group->admin_id != auth()->user()->id && $assignment->author_id != auth()->user()->id){
+            Abort(401);
+        }
         $attributes = request()->validate([
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:255'],
@@ -243,6 +252,9 @@ class AssignmentsController extends Controller
      */
     public function destroy(Assignment $assignment)
     {
+        if($assignment->group->admin_id != auth()->user()->id && $assignment->author_id != auth()->user()->id){
+            Abort(401);
+        }
         DB::transaction(function () use(&$assignment) {
             $notify_assignees = $assignment->users()->select('email')->where('my_assignment_updated_notify', true)->where('users.id', '!=', auth()->user()->id)->get();
             
@@ -268,6 +280,10 @@ class AssignmentsController extends Controller
     
     public function take(Assignment $assignment)
     {
+        if (!$assignment->group->hasUser(auth()->user()))
+        {
+            Abort(401);
+        }
         DB::transaction(function () use(&$assignment) {
             $this->updatedAssignmentNotifyUsers($assignment);
             $assignment->users()->attach(auth()->user()->id);
@@ -276,6 +292,9 @@ class AssignmentsController extends Controller
 
     public function done(Assignment $assignment)
     {
+        if($assignment->group->admin_id != auth()->user()->id && $assignment->author_id != auth()->user()->id){
+            Abort(401);
+        }
         DB::transaction(function () use(&$assignment) {
             $assignment->update(array('done' => true));
             $this->updatedAssignmentNotifyUsers($assignment);
@@ -285,6 +304,27 @@ class AssignmentsController extends Controller
     public function loadOlderAssignments(Group $group, $howManyDisplayed){
         $assignments = $group->assignments()->with('users')->with('author')->offset($howManyDisplayed)->limit(10)->orderByDesc('due')->get();
         return $assignments;
+    }
+
+    public function updateComment(Request $request, Assignment $assignment)
+    {
+        if($assignment->group->admin_id != auth()->user()->id || $assignment->author_id != auth()->user()->id){
+            Abort(401);
+        }
+        $attributes = request()->validate([
+            'author_comment' => [
+                'string', 
+                'nullable', 
+                'max:500', 
+            ],
+        ]);
+            
+        if(!request('author_comment')){
+            $attributes['author_comment'] = NULL;
+        }
+
+        $assignment->update($attributes);
+        return $assignment->author_comment;
     }
 }
 

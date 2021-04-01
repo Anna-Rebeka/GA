@@ -35,6 +35,7 @@ class CreateUsersAndGroupsTable extends Migration
 
             $table->foreign('active_group')
             ->references('id')
+            ->onDelete('set null')
             ->on('groups');
         });
 

@@ -1,3 +1,3 @@
 <x-master>
-    <group-events :user="{{ $user }}"  :events="{{ $events }}"></group-events>
+    <group-events :user="{{ $user }}"  :group="{{ $group }}" :events="{{ $events }}"></group-events>
 </x-master>

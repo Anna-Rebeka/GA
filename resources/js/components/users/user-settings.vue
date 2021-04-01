@@ -46,7 +46,7 @@
             </div>
         </div>
 
-        <hr class="w-full -ml-5 bg-gray-500 border-2 mb-12 rounded-full" />
+        <div class="w-full mt-12 border-b mb-12 rounded-full"></div>
 
         <p
             class="-ml-8 mt-4 block mb-7 font-bold text-lg text-center text-gray-700"
@@ -198,13 +198,14 @@
 
         <div class="clear-both"></div>
 
-        <div class="flex items-center justify-between w-full -ml-4 mt-10 p-2 bg-green-500 shadow text-white" v-if="settingsSubmitted">
-                    Your changes have been saved!
+        <div
+            class="flex items-center justify-between w-full -ml-4 mt-10 p-2 bg-green-500 shadow text-white"
+            v-if="settingsSubmitted"
+        >
+            Your changes have been saved!
         </div>
-
-        <hr
-            class="w-full mt-12 -ml-5 bg-gray-500 border-2 mb-12 rounded-full"
-        />
+        
+        <div class="w-full mt-12 border-b mb-12 rounded-full"></div>
 
         <button
             @click="deleteAccount()"

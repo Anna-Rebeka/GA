@@ -13,10 +13,10 @@
             <select
                 id="filterAssignments"
                 class="inline-block rounded-lg bg-white border border-gray-300 text-gray-700 px-4 pr-8 h-8 mr-2 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
-                <option value="mine">Mine</option>
+                <option value="mine">Assigned to me</option>
                 <option value="all">All</option>
             </select>
-            <div class="inline-block relative text-gray-600 w-1/3">
+            <div class="md:inline-block md:mt-0 mt-2 relative text-gray-600 md:w-1/3 w-48">
                 <input class="rounded-lg bg-white border border-gray-300 text-gray-500 w-full h-8 px-5 pr-10 rounded-lg text-sm focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500"
                     id="searchBar" type="search" name="searchBar" placeholder="Search by name">
                 <button id="searchButton" type="submit" class="absolute right-0 top-2 mr-4 bg-transparent focus:outline-none">
@@ -25,7 +25,7 @@
             </div>
         </div>
         <p class="ml-2 text-xs font-bold text-blue-500 float-left">Deadline </p> <p class="text-sm font-bold float-left ml-2 mr-2">/</p> <p class="float-left text-xs font-bold text-red-600 mb-4 mr-8"> On time</p>
-        <p class="ml-2 text-xs px-1 font-medium bg-red-100 float-left">waiting</p> <p class="text-sm font-bold float-left ml-2 mr-2">/</p> <p class="text-xs px-2 font-medium bg-green-100 float-left"> done</p>
+        <p class="ml-2 text-xs px-1 font-medium bg-red-100 float-left">In progress</p> <p class="text-sm font-bold float-left ml-2 mr-2">/</p> <p class="text-xs px-2 font-medium bg-green-100 float-left"> done</p>
         <div class="flex flex-col clear-both">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">

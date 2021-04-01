@@ -25,6 +25,7 @@ class CreateAssignmentsTable extends Migration
             $table->text('description');
             $table->integer('max_assignees')->nullable();
             $table->boolean('done')->default(false);
+            $table->string('author_comment', 500)->nullable();
             $table->timestamps();
             
             $table->foreign('author_id')

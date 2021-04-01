@@ -15,6 +15,9 @@ class GroupStatisticsController extends Controller
 {
     public function showStatistics(Group $group)
     {
+        if($group->admin_id != auth()->user()->id){
+            Abort(401);
+        }
         $users_with_assignments = DB::table('assignment_user')
             ->select('assignment_user.user_id')
             ->distinct()

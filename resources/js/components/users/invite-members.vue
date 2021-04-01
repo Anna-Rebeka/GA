@@ -88,7 +88,7 @@ export default {
         submit() {
             this.fields = this.fields.map((field) => field["email"]);
             axios
-                .post("/invite-member", this.fields)
+                .post("/groups/" + this.user.active_group + "/invite-member", this.fields)
                 .then((response) => {
                     this.fields = {};
                     this.invitesSent = true;

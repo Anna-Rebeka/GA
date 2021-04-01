@@ -2266,8 +2266,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["user", "assignment"],
+  props: ["user", "assignment", "assignment_users_ids"],
   data: function data() {
     return {
       takenAssignment: false,
@@ -2280,7 +2292,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.getAssignmentFiles();
-    console.log(this.assignmentsFiles);
   },
   methods: {
     getAssignmentFiles: function getAssignmentFiles() {
@@ -2525,12 +2536,87 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["user", "assignment", "author"],
+  props: ["user", "assignment", "author", "assignment_users_ids"],
   data: function data() {
     return {
       shownAssignment: this.assignment,
-      takenAssignment: this.assignment.taken
+      takenAssignment: this.assignment.taken,
+      editingComment: false,
+      authorComment: this.assignment.author_comment
     };
   },
   methods: {
@@ -2550,6 +2636,8 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.patch("/assignments/" + $assignment.id + "/take").then(function (response) {
         _this.shownAssignment.users.push(_this.user);
+
+        _this.assignment_users_ids.push(_this.user.id);
 
         _this.takenAssignment = true;
       })["catch"](function (error) {
@@ -2578,6 +2666,18 @@ __webpack_require__.r(__webpack_exports__);
     deleteAssignment: function deleteAssignment($assignment) {
       axios["delete"]("/assignments/" + $assignment.id).then(function (response) {
         window.location.href = "/assignments";
+      });
+    },
+    editComment: function editComment() {
+      var _this3 = this;
+
+      axios.patch("/assignments/" + this.assignment.id + "/edit-comment", {
+        author_comment: document.getElementById("author_comment").value
+      }).then(function (response) {
+        _this3.authorComment = response.data;
+        _this3.editingComment = false;
+      })["catch"](function (error) {
+        console.log(error.message);
       });
     }
   }
@@ -2690,8 +2790,72 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user', 'assignments'],
+  props: ["user", "group", "assignments"],
   data: function data() {
     return {
       allAssignments: this.assignments,
@@ -2749,6 +2913,8 @@ __webpack_require__.r(__webpack_exports__);
           this.filterToDo();
         } else if (this.select.value === "free") {
           this.filterFree();
+        } else if (this.select.value === "noAuthor") {
+          this.filterNoAuthor();
         }
 
         this.filtered = this.select.value;
@@ -2785,6 +2951,15 @@ __webpack_require__.r(__webpack_exports__);
     filterFree: function filterFree() {
       this.savedAssignments = this.savedAssignments.filter(function (e) {
         if (e.users.length == 0 || e.users.length < e.max_assignees) {
+          return true;
+        }
+
+        return false;
+      });
+    },
+    filterNoAuthor: function filterNoAuthor() {
+      this.savedAssignments = this.savedAssignments.filter(function (e) {
+        if (!e.author_id) {
           return true;
         }
 
@@ -2928,7 +3103,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user', 'assignments', 'members'],
+  props: ['user', 'group', 'assignments', 'members'],
   data: function data() {
     return {
       csrf: document.head.querySelector('meta[name="csrf-token"]').content,
@@ -3107,7 +3282,7 @@ __webpack_require__.r(__webpack_exports__);
     getGroupMembers: function getGroupMembers() {
       var _this3 = this;
 
-      axios.get("/group/" + this.user.active_group + "/members/get").then(function (response) {
+      axios.get("/groups/" + this.user.active_group + "/members/get").then(function (response) {
         _this3.members = response.data;
 
         _this3.autocomplete(document.getElementById("memberInput"), _this3.members, _this3.lettersCounter);
@@ -3605,8 +3780,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user', 'assignment'],
+  props: ["user", "assignment"],
   data: function data() {
     return {
       comments: [],
@@ -3619,17 +3820,22 @@ __webpack_require__.r(__webpack_exports__);
 
     this.getComments();
     document.getElementById("commentArea").addEventListener("keypress", this.submitOnEnter);
-    window.Echo["private"]('commented_assignment.' + this.assignment.id + '.group.' + this.assignment.group_id).listen('AssignmentCommented', function (e) {
+    window.Echo["private"]("commented_assignment." + this.assignment.id + ".group." + this.assignment.group_id).listen("AssignmentCommented", function (e) {
       e.assignment_comment.user = e.user;
 
       _this.comments.unshift(e.assignment_comment);
+    });
+    window.Echo["private"]("commented_assignment." + this.assignment.id + ".group." + this.assignment.group_id + ".deleted").listen("AssignmentCommentDeleted", function (e) {
+      _this.comments = _this.comments.filter(function (c) {
+        return c.id !== e.assignment_comment.id;
+      });
     });
   },
   methods: {
     getComments: function getComments() {
       var _this2 = this;
 
-      axios.get('/assignments/' + this.assignment.id + '/comments').then(function (response) {
+      axios.get("/assignments/" + this.assignment.id + "/comments").then(function (response) {
         _this2.comments = response.data;
       })["catch"](function (error) {
         console.log(error.message);
@@ -3651,11 +3857,11 @@ __webpack_require__.r(__webpack_exports__);
 
       var commentArea = document.getElementById("commentArea").value;
       document.getElementById("commentArea").value = "";
-      axios.post('/assignments/' + this.assignment.id + '/comments', {
+      axios.post("/assignments/" + this.assignment.id + "/comments", {
         assignment_id: this.assignment.id,
         text: commentArea
       }).then(function (response) {
-        response.data['user'] = _this3.user;
+        response.data["user"] = _this3.user;
 
         _this3.comments.unshift(response.data);
       })["catch"](function (error) {
@@ -3665,6 +3871,19 @@ __webpack_require__.r(__webpack_exports__);
         }
 
         console.log(error.message);
+      });
+    },
+    deleteComment: function deleteComment(comment) {
+      var _this4 = this;
+
+      if (!confirm("Are you sure you want to delete this comment?")) {
+        return;
+      }
+
+      axios["delete"]("/assignments/" + this.assignment.id + "/comments/" + comment.id + "/destroy").then(function (response) {
+        _this4.comments = _this4.comments.filter(function (c) {
+          return c.id !== response.data.id;
+        });
       });
     }
   }
@@ -3718,8 +3937,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user', 'event'],
+  props: ["user", "event"],
   data: function data() {
     return {
       comments: [],
@@ -3732,17 +3977,22 @@ __webpack_require__.r(__webpack_exports__);
 
     this.getComments();
     document.getElementById("commentArea").addEventListener("keypress", this.submitOnEnter);
-    window.Echo["private"]('commented_event.' + this.event.id + '.group.' + this.event.group_id).listen('EventCommented', function (e) {
+    window.Echo["private"]("commented_event." + this.event.id + ".group." + this.event.group_id).listen("EventCommented", function (e) {
       e.event_comment.user = e.user;
 
       _this.comments.unshift(e.event_comment);
+    });
+    window.Echo["private"]("commented_event." + this.event.id + ".group." + this.event.group_id + ".deleted").listen("EventCommentDeleted", function (e) {
+      _this.comments = _this.comments.filter(function (c) {
+        return c.id !== e.event_comment.id;
+      });
     });
   },
   methods: {
     getComments: function getComments() {
       var _this2 = this;
 
-      axios.get('/events/' + this.event.id + '/comments').then(function (response) {
+      axios.get("/events/" + this.event.id + "/comments").then(function (response) {
         _this2.comments = response.data;
       })["catch"](function (error) {
         console.log(error.message);
@@ -3764,11 +4014,11 @@ __webpack_require__.r(__webpack_exports__);
 
       var commentArea = document.getElementById("commentArea").value;
       document.getElementById("commentArea").value = "";
-      axios.post('/events/' + this.event.id + '/comments', {
+      axios.post("/events/" + this.event.id + "/comments", {
         event_id: this.event.id,
         text: commentArea
       }).then(function (response) {
-        response.data['user'] = _this3.user;
+        response.data["user"] = _this3.user;
 
         _this3.comments.unshift(response.data);
       })["catch"](function (error) {
@@ -3778,6 +4028,19 @@ __webpack_require__.r(__webpack_exports__);
         }
 
         console.log(error.message);
+      });
+    },
+    deleteComment: function deleteComment(comment) {
+      var _this4 = this;
+
+      if (!confirm("Are you sure you want to delete this comment?")) {
+        return;
+      }
+
+      axios["delete"]("/events/" + this.event.id + "/comments/" + comment.id + "/destroy").then(function (response) {
+        _this4.comments = _this4.comments.filter(function (c) {
+          return c.id !== response.data.id;
+        });
       });
     }
   }
@@ -4176,14 +4439,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["user", "going", "event", "host"],
+  props: ["user", "going", "event", "host", "host_id"],
   data: function data() {
     return {
       savedUsers: this.event.users,
       pageOfItems: [],
       cannotJoinOldEventError: false,
-      cannotLeaveOldEventError: false
+      cannotLeaveOldEventError: false,
+      savedGoing: this.going
     };
   },
   methods: {
@@ -4207,9 +4472,9 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       axios.post("/events/" + this.event.id + "/join").then(function (response) {
-        _this.going.push(_this.user.id);
+        _this.savedGoing.push(_this.user.id);
 
-        _this.event.users.push(_this.user);
+        _this.savedUsers.push(_this.user);
 
         _this.reload();
       })["catch"](function (error) {
@@ -4230,13 +4495,12 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       axios.post("/events/" + this.event.id + "/leave").then(function (response) {
-        var indexEU = _this2.event.users.indexOf(_this2.user);
-
-        var indexG = _this2.going.indexOf(_this2.user.id);
-
-        _this2.event.users.splice(indexEU, 1);
-
-        _this2.going.splice(indexG, 1);
+        _this2.savedUsers = _this2.savedUsers.filter(function (eu) {
+          return eu.id != response.data.id;
+        });
+        _this2.savedGoing = _this2.savedGoing.filter(function (gid) {
+          return gid != response.data.id;
+        });
 
         _this2.reload();
       })["catch"](function (error) {
@@ -4358,8 +4622,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user', 'events'],
+  props: ['user', 'group', 'events'],
   data: function data() {
     return {
       allEvents: this.events,
@@ -4448,6 +4713,8 @@ __webpack_require__.r(__webpack_exports__);
           this.filterJoined();
         } else if (this.select.value === "pending") {
           this.filterPending();
+        } else if (this.select.value === "noHost") {
+          this.filterNoHost();
         }
 
         this.filtered = this.select.value;
@@ -4474,6 +4741,15 @@ __webpack_require__.r(__webpack_exports__);
         return !e.users.map(function (u) {
           return u.id;
         }).includes(authed.id);
+      });
+    },
+    filterNoHost: function filterNoHost() {
+      this.savedEvents = this.savedEvents.filter(function (e) {
+        if (!e.host_id) {
+          return true;
+        }
+
+        return false;
       });
     },
     reload: function reload() {
@@ -4625,7 +4901,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["user", "events"],
+  props: ["user", "group", "events"],
   data: function data() {
     return {
       csrf: document.head.querySelector('meta[name="csrf-token"]').content,
@@ -4672,6 +4948,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -4922,6 +5199,49 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "group", "members"],
   data: function data() {
@@ -4931,7 +5251,8 @@ __webpack_require__.r(__webpack_exports__);
       changedAvatar: false,
       emptyEditSubmitted: false,
       adminChangeFailed: false,
-      avatarTooBig: false
+      avatarTooBig: false,
+      deletingGroup: false
     };
   },
   methods: {
@@ -4986,6 +5307,29 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         window.location.href = "/profile/" + _this.user.username;
       })["catch"](function (error) {
+        console.log(error.message);
+      });
+    },
+    deleteGroup: function deleteGroup() {
+      var _this2 = this;
+
+      if (!this.deletingGroup) {
+        this.deletingGroup = true;
+        return;
+      }
+
+      if (document.getElementById("checkDeleting").value.trim().toLowerCase() != "yes") {
+        return;
+      }
+
+      axios["delete"]("/groups/" + this.group.id + "/destroy").then(function (response) {
+        window.location.href = "/dashboard";
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this2.errors = error.response.data.errors;
+          console.log(_this2.errors);
+        }
+
         console.log(error.message);
       });
     }
@@ -5383,6 +5727,59 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "group"],
   data: function data() {
@@ -5545,6 +5942,10 @@ __webpack_require__.r(__webpack_exports__);
     deletePost: function deletePost(post) {
       var _this7 = this;
 
+      if (!confirm("Are you sure you want to delete this post?")) {
+        return;
+      }
+
       axios["delete"]("/groups/" + this.group.id + "/whiteboard-post-delete/" + post.id, {}).then(function (response) {
         _this7.posts = _this7.posts.filter(function (p) {
           return p != post;
@@ -5617,8 +6018,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["user", "members", "groupid"],
+  props: ["user", "members", "group"],
   data: function data() {
     return {
       visibleMembers: null
@@ -5631,6 +6040,20 @@ __webpack_require__.r(__webpack_exports__);
 
     if (this.visibleMembers.length > 3) {
       this.visibleMembers = this.visibleMembers.slice(0, 4);
+    }
+  },
+  methods: {
+    checkWithUserPanel: function checkWithUserPanel() {
+      var retVal = prompt("Are you sure you want to leave this group?", 'type "yes" to continue');
+
+      if (retVal.trim().toLowerCase() == "yes") {
+        this.excludeUserFromGroupPanel();
+      }
+    },
+    excludeUserFromGroupPanel: function excludeUserFromGroupPanel() {
+      axios["delete"]("/groups/" + this.group.id + "/exclude-member/" + this.user.id).then(function (response) {
+        window.location.href = "/dashboard";
+      });
     }
   }
 });
@@ -5971,6 +6394,10 @@ __webpack_require__.r(__webpack_exports__);
     deleteData: function deleteData(note) {
       var _this = this;
 
+      if (!confirm("Are you sure you want to delete this note?")) {
+        return;
+      }
+
       axios["delete"]('notes/' + note.id).then(function (response) {
         _this.savedNotes = _this.savedNotes.filter(function (e) {
           return e !== note;
@@ -6038,8 +6465,40 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['users'],
+  props: ["users", "group"],
   data: function data() {
     return {
       pageOfItems: [],
@@ -6051,6 +6510,20 @@ __webpack_require__.r(__webpack_exports__);
     this.autocomplete(document.getElementById("memberInput"), this.savedUsers, this.lettersCounter);
   },
   methods: {
+    checkWithUser: function checkWithUser(user) {
+      if (confirm("Are you sure you want " + user.name + " to leave this group?")) {
+        this.excludeUserFromGroup(user);
+      }
+    },
+    excludeUserFromGroup: function excludeUserFromGroup(user) {
+      var _this = this;
+
+      axios["delete"]("/groups/" + this.group.id + "/exclude-member/" + user.id).then(function (response) {
+        _this.savedUsers = _this.savedUsers.filter(function (u) {
+          return u.id !== response.data.id;
+        });
+      });
+    },
     onChangePage: function onChangePage(pageOfItems) {
       this.pageOfItems = pageOfItems;
     },
@@ -6212,7 +6685,7 @@ __webpack_require__.r(__webpack_exports__);
       this.fields = this.fields.map(function (field) {
         return field["email"];
       });
-      axios.post("/invite-member", this.fields).then(function (response) {
+      axios.post("/groups/" + this.user.active_group + "/invite-member", this.fields).then(function (response) {
         _this.fields = {};
         _this.invitesSent = true;
       })["catch"](function (error) {
@@ -7185,6 +7658,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "new_whiteboard_notify", "new_assignment_notify", "new_event_notify"],
   data: function data() {
@@ -7311,8 +7785,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['authUser', 'user', 'userCreatedAt', 'userEditPath'],
+  props: ["authUser", "user", "userCreatedAt", "userEditPath"],
   mounted: function mounted() {}
 });
 
@@ -45857,162 +46333,177 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("div", { staticClass: "px-8 mr-2 mb-16" }, [
-      _vm.assignmentsFiles.length > 0
-        ? _c(
-            "div",
-            { staticClass: "mb-10" },
-            [
-              _vm._l(_vm.pageOfItems, function(file) {
-                return _c("div", { key: file.id }, [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "float-left mb-1",
-                      attrs: { href: "/storage/" + file.file_path }
-                    },
-                    [_vm._v(_vm._s(file.file_name))]
-                  ),
-                  _vm._v(" "),
-                  file.user_id == _vm.user.id
-                    ? _c("div", [
-                        _c(
-                          "button",
-                          {
-                            staticClass:
-                              "ml-6 float-left text-red-500 font-bold focus:outline-none",
-                            on: {
-                              click: function($event) {
-                                return _vm.deleteFile(file)
-                              }
-                            }
-                          },
-                          [
-                            _vm._v(
-                              "\n                        x\n                    "
-                            )
-                          ]
-                        )
-                      ])
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "clear-both" })
-                ])
-              }),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "mb-10 clear-both w-full text-center text-sm" },
-                [
-                  _c("jw-pagination", {
-                    attrs: { items: _vm.assignmentsFiles, pageSize: 5 },
-                    on: { changePage: _vm.onChangePage }
-                  })
-                ],
-                1
-              )
-            ],
-            2
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      _c(
-        "form",
-        {
-          staticClass: "clear-both",
-          on: {
-            submit: function($event) {
-              $event.preventDefault()
-              return _vm.submit()
-            }
-          }
-        },
-        [
-          _c("input", {
-            attrs: { type: "hidden", name: "_token" },
-            domProps: { value: _vm.csrf }
-          }),
-          _vm._v(" "),
-          _c("div", { staticClass: "float-left" }, [
-            _c(
-              "label",
-              {
-                staticClass: "font-bold mb-4 text-underlined",
-                attrs: { for: "file_path" }
-              },
-              [_vm._v("\n                    File upload\n                ")]
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticClass: "text-sm mt-4 file-upload-wrapper",
-                attrs: { "data-text": "Select your file!" }
-              },
-              [
-                _c("input", {
-                  ref: "file_path",
-                  attrs: {
-                    name: "file_path",
-                    id: "file_path",
-                    type: "file",
-                    value: "file_path",
-                    required: ""
-                  },
-                  on: {
-                    change: function($event) {
-                      return _vm.handleFileUpload()
-                    }
-                  }
-                })
-              ]
-            )
-          ]),
-          _vm._v(" "),
-          _vm._m(0),
-          _vm._v(" "),
-          _vm.fileTooBig
+  return _vm.assignment.group.admin_id == _vm.user.id ||
+    _vm.assignment.author_id == _vm.user.id ||
+    _vm.user in _vm.assignment.users ||
+    _vm.assignment_users_ids.includes(_vm.user.id)
+    ? _c("div", [
+        _c("div", { staticClass: "px-8 mr-2 mb-16" }, [
+          _vm.assignmentsFiles.length > 0
             ? _c(
-                "p",
-                {
-                  staticClass:
-                    "clear-both flex items-center justify-between w-full my-5 p-2 bg-red-500 shadow text-white"
-                },
-                [_vm._v("Please choose a file under 25MB.")]
+                "div",
+                { staticClass: "mb-10" },
+                [
+                  _vm._l(_vm.pageOfItems, function(file) {
+                    return _c("div", { key: file.id }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "float-left mb-1",
+                          attrs: { href: "/storage/" + file.file_path }
+                        },
+                        [_vm._v(_vm._s(file.file_name))]
+                      ),
+                      _vm._v(" "),
+                      file.user_id == _vm.user.id
+                        ? _c("div", [
+                            _c(
+                              "button",
+                              {
+                                staticClass:
+                                  "ml-6 float-left text-red-500 font-bold focus:outline-none",
+                                on: {
+                                  click: function($event) {
+                                    return _vm.deleteFile(file)
+                                  }
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                        x\n                    "
+                                )
+                              ]
+                            )
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "clear-both" })
+                    ])
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "mb-10 clear-both w-full text-center text-sm"
+                    },
+                    [
+                      _c("jw-pagination", {
+                        attrs: { items: _vm.assignmentsFiles, pageSize: 5 },
+                        on: { changePage: _vm.onChangePage }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                2
               )
             : _vm._e(),
           _vm._v(" "),
-          _c("div", { staticClass: "clear-both" }),
-          _vm._v(" "),
-          _c("div", { staticClass: "mb-6 mt-6" }, [
-            _c(
-              "button",
-              {
-                staticClass:
-                  "float-right text-sm bg-blue-400 text-white rounded-lg px-2 w-16 py-2 hover:bg-blue-500 mr-4 focus:outline-none",
-                attrs: { type: "submit" },
-                on: {
-                  submit: function($event) {
-                    $event.preventDefault()
-                    return _vm.submit()
-                  }
+          _c(
+            "form",
+            {
+              staticClass: "clear-both",
+              on: {
+                submit: function($event) {
+                  $event.preventDefault()
+                  return _vm.submit()
                 }
-              },
-              [_vm._v("\n                    Submit\n                ")]
-            )
-          ])
-        ]
-      )
-    ])
-  ])
+              }
+            },
+            [
+              _c("input", {
+                attrs: { type: "hidden", name: "_token" },
+                domProps: { value: _vm.csrf }
+              }),
+              _vm._v(" "),
+              _c("div", { staticClass: "xl:float-left" }, [
+                _c(
+                  "label",
+                  {
+                    staticClass: "font-bold mb-4 text-underlined",
+                    attrs: { for: "file_path" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                    File upload\n                "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "text-sm mt-4 file-upload-wrapper",
+                    attrs: { "data-text": "Select your file!" }
+                  },
+                  [
+                    _c("input", {
+                      ref: "file_path",
+                      attrs: {
+                        name: "file_path",
+                        id: "file_path",
+                        type: "file",
+                        value: "file_path",
+                        required: ""
+                      },
+                      on: {
+                        change: function($event) {
+                          return _vm.handleFileUpload()
+                        }
+                      }
+                    })
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _vm._m(0),
+              _vm._v(" "),
+              _vm.fileTooBig
+                ? _c(
+                    "p",
+                    {
+                      staticClass:
+                        "clear-both flex items-center justify-between w-full my-5 p-2 bg-red-500 shadow text-white"
+                    },
+                    [
+                      _vm._v(
+                        "\n                Please choose a file under 25MB.\n            "
+                      )
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c("div", { staticClass: "clear-both" }),
+              _vm._v(" "),
+              _c("div", { staticClass: "mb-6 mt-6" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass:
+                      "float-right text-sm bg-blue-400 text-white rounded-lg px-2 w-16 py-2 hover:bg-blue-500 mr-4 focus:outline-none",
+                    attrs: { type: "submit" },
+                    on: {
+                      submit: function($event) {
+                        $event.preventDefault()
+                        return _vm.submit()
+                      }
+                    }
+                  },
+                  [_vm._v("\n                    Submit\n                ")]
+                )
+              ])
+            ]
+          )
+        ])
+      ])
+    : _vm._e()
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "float-right" }, [
+    return _c("div", { staticClass: "xl:float-right xl:mt-0 mt-4" }, [
       _c(
         "label",
         {
@@ -46071,6 +46562,7 @@ var render = function() {
     [
       _c("div", { staticClass: "p-8 mr-2 mb-2" }, [
         _c("div", { staticClass: "float-right" }, [
+          _vm.user.id == _vm.assignment.group.admin_id ||
           _vm.shownAssignment.author_id == _vm.user.id
             ? _c("div", { staticClass: "mb-5" }, [
                 !_vm.shownAssignment.done
@@ -46105,7 +46597,11 @@ var render = function() {
                         staticClass: "p-3",
                         attrs: { href: _vm.shownAssignment.id + "/edit" }
                       },
-                      [_vm._v(" Edit ")]
+                      [
+                        _vm._v(
+                          "\n                        Edit\n                    "
+                        )
+                      ]
                     )
                   ]
                 ),
@@ -46374,11 +46870,147 @@ var render = function() {
               )
             ])
           ]
-        )
+        ),
+        _vm._v(" "),
+        _vm.user.id == _vm.assignment.author_id ||
+        _vm.assignment_users_ids.includes(_vm.user.id) ||
+        _vm.user.id == _vm.assignment.group.admin_id
+          ? _c(
+              "div",
+              {
+                staticClass: "py-4 px-6 mb-2 border-b border-gray-200 rounded"
+              },
+              [
+                _vm._m(5),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" },
+                  [
+                    !_vm.editingComment
+                      ? _c(
+                          "div",
+                          {
+                            staticClass:
+                              "relative bg-purple-100 border-gray-300 rounded-lg p-5 mb-5"
+                          },
+                          [
+                            _vm.authorComment
+                              ? _c("p", [_vm._v(_vm._s(_vm.authorComment))])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.assignment.group.admin_id == _vm.user.id
+                              ? _c(
+                                  "div",
+                                  { staticClass: "absolute top-1 right-1" },
+                                  [
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass: "focus:outline-none",
+                                        on: {
+                                          click: function($event) {
+                                            _vm.editingComment = !_vm.editingComment
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c("img", {
+                                          staticClass:
+                                            "w-9 border border-gray-300 rounded-full",
+                                          attrs: {
+                                            src: "/img/edit.png",
+                                            alt: "edit"
+                                          }
+                                        })
+                                      ]
+                                    )
+                                  ]
+                                )
+                              : _vm._e()
+                          ]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.editingComment
+                      ? _c("div", { staticClass: "relative" }, [
+                          _c("textarea", {
+                            staticClass:
+                              "relative w-full resize-none bg-purple-100 border-gray-300 rounded-lg p-5 mb-5 focus:outline-none",
+                            attrs: {
+                              id: "author_comment",
+                              name: "text",
+                              placeholder: _vm.authorComment,
+                              maxlength: "500"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _vm.assignment.group.admin_id == _vm.user.id
+                            ? _c(
+                                "div",
+                                { staticClass: "absolute z-40 top-1 right-1" },
+                                [
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "focus:outline-none",
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.editComment()
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c("img", {
+                                        staticClass:
+                                          "w-9 border border-gray-300 rounded-full",
+                                        attrs: {
+                                          src: "/img/edit.png",
+                                          alt: "edit"
+                                        }
+                                      })
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "focus:outline-none",
+                                      on: {
+                                        click: function($event) {
+                                          _vm.editingComment = !_vm.editingComment
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c("img", {
+                                        staticClass:
+                                          "w-9 border border-gray-300 rounded-full",
+                                        attrs: {
+                                          src: "/img/cancel.png",
+                                          alt: "edit"
+                                        }
+                                      })
+                                    ]
+                                  )
+                                ]
+                              )
+                            : _vm._e()
+                        ])
+                      : _vm._e()
+                  ]
+                )
+              ]
+            )
+          : _vm._e()
       ]),
       _vm._v(" "),
       _c("assignment-show-file-upload", {
-        attrs: { user: _vm.user, assignment: _vm.assignment }
+        attrs: {
+          user: _vm.user,
+          assignment: _vm.assignment,
+          assignment_users_ids: _vm.assignment_users_ids
+        }
       })
     ],
     1
@@ -46420,6 +47052,14 @@ var staticRenderFns = [
     return _c("p", { staticClass: "mb-2" }, [
       _c("strong", [_vm._v("What about")])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", { staticClass: "mb-2" }, [
+      _c("strong", [_vm._v("Author commented (privatly)")])
+    ])
   }
 ]
 render._withStripped = true
@@ -46444,10 +47084,42 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm._m(0),
+    _c("div", { staticClass: "space-x-2 w-full mb-4" }, [
+      _c(
+        "select",
+        {
+          staticClass:
+            "inline-block rounded-lg bg-white border border-gray-300 text-gray-700 px-4 pr-8 h-8 mr-2 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500",
+          attrs: { id: "filter" }
+        },
+        [
+          _c("option", { attrs: { value: "all" } }, [_vm._v("All")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "mine" } }, [
+            _vm._v("Assigned to me")
+          ]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "toDo" } }, [_vm._v("In progress")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "free" } }, [_vm._v("Free")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "created" } }, [
+            _vm._v("Created by me")
+          ]),
+          _vm._v(" "),
+          _vm.user.id == _vm.group.admin_id
+            ? _c("option", { attrs: { value: "noAuthor" } }, [
+                _vm._v("\n                Without an author\n            ")
+              ])
+            : _vm._e()
+        ]
+      ),
+      _vm._v(" "),
+      _vm._m(0)
+    ]),
     _vm._v(" "),
     _c("p", { staticClass: "text-xs font-bold text-blue-500 float-left" }, [
-      _vm._v("Deadline ")
+      _vm._v("Deadline")
     ]),
     _vm._v(" "),
     _c("p", { staticClass: "text-sm font-bold float-left ml-2 mr-2" }, [
@@ -46457,11 +47129,11 @@ var render = function() {
     _c(
       "p",
       { staticClass: "float-left text-xs font-bold text-red-600 mb-4 mr-8" },
-      [_vm._v(" On time")]
+      [_vm._v("\n        On time\n    ")]
     ),
     _vm._v(" "),
     _c("p", { staticClass: "text-xs px-1 font-medium bg-red-100 float-left" }, [
-      _vm._v("Waiting")
+      _vm._v("In progress")
     ]),
     _vm._v(" "),
     _c("p", { staticClass: "text-sm font-bold float-left ml-2 mr-2" }, [
@@ -46471,7 +47143,7 @@ var render = function() {
     _c(
       "p",
       { staticClass: "text-xs px-2 font-medium bg-green-100 float-left" },
-      [_vm._v(" Done")]
+      [_vm._v("Done")]
     ),
     _vm._v(" "),
     _c("div", { staticClass: "flex flex-col clear-both" }, [
@@ -46531,14 +47203,14 @@ var render = function() {
                                   },
                                   [
                                     _vm._v(
-                                      "\n                            " +
+                                      "\n                                        " +
                                         _vm._s(
                                           _vm._f("dateFormat")(
                                             new Date(assignment.due),
                                             "DD.MM.YYYY , HH:mm"
                                           )
                                         ) +
-                                        "\n                        "
+                                        "\n                                    "
                                     )
                                   ]
                                 )
@@ -46557,9 +47229,9 @@ var render = function() {
                                   },
                                   [
                                     _vm._v(
-                                      "\n                                " +
+                                      "\n                                        " +
                                         _vm._s(assignment.name) +
-                                        "\n                        "
+                                        "\n                                    "
                                     )
                                   ]
                                 )
@@ -46576,7 +47248,11 @@ var render = function() {
                                   [
                                     assignment.author
                                       ? _c("p", [
-                                          _vm._v(_vm._s(assignment.author.name))
+                                          _vm._v(
+                                            "\n                                            " +
+                                              _vm._s(assignment.author.name) +
+                                              "\n                                        "
+                                          )
                                         ])
                                       : _c("p", [_vm._v("*deleted account*")])
                                   ]
@@ -46596,7 +47272,7 @@ var render = function() {
                                 },
                                 [
                                   _vm._v(
-                                    "\n                            Details\n                        "
+                                    "\n                                        Details\n                                    "
                                   )
                                 ]
                               )
@@ -46634,7 +47310,7 @@ var render = function() {
                   }
                 }
               },
-              [_vm._v("\n        Load older\n    ")]
+              [_vm._v("\n                    Load older\n                ")]
             )
           ]
         )
@@ -46647,30 +47323,13 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "space-x-2 w-full mb-4" }, [
-      _c(
-        "select",
-        {
-          staticClass:
-            "inline-block rounded-lg bg-white border border-gray-300 text-gray-700 px-4 pr-8 h-8 mr-2 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500",
-          attrs: { id: "filter" }
-        },
-        [
-          _c("option", { attrs: { value: "all" } }, [_vm._v("All")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "mine" } }, [_vm._v("Mine")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "toDo" } }, [_vm._v("Waiting")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "free" } }, [_vm._v("Free")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "created" } }, [
-            _vm._v("Created by me")
-          ])
-        ]
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "inline-block relative text-gray-600 w-1/3" }, [
+    return _c(
+      "div",
+      {
+        staticClass:
+          "md:inline-block md:mt-0 mt-2 relative text-gray-600 md:ml-0 md:w-1/3 w-48"
+      },
+      [
         _c("input", {
           staticClass:
             "rounded-lg bg-white border border-gray-300 text-gray-500 w-full h-8 px-5 pr-10 rounded-lg text-sm focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500",
@@ -46700,8 +47359,8 @@ var staticRenderFns = [
             })
           ]
         )
-      ])
-    ])
+      ]
+    )
   },
   function() {
     var _vm = this
@@ -46716,7 +47375,11 @@ var staticRenderFns = [
               "pl-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase",
             attrs: { scope: "col" }
           },
-          [_vm._v("\n                        When \n                    ")]
+          [
+            _vm._v(
+              "\n                                    When\n                                "
+            )
+          ]
         ),
         _vm._v(" "),
         _c(
@@ -46726,7 +47389,11 @@ var staticRenderFns = [
               "pl-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase",
             attrs: { scope: "col" }
           },
-          [_vm._v("\n                        What\n                    ")]
+          [
+            _vm._v(
+              "\n                                    What\n                                "
+            )
+          ]
         ),
         _vm._v(" "),
         _c(
@@ -46736,7 +47403,11 @@ var staticRenderFns = [
               "pl-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase",
             attrs: { scope: "col" }
           },
-          [_vm._v("\n                        By who\n                    ")]
+          [
+            _vm._v(
+              "\n                                    By who\n                                "
+            )
+          ]
         ),
         _vm._v(" "),
         _c("th", {
@@ -47292,7 +47963,11 @@ var render = function() {
         : _vm._e(),
       _vm._v(" "),
       _c("assignments-table", {
-        attrs: { user: _vm.user, assignments: _vm.assignments }
+        attrs: {
+          user: _vm.user,
+          group: _vm.group,
+          assignments: _vm.assignments
+        }
       })
     ],
     1
@@ -47536,7 +48211,7 @@ var render = function() {
             "button",
             {
               staticClass:
-                "bg-white text-sm text-center relative clear-both w-full h-8 px-4 pt-1 mb-4 border border-gray-300 hover:bg-purple-100 focus:outline-none focus:bg-purple-100",
+                "bg-white md:text-sm text-xs text-center relative clear-both w-full h-8 px-4 pt-1 mb-4 border border-gray-300 hover:bg-purple-100 focus:outline-none focus:bg-purple-100",
               on: {
                 click: function($event) {
                   return _vm.loadOlderMessages()
@@ -47591,7 +48266,7 @@ var render = function() {
                     message.sender
                       ? _c("img", {
                           staticClass:
-                            "rounded-full object-cover h-15 w-15 mr-2 mb-3",
+                            "rounded-full object-cover md:h-15 md:w-15 w-9 h-9 mr-2 mb-3",
                           attrs: { src: message.sender.avatar, alt: "avatar" }
                         })
                       : _c("img", {
@@ -47656,18 +48331,25 @@ var render = function() {
                         : _vm._e()
                     ]),
                     _vm._v(" "),
-                    _c("p", { staticClass: "text-xs float-right mb-2" }, [
-                      _vm._v(
-                        "\n                        " +
-                          _vm._s(
-                            _vm._f("dateFormat")(
-                              new Date(message.created_at),
-                              "HH:mm , DD.MM.YYYY"
-                            )
-                          ) +
-                          "\n                    "
-                      )
-                    ])
+                    _c(
+                      "p",
+                      {
+                        staticClass:
+                          "text-xs md:float-right md:relative md:mb-2 absolute top-1 right-1"
+                      },
+                      [
+                        _vm._v(
+                          "\n                        " +
+                            _vm._s(
+                              _vm._f("dateFormat")(
+                                new Date(message.created_at),
+                                "HH:mm , DD.MM.YYYY"
+                              )
+                            ) +
+                            "\n                    "
+                        )
+                      ]
+                    )
                   ])
                 ])
               ]
@@ -47884,7 +48566,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "div",
-      { staticClass: "relative mt-5 mb-2 lg:mt-0 lg:ml-6 lg:float-left" },
+      { staticClass: "relative mt-5 mb-2 xl:float-right xl:mt-0 mt-4" },
       [
         _c(
           "label",
@@ -47939,7 +48621,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "mx-8" }, [
     _c("h3", { staticClass: "font-bold mb-4 text-underlined" }, [
-      _vm._v(" Comments section ")
+      _vm._v("Comments section")
     ]),
     _vm._v(" "),
     _c(
@@ -47984,9 +48666,30 @@ var render = function() {
           "div",
           {
             key: comment.id,
-            staticClass: "flex p-4 border-b border-b-gray-400"
+            staticClass: "flex relative p-4 border-b border-b-gray-400"
           },
           [
+            comment.user_id == _vm.user.id ||
+            _vm.user.id == _vm.assignment.group.admin_id
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "absolute top-3 right-3 focus:outline-none",
+                    on: {
+                      click: function($event) {
+                        return _vm.deleteComment(comment)
+                      }
+                    }
+                  },
+                  [
+                    _c("img", {
+                      staticClass: "w-4",
+                      attrs: { src: "/img/bin.png", alt: "delete" }
+                    })
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
             _c("div", { staticClass: "mr-2" }, [
               _c("img", {
                 staticClass: "rounded-full object-cover h-15 w-15 mr-2",
@@ -47996,27 +48699,27 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "w-full" }, [
               _c("h5", { staticClass: "font-bold mb-2" }, [
-                _vm._v(" " + _vm._s(comment.user.name) + " ")
+                _vm._v(_vm._s(comment.user.name))
               ]),
               _vm._v(" "),
               _c("p", { staticClass: "text-sm mb-3 break-words" }, [
                 _vm._v(
-                  "\n                        " +
+                  "\n                    " +
                     _vm._s(comment.text) +
-                    "\n                    "
+                    "\n                "
                 )
               ]),
               _vm._v(" "),
               _c("p", { staticClass: "text-xs float-right" }, [
                 _vm._v(
-                  " " +
+                  "\n                    " +
                     _vm._s(
                       _vm._f("dateFormat")(
                         new Date(comment.created_at),
                         "HH:mm , DD.MM.YYYY"
                       )
                     ) +
-                    " "
+                    "\n                "
                 )
               ])
             ])
@@ -48063,7 +48766,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "mx-8" }, [
     _c("h3", { staticClass: "font-bold mb-4 text-underlined" }, [
-      _vm._v(" Comments section ")
+      _vm._v("Comments section")
     ]),
     _vm._v(" "),
     _c(
@@ -48108,9 +48811,30 @@ var render = function() {
           "div",
           {
             key: comment.id,
-            staticClass: "flex p-4 border-b border-b-gray-400"
+            staticClass: "flex relative p-4 border-b border-b-gray-400"
           },
           [
+            comment.user_id == _vm.user.id ||
+            _vm.user.id == _vm.event.group.admin_id
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "absolute top-3 right-3 focus:outline-none",
+                    on: {
+                      click: function($event) {
+                        return _vm.deleteComment(comment)
+                      }
+                    }
+                  },
+                  [
+                    _c("img", {
+                      staticClass: "w-4",
+                      attrs: { src: "/img/bin.png", alt: "delete" }
+                    })
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
             _c("div", { staticClass: "mr-2" }, [
               _c("img", {
                 staticClass: "rounded-full object-cover h-15 w-15 mr-2",
@@ -48120,27 +48844,27 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "w-full" }, [
               _c("h5", { staticClass: "font-bold mb-2" }, [
-                _vm._v(" " + _vm._s(comment.user.name) + " ")
+                _vm._v(_vm._s(comment.user.name))
               ]),
               _vm._v(" "),
               _c("p", { staticClass: "text-sm mb-3 break-words" }, [
                 _vm._v(
-                  "\n                        " +
+                  "\n                    " +
                     _vm._s(comment.text) +
-                    "\n                    "
+                    "\n                "
                 )
               ]),
               _vm._v(" "),
               _c("p", { staticClass: "text-xs float-right" }, [
                 _vm._v(
-                  " " +
+                  "\n                    " +
                     _vm._s(
                       _vm._f("dateFormat")(
                         new Date(comment.created_at),
                         "HH:mm , DD.MM.YYYY"
                       )
                     ) +
-                    " "
+                    "\n                "
                 )
               ])
             ])
@@ -48534,7 +49258,7 @@ var render = function() {
     [
       _c("div", { staticClass: "p-8 mr-2 mb-8" }, [
         _c("div", { staticClass: "float-right" }, [
-          _vm.going && !_vm.going.includes(_vm.user.id)
+          _vm.savedGoing && !_vm.savedGoing.includes(_vm.user.id)
             ? _c(
                 "button",
                 {
@@ -48562,21 +49286,28 @@ var render = function() {
                 [_vm._v("\n                Leave\n            ")]
               ),
           _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass:
-                "float-right rounded-lg w-16 px-2 text-center py-2 mr-2 text-white text-sm bg-gray-400 hover:bg-gray-500 focus:outline-none"
-            },
-            [
-              _c(
-                "a",
-                { staticClass: "p-3", attrs: { href: _vm.event.id + "/edit" } },
-                [_vm._v("\n                    Edit\n                ")]
+          _vm.event.group.admin_id == _vm.user.id ||
+          _vm.event.host_id == _vm.user.id
+            ? _c(
+                "div",
+                {
+                  staticClass:
+                    "float-right rounded-lg w-16 px-2 text-center py-2 mr-2 text-white text-sm bg-gray-400 hover:bg-gray-500 focus:outline-none"
+                },
+                [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "p-3",
+                      attrs: { href: _vm.event.id + "/edit" }
+                    },
+                    [_vm._v("\n                    Edit\n                ")]
+                  )
+                ]
               )
-            ]
-          ),
+            : _vm._e(),
           _vm._v(" "),
+          _vm.event.group.admin_id == _vm.user.id ||
           _vm.event.host_id == _vm.user.id
             ? _c(
                 "button",
@@ -49082,46 +49813,57 @@ var staticRenderFns = [
           _c("option", { attrs: { value: "all" } }, [_vm._v("All")]),
           _vm._v(" "),
           _c("option", { attrs: { value: "created" } }, [
-            _vm._v("Created by me")
+            _vm._v("Hosted by me")
           ]),
           _vm._v(" "),
-          _c("option", { attrs: { value: "joined" } }, [_vm._v("Joined")]),
+          _c("option", { attrs: { value: "joined" } }, [_vm._v("Going to")]),
           _vm._v(" "),
-          _c("option", { attrs: { value: "pending" } }, [_vm._v("Pending")])
+          _c("option", { attrs: { value: "pending" } }, [_vm._v("Pending")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "noHost" } }, [
+            _vm._v("Without a host")
+          ])
         ]
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "inline-block relative text-gray-600 w-1/3" }, [
-        _c("input", {
+      _c(
+        "div",
+        {
           staticClass:
-            "rounded-lg bg-white border border-gray-300 text-gray-500 w-full h-8 px-5 pr-10 rounded-lg text-sm focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500",
-          attrs: {
-            id: "searchBar",
-            type: "search",
-            name: "searchBar",
-            placeholder: "Search by name"
-          }
-        }),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
+            "md:inline-block md:mt-0 mt-2 relative text-gray-600 md:w-1/3 w-48"
+        },
+        [
+          _c("input", {
             staticClass:
-              "absolute right-0 top-2 mr-4 bg-transparent focus:outline-none",
-            attrs: { id: "searchButton", type: "submit" }
-          },
-          [
-            _c("img", {
-              attrs: {
-                src: "/img/search.png",
-                width: "20",
-                height: "20",
-                alt: "submit"
-              }
-            })
-          ]
-        )
-      ])
+              "rounded-lg bg-white border border-gray-300 text-gray-500 w-full h-8 px-5 pr-10 rounded-lg text-sm focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500",
+            attrs: {
+              id: "searchBar",
+              type: "search",
+              name: "searchBar",
+              placeholder: "Search by name"
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass:
+                "absolute right-0 top-2 mr-4 bg-transparent focus:outline-none",
+              attrs: { id: "searchButton", type: "submit" }
+            },
+            [
+              _c("img", {
+                attrs: {
+                  src: "/img/search.png",
+                  width: "20",
+                  height: "20",
+                  alt: "submit"
+                }
+              })
+            ]
+          )
+        ]
+      )
     ])
   },
   function() {
@@ -49519,7 +50261,9 @@ var render = function() {
           )
         : _vm._e(),
       _vm._v(" "),
-      _c("events-table", { attrs: { user: _vm.user, events: _vm.savedEvents } })
+      _c("events-table", {
+        attrs: { user: _vm.user, group: _vm.group, events: _vm.savedEvents }
+      })
     ],
     1
   )
@@ -49546,7 +50290,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "text-center pt-6 z-40 relative" }, [
+  return _c("div", { staticClass: "text-center pt-6 z-30 relative" }, [
     _c(
       "a",
       {
@@ -49597,7 +50341,7 @@ var render = function() {
               {
                 staticClass:
                   "bg-white block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
-                attrs: { href: "/whiteboard" }
+                attrs: { href: "/groups/" + _vm.group.id + "/whiteboard" }
               },
               [_vm._v("Whiteboard\n            ")]
             ),
@@ -49622,15 +50366,19 @@ var render = function() {
               [_vm._v("Events\n            ")]
             ),
             _vm._v(" "),
-            _c(
-              "a",
-              {
-                staticClass:
-                  "bg-white block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
-                attrs: { href: "/groups/" + _vm.group.id + "/group-statistics" }
-              },
-              [_vm._v("Workload\n            ")]
-            )
+            _vm.user.id == _vm.group.admin_id
+              ? _c(
+                  "a",
+                  {
+                    staticClass:
+                      "bg-white block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+                    attrs: {
+                      href: "/groups/" + _vm.group.id + "/group-statistics"
+                    }
+                  },
+                  [_vm._v("Workload\n            ")]
+                )
+              : _vm._e()
           ])
         : _c("div", [
             _c("h2", { staticClass: "font-bold text-2xl mb-6" }, [
@@ -49756,75 +50504,89 @@ var render = function() {
                   staticClass:
                     "flex items-center justify-between w-full my-5 p-2 bg-red-500 shadow text-white"
                 },
-                [_vm._v("Please choose a picture under 5MB.")]
+                [
+                  _vm._v(
+                    "\n                Please choose a picture under 5MB.\n            "
+                  )
+                ]
               )
             : _vm._e()
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "mb-8" }, [
-          _c(
-            "label",
-            {
-              staticClass:
-                "mt-4 block mb-2 uppercase font-bold text-xs text-gray-700",
-              attrs: { for: "admin_id" }
-            },
-            [_vm._v("\n                Pick a new admin\n            ")]
-          ),
-          _vm._v(" "),
-          _c(
-            "select",
-            {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.fields.admin_id,
-                  expression: "fields.admin_id"
-                }
-              ],
-              staticClass: "border-b border-gray-400",
-              attrs: { name: "admin_id", id: "admin_id" },
-              on: {
-                change: function($event) {
-                  var $$selectedVal = Array.prototype.filter
-                    .call($event.target.options, function(o) {
-                      return o.selected
-                    })
-                    .map(function(o) {
-                      var val = "_value" in o ? o._value : o.value
-                      return val
-                    })
-                  _vm.$set(
-                    _vm.fields,
-                    "admin_id",
-                    $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-                  )
-                }
-              }
-            },
-            [
-              _c("option", { domProps: { value: _vm.user.id } }, [
-                _vm._v(_vm._s(_vm.user.name))
+        _vm.user.id == _vm.group.admin_id
+          ? _c("div", { staticClass: "mb-8" }, [
+              _c("p", { staticClass: "text-sm text-gray-600" }, [
+                _vm._v(
+                  "You can't leave this group unless you pass on your admin rights."
+                )
               ]),
               _vm._v(" "),
-              _vm._l(_vm.members, function(member) {
-                return _c(
-                  "option",
-                  { key: member.id, domProps: { value: member.id } },
-                  [
-                    _vm._v(
-                      "\n                    " +
-                        _vm._s(member.name) +
-                        "\n                "
+              _c(
+                "label",
+                {
+                  staticClass:
+                    "mt-4 block mb-2 uppercase font-bold text-xs text-gray-700",
+                  attrs: { for: "admin_id" }
+                },
+                [_vm._v("\n                Pick a new admin\n            ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.fields.admin_id,
+                      expression: "fields.admin_id"
+                    }
+                  ],
+                  staticClass: "border-b border-gray-400",
+                  attrs: { name: "admin_id", id: "admin_id" },
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.fields,
+                        "admin_id",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    }
+                  }
+                },
+                [
+                  _c("option", { domProps: { value: _vm.user.id } }, [
+                    _vm._v(_vm._s(_vm.user.name))
+                  ]),
+                  _vm._v(" "),
+                  _vm._l(_vm.members, function(member) {
+                    return _c(
+                      "option",
+                      { key: member.id, domProps: { value: member.id } },
+                      [
+                        _vm._v(
+                          "\n                    " +
+                            _vm._s(member.name) +
+                            "\n                "
+                        )
+                      ]
                     )
-                  ]
-                )
-              })
-            ],
-            2
-          )
-        ]),
+                  })
+                ],
+                2
+              )
+            ])
+          : _vm._e(),
         _vm._v(" "),
         _vm.fields.admin_id && _vm.fields.admin_id != _vm.user.id
           ? _c("div", [
@@ -49894,7 +50656,27 @@ var render = function() {
             },
             [_vm._v("\n                Submit\n            ")]
           )
-        ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "w-full mt-12 border-b mb-12 rounded-full" }),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass:
+              "rounded px-2 py-3 mr-2 mb-8 uppercase text-white text-sm border bg-red-300 border-red-400 hover:bg-red-500 focus:outline-none",
+            on: {
+              click: function($event) {
+                return _vm.deleteGroup()
+              }
+            }
+          },
+          [_vm._v("\n            Delete this group\n        ")]
+        ),
+        _vm._v(" "),
+        _vm.deletingGroup
+          ? _c("div", [_vm._m(1), _vm._v(" "), _vm._m(2)])
+          : _vm._e()
       ]
     )
   ])
@@ -49925,6 +50707,61 @@ var staticRenderFns = [
           type: "text",
           name: "checkAdminChange",
           id: "checkAdminChange",
+          placeholder: "do you wish to proceed?"
+        }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass:
+          "flex items-center justify-between w-full mt-6 mb-6 p-2 bg-yellow-400 shadow text-white"
+      },
+      [
+        _vm._v("\n                Deleting a group is irreversible. "),
+        _c("br"),
+        _vm._v(
+          "\n                If you wish to preserve this group you have to pass your admin rights "
+        ),
+        _c("br"),
+        _vm._v("\n                to another member BEFORE continuing. "),
+        _c("br"),
+        _vm._v(
+          "\n                Otherwise everything will be lost.\n            "
+        )
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "mb-12" }, [
+      _c(
+        "label",
+        {
+          staticClass:
+            "mt-4 block mb-2 uppercase font-bold text-sm text-red-500",
+          attrs: { for: "checkDeleting" }
+        },
+        [
+          _vm._v(
+            '\n                    Please type "yes" to delete this group.\n                '
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c("input", {
+        staticClass: "focus:outline-none border-b border-gray-400 p-2",
+        attrs: {
+          type: "text",
+          name: "checkDeleting",
+          id: "checkDeleting",
           placeholder: "do you wish to proceed?"
         }
       })
@@ -50157,13 +50994,15 @@ var render = function() {
             _vm._v(" "),
             !_vm.groupBoard && _vm.group.admin_id == _vm.user.id
               ? _c("p", { staticClass: "text-gray-400 text-sm text-center" }, [
-                  _vm._v("Write here for others to see!")
+                  _vm._v(
+                    "\n            Write here for others to see!\n        "
+                  )
                 ])
               : _vm._e(),
             _vm._v(" "),
             !_vm.groupBoard && _vm.group.admin_id != _vm.user.id
               ? _c("p", { staticClass: "text-gray-400 text-center" }, [
-                  _vm._v("...")
+                  _vm._v("\n            ...\n        ")
                 ])
               : _vm._e(),
             _vm._v(" "),
@@ -50251,8 +51090,7 @@ var render = function() {
       "div",
       {
         ref: "whiteboard",
-        staticClass:
-          "container mb-2 pr-4 h-80 overflow-y-scroll min-h-screen\t",
+        staticClass: "container mb-2 pr-4 h-80 overflow-y-scroll min-h-screen",
         attrs: { id: "whiteboard" }
       },
       [
@@ -50283,7 +51121,7 @@ var render = function() {
               }
             },
             [
-              post.sender_id == _vm.user.id
+              post.sender_id == _vm.user.id || _vm.user.id == _vm.group.admin_id
                 ? _c(
                     "button",
                     {
@@ -50319,7 +51157,7 @@ var render = function() {
                 _c("div", { staticClass: "float-left mr-2" }, [
                   _c("img", {
                     staticClass:
-                      "rounded-full object-cover h-15 w-15 mr-2 mb-3",
+                      "rounded-full object-cover md:h-15 md:w-15 w-9 h-9 mr-2 mb-3",
                     attrs: { src: post.sender.avatar, alt: "avatar" }
                   })
                 ]),
@@ -50376,18 +51214,25 @@ var render = function() {
                       : _vm._e()
                   ]),
                   _vm._v(" "),
-                  _c("p", { staticClass: "text-xs float-right mb-2" }, [
-                    _vm._v(
-                      "\n                        " +
-                        _vm._s(
-                          _vm._f("dateFormat")(
-                            new Date(post.created_at),
-                            "HH:mm , DD.MM.YYYY"
-                          )
-                        ) +
-                        "\n                    "
-                    )
-                  ])
+                  _c(
+                    "p",
+                    {
+                      staticClass:
+                        "text-xs md:float-right md:relative md:mb-2 absolute top-0 left-1"
+                    },
+                    [
+                      _vm._v(
+                        "\n                        " +
+                          _vm._s(
+                            _vm._f("dateFormat")(
+                              new Date(post.created_at),
+                              "HH:mm , DD.MM.YYYY"
+                            )
+                          ) +
+                          "\n                    "
+                      )
+                    ]
+                  )
                 ])
               ])
             ]
@@ -50535,7 +51380,11 @@ var render = function() {
                 staticClass:
                   "flex items-center justify-between w-full my-5 p-2 bg-red-500 shadow text-white"
               },
-              [_vm._v("Please choose a picture under 5MB.")]
+              [
+                _vm._v(
+                  "\n            Please choose a picture under 5MB.\n        "
+                )
+              ]
             )
           : _vm._e(),
         _vm._v(" "),
@@ -50586,7 +51435,11 @@ var render = function() {
                       staticClass:
                         "flex items-center justify-between w-full my-5 p-2 bg-red-500 shadow text-white"
                     },
-                    [_vm._v("Please choose a file under 25MB.")]
+                    [
+                      _vm._v(
+                        "\n                Please choose a file under 25MB.\n            "
+                      )
+                    ]
                   )
                 : _vm._e()
             ])
@@ -50602,7 +51455,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "div",
-      { staticClass: "relative mt-5 mb-2 lg:mt-0 lg:ml-6 lg:float-left" },
+      { staticClass: "relative mt-5 mb-2 xl:float-right xl:mt-0 mt-4" },
       [
         _c(
           "label",
@@ -50703,15 +51556,17 @@ var render = function() {
       : _c("p", [_vm._v("No members")]),
     _vm._v(" "),
     _c("div", { staticClass: "flex w-full justify-between" }, [
-      _c(
-        "a",
-        {
-          staticClass:
-            "bg-white w-24 float-left m-2 shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 rounded-lg",
-          attrs: { href: "/invite-member" }
-        },
-        [_vm._v("Ivite\n        ")]
-      ),
+      _vm.user.id == _vm.group.admin_id
+        ? _c(
+            "a",
+            {
+              staticClass:
+                "bg-white w-24 float-left m-2 shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 rounded-lg",
+              attrs: { href: "/groups/" + _vm.group.id + "/invite-member" }
+            },
+            [_vm._v("Invite\n        ")]
+          )
+        : _vm._e(),
       _vm._v(" "),
       _vm.members.length > 0
         ? _c(
@@ -50719,9 +51574,26 @@ var render = function() {
             {
               staticClass:
                 "bg-white w-24 float-right m-2 shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 rounded-lg",
-              attrs: { href: "/all-members/" + _vm.groupid }
+              attrs: { href: "/groups/" + _vm.group.id + "/all-members/" }
             },
             [_vm._v("Show all\n        ")]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.user.id != _vm.group.admin_id
+        ? _c(
+            "button",
+            {
+              staticClass:
+                "bg-white w-24 float-left m-2 shadow border border-red-400 py-2 px-4 text-white text-xs bg-red-300 hover:bg-red-500 rounded-lg focus:outline-none",
+              attrs: { href: "/groups/" + _vm.group.id + "/group-statistics" },
+              on: {
+                click: function($event) {
+                  return _vm.checkWithUserPanel()
+                }
+              }
+            },
+            [_vm._v("\n            Leave\n        ")]
           )
         : _vm._e()
     ])
@@ -50793,31 +51665,38 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "z-30 fixed bottom-4 right-6" }, [
-    _c(
-      "a",
-      {
-        staticClass:
-          "shadow border border-gray-300 text-black text-xs font-bold text-gray-700 rounded-full bg-white flex items-center justify-center font-mono",
-        class: {
-          "bg-purple-200 hover:text-white hover:bg-purple-400": _vm.newMessage,
-          "hover:text-gray-500 hover:bg-gray-100": !_vm.newMessage
+  return _c(
+    "div",
+    {
+      staticClass: "z-30 z-30 xl:w-20 xl:h-20 w-14 h-14 fixed bottom-4 right-6"
+    },
+    [
+      _c(
+        "a",
+        {
+          staticClass:
+            "shadow border border-gray-300 text-black text-xs font-bold text-gray-700 rounded-full bg-white flex items-center justify-center font-mono",
+          class: {
+            "bg-purple-200 hover:text-white hover:bg-purple-400":
+              _vm.newMessage,
+            "hover:text-gray-500 hover:bg-gray-100": !_vm.newMessage
+          },
+          staticStyle: { "font-size": "20px" },
+          attrs: { href: "/chats" }
         },
-        staticStyle: { height: "100px", width: "100px", "font-size": "20px" },
-        attrs: { href: "/chats" }
-      },
-      [
-        _vm.newMessage
-          ? _c("div", {
-              staticClass:
-                "fixed bottom-24 right-8 rounded-full bg-red-500 w-3 h-3"
-            })
-          : _vm._e(),
-        _vm._v(" "),
-        _c("img", { attrs: { src: "/img/messages.png", alt: "messages" } })
-      ]
-    )
-  ])
+        [
+          _vm.newMessage
+            ? _c("div", {
+                staticClass:
+                  "fixed xl:bottom-20 bottom-16 right-8 rounded-full bg-red-500 w-3 h-3"
+              })
+            : _vm._e(),
+          _vm._v(" "),
+          _c("img", { attrs: { src: "/img/messages.png", alt: "messages" } })
+        ]
+      )
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -50905,8 +51784,8 @@ var render = function() {
         "a",
         {
           staticClass:
-            "z-30 fixed bottom-4 left-6 hover:text-gray-500 hover:bg-gray-100 shadow border border-gray-300 text-black text-xs font-bold text-gray-700 rounded-full bg-white flex items-center justify-center font-mono",
-          staticStyle: { height: "100px", width: "100px", "font-size": "20px" },
+            "z-40 xl:w-20 xl:h-20 w-14 h-14 fixed bottom-4 left-6 hover:text-gray-500 hover:bg-gray-100 shadow border border-gray-300 text-black text-xs font-bold text-gray-700 rounded-full bg-white flex items-center justify-center font-mono",
+          staticStyle: { "font-size": "20px" },
           attrs: { href: "/" + _vm.user.username + "/notes" }
         },
         [_c("img", { attrs: { src: "/img/notes.png", alt: "notes" } })]
@@ -51005,7 +51884,7 @@ var render = function() {
           "button",
           {
             staticClass:
-              "shadow float-right -mt-4 rounded-full border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 focus:outline-none",
+              "shadow float-right -mt-4 rounded-lg border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 focus:outline-none",
             attrs: { type: "submit" }
           },
           [_vm._v("\n            Make a note\n        ")]
@@ -51119,45 +51998,65 @@ var render = function() {
           "li",
           { key: user.id, staticClass: "inline float-left mr-4" },
           [
-            _c("a", { attrs: { href: "/profile/" + user.username } }, [
+            _c("div", { staticClass: "relative" }, [
               _c(
-                "div",
+                "button",
                 {
-                  staticClass:
-                    "max-w-xs lg:w-40 lg:h-60 w-20 h-30 rounded overflow-hidden shadow-lg mb-4"
+                  staticClass: "absolute top-0 right-0 rounded-full border",
+                  on: {
+                    click: function($event) {
+                      return _vm.checkWithUser(user)
+                    }
+                  }
                 },
                 [
                   _c("img", {
-                    staticClass: "lg:w-40 lg:h-40 w-20 h-20 object-cover",
-                    attrs: { src: user.avatar, alt: user.username }
-                  }),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "px-6 py-2 text-center" }, [
-                    _c("div", { staticClass: "font-bold text-sm mb-2" }, [
-                      _vm._v(
-                        "\n                            " +
-                          _vm._s(user.name) +
-                          "\n                        "
-                      )
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "p",
-                    {
-                      staticClass:
-                        "invisible text-gray-700 text-center mb-1 text-xs lg:visible xl:visible"
-                    },
-                    [
-                      _vm._v(
-                        "\n                            " +
-                          _vm._s(user.email) +
-                          "\n                    "
-                      )
-                    ]
-                  )
+                    staticClass: "object-cover rounded-full h-8 w-8",
+                    attrs: { src: "/img/cancel.png", alt: "exclude" }
+                  })
                 ]
-              )
+              ),
+              _vm._v(" "),
+              _c("a", { attrs: { href: "/profile/" + user.username } }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "max-w-xs lg:w-40 lg:h-60 w-20 h-30 rounded overflow-hidden shadow-lg mb-4"
+                  },
+                  [
+                    _c("img", {
+                      staticClass: "lg:w-40 lg:h-40 w-20 h-20 object-cover",
+                      attrs: { src: user.avatar, alt: user.username }
+                    }),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "px-6 py-2 text-center" }, [
+                      _c("div", { staticClass: "font-bold text-sm mb-2" }, [
+                        _vm._v(
+                          "\n                                " +
+                            _vm._s(user.name) +
+                            "\n                            "
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "p",
+                      {
+                        staticClass:
+                          "invisible text-gray-700 text-center mb-1 text-xs lg:visible xl:visible"
+                      },
+                      [
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(user.email) +
+                            "\n                        "
+                        )
+                      ]
+                    )
+                  ]
+                )
+              ])
             ])
           ]
         )
@@ -51426,7 +52325,7 @@ var render = function() {
     _c(
       "p",
       { staticClass: "ml-2 text-xs px-1 font-medium bg-red-100 float-left" },
-      [_vm._v("waiting")]
+      [_vm._v("In progress")]
     ),
     _vm._v(" "),
     _c("p", { staticClass: "text-sm font-bold float-left ml-2 mr-2" }, [
@@ -51649,43 +52548,52 @@ var staticRenderFns = [
           attrs: { id: "filterAssignments" }
         },
         [
-          _c("option", { attrs: { value: "mine" } }, [_vm._v("Mine")]),
+          _c("option", { attrs: { value: "mine" } }, [
+            _vm._v("Assigned to me")
+          ]),
           _vm._v(" "),
           _c("option", { attrs: { value: "all" } }, [_vm._v("All")])
         ]
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "inline-block relative text-gray-600 w-1/3" }, [
-        _c("input", {
+      _c(
+        "div",
+        {
           staticClass:
-            "rounded-lg bg-white border border-gray-300 text-gray-500 w-full h-8 px-5 pr-10 rounded-lg text-sm focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500",
-          attrs: {
-            id: "searchBar",
-            type: "search",
-            name: "searchBar",
-            placeholder: "Search by name"
-          }
-        }),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
+            "md:inline-block md:mt-0 mt-2 relative text-gray-600 md:w-1/3 w-48"
+        },
+        [
+          _c("input", {
             staticClass:
-              "absolute right-0 top-2 mr-4 bg-transparent focus:outline-none",
-            attrs: { id: "searchButton", type: "submit" }
-          },
-          [
-            _c("img", {
-              attrs: {
-                src: "/img/search.png",
-                width: "20",
-                height: "20",
-                alt: "submit"
-              }
-            })
-          ]
-        )
-      ])
+              "rounded-lg bg-white border border-gray-300 text-gray-500 w-full h-8 px-5 pr-10 rounded-lg text-sm focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500",
+            attrs: {
+              id: "searchBar",
+              type: "search",
+              name: "searchBar",
+              placeholder: "Search by name"
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass:
+                "absolute right-0 top-2 mr-4 bg-transparent focus:outline-none",
+              attrs: { id: "searchButton", type: "submit" }
+            },
+            [
+              _c("img", {
+                attrs: {
+                  src: "/img/search.png",
+                  width: "20",
+                  height: "20",
+                  alt: "submit"
+                }
+              })
+            ]
+          )
+        ]
+      )
     ])
   },
   function() {
@@ -52358,43 +53266,50 @@ var staticRenderFns = [
           attrs: { id: "filterEvents" }
         },
         [
-          _c("option", { attrs: { value: "joined" } }, [_vm._v("Joined")]),
+          _c("option", { attrs: { value: "joined" } }, [_vm._v("Going to")]),
           _vm._v(" "),
           _c("option", { attrs: { value: "all" } }, [_vm._v("All")])
         ]
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "inline-block relative text-gray-600 w-1/3" }, [
-        _c("input", {
+      _c(
+        "div",
+        {
           staticClass:
-            "rounded-lg bg-white border border-gray-300 text-gray-500 w-full h-8 px-5 pr-10 rounded-lg text-sm focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500",
-          attrs: {
-            id: "searchBar",
-            type: "search",
-            name: "searchBar",
-            placeholder: "Search by name"
-          }
-        }),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
+            "md:inline-block md:mt-0 mt-2 relative text-gray-600 md:w-1/3 w-48"
+        },
+        [
+          _c("input", {
             staticClass:
-              "absolute right-0 top-2 mr-4 bg-transparent focus:outline-none",
-            attrs: { id: "searchButton", type: "submit" }
-          },
-          [
-            _c("img", {
-              attrs: {
-                src: "/img/search.png",
-                width: "20",
-                height: "20",
-                alt: "submit"
-              }
-            })
-          ]
-        )
-      ])
+              "rounded-lg bg-white border border-gray-300 text-gray-500 w-full h-8 px-5 pr-10 rounded-lg text-sm focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500",
+            attrs: {
+              id: "searchBar",
+              type: "search",
+              name: "searchBar",
+              placeholder: "Search by name"
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass:
+                "absolute right-0 top-2 mr-4 bg-transparent focus:outline-none",
+              attrs: { id: "searchButton", type: "submit" }
+            },
+            [
+              _c("img", {
+                attrs: {
+                  src: "/img/search.png",
+                  width: "20",
+                  height: "20",
+                  alt: "submit"
+                }
+              })
+            ]
+          )
+        ]
+      )
     ])
   },
   function() {
@@ -52657,9 +53572,7 @@ var render = function() {
         ])
       : _vm._e(),
     _vm._v(" "),
-    _c("hr", {
-      staticClass: "w-full -ml-5 bg-gray-500 border-2 mb-12 rounded-full"
-    }),
+    _c("div", { staticClass: "w-full mt-12 border-b mb-12 rounded-full" }),
     _vm._v(" "),
     _c(
       "p",
@@ -53055,13 +53968,11 @@ var render = function() {
             staticClass:
               "flex items-center justify-between w-full -ml-4 mt-10 p-2 bg-green-500 shadow text-white"
           },
-          [_vm._v("\n                Your changes have been saved!\n    ")]
+          [_vm._v("\n        Your changes have been saved!\n    ")]
         )
       : _vm._e(),
     _vm._v(" "),
-    _c("hr", {
-      staticClass: "w-full mt-12 -ml-5 bg-gray-500 border-2 mb-12 rounded-full"
-    }),
+    _c("div", { staticClass: "w-full mt-12 border-b mb-12 rounded-full" }),
     _vm._v(" "),
     _c(
       "button",
@@ -53169,7 +54080,7 @@ var render = function() {
       _vm._v(" "),
       _c("img", {
         staticClass:
-          "object-cover w-32 h-32 mr-2 rounded-full border-4 border-white absolute bottom-0 transform -translate-x-1/2 translate-y-1/2",
+          "object-cover md:w-32 md:h-32 sm:w-24 sm:h-24 h-16 w-16 mr-2 rounded-full border-4 border-white absolute bottom-0 transform -translate-x-1/2 translate-y-1/2",
         staticStyle: { left: "50%" },
         attrs: { src: _vm.user.avatar, alt: "avatar" }
       })
@@ -53180,9 +54091,11 @@ var render = function() {
       { staticClass: "flex rounded-lg justify-between items-center mb-6" },
       [
         _c("div", { staticClass: "w-14 md:w-44 2xl:w-64" }, [
-          _c("h2", { staticClass: "font-bold text-2xl" }, [
-            _vm._v(" " + _vm._s(_vm.user.name) + " ")
-          ]),
+          _c(
+            "h2",
+            { staticClass: "font-bold lg:text-2xl md:text-lg text-md" },
+            [_vm._v(_vm._s(_vm.user.name))]
+          ),
           _vm._v(" "),
           _c("p", { staticClass: "text-sm" }, [
             _vm._v("Joined " + _vm._s(_vm.userCreatedAt))
@@ -53198,7 +54111,7 @@ var render = function() {
                     "rounded-lg shadow border border-gray-300 py-2 px-4 mr-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
                   attrs: { href: _vm.userEditPath }
                 },
-                [_vm._v("\n                    Edit profile\n                ")]
+                [_vm._v("\n                Edit profile\n            ")]
               )
             ])
           : _c(
@@ -53208,18 +54121,20 @@ var render = function() {
                   "rounded-lg shadow border border-gray-300 py-2 px-4 mr-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
                 attrs: { href: "/chats/find/" + _vm.user.id }
               },
-              [_vm._v("  \n                Chat \n            ")]
+              [_vm._v("\n            Chat\n        ")]
             )
       ]
     ),
+    _vm._v(" "),
+    _c("p", { staticClass: "text-sm float-right mb-4" }, [
+      _vm._v("\n        " + _vm._s(_vm.user.email) + "\n    ")
+    ]),
     _vm._v(" "),
     _c("p", { staticClass: "text-sm mb-4" }, [
       _vm._v("\n        " + _vm._s(_vm.user.bio) + "\n    ")
     ]),
     _vm._v(" "),
-    _c("hr", {
-      staticClass: "w-full h-1 bg-gray-100 border-none mb-10 rounded-full"
-    }),
+    _c("div", { staticClass: "w-full mt-12 border-b mb-12 rounded-full" }),
     _vm._v(" "),
     _vm.authUser.id == _vm.user.id
       ? _c(

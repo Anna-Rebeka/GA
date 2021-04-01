@@ -26,7 +26,8 @@ class UsersController extends Controller
     {   
         $users = $group->users()->orderBy('name')->where('users.id', '!=', auth()->user()->id)->get();
         return view('profile.index', [
-            'users' => $users
+            'users' => $users,
+            'group' => $group
         ]);
     }
 
@@ -86,9 +87,15 @@ class UsersController extends Controller
     public function showSettings(User $user)
     {
         $group = $user->group;
-        $new_whiteboard_notify = $user->groups()->where('groups.id', $group->id)->first()->pivot->new_whiteboard_notify;
-        $new_assignment_notify = $user->groups()->where('groups.id', $group->id)->first()->pivot->new_assignment_notify;
-        $new_event_notify = $user->groups()->where('groups.id', $group->id)->first()->pivot->new_event_notify;
+        $new_whiteboard_notify = 0;
+        $new_assignment_notify = 0;
+        $new_event_notify = 0;
+
+        if($user->group){
+            $new_whiteboard_notify = $user->groups()->where('groups.id', $group->id)->first()->pivot->new_whiteboard_notify;
+            $new_assignment_notify = $user->groups()->where('groups.id', $group->id)->first()->pivot->new_assignment_notify;
+            $new_event_notify = $user->groups()->where('groups.id', $group->id)->first()->pivot->new_event_notify;
+        }
 
         return view('profile.settings', [
             'user' => $user,
@@ -231,6 +238,9 @@ class UsersController extends Controller
      */
     public function destroy(User $user)
     {
+        if (auth()->user()->id != $user->id){
+            Abort(401);
+        }
         $user->delete();
     }
 

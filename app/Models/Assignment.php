@@ -22,6 +22,7 @@ class Assignment extends Model
         'on_time',
         'duration',
         'done',
+        'author_comment',
         'description',
         'max_assignees',
         'created_at'
