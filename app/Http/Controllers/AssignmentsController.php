@@ -31,6 +31,7 @@ class AssignmentsController extends Controller
 
         return view('groups.assignments', [
             'user' => auth()->user(),
+            'group' => $group,
             'assignments' => $assignments,
             'members' => $group->users
         ]);

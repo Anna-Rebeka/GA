@@ -29,6 +29,7 @@ class EventsController extends Controller
 
         return view('groups.events', [
             'user' => auth()->user(),
+            'group' => $group,
             'events' => $events
         ]);
     }

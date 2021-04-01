@@ -2702,8 +2702,72 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user', 'assignments'],
+  props: ["user", "group", "assignments"],
   data: function data() {
     return {
       allAssignments: this.assignments,
@@ -2761,6 +2825,8 @@ __webpack_require__.r(__webpack_exports__);
           this.filterToDo();
         } else if (this.select.value === "free") {
           this.filterFree();
+        } else if (this.select.value === "noAuthor") {
+          this.filterNoAuthor();
         }
 
         this.filtered = this.select.value;
@@ -2797,6 +2863,15 @@ __webpack_require__.r(__webpack_exports__);
     filterFree: function filterFree() {
       this.savedAssignments = this.savedAssignments.filter(function (e) {
         if (e.users.length == 0 || e.users.length < e.max_assignees) {
+          return true;
+        }
+
+        return false;
+      });
+    },
+    filterNoAuthor: function filterNoAuthor() {
+      this.savedAssignments = this.savedAssignments.filter(function (e) {
+        if (!e.author_id) {
           return true;
         }
 
@@ -2940,7 +3015,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user', 'assignments', 'members'],
+  props: ['user', 'group', 'assignments', 'members'],
   data: function data() {
     return {
       csrf: document.head.querySelector('meta[name="csrf-token"]').content,
@@ -4371,8 +4446,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user', 'events'],
+  props: ['user', 'group', 'events'],
   data: function data() {
     return {
       allEvents: this.events,
@@ -4461,6 +4537,8 @@ __webpack_require__.r(__webpack_exports__);
           this.filterJoined();
         } else if (this.select.value === "pending") {
           this.filterPending();
+        } else if (this.select.value === "noHost") {
+          this.filterNoHost();
         }
 
         this.filtered = this.select.value;
@@ -4487,6 +4565,15 @@ __webpack_require__.r(__webpack_exports__);
         return !e.users.map(function (u) {
           return u.id;
         }).includes(authed.id);
+      });
+    },
+    filterNoHost: function filterNoHost() {
+      this.savedEvents = this.savedEvents.filter(function (e) {
+        if (!e.host_id) {
+          return true;
+        }
+
+        return false;
       });
     },
     reload: function reload() {
@@ -4638,7 +4725,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["user", "events"],
+  props: ["user", "group", "events"],
   data: function data() {
     return {
       csrf: document.head.querySelector('meta[name="csrf-token"]').content,
@@ -46584,10 +46671,42 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm._m(0),
+    _c("div", { staticClass: "space-x-2 w-full mb-4" }, [
+      _c(
+        "select",
+        {
+          staticClass:
+            "inline-block rounded-lg bg-white border border-gray-300 text-gray-700 px-4 pr-8 h-8 mr-2 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500",
+          attrs: { id: "filter" }
+        },
+        [
+          _c("option", { attrs: { value: "all" } }, [_vm._v("All")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "mine" } }, [
+            _vm._v("Assigned to me")
+          ]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "toDo" } }, [_vm._v("Waiting")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "free" } }, [_vm._v("Free")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "created" } }, [
+            _vm._v("Created by me")
+          ]),
+          _vm._v(" "),
+          _vm.user.id == _vm.group.admin_id
+            ? _c("option", { attrs: { value: "noAuthor" } }, [
+                _vm._v("\n                Without an author\n            ")
+              ])
+            : _vm._e()
+        ]
+      ),
+      _vm._v(" "),
+      _vm._m(0)
+    ]),
     _vm._v(" "),
     _c("p", { staticClass: "text-xs font-bold text-blue-500 float-left" }, [
-      _vm._v("Deadline ")
+      _vm._v("Deadline")
     ]),
     _vm._v(" "),
     _c("p", { staticClass: "text-sm font-bold float-left ml-2 mr-2" }, [
@@ -46597,7 +46716,7 @@ var render = function() {
     _c(
       "p",
       { staticClass: "float-left text-xs font-bold text-red-600 mb-4 mr-8" },
-      [_vm._v(" On time")]
+      [_vm._v("\n        On time\n    ")]
     ),
     _vm._v(" "),
     _c("p", { staticClass: "text-xs px-1 font-medium bg-red-100 float-left" }, [
@@ -46611,7 +46730,7 @@ var render = function() {
     _c(
       "p",
       { staticClass: "text-xs px-2 font-medium bg-green-100 float-left" },
-      [_vm._v(" Done")]
+      [_vm._v("Done")]
     ),
     _vm._v(" "),
     _c("div", { staticClass: "flex flex-col clear-both" }, [
@@ -46671,14 +46790,14 @@ var render = function() {
                                   },
                                   [
                                     _vm._v(
-                                      "\n                            " +
+                                      "\n                                        " +
                                         _vm._s(
                                           _vm._f("dateFormat")(
                                             new Date(assignment.due),
                                             "DD.MM.YYYY , HH:mm"
                                           )
                                         ) +
-                                        "\n                        "
+                                        "\n                                    "
                                     )
                                   ]
                                 )
@@ -46697,9 +46816,9 @@ var render = function() {
                                   },
                                   [
                                     _vm._v(
-                                      "\n                                " +
+                                      "\n                                        " +
                                         _vm._s(assignment.name) +
-                                        "\n                        "
+                                        "\n                                    "
                                     )
                                   ]
                                 )
@@ -46716,7 +46835,11 @@ var render = function() {
                                   [
                                     assignment.author
                                       ? _c("p", [
-                                          _vm._v(_vm._s(assignment.author.name))
+                                          _vm._v(
+                                            "\n                                            " +
+                                              _vm._s(assignment.author.name) +
+                                              "\n                                        "
+                                          )
                                         ])
                                       : _c("p", [_vm._v("*deleted account*")])
                                   ]
@@ -46736,7 +46859,7 @@ var render = function() {
                                 },
                                 [
                                   _vm._v(
-                                    "\n                            Details\n                        "
+                                    "\n                                        Details\n                                    "
                                   )
                                 ]
                               )
@@ -46774,7 +46897,7 @@ var render = function() {
                   }
                 }
               },
-              [_vm._v("\n        Load older\n    ")]
+              [_vm._v("\n                    Load older\n                ")]
             )
           ]
         )
@@ -46787,30 +46910,10 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "space-x-2 w-full mb-4" }, [
-      _c(
-        "select",
-        {
-          staticClass:
-            "inline-block rounded-lg bg-white border border-gray-300 text-gray-700 px-4 pr-8 h-8 mr-2 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500",
-          attrs: { id: "filter" }
-        },
-        [
-          _c("option", { attrs: { value: "all" } }, [_vm._v("All")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "mine" } }, [_vm._v("Mine")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "toDo" } }, [_vm._v("Waiting")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "free" } }, [_vm._v("Free")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "created" } }, [
-            _vm._v("Created by me")
-          ])
-        ]
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "inline-block relative text-gray-600 w-1/3" }, [
+    return _c(
+      "div",
+      { staticClass: "inline-block relative text-gray-600 w-1/3" },
+      [
         _c("input", {
           staticClass:
             "rounded-lg bg-white border border-gray-300 text-gray-500 w-full h-8 px-5 pr-10 rounded-lg text-sm focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500",
@@ -46840,8 +46943,8 @@ var staticRenderFns = [
             })
           ]
         )
-      ])
-    ])
+      ]
+    )
   },
   function() {
     var _vm = this
@@ -46856,7 +46959,11 @@ var staticRenderFns = [
               "pl-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase",
             attrs: { scope: "col" }
           },
-          [_vm._v("\n                        When \n                    ")]
+          [
+            _vm._v(
+              "\n                                    When\n                                "
+            )
+          ]
         ),
         _vm._v(" "),
         _c(
@@ -46866,7 +46973,11 @@ var staticRenderFns = [
               "pl-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase",
             attrs: { scope: "col" }
           },
-          [_vm._v("\n                        What\n                    ")]
+          [
+            _vm._v(
+              "\n                                    What\n                                "
+            )
+          ]
         ),
         _vm._v(" "),
         _c(
@@ -46876,7 +46987,11 @@ var staticRenderFns = [
               "pl-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase",
             attrs: { scope: "col" }
           },
-          [_vm._v("\n                        By who\n                    ")]
+          [
+            _vm._v(
+              "\n                                    By who\n                                "
+            )
+          ]
         ),
         _vm._v(" "),
         _c("th", {
@@ -47432,7 +47547,11 @@ var render = function() {
         : _vm._e(),
       _vm._v(" "),
       _c("assignments-table", {
-        attrs: { user: _vm.user, assignments: _vm.assignments }
+        attrs: {
+          user: _vm.user,
+          group: _vm.group,
+          assignments: _vm.assignments
+        }
       })
     ],
     1
@@ -49229,12 +49348,16 @@ var staticRenderFns = [
           _c("option", { attrs: { value: "all" } }, [_vm._v("All")]),
           _vm._v(" "),
           _c("option", { attrs: { value: "created" } }, [
-            _vm._v("Created by me")
+            _vm._v("Hosted by me")
           ]),
           _vm._v(" "),
-          _c("option", { attrs: { value: "joined" } }, [_vm._v("Joined")]),
+          _c("option", { attrs: { value: "joined" } }, [_vm._v("Going to")]),
           _vm._v(" "),
-          _c("option", { attrs: { value: "pending" } }, [_vm._v("Pending")])
+          _c("option", { attrs: { value: "pending" } }, [_vm._v("Pending")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "noHost" } }, [
+            _vm._v("Without a host")
+          ])
         ]
       ),
       _vm._v(" "),
@@ -49666,7 +49789,9 @@ var render = function() {
           )
         : _vm._e(),
       _vm._v(" "),
-      _c("events-table", { attrs: { user: _vm.user, events: _vm.savedEvents } })
+      _c("events-table", {
+        attrs: { user: _vm.user, group: _vm.group, events: _vm.savedEvents }
+      })
     ],
     1
   )
@@ -51918,7 +52043,9 @@ var staticRenderFns = [
           attrs: { id: "filterAssignments" }
         },
         [
-          _c("option", { attrs: { value: "mine" } }, [_vm._v("Mine")]),
+          _c("option", { attrs: { value: "mine" } }, [
+            _vm._v("Assigned to me")
+          ]),
           _vm._v(" "),
           _c("option", { attrs: { value: "all" } }, [_vm._v("All")])
         ]
@@ -52627,7 +52754,7 @@ var staticRenderFns = [
           attrs: { id: "filterEvents" }
         },
         [
-          _c("option", { attrs: { value: "joined" } }, [_vm._v("Joined")]),
+          _c("option", { attrs: { value: "joined" } }, [_vm._v("Going to")]),
           _vm._v(" "),
           _c("option", { attrs: { value: "all" } }, [_vm._v("All")])
         ]

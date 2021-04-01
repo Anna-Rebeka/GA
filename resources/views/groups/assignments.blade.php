@@ -1,3 +1,3 @@
 <x-master>
-    <group-assignments :user="{{ $user }}" :assignments="{{ $assignments }}" :members="{{ $members }}"></group-assignments>
+    <group-assignments :user="{{ $user }}" :group="{{ $group }}" :assignments="{{ $assignments }}" :members="{{ $members }}"></group-assignments>
 </x-master>

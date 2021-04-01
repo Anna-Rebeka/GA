@@ -5,9 +5,10 @@
                 id="filter"
                 class="inline-block rounded-lg bg-white border border-gray-300 text-gray-700 px-4 pr-8 h-8 mr-2 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
                 <option value="all">All</option>
-                <option value="created">Created by me</option>
-                <option value="joined">Joined</option>
+                <option value="created">Hosted by me</option>
+                <option value="joined">Going to</option>
                 <option value="pending">Pending</option>
+                <option value="noHost">Without a host</option>
             </select>
             <div class="inline-block relative text-gray-600 w-1/3">
                 <input class="rounded-lg bg-white border border-gray-300 text-gray-500 w-full h-8 px-5 pr-10 rounded-lg text-sm focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500"
@@ -91,7 +92,7 @@
 
 <script>
 export default {
-    props: ['user', 'events'],
+    props: ['user', 'group', 'events'],
     data() {
         return {
             allEvents: this.events,
@@ -180,6 +181,9 @@ export default {
                 else if(this.select.value === "pending"){
                     this.filterPending();
                 }
+                else if(this.select.value === "noHost"){
+                    this.filterNoHost();
+                }
                 this.filtered = this.select.value;
             }
         },
@@ -203,6 +207,15 @@ export default {
             var eventUsers = [];
             this.savedEvents = this.savedEvents.filter(function(e) {
                 return !e.users.map(u => u.id).includes(authed.id);                
+            });
+        },
+
+        filterNoHost(){
+            this.savedEvents = this.savedEvents.filter(function(e) {
+                if(!e.host_id){
+                    return true;
+                }
+                return false;
             });
         },
 

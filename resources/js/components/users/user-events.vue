@@ -13,7 +13,7 @@
             <select
                 id="filterEvents"
                 class="inline-block rounded-lg bg-white border border-gray-300 text-gray-700 px-4 pr-8 h-8 mr-2 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
-                <option value="joined">Joined</option>
+                <option value="joined">Going to</option>
                 <option value="all">All</option>
             </select>
             <div class="inline-block relative text-gray-600 w-1/3">

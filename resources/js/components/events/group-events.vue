@@ -107,13 +107,13 @@
             Your event was created! Check it out down below.
         </div>
 
-        <events-table :user="user" :events="savedEvents"></events-table>
+        <events-table :user="user" :group="group" :events="savedEvents"></events-table>
     </div>
 </template>
 
 <script>
 export default {
-    props: ["user", "events"],
+    props: ["user", "group", "events"],
     data() {
         return {
             csrf: document.head.querySelector('meta[name="csrf-token"]')

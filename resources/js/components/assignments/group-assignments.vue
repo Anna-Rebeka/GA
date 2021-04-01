@@ -98,13 +98,13 @@
                     Your assignment was created! Check it out down below.
         </div>
         
-        <assignments-table :user="user" :assignments="assignments"></assignments-table>
+        <assignments-table :user="user" :group="group" :assignments="assignments"></assignments-table>
     </div>
 </template>
 
 <script>
 export default {
-    props: ['user', 'assignments', 'members'], 
+    props: ['user', 'group', 'assignments', 'members'], 
     data() {
         return {
             csrf: document.head.querySelector('meta[name="csrf-token"]').content,
