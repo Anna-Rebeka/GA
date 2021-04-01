@@ -38,7 +38,7 @@ class ChatroomsController extends Controller
 
     public function getMessages(Chatroom $chatroom){
         if(!$chatroom->hasUser(auth()->user())){
-            Abort('404');
+            Abort('401');
         }
         return Message::where('chatroom_id', $chatroom->id)
             ->with('sender')
@@ -91,7 +91,7 @@ class ChatroomsController extends Controller
     public function show(Chatroom $chatroom)
     {   
         if(!$chatroom->hasUser(auth()->user())){
-            Abort('404');
+            Abort('401');
         }
         $chatroom->users;
         $user = auth()->user();

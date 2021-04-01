@@ -24,7 +24,7 @@ class AssignmentsController extends Controller
     public function index()
     {
         if(!auth()->user()->group){
-            Abort('404');
+            Abort('401');
         }
         $group = auth()->user()->group;
         $assignments = $group->assignments()->with('users')->with('author')->where('due', '>=', now())->orderBy('due')->get();
