@@ -51396,31 +51396,38 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "z-30 fixed bottom-4 right-6" }, [
-    _c(
-      "a",
-      {
-        staticClass:
-          "shadow border border-gray-300 text-black text-xs font-bold text-gray-700 rounded-full bg-white flex items-center justify-center font-mono",
-        class: {
-          "bg-purple-200 hover:text-white hover:bg-purple-400": _vm.newMessage,
-          "hover:text-gray-500 hover:bg-gray-100": !_vm.newMessage
+  return _c(
+    "div",
+    {
+      staticClass: "z-30 md:h-24 md:w-24 z-30 w-16 h-16 fixed bottom-4 right-6"
+    },
+    [
+      _c(
+        "a",
+        {
+          staticClass:
+            "shadow border border-gray-300 text-black text-xs font-bold text-gray-700 rounded-full bg-white flex items-center justify-center font-mono",
+          class: {
+            "bg-purple-200 hover:text-white hover:bg-purple-400":
+              _vm.newMessage,
+            "hover:text-gray-500 hover:bg-gray-100": !_vm.newMessage
+          },
+          staticStyle: { "font-size": "20px" },
+          attrs: { href: "/chats" }
         },
-        staticStyle: { height: "100px", width: "100px", "font-size": "20px" },
-        attrs: { href: "/chats" }
-      },
-      [
-        _vm.newMessage
-          ? _c("div", {
-              staticClass:
-                "fixed bottom-24 right-8 rounded-full bg-red-500 w-3 h-3"
-            })
-          : _vm._e(),
-        _vm._v(" "),
-        _c("img", { attrs: { src: "/img/messages.png", alt: "messages" } })
-      ]
-    )
-  ])
+        [
+          _vm.newMessage
+            ? _c("div", {
+                staticClass:
+                  "fixed bottom-24 right-8 rounded-full bg-red-500 w-3 h-3"
+              })
+            : _vm._e(),
+          _vm._v(" "),
+          _c("img", { attrs: { src: "/img/messages.png", alt: "messages" } })
+        ]
+      )
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -51508,8 +51515,8 @@ var render = function() {
         "a",
         {
           staticClass:
-            "z-30 fixed bottom-4 left-6 hover:text-gray-500 hover:bg-gray-100 shadow border border-gray-300 text-black text-xs font-bold text-gray-700 rounded-full bg-white flex items-center justify-center font-mono",
-          staticStyle: { height: "100px", width: "100px", "font-size": "20px" },
+            "md:h-24 md:w-24 z-30 w-16 h-16 fixed bottom-4 left-6 hover:text-gray-500 hover:bg-gray-100 shadow border border-gray-300 text-black text-xs font-bold text-gray-700 rounded-full bg-white flex items-center justify-center font-mono",
+          staticStyle: { "font-size": "20px" },
           attrs: { href: "/" + _vm.user.username + "/notes" }
         },
         [_c("img", { attrs: { src: "/img/notes.png", alt: "notes" } })]

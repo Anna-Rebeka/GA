@@ -1,12 +1,12 @@
 <template>
-    <div class="z-30 fixed bottom-4 right-6">
+    <div class="z-30 md:h-24 md:w-24 z-30 w-16 h-16 fixed bottom-4 right-6">
         <a
             v-bind:class="{
                 'bg-purple-200 hover:text-white hover:bg-purple-400': newMessage,
                 'hover:text-gray-500 hover:bg-gray-100': !newMessage,
             }"
             class="shadow border border-gray-300 text-black text-xs font-bold text-gray-700 rounded-full bg-white flex items-center justify-center font-mono"
-            style="height: 100px; width: 100px; font-size: 20px"
+            style="font-size: 20px"
             href="/chats"
         >
             <div
