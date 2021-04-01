@@ -30,7 +30,7 @@
                 v-if="user.id == group.admin_id"
                 :href="'/groups/' + group.id + '/invite-member'"
                 class="bg-white w-24 float-left m-2 shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 rounded-lg"
-                >Ivite
+                >Invite
             </a>
             <a
                 v-if="members.length > 0"

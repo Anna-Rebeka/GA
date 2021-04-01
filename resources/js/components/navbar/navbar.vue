@@ -27,7 +27,7 @@
         </div>
         <a
             :href="'/' + user.username + '/notes'"
-            class="md:h-24 md:w-24 z-30 w-16 h-16 fixed bottom-4 left-6 hover:text-gray-500 hover:bg-gray-100 shadow border border-gray-300 text-black text-xs font-bold text-gray-700 rounded-full bg-white flex items-center justify-center font-mono"
+            class="z-40 xl:w-20 xl:h-20 w-14 h-14 fixed bottom-4 left-6 hover:text-gray-500 hover:bg-gray-100 shadow border border-gray-300 text-black text-xs font-bold text-gray-700 rounded-full bg-white flex items-center justify-center font-mono"
             style="font-size: 20px"
         >
             <img src="/img/notes.png" alt="notes" />

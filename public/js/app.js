@@ -46865,7 +46865,7 @@ var render = function() {
             _vm._v("Assigned to me")
           ]),
           _vm._v(" "),
-          _c("option", { attrs: { value: "toDo" } }, [_vm._v("Waiting")]),
+          _c("option", { attrs: { value: "toDo" } }, [_vm._v("In progress")]),
           _vm._v(" "),
           _c("option", { attrs: { value: "free" } }, [_vm._v("Free")]),
           _vm._v(" "),
@@ -46899,7 +46899,7 @@ var render = function() {
     ),
     _vm._v(" "),
     _c("p", { staticClass: "text-xs px-1 font-medium bg-red-100 float-left" }, [
-      _vm._v("Waiting")
+      _vm._v("In progress")
     ]),
     _vm._v(" "),
     _c("p", { staticClass: "text-sm font-bold float-left ml-2 mr-2" }, [
@@ -50056,7 +50056,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "text-center pt-6 z-40 relative" }, [
+  return _c("div", { staticClass: "text-center pt-6 z-30 relative" }, [
     _c(
       "a",
       {
@@ -51330,7 +51330,7 @@ var render = function() {
                 "bg-white w-24 float-left m-2 shadow border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 rounded-lg",
               attrs: { href: "/groups/" + _vm.group.id + "/invite-member" }
             },
-            [_vm._v("Ivite\n        ")]
+            [_vm._v("Invite\n        ")]
           )
         : _vm._e(),
       _vm._v(" "),
@@ -51434,7 +51434,7 @@ var render = function() {
   return _c(
     "div",
     {
-      staticClass: "z-30 md:h-24 md:w-24 z-30 w-16 h-16 fixed bottom-4 right-6"
+      staticClass: "z-30 z-30 xl:w-20 xl:h-20 w-14 h-14 fixed bottom-4 right-6"
     },
     [
       _c(
@@ -51454,7 +51454,7 @@ var render = function() {
           _vm.newMessage
             ? _c("div", {
                 staticClass:
-                  "fixed bottom-24 right-8 rounded-full bg-red-500 w-3 h-3"
+                  "fixed xl:bottom-20 bottom-16 right-8 rounded-full bg-red-500 w-3 h-3"
               })
             : _vm._e(),
           _vm._v(" "),
@@ -51550,7 +51550,7 @@ var render = function() {
         "a",
         {
           staticClass:
-            "md:h-24 md:w-24 z-30 w-16 h-16 fixed bottom-4 left-6 hover:text-gray-500 hover:bg-gray-100 shadow border border-gray-300 text-black text-xs font-bold text-gray-700 rounded-full bg-white flex items-center justify-center font-mono",
+            "z-40 xl:w-20 xl:h-20 w-14 h-14 fixed bottom-4 left-6 hover:text-gray-500 hover:bg-gray-100 shadow border border-gray-300 text-black text-xs font-bold text-gray-700 rounded-full bg-white flex items-center justify-center font-mono",
           staticStyle: { "font-size": "20px" },
           attrs: { href: "/" + _vm.user.username + "/notes" }
         },
@@ -52091,7 +52091,7 @@ var render = function() {
     _c(
       "p",
       { staticClass: "ml-2 text-xs px-1 font-medium bg-red-100 float-left" },
-      [_vm._v("waiting")]
+      [_vm._v("In progress")]
     ),
     _vm._v(" "),
     _c("p", { staticClass: "text-sm font-bold float-left ml-2 mr-2" }, [

@@ -1,5 +1,5 @@
 <template>
-    <div class="z-30 md:h-24 md:w-24 z-30 w-16 h-16 fixed bottom-4 right-6">
+    <div class="z-30 z-30 xl:w-20 xl:h-20 w-14 h-14 fixed bottom-4 right-6">
         <a
             v-bind:class="{
                 'bg-purple-200 hover:text-white hover:bg-purple-400': newMessage,
@@ -11,7 +11,7 @@
         >
             <div
                 v-if="newMessage"
-                class="fixed bottom-24 right-8 rounded-full bg-red-500 w-3 h-3"
+                class="fixed xl:bottom-20 bottom-16 right-8 rounded-full bg-red-500 w-3 h-3"
             ></div>
             <img src="/img/messages.png" alt="messages" />
         </a>

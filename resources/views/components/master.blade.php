@@ -19,7 +19,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body  class="bg-gray-100">
-    <img class="hidden lg:flex w-48 z-10 fixed bottom-0 left-0" src="/img/radars.png" alt="">
+    <img class="hidden xl:flex w-40 z-10 fixed bottom-0 left-0" src="/img/radars.png" alt="">
     <div id="app">
         <section class="mt-16 px-8">
             <main class="container mx-auto">

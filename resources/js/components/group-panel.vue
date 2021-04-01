@@ -1,5 +1,5 @@
 <template>
-    <div class="text-center pt-6 z-40 relative">
+    <div class="text-center pt-6 z-30 relative">
         <a
             href="/create-group"
             class="bg-white mb-6 rounded-lg border border-gray-300 py-2 px-3 font-bold text-black text-xs hover:text-gray-500 hover:bg-gray-100"

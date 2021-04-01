@@ -7,7 +7,7 @@
             >
                 <option value="all">All</option>
                 <option value="mine">Assigned to me</option>
-                <option value="toDo">Waiting</option>
+                <option value="toDo">In progress</option>
                 <option value="free">Free</option>
                 <option value="created">Created by me</option>
                 <option v-if="user.id == group.admin_id" value="noAuthor">
@@ -41,7 +41,7 @@
         <p class="float-left text-xs font-bold text-red-600 mb-4 mr-8">
             On time
         </p>
-        <p class="text-xs px-1 font-medium bg-red-100 float-left">Waiting</p>
+        <p class="text-xs px-1 font-medium bg-red-100 float-left">In progress</p>
         <p class="text-sm font-bold float-left ml-2 mr-2">/</p>
         <p class="text-xs px-2 font-medium bg-green-100 float-left">Done</p>
 
