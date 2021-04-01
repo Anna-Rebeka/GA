@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Assignment;
 use App\Models\AssignmentsComments;
 use App\Events\AssignmentCommented;
+use App\Events\AssignmentCommentDeleted;
 use Illuminate\Support\Facades\DB;
 
 
@@ -13,10 +14,7 @@ class AssignmentsCommentsController extends Controller
 {
     public function index(Assignment $assignment)
     {
-        $comments = $assignment->comments()->orderBy('assignments_comments.created_at', 'desc')->get();
-        foreach ($comments as $comment){
-            $comment->user;
-        }
+        $comments = $assignment->comments()->orderBy('assignments_comments.created_at', 'desc')->with('user')->get();
         return $comments;
     }
 
@@ -44,6 +42,7 @@ class AssignmentsCommentsController extends Controller
         if($assignment->group->admin_id != auth()->user()->id && $comment->user_id != auth()->user()->id){
             Abort(401);
         }
+        broadcast(new AssignmentCommentDeleted(auth()->user(), $comment, $assignment, $assignment->group))->toOthers();
         $comment->delete();
         return $comment;
     }

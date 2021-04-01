@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Events\EventCommented;
+use App\Events\EventCommentDeleted;
 
 
 class EventCommentsController extends Controller
@@ -19,10 +20,7 @@ class EventCommentsController extends Controller
      */
     public function index(Event $event)
     {
-        $comments = $event->comments()->orderBy('event_comments.created_at', 'desc')->get();
-        foreach ($comments as $comment){
-            $comment->user;
-        }
+        $comments = $event->comments()->orderBy('event_comments.created_at', 'desc')->with('user')->get();
         return $comments;
     }
 
@@ -109,6 +107,7 @@ class EventCommentsController extends Controller
         if($event->group->admin_id != auth()->user()->id && $comment->user_id != auth()->user()->id){
             Abort(401);
         }
+        broadcast(new EventCommentDeleted(auth()->user(), $comment, $event, $event->group))->toOthers();
         $comment->delete();
         return $comment;
     }

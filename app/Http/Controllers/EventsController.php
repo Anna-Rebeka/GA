@@ -261,6 +261,7 @@ class EventsController extends Controller
             $event->users()->detach(auth()->user()->id);
             $this->updatedEventNotifyUsers($event);
         });
+        return auth()->user();
     }
 
     public function loadOlderEvents(Group $group, $howManyDisplayed)

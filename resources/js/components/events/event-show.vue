@@ -3,7 +3,7 @@
         <div class="p-8 mr-2 mb-8">
             <div class="float-right">
                 <button
-                    v-if="going && !going.includes(user.id)"
+                    v-if="savedGoing && !savedGoing.includes(user.id)"
                     @click="joinEvent()"
                     class="rounded-lg py-2 px-4 mr-2 w-16 text-white text-sm bg-green-400 hover:bg-green-300 focus:outline-none"
                 >
@@ -128,6 +128,7 @@ export default {
             pageOfItems: [],
             cannotJoinOldEventError: false,
             cannotLeaveOldEventError: false,
+            savedGoing: this.going,
         };
     },
 
@@ -154,8 +155,8 @@ export default {
             axios
                 .post("/events/" + this.event.id + "/join")
                 .then((response) => {
-                    this.going.push(this.user.id);
-                    this.event.users.push(this.user);
+                    this.savedGoing.push(this.user.id);
+                    this.savedUsers.push(this.user);
                     this.reload();
                 })
                 .catch((error) => {
@@ -175,10 +176,12 @@ export default {
             axios
                 .post("/events/" + this.event.id + "/leave")
                 .then((response) => {
-                    var indexEU = this.event.users.indexOf(this.user);
-                    var indexG = this.going.indexOf(this.user.id);
-                    this.event.users.splice(indexEU, 1);
-                    this.going.splice(indexG, 1);
+                    this.savedUsers = this.savedUsers.filter(function (eu) {
+                        return eu.id != response.data.id;
+                    });
+                    this.savedGoing = this.savedGoing.filter(function (gid) {
+                        return gid != response.data.id;
+                    });
                     this.reload();
                 })
                 .catch((error) => {

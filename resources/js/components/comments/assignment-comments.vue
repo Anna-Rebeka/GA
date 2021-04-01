@@ -89,6 +89,18 @@ export default {
             e.assignment_comment.user = e.user;
             this.comments.unshift(e.assignment_comment);
         });
+
+        window.Echo.private(
+            "commented_assignment." +
+                this.assignment.id +
+                ".group." +
+                this.assignment.group_id +
+                ".deleted"
+        ).listen("AssignmentCommentDeleted", (e) => {
+            this.comments = this.comments.filter(function (c) {
+                return c.id !== e.assignment_comment.id;
+            });
+        });
     },
 
     methods: {
@@ -141,10 +153,19 @@ export default {
             if (!confirm("Are you sure you want to delete this comment?")) {
                 return;
             }
-            axios.delete("/assignments/" + this.assignment.id + "/comments/" + comment.id + "/destroy").then((response) => {
-                var index = this.comments.indexOf(response.data);
-                this.comments.splice(index, 1);
-            });
+            axios
+                .delete(
+                    "/assignments/" +
+                        this.assignment.id +
+                        "/comments/" +
+                        comment.id +
+                        "/destroy"
+                )
+                .then((response) => {
+                    this.comments = this.comments.filter(function (c) {
+                        return c.id !== response.data.id;
+                    });
+                });
         },
     },
 };

@@ -3737,6 +3737,11 @@ __webpack_require__.r(__webpack_exports__);
 
       _this.comments.unshift(e.assignment_comment);
     });
+    window.Echo["private"]("commented_assignment." + this.assignment.id + ".group." + this.assignment.group_id + ".deleted").listen("AssignmentCommentDeleted", function (e) {
+      _this.comments = _this.comments.filter(function (c) {
+        return c.id !== e.assignment_comment.id;
+      });
+    });
   },
   methods: {
     getComments: function getComments() {
@@ -3788,9 +3793,9 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       axios["delete"]("/assignments/" + this.assignment.id + "/comments/" + comment.id + "/destroy").then(function (response) {
-        var index = _this4.comments.indexOf(response.data);
-
-        _this4.comments.splice(index, 1);
+        _this4.comments = _this4.comments.filter(function (c) {
+          return c.id !== response.data.id;
+        });
       });
     }
   }
@@ -3889,6 +3894,11 @@ __webpack_require__.r(__webpack_exports__);
 
       _this.comments.unshift(e.event_comment);
     });
+    window.Echo["private"]("commented_event." + this.event.id + ".group." + this.event.group_id + ".deleted").listen("EventCommentDeleted", function (e) {
+      _this.comments = _this.comments.filter(function (c) {
+        return c.id !== e.event_comment.id;
+      });
+    });
   },
   methods: {
     getComments: function getComments() {
@@ -3940,9 +3950,9 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       axios["delete"]("/events/" + this.event.id + "/comments/" + comment.id + "/destroy").then(function (response) {
-        var index = _this4.comments.indexOf(response.data);
-
-        _this4.comments.splice(index, 1);
+        _this4.comments = _this4.comments.filter(function (c) {
+          return c.id !== response.data.id;
+        });
       });
     }
   }
@@ -4349,7 +4359,8 @@ __webpack_require__.r(__webpack_exports__);
       savedUsers: this.event.users,
       pageOfItems: [],
       cannotJoinOldEventError: false,
-      cannotLeaveOldEventError: false
+      cannotLeaveOldEventError: false,
+      savedGoing: this.going
     };
   },
   methods: {
@@ -4373,9 +4384,9 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       axios.post("/events/" + this.event.id + "/join").then(function (response) {
-        _this.going.push(_this.user.id);
+        _this.savedGoing.push(_this.user.id);
 
-        _this.event.users.push(_this.user);
+        _this.savedUsers.push(_this.user);
 
         _this.reload();
       })["catch"](function (error) {
@@ -4396,13 +4407,12 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       axios.post("/events/" + this.event.id + "/leave").then(function (response) {
-        var indexEU = _this2.event.users.indexOf(_this2.user);
-
-        var indexG = _this2.going.indexOf(_this2.user.id);
-
-        _this2.event.users.splice(indexEU, 1);
-
-        _this2.going.splice(indexG, 1);
+        _this2.savedUsers = _this2.savedUsers.filter(function (eu) {
+          return eu.id != response.data.id;
+        });
+        _this2.savedGoing = _this2.savedGoing.filter(function (gid) {
+          return gid != response.data.id;
+        });
 
         _this2.reload();
       })["catch"](function (error) {
@@ -6369,8 +6379,37 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['users', 'group'],
+  props: ["users", "group"],
   data: function data() {
     return {
       pageOfItems: [],
@@ -6391,9 +6430,9 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios["delete"]("/groups/" + this.group.id + "/exclude-member/" + user.id).then(function (response) {
-        var index = _this.users.indexOf(response.data);
-
-        _this.users.splice(index, 1);
+        _this.savedUsers = _this.savedUsers.filter(function (u) {
+          return u.id !== response.data.id;
+        });
       });
     },
     onChangePage: function onChangePage(pageOfItems) {
@@ -48531,7 +48570,7 @@ var render = function() {
           },
           [
             comment.user_id == _vm.user.id ||
-            _vm.user.id == _vm.assignment.group.admin_id
+            _vm.user.id == _vm.event.group.admin_id
               ? _c(
                   "button",
                   {
@@ -48974,7 +49013,7 @@ var render = function() {
     [
       _c("div", { staticClass: "p-8 mr-2 mb-8" }, [
         _c("div", { staticClass: "float-right" }, [
-          _vm.going && !_vm.going.includes(_vm.user.id)
+          _vm.savedGoing && !_vm.savedGoing.includes(_vm.user.id)
             ? _c(
                 "button",
                 {
@@ -51687,7 +51726,7 @@ var render = function() {
               _c(
                 "button",
                 {
-                  staticClass: "absolute top-0 right-0 rounded-full border ",
+                  staticClass: "absolute top-0 right-0 rounded-full border",
                   on: {
                     click: function($event) {
                       return _vm.checkWithUser(user)
@@ -51718,9 +51757,9 @@ var render = function() {
                     _c("div", { staticClass: "px-6 py-2 text-center" }, [
                       _c("div", { staticClass: "font-bold text-sm mb-2" }, [
                         _vm._v(
-                          "\n                            " +
+                          "\n                                " +
                             _vm._s(user.name) +
-                            "\n                        "
+                            "\n                            "
                         )
                       ])
                     ]),
@@ -51735,7 +51774,7 @@ var render = function() {
                         _vm._v(
                           "\n                            " +
                             _vm._s(user.email) +
-                            "\n                    "
+                            "\n                        "
                         )
                       ]
                     )

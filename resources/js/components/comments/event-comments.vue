@@ -23,7 +23,7 @@
                 <button
                     v-if="
                         comment.user_id == user.id ||
-                        user.id == assignment.group.admin_id
+                        user.id == event.group.admin_id
                     "
                     v-on:click="deleteComment(comment)"
                     class="absolute top-3 right-3 focus:outline-none"
@@ -86,6 +86,18 @@ export default {
             e.event_comment.user = e.user;
             this.comments.unshift(e.event_comment);
         });
+
+        window.Echo.private(
+            "commented_event." +
+                this.event.id +
+                ".group." +
+                this.event.group_id +
+                ".deleted"
+        ).listen("EventCommentDeleted", (e) => {
+            this.comments = this.comments.filter(function (c) {
+                return c.id !== e.event_comment.id;
+            });
+        });
     },
 
     methods: {
@@ -147,8 +159,9 @@ export default {
                         "/destroy"
                 )
                 .then((response) => {
-                    var index = this.comments.indexOf(response.data);
-                    this.comments.splice(index, 1);
+                    this.comments = this.comments.filter(function (c) {
+                        return c.id !== response.data.id;
+                    });
                 });
         },
     },
