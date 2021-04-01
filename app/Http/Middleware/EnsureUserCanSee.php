@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use App\Models\Group;
+use App\Models\Chatroom;
 use App\Models\Assignment;
 use App\Models\Event;
 use Illuminate\Http\Request;
@@ -52,11 +53,6 @@ class EnsureUserCanSee
                 $assignment = Assignment::find($request->assignment);
             }
             if(!$assignment->group->hasUser(auth()->user())){
-                Abort('401');
-            }
-        }
-        if($request->chatroom){
-            if(!$request->chatroom->hasUser(auth()->user())){
                 Abort('401');
             }
         }

@@ -37,6 +37,9 @@ class ChatroomsController extends Controller
     }
 
     public function getMessages(Chatroom $chatroom){
+        if(!$chatroom->hasUser(auth()->user())){
+            Abort('404');
+        }
         return Message::where('chatroom_id', $chatroom->id)
             ->with('sender')
             ->orderBy('created_at', 'DESC')
@@ -87,6 +90,9 @@ class ChatroomsController extends Controller
      */
     public function show(Chatroom $chatroom)
     {   
+        if(!$chatroom->hasUser(auth()->user())){
+            Abort('404');
+        }
         $chatroom->users;
         $user = auth()->user();
         $user->group;
