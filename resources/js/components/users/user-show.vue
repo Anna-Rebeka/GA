@@ -9,14 +9,14 @@
             <img
                 :src="user.avatar"
                 alt="avatar"
-                class="object-cover w-32 h-32 mr-2 rounded-full border-4 border-white absolute bottom-0 transform -translate-x-1/2 translate-y-1/2"
+                class="object-cover md:w-32 md:h-32 sm:w-24 sm:h-24 h-16 w-16 mr-2 rounded-full border-4 border-white absolute bottom-0 transform -translate-x-1/2 translate-y-1/2"
                 style="left: 50%"
             />
         </div>
 
         <div class="flex rounded-lg justify-between items-center mb-6">
             <div class="w-14 md:w-44 2xl:w-64">
-                <h2 class="font-bold text-2xl">{{ user.name }}</h2>
+                <h2 class="font-bold lg:text-2xl md:text-lg text-md">{{ user.name }}</h2>
                 <p class="text-sm">Joined {{ userCreatedAt }}</p>
             </div>
 

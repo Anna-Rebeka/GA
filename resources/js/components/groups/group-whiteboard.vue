@@ -103,7 +103,7 @@
                         <img
                             :src="post.sender.avatar"
                             alt="avatar"
-                            class="rounded-full object-cover h-15 w-15 mr-2 mb-3"
+                            class="rounded-full object-cover md:h-15 md:w-15 w-9 h-9 mr-2 mb-3"
                         />
                     </div>
                     <div>
@@ -134,7 +134,7 @@
                             </div>
                         </div>
 
-                        <p class="text-xs float-right mb-2">
+                        <p class="text-xs md:float-right md:relative md:mb-2 absolute top-0 left-1">
                             {{
                                 new Date(post.created_at)
                                     | dateFormat("HH:mm , DD.MM.YYYY")
@@ -220,7 +220,7 @@
                         />
                     </div>
                 </div>
-                <div class="relative mt-5 mb-2 lg:mt-0 lg:ml-6 lg:float-left">
+                <div class="relative mt-5 mb-2 xl:float-right xl:mt-0 mt-4">
                     <label
                         class="font-bold mb-4 text-underline"
                         for="file_name"

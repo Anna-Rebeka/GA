@@ -14,7 +14,7 @@
                     Without an author
                 </option>
             </select>
-            <div class="inline-block relative text-gray-600 w-1/3">
+            <div class="md:inline-block md:mt-0 mt-2 relative text-gray-600 md:ml-0 md:w-1/3 w-48">
                 <input
                     class="rounded-lg bg-white border border-gray-300 text-gray-500 w-full h-8 px-5 pr-10 rounded-lg text-sm focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500"
                     id="searchBar"

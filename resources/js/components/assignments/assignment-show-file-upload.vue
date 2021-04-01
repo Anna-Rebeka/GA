@@ -36,7 +36,7 @@
 
             <form class="clear-both" v-on:submit.prevent="submit()">
                 <input type="hidden" name="_token" :value="csrf" />
-                <div class="float-left">
+                <div class="xl:float-left">
                     <label
                         class="font-bold mb-4 text-underlined"
                         for="file_path"
@@ -60,7 +60,7 @@
                     </div>
                 </div>
 
-                <div class="float-right">
+                <div class="xl:float-right xl:mt-0 mt-4">
                     <label
                         class="font-bold mb-4 text-underline"
                         for="file_name"

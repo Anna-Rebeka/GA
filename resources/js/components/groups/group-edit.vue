@@ -50,7 +50,8 @@
                 </p>
             </div>
 
-            <div class="mb-8">
+            <div class="mb-8" v-if="user.id == group.admin_id">
+                <p class="text-sm text-gray-600">You can't leave this group unless you pass on your admin rights.</p>
                 <label
                     class="mt-4 block mb-2 uppercase font-bold text-xs text-gray-700"
                     for="admin_id"

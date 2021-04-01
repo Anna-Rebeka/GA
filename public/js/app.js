@@ -5153,6 +5153,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "group", "members"],
   data: function data() {
@@ -46325,7 +46326,7 @@ var render = function() {
                 domProps: { value: _vm.csrf }
               }),
               _vm._v(" "),
-              _c("div", { staticClass: "float-left" }, [
+              _c("div", { staticClass: "xl:float-left" }, [
                 _c(
                   "label",
                   {
@@ -46412,7 +46413,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "float-right" }, [
+    return _c("div", { staticClass: "xl:float-right xl:mt-0 mt-4" }, [
       _c(
         "label",
         {
@@ -47090,7 +47091,10 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "div",
-      { staticClass: "inline-block relative text-gray-600 w-1/3" },
+      {
+        staticClass:
+          "md:inline-block md:mt-0 mt-2 relative text-gray-600 md:ml-0 md:w-1/3 w-48"
+      },
       [
         _c("input", {
           staticClass:
@@ -47973,7 +47977,7 @@ var render = function() {
             "button",
             {
               staticClass:
-                "bg-white text-sm text-center relative clear-both w-full h-8 px-4 pt-1 mb-4 border border-gray-300 hover:bg-purple-100 focus:outline-none focus:bg-purple-100",
+                "bg-white md:text-sm text-xs text-center relative clear-both w-full h-8 px-4 pt-1 mb-4 border border-gray-300 hover:bg-purple-100 focus:outline-none focus:bg-purple-100",
               on: {
                 click: function($event) {
                   return _vm.loadOlderMessages()
@@ -48028,7 +48032,7 @@ var render = function() {
                     message.sender
                       ? _c("img", {
                           staticClass:
-                            "rounded-full object-cover h-15 w-15 mr-2 mb-3",
+                            "rounded-full object-cover md:h-15 md:w-15 w-9 h-9 mr-2 mb-3",
                           attrs: { src: message.sender.avatar, alt: "avatar" }
                         })
                       : _c("img", {
@@ -48093,18 +48097,25 @@ var render = function() {
                         : _vm._e()
                     ]),
                     _vm._v(" "),
-                    _c("p", { staticClass: "text-xs float-right mb-2" }, [
-                      _vm._v(
-                        "\n                        " +
-                          _vm._s(
-                            _vm._f("dateFormat")(
-                              new Date(message.created_at),
-                              "HH:mm , DD.MM.YYYY"
-                            )
-                          ) +
-                          "\n                    "
-                      )
-                    ])
+                    _c(
+                      "p",
+                      {
+                        staticClass:
+                          "text-xs md:float-right md:relative md:mb-2 absolute top-1 right-1"
+                      },
+                      [
+                        _vm._v(
+                          "\n                        " +
+                            _vm._s(
+                              _vm._f("dateFormat")(
+                                new Date(message.created_at),
+                                "HH:mm , DD.MM.YYYY"
+                              )
+                            ) +
+                            "\n                    "
+                        )
+                      ]
+                    )
                   ])
                 ])
               ]
@@ -48321,7 +48332,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "div",
-      { staticClass: "relative mt-5 mb-2 lg:mt-0 lg:ml-6 lg:float-left" },
+      { staticClass: "relative mt-5 mb-2 xl:float-right xl:mt-0 mt-4" },
       [
         _c(
           "label",
@@ -49581,37 +49592,44 @@ var staticRenderFns = [
         ]
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "inline-block relative text-gray-600 w-1/3" }, [
-        _c("input", {
+      _c(
+        "div",
+        {
           staticClass:
-            "rounded-lg bg-white border border-gray-300 text-gray-500 w-full h-8 px-5 pr-10 rounded-lg text-sm focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500",
-          attrs: {
-            id: "searchBar",
-            type: "search",
-            name: "searchBar",
-            placeholder: "Search by name"
-          }
-        }),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
+            "md:inline-block md:mt-0 mt-2 relative text-gray-600 md:w-1/3 w-48"
+        },
+        [
+          _c("input", {
             staticClass:
-              "absolute right-0 top-2 mr-4 bg-transparent focus:outline-none",
-            attrs: { id: "searchButton", type: "submit" }
-          },
-          [
-            _c("img", {
-              attrs: {
-                src: "/img/search.png",
-                width: "20",
-                height: "20",
-                alt: "submit"
-              }
-            })
-          ]
-        )
-      ])
+              "rounded-lg bg-white border border-gray-300 text-gray-500 w-full h-8 px-5 pr-10 rounded-lg text-sm focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500",
+            attrs: {
+              id: "searchBar",
+              type: "search",
+              name: "searchBar",
+              placeholder: "Search by name"
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass:
+                "absolute right-0 top-2 mr-4 bg-transparent focus:outline-none",
+              attrs: { id: "searchButton", type: "submit" }
+            },
+            [
+              _c("img", {
+                attrs: {
+                  src: "/img/search.png",
+                  width: "20",
+                  height: "20",
+                  alt: "submit"
+                }
+              })
+            ]
+          )
+        ]
+      )
     ])
   },
   function() {
@@ -50261,70 +50279,80 @@ var render = function() {
             : _vm._e()
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "mb-8" }, [
-          _c(
-            "label",
-            {
-              staticClass:
-                "mt-4 block mb-2 uppercase font-bold text-xs text-gray-700",
-              attrs: { for: "admin_id" }
-            },
-            [_vm._v("\n                Pick a new admin\n            ")]
-          ),
-          _vm._v(" "),
-          _c(
-            "select",
-            {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.fields.admin_id,
-                  expression: "fields.admin_id"
-                }
-              ],
-              staticClass: "border-b border-gray-400",
-              attrs: { name: "admin_id", id: "admin_id" },
-              on: {
-                change: function($event) {
-                  var $$selectedVal = Array.prototype.filter
-                    .call($event.target.options, function(o) {
-                      return o.selected
-                    })
-                    .map(function(o) {
-                      var val = "_value" in o ? o._value : o.value
-                      return val
-                    })
-                  _vm.$set(
-                    _vm.fields,
-                    "admin_id",
-                    $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-                  )
-                }
-              }
-            },
-            [
-              _c("option", { domProps: { value: _vm.user.id } }, [
-                _vm._v(_vm._s(_vm.user.name))
+        _vm.user.id == _vm.group.admin_id
+          ? _c("div", { staticClass: "mb-8" }, [
+              _c("p", { staticClass: "text-sm text-gray-600" }, [
+                _vm._v(
+                  "You can't leave this group unless you pass on your admin rights."
+                )
               ]),
               _vm._v(" "),
-              _vm._l(_vm.members, function(member) {
-                return _c(
-                  "option",
-                  { key: member.id, domProps: { value: member.id } },
-                  [
-                    _vm._v(
-                      "\n                    " +
-                        _vm._s(member.name) +
-                        "\n                "
+              _c(
+                "label",
+                {
+                  staticClass:
+                    "mt-4 block mb-2 uppercase font-bold text-xs text-gray-700",
+                  attrs: { for: "admin_id" }
+                },
+                [_vm._v("\n                Pick a new admin\n            ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.fields.admin_id,
+                      expression: "fields.admin_id"
+                    }
+                  ],
+                  staticClass: "border-b border-gray-400",
+                  attrs: { name: "admin_id", id: "admin_id" },
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.fields,
+                        "admin_id",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    }
+                  }
+                },
+                [
+                  _c("option", { domProps: { value: _vm.user.id } }, [
+                    _vm._v(_vm._s(_vm.user.name))
+                  ]),
+                  _vm._v(" "),
+                  _vm._l(_vm.members, function(member) {
+                    return _c(
+                      "option",
+                      { key: member.id, domProps: { value: member.id } },
+                      [
+                        _vm._v(
+                          "\n                    " +
+                            _vm._s(member.name) +
+                            "\n                "
+                        )
+                      ]
                     )
-                  ]
-                )
-              })
-            ],
-            2
-          )
-        ]),
+                  })
+                ],
+                2
+              )
+            ])
+          : _vm._e(),
         _vm._v(" "),
         _vm.fields.admin_id && _vm.fields.admin_id != _vm.user.id
           ? _c("div", [
@@ -50895,7 +50923,7 @@ var render = function() {
                 _c("div", { staticClass: "float-left mr-2" }, [
                   _c("img", {
                     staticClass:
-                      "rounded-full object-cover h-15 w-15 mr-2 mb-3",
+                      "rounded-full object-cover md:h-15 md:w-15 w-9 h-9 mr-2 mb-3",
                     attrs: { src: post.sender.avatar, alt: "avatar" }
                   })
                 ]),
@@ -50952,18 +50980,25 @@ var render = function() {
                       : _vm._e()
                   ]),
                   _vm._v(" "),
-                  _c("p", { staticClass: "text-xs float-right mb-2" }, [
-                    _vm._v(
-                      "\n                        " +
-                        _vm._s(
-                          _vm._f("dateFormat")(
-                            new Date(post.created_at),
-                            "HH:mm , DD.MM.YYYY"
-                          )
-                        ) +
-                        "\n                    "
-                    )
-                  ])
+                  _c(
+                    "p",
+                    {
+                      staticClass:
+                        "text-xs md:float-right md:relative md:mb-2 absolute top-0 left-1"
+                    },
+                    [
+                      _vm._v(
+                        "\n                        " +
+                          _vm._s(
+                            _vm._f("dateFormat")(
+                              new Date(post.created_at),
+                              "HH:mm , DD.MM.YYYY"
+                            )
+                          ) +
+                          "\n                    "
+                      )
+                    ]
+                  )
                 ])
               ])
             ]
@@ -51186,7 +51221,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "div",
-      { staticClass: "relative mt-5 mb-2 lg:mt-0 lg:ml-6 lg:float-left" },
+      { staticClass: "relative mt-5 mb-2 xl:float-right xl:mt-0 mt-4" },
       [
         _c(
           "label",
@@ -52287,37 +52322,44 @@ var staticRenderFns = [
         ]
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "inline-block relative text-gray-600 w-1/3" }, [
-        _c("input", {
+      _c(
+        "div",
+        {
           staticClass:
-            "rounded-lg bg-white border border-gray-300 text-gray-500 w-full h-8 px-5 pr-10 rounded-lg text-sm focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500",
-          attrs: {
-            id: "searchBar",
-            type: "search",
-            name: "searchBar",
-            placeholder: "Search by name"
-          }
-        }),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
+            "md:inline-block md:mt-0 mt-2 relative text-gray-600 md:w-1/3 w-48"
+        },
+        [
+          _c("input", {
             staticClass:
-              "absolute right-0 top-2 mr-4 bg-transparent focus:outline-none",
-            attrs: { id: "searchButton", type: "submit" }
-          },
-          [
-            _c("img", {
-              attrs: {
-                src: "/img/search.png",
-                width: "20",
-                height: "20",
-                alt: "submit"
-              }
-            })
-          ]
-        )
-      ])
+              "rounded-lg bg-white border border-gray-300 text-gray-500 w-full h-8 px-5 pr-10 rounded-lg text-sm focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500",
+            attrs: {
+              id: "searchBar",
+              type: "search",
+              name: "searchBar",
+              placeholder: "Search by name"
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass:
+                "absolute right-0 top-2 mr-4 bg-transparent focus:outline-none",
+              attrs: { id: "searchButton", type: "submit" }
+            },
+            [
+              _c("img", {
+                attrs: {
+                  src: "/img/search.png",
+                  width: "20",
+                  height: "20",
+                  alt: "submit"
+                }
+              })
+            ]
+          )
+        ]
+      )
     ])
   },
   function() {
@@ -52996,37 +53038,44 @@ var staticRenderFns = [
         ]
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "inline-block relative text-gray-600 w-1/3" }, [
-        _c("input", {
+      _c(
+        "div",
+        {
           staticClass:
-            "rounded-lg bg-white border border-gray-300 text-gray-500 w-full h-8 px-5 pr-10 rounded-lg text-sm focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500",
-          attrs: {
-            id: "searchBar",
-            type: "search",
-            name: "searchBar",
-            placeholder: "Search by name"
-          }
-        }),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
+            "md:inline-block md:mt-0 mt-2 relative text-gray-600 md:w-1/3 w-48"
+        },
+        [
+          _c("input", {
             staticClass:
-              "absolute right-0 top-2 mr-4 bg-transparent focus:outline-none",
-            attrs: { id: "searchButton", type: "submit" }
-          },
-          [
-            _c("img", {
-              attrs: {
-                src: "/img/search.png",
-                width: "20",
-                height: "20",
-                alt: "submit"
-              }
-            })
-          ]
-        )
-      ])
+              "rounded-lg bg-white border border-gray-300 text-gray-500 w-full h-8 px-5 pr-10 rounded-lg text-sm focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500",
+            attrs: {
+              id: "searchBar",
+              type: "search",
+              name: "searchBar",
+              placeholder: "Search by name"
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass:
+                "absolute right-0 top-2 mr-4 bg-transparent focus:outline-none",
+              attrs: { id: "searchButton", type: "submit" }
+            },
+            [
+              _c("img", {
+                attrs: {
+                  src: "/img/search.png",
+                  width: "20",
+                  height: "20",
+                  alt: "submit"
+                }
+              })
+            ]
+          )
+        ]
+      )
     ])
   },
   function() {
@@ -53797,7 +53846,7 @@ var render = function() {
       _vm._v(" "),
       _c("img", {
         staticClass:
-          "object-cover w-32 h-32 mr-2 rounded-full border-4 border-white absolute bottom-0 transform -translate-x-1/2 translate-y-1/2",
+          "object-cover md:w-32 md:h-32 sm:w-24 sm:h-24 h-16 w-16 mr-2 rounded-full border-4 border-white absolute bottom-0 transform -translate-x-1/2 translate-y-1/2",
         staticStyle: { left: "50%" },
         attrs: { src: _vm.user.avatar, alt: "avatar" }
       })
@@ -53808,9 +53857,11 @@ var render = function() {
       { staticClass: "flex rounded-lg justify-between items-center mb-6" },
       [
         _c("div", { staticClass: "w-14 md:w-44 2xl:w-64" }, [
-          _c("h2", { staticClass: "font-bold text-2xl" }, [
-            _vm._v(_vm._s(_vm.user.name))
-          ]),
+          _c(
+            "h2",
+            { staticClass: "font-bold lg:text-2xl md:text-lg text-md" },
+            [_vm._v(_vm._s(_vm.user.name))]
+          ),
           _vm._v(" "),
           _c("p", { staticClass: "text-sm" }, [
             _vm._v("Joined " + _vm._s(_vm.userCreatedAt))

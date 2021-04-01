@@ -16,7 +16,7 @@
                 <option value="mine">Assigned to me</option>
                 <option value="all">All</option>
             </select>
-            <div class="inline-block relative text-gray-600 w-1/3">
+            <div class="md:inline-block md:mt-0 mt-2 relative text-gray-600 md:w-1/3 w-48">
                 <input class="rounded-lg bg-white border border-gray-300 text-gray-500 w-full h-8 px-5 pr-10 rounded-lg text-sm focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500"
                     id="searchBar" type="search" name="searchBar" placeholder="Search by name">
                 <button id="searchButton" type="submit" class="absolute right-0 top-2 mr-4 bg-transparent focus:outline-none">
