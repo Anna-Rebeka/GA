@@ -103,8 +103,13 @@ class EventCommentsController extends Controller
      * @param  \App\Models\EventComment  $eventComments
      * @return \Illuminate\Http\Response
      */
-    public function destroy(EventComment $eventComments)
+    public function destroy(Event $event, $commentId)
     {
-        //
+        $comment = EventComment::findOrFail($commentId);
+        if($event->group->admin_id != auth()->user()->id && $comment->user_id != auth()->user()->id){
+            Abort(401);
+        }
+        $comment->delete();
+        return $comment;
     }
 }

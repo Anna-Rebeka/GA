@@ -12,7 +12,7 @@
                 >
                 </textarea>
             </div>    
-            <button type="submit" class="shadow float-right -mt-4 rounded-full border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
+            <button type="submit" class="shadow float-right -mt-4 rounded-lg border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
                 Make a note
             </button>
         </form>
@@ -62,6 +62,9 @@ export default {
         },
         
         deleteData: function(note) {
+            if (!confirm("Are you sure you want to delete this note?")) {
+                return;
+            }
             axios.delete('notes/' + note.id).then(response => {
                 this.savedNotes = this.savedNotes.filter(function(e) { return e !== note })
             });

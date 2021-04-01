@@ -38,4 +38,13 @@ class AssignmentsCommentsController extends Controller
         });
         return $comment;
     }
+
+    public function destroy(Assignment $assignment, int $commentId){
+        $comment = AssignmentsComments::findOrFail($commentId);
+        if($assignment->group->admin_id != auth()->user()->id && $comment->user_id != auth()->user()->id){
+            Abort(401);
+        }
+        $comment->delete();
+        return $comment;
+    }
 }

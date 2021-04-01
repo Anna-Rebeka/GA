@@ -90,6 +90,8 @@ Route::middleware(['auth', 'can.see'])->group(function() {
 
     Route::get('/events/{event:id}/comments', [EventCommentsController::class, 'index']);
     Route::post('/events/{event:id}/comments', [EventCommentsController::class, 'store']);
+    Route::delete('/events/{event:id}/comments/{id}/destroy', [EventCommentsController::class, 'destroy']);
+
 
     Route::get('/assignments', [AssignmentsController::class, 'index']);
     Route::get('/assignments/{assignment:id}', [AssignmentsController::class, 'show']);
@@ -105,6 +107,7 @@ Route::middleware(['auth', 'can.see'])->group(function() {
 
     Route::get('/assignments/{assignment:id}/comments', [AssignmentsCommentsController::class, 'index']);
     Route::post('/assignments/{assignment:id}/comments', [AssignmentsCommentsController::class, 'store']);
+    Route::delete('/assignments/{assignment:id}/comments/{id}/destroy', [AssignmentsCommentsController::class, 'destroy']);
 
     Route::get('/assignments/{assignment:id}/get-files', [AssignmentsFilesController::class, 'index']);
     Route::post('/assignments/{assignment:id}/file-upload', [AssignmentsFilesController::class, 'store']);

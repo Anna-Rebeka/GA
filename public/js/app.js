@@ -3692,8 +3692,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user', 'assignment'],
+  props: ["user", "assignment"],
   data: function data() {
     return {
       comments: [],
@@ -3706,7 +3732,7 @@ __webpack_require__.r(__webpack_exports__);
 
     this.getComments();
     document.getElementById("commentArea").addEventListener("keypress", this.submitOnEnter);
-    window.Echo["private"]('commented_assignment.' + this.assignment.id + '.group.' + this.assignment.group_id).listen('AssignmentCommented', function (e) {
+    window.Echo["private"]("commented_assignment." + this.assignment.id + ".group." + this.assignment.group_id).listen("AssignmentCommented", function (e) {
       e.assignment_comment.user = e.user;
 
       _this.comments.unshift(e.assignment_comment);
@@ -3716,7 +3742,7 @@ __webpack_require__.r(__webpack_exports__);
     getComments: function getComments() {
       var _this2 = this;
 
-      axios.get('/assignments/' + this.assignment.id + '/comments').then(function (response) {
+      axios.get("/assignments/" + this.assignment.id + "/comments").then(function (response) {
         _this2.comments = response.data;
       })["catch"](function (error) {
         console.log(error.message);
@@ -3738,11 +3764,11 @@ __webpack_require__.r(__webpack_exports__);
 
       var commentArea = document.getElementById("commentArea").value;
       document.getElementById("commentArea").value = "";
-      axios.post('/assignments/' + this.assignment.id + '/comments', {
+      axios.post("/assignments/" + this.assignment.id + "/comments", {
         assignment_id: this.assignment.id,
         text: commentArea
       }).then(function (response) {
-        response.data['user'] = _this3.user;
+        response.data["user"] = _this3.user;
 
         _this3.comments.unshift(response.data);
       })["catch"](function (error) {
@@ -3752,6 +3778,19 @@ __webpack_require__.r(__webpack_exports__);
         }
 
         console.log(error.message);
+      });
+    },
+    deleteComment: function deleteComment(comment) {
+      var _this4 = this;
+
+      if (!confirm("Are you sure you want to delete this comment?")) {
+        return;
+      }
+
+      axios["delete"]("/assignments/" + this.assignment.id + "/comments/" + comment.id + "/destroy").then(function (response) {
+        var index = _this4.comments.indexOf(response.data);
+
+        _this4.comments.splice(index, 1);
       });
     }
   }
@@ -3805,8 +3844,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user', 'event'],
+  props: ["user", "event"],
   data: function data() {
     return {
       comments: [],
@@ -3819,7 +3884,7 @@ __webpack_require__.r(__webpack_exports__);
 
     this.getComments();
     document.getElementById("commentArea").addEventListener("keypress", this.submitOnEnter);
-    window.Echo["private"]('commented_event.' + this.event.id + '.group.' + this.event.group_id).listen('EventCommented', function (e) {
+    window.Echo["private"]("commented_event." + this.event.id + ".group." + this.event.group_id).listen("EventCommented", function (e) {
       e.event_comment.user = e.user;
 
       _this.comments.unshift(e.event_comment);
@@ -3829,7 +3894,7 @@ __webpack_require__.r(__webpack_exports__);
     getComments: function getComments() {
       var _this2 = this;
 
-      axios.get('/events/' + this.event.id + '/comments').then(function (response) {
+      axios.get("/events/" + this.event.id + "/comments").then(function (response) {
         _this2.comments = response.data;
       })["catch"](function (error) {
         console.log(error.message);
@@ -3851,11 +3916,11 @@ __webpack_require__.r(__webpack_exports__);
 
       var commentArea = document.getElementById("commentArea").value;
       document.getElementById("commentArea").value = "";
-      axios.post('/events/' + this.event.id + '/comments', {
+      axios.post("/events/" + this.event.id + "/comments", {
         event_id: this.event.id,
         text: commentArea
       }).then(function (response) {
-        response.data['user'] = _this3.user;
+        response.data["user"] = _this3.user;
 
         _this3.comments.unshift(response.data);
       })["catch"](function (error) {
@@ -3865,6 +3930,19 @@ __webpack_require__.r(__webpack_exports__);
         }
 
         console.log(error.message);
+      });
+    },
+    deleteComment: function deleteComment(comment) {
+      var _this4 = this;
+
+      if (!confirm("Are you sure you want to delete this comment?")) {
+        return;
+      }
+
+      axios["delete"]("/events/" + this.event.id + "/comments/" + comment.id + "/destroy").then(function (response) {
+        var index = _this4.comments.indexOf(response.data);
+
+        _this4.comments.splice(index, 1);
       });
     }
   }
@@ -5550,6 +5628,59 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "group"],
   data: function data() {
@@ -5711,6 +5842,10 @@ __webpack_require__.r(__webpack_exports__);
     },
     deletePost: function deletePost(post) {
       var _this7 = this;
+
+      if (!confirm("Are you sure you want to delete this post?")) {
+        return;
+      }
 
       axios["delete"]("/groups/" + this.group.id + "/whiteboard-post-delete/" + post.id, {}).then(function (response) {
         _this7.posts = _this7.posts.filter(function (p) {
@@ -6159,6 +6294,10 @@ __webpack_require__.r(__webpack_exports__);
     },
     deleteData: function deleteData(note) {
       var _this = this;
+
+      if (!confirm("Are you sure you want to delete this note?")) {
+        return;
+      }
 
       axios["delete"]('notes/' + note.id).then(function (response) {
         _this.savedNotes = _this.savedNotes.filter(function (e) {
@@ -48198,7 +48337,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "mx-8" }, [
     _c("h3", { staticClass: "font-bold mb-4 text-underlined" }, [
-      _vm._v(" Comments section ")
+      _vm._v("Comments section")
     ]),
     _vm._v(" "),
     _c(
@@ -48243,9 +48382,30 @@ var render = function() {
           "div",
           {
             key: comment.id,
-            staticClass: "flex p-4 border-b border-b-gray-400"
+            staticClass: "flex relative p-4 border-b border-b-gray-400"
           },
           [
+            comment.user_id == _vm.user.id ||
+            _vm.user.id == _vm.assignment.group.admin_id
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "absolute top-3 right-3 focus:outline-none",
+                    on: {
+                      click: function($event) {
+                        return _vm.deleteComment(comment)
+                      }
+                    }
+                  },
+                  [
+                    _c("img", {
+                      staticClass: "w-4",
+                      attrs: { src: "/img/bin.png", alt: "delete" }
+                    })
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
             _c("div", { staticClass: "mr-2" }, [
               _c("img", {
                 staticClass: "rounded-full object-cover h-15 w-15 mr-2",
@@ -48255,27 +48415,27 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "w-full" }, [
               _c("h5", { staticClass: "font-bold mb-2" }, [
-                _vm._v(" " + _vm._s(comment.user.name) + " ")
+                _vm._v(_vm._s(comment.user.name))
               ]),
               _vm._v(" "),
               _c("p", { staticClass: "text-sm mb-3 break-words" }, [
                 _vm._v(
-                  "\n                        " +
+                  "\n                    " +
                     _vm._s(comment.text) +
-                    "\n                    "
+                    "\n                "
                 )
               ]),
               _vm._v(" "),
               _c("p", { staticClass: "text-xs float-right" }, [
                 _vm._v(
-                  " " +
+                  "\n                    " +
                     _vm._s(
                       _vm._f("dateFormat")(
                         new Date(comment.created_at),
                         "HH:mm , DD.MM.YYYY"
                       )
                     ) +
-                    " "
+                    "\n                "
                 )
               ])
             ])
@@ -48322,7 +48482,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "mx-8" }, [
     _c("h3", { staticClass: "font-bold mb-4 text-underlined" }, [
-      _vm._v(" Comments section ")
+      _vm._v("Comments section")
     ]),
     _vm._v(" "),
     _c(
@@ -48367,9 +48527,30 @@ var render = function() {
           "div",
           {
             key: comment.id,
-            staticClass: "flex p-4 border-b border-b-gray-400"
+            staticClass: "flex relative p-4 border-b border-b-gray-400"
           },
           [
+            comment.user_id == _vm.user.id ||
+            _vm.user.id == _vm.assignment.group.admin_id
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "absolute top-3 right-3 focus:outline-none",
+                    on: {
+                      click: function($event) {
+                        return _vm.deleteComment(comment)
+                      }
+                    }
+                  },
+                  [
+                    _c("img", {
+                      staticClass: "w-4",
+                      attrs: { src: "/img/bin.png", alt: "delete" }
+                    })
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
             _c("div", { staticClass: "mr-2" }, [
               _c("img", {
                 staticClass: "rounded-full object-cover h-15 w-15 mr-2",
@@ -48379,27 +48560,27 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "w-full" }, [
               _c("h5", { staticClass: "font-bold mb-2" }, [
-                _vm._v(" " + _vm._s(comment.user.name) + " ")
+                _vm._v(_vm._s(comment.user.name))
               ]),
               _vm._v(" "),
               _c("p", { staticClass: "text-sm mb-3 break-words" }, [
                 _vm._v(
-                  "\n                        " +
+                  "\n                    " +
                     _vm._s(comment.text) +
-                    "\n                    "
+                    "\n                "
                 )
               ]),
               _vm._v(" "),
               _c("p", { staticClass: "text-xs float-right" }, [
                 _vm._v(
-                  " " +
+                  "\n                    " +
                     _vm._s(
                       _vm._f("dateFormat")(
                         new Date(comment.created_at),
                         "HH:mm , DD.MM.YYYY"
                       )
                     ) +
-                    " "
+                    "\n                "
                 )
               ])
             ])
@@ -50512,13 +50693,15 @@ var render = function() {
             _vm._v(" "),
             !_vm.groupBoard && _vm.group.admin_id == _vm.user.id
               ? _c("p", { staticClass: "text-gray-400 text-sm text-center" }, [
-                  _vm._v("Write here for others to see!")
+                  _vm._v(
+                    "\n            Write here for others to see!\n        "
+                  )
                 ])
               : _vm._e(),
             _vm._v(" "),
             !_vm.groupBoard && _vm.group.admin_id != _vm.user.id
               ? _c("p", { staticClass: "text-gray-400 text-center" }, [
-                  _vm._v("...")
+                  _vm._v("\n            ...\n        ")
                 ])
               : _vm._e(),
             _vm._v(" "),
@@ -50606,8 +50789,7 @@ var render = function() {
       "div",
       {
         ref: "whiteboard",
-        staticClass:
-          "container mb-2 pr-4 h-80 overflow-y-scroll min-h-screen\t",
+        staticClass: "container mb-2 pr-4 h-80 overflow-y-scroll min-h-screen",
         attrs: { id: "whiteboard" }
       },
       [
@@ -50890,7 +51072,11 @@ var render = function() {
                 staticClass:
                   "flex items-center justify-between w-full my-5 p-2 bg-red-500 shadow text-white"
               },
-              [_vm._v("Please choose a picture under 5MB.")]
+              [
+                _vm._v(
+                  "\n            Please choose a picture under 5MB.\n        "
+                )
+              ]
             )
           : _vm._e(),
         _vm._v(" "),
@@ -50941,7 +51127,11 @@ var render = function() {
                       staticClass:
                         "flex items-center justify-between w-full my-5 p-2 bg-red-500 shadow text-white"
                     },
-                    [_vm._v("Please choose a file under 25MB.")]
+                    [
+                      _vm._v(
+                        "\n                Please choose a file under 25MB.\n            "
+                      )
+                    ]
                   )
                 : _vm._e()
             ])
@@ -51379,7 +51569,7 @@ var render = function() {
           "button",
           {
             staticClass:
-              "shadow float-right -mt-4 rounded-full border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 focus:outline-none",
+              "shadow float-right -mt-4 rounded-lg border border-gray-300 py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 focus:outline-none",
             attrs: { type: "submit" }
           },
           [_vm._v("\n            Make a note\n        ")]

@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use App\Models\Group;
+use App\Models\Assignment;
+use App\Models\Event;
 use Illuminate\Http\Request;
 
 class EnsureUserCanSee
@@ -30,12 +32,26 @@ class EnsureUserCanSee
             }
         }
         if($request->event){
-            if(!$request->event->group->hasUser(auth()->user())){
+            $event = null;
+            if(is_a($request->event, 'App\Models\Event')){      
+                $event = $request->event;
+            }
+            else{
+                $event = Event::find($request->event);
+            }
+            if(!$event->group->hasUser(auth()->user())){
                 Abort('401');
             }
         }
         if($request->assignment){
-            if(!$request->assignment->group->hasUser(auth()->user())){
+            $assignment = null;
+            if(is_a($request->assignment, 'App\Models\Assignment')){      
+                $assignment = $request->assignment;
+            }
+            else{
+                $assignment = Assignment::find($request->assignment);
+            }
+            if(!$assignment->group->hasUser(auth()->user())){
                 Abort('401');
             }
         }

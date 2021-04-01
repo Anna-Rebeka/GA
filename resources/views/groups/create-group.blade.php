@@ -30,8 +30,8 @@
                 </div>
             
                 <div class="text-center">
-                    <button type="submit" class="rounded-full border border-gray-300 bg-white py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
-                        Create new group!
+                    <button type="submit" class="rounded-lg border border-gray-300 bg-white py-2 px-4 text-black text-xs hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
+                        Create a new group!
                     </button>
 
                         @if (session('message'))
