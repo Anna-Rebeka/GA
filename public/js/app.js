@@ -3107,21 +3107,21 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       csrf: document.head.querySelector('meta[name="csrf-token"]').content,
-      fields: {},
-      errors: {},
+      groupAssignmentsFields: {},
+      groupAssignmentsErrors: {},
       createNewAssignment: false,
       newAssignmentCreated: false
     };
   },
   mounted: function mounted() {
-    this.fields.users = [];
+    this.groupAssignmentsFields.users = [];
   },
   methods: {
     submit: function submit() {
       var _this = this;
 
-      axios.post('/assignments', this.fields).then(function (response) {
-        _this.fields = {};
+      axios.post('/assignments', this.groupAssignmentsFields).then(function (response) {
+        _this.groupAssignmentsFields = {};
         _this.createNewAssignment = false;
         _this.newAssignmentCreated = true;
         response.data.author = _this.user;
@@ -47491,7 +47491,7 @@ var render = function() {
                     domProps: { value: _vm.csrf }
                   }),
                   _vm._v(" "),
-                  _vm.errors.text
+                  _vm.groupAssignmentsErrors.text
                     ? _c(
                         "div",
                         {
@@ -47501,7 +47501,7 @@ var render = function() {
                         [
                           _vm._v(
                             "\n                " +
-                              _vm._s(_vm.errors.text[0]) +
+                              _vm._s(_vm.groupAssignmentsErrors.text[0]) +
                               "\n            "
                           )
                         ]
@@ -47526,8 +47526,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.fields.name,
-                            expression: "fields.name"
+                            value: _vm.groupAssignmentsFields.name,
+                            expression: "groupAssignmentsFields.name"
                           }
                         ],
                         staticClass: "border w-full p-2",
@@ -47537,13 +47537,17 @@ var render = function() {
                           name: "name",
                           required: ""
                         },
-                        domProps: { value: _vm.fields.name },
+                        domProps: { value: _vm.groupAssignmentsFields.name },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.$set(_vm.fields, "name", $event.target.value)
+                            _vm.$set(
+                              _vm.groupAssignmentsFields,
+                              "name",
+                              $event.target.value
+                            )
                           }
                         }
                       })
@@ -47566,8 +47570,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.fields.description,
-                            expression: "fields.description"
+                            value: _vm.groupAssignmentsFields.description,
+                            expression: "groupAssignmentsFields.description"
                           }
                         ],
                         staticClass:
@@ -47577,14 +47581,16 @@ var render = function() {
                           placeholder: "specify this task...",
                           required: ""
                         },
-                        domProps: { value: _vm.fields.description },
+                        domProps: {
+                          value: _vm.groupAssignmentsFields.description
+                        },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
                             _vm.$set(
-                              _vm.fields,
+                              _vm.groupAssignmentsFields,
                               "description",
                               $event.target.value
                             )
@@ -47610,8 +47616,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.fields.due,
-                            expression: "fields.due"
+                            value: _vm.groupAssignmentsFields.due,
+                            expression: "groupAssignmentsFields.due"
                           }
                         ],
                         staticClass: "border p-2",
@@ -47621,13 +47627,17 @@ var render = function() {
                           name: "due",
                           required: ""
                         },
-                        domProps: { value: _vm.fields.due },
+                        domProps: { value: _vm.groupAssignmentsFields.due },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.$set(_vm.fields, "due", $event.target.value)
+                            _vm.$set(
+                              _vm.groupAssignmentsFields,
+                              "due",
+                              $event.target.value
+                            )
                           }
                         }
                       })
@@ -47649,8 +47659,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.fields.on_time,
-                            expression: "fields.on_time"
+                            value: _vm.groupAssignmentsFields.on_time,
+                            expression: "groupAssignmentsFields.on_time"
                           }
                         ],
                         attrs: {
@@ -47661,11 +47671,18 @@ var render = function() {
                         },
                         domProps: {
                           value: false,
-                          checked: _vm._q(_vm.fields.on_time, false)
+                          checked: _vm._q(
+                            _vm.groupAssignmentsFields.on_time,
+                            false
+                          )
                         },
                         on: {
                           change: function($event) {
-                            return _vm.$set(_vm.fields, "on_time", false)
+                            return _vm.$set(
+                              _vm.groupAssignmentsFields,
+                              "on_time",
+                              false
+                            )
                           }
                         }
                       }),
@@ -47680,8 +47697,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.fields.on_time,
-                            expression: "fields.on_time"
+                            value: _vm.groupAssignmentsFields.on_time,
+                            expression: "groupAssignmentsFields.on_time"
                           }
                         ],
                         attrs: {
@@ -47692,11 +47709,18 @@ var render = function() {
                         },
                         domProps: {
                           value: true,
-                          checked: _vm._q(_vm.fields.on_time, true)
+                          checked: _vm._q(
+                            _vm.groupAssignmentsFields.on_time,
+                            true
+                          )
                         },
                         on: {
                           change: function($event) {
-                            return _vm.$set(_vm.fields, "on_time", true)
+                            return _vm.$set(
+                              _vm.groupAssignmentsFields,
+                              "on_time",
+                              true
+                            )
                           }
                         }
                       }),
@@ -47730,8 +47754,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.fields.duration_hours,
-                            expression: "fields.duration_hours"
+                            value: _vm.groupAssignmentsFields.duration_hours,
+                            expression: "groupAssignmentsFields.duration_hours"
                           }
                         ],
                         staticClass: "border w-16 p-2",
@@ -47741,14 +47765,16 @@ var render = function() {
                           name: "duration_hours",
                           min: "0"
                         },
-                        domProps: { value: _vm.fields.duration_hours },
+                        domProps: {
+                          value: _vm.groupAssignmentsFields.duration_hours
+                        },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
                             _vm.$set(
-                              _vm.fields,
+                              _vm.groupAssignmentsFields,
                               "duration_hours",
                               $event.target.value
                             )
@@ -47770,8 +47796,9 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.fields.duration_minutes,
-                            expression: "fields.duration_minutes"
+                            value: _vm.groupAssignmentsFields.duration_minutes,
+                            expression:
+                              "groupAssignmentsFields.duration_minutes"
                           }
                         ],
                         staticClass: "border w-16 p-2",
@@ -47782,14 +47809,16 @@ var render = function() {
                           min: "0",
                           max: "59"
                         },
-                        domProps: { value: _vm.fields.duration_minutes },
+                        domProps: {
+                          value: _vm.groupAssignmentsFields.duration_minutes
+                        },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
                             _vm.$set(
-                              _vm.fields,
+                              _vm.groupAssignmentsFields,
                               "duration_minutes",
                               $event.target.value
                             )
@@ -47829,8 +47858,8 @@ var render = function() {
                                   {
                                     name: "model",
                                     rawName: "v-model",
-                                    value: _vm.fields.users,
-                                    expression: "fields.users"
+                                    value: _vm.groupAssignmentsFields.users,
+                                    expression: "groupAssignmentsFields.users"
                                   }
                                 ],
                                 attrs: {
@@ -47840,13 +47869,18 @@ var render = function() {
                                 },
                                 domProps: {
                                   value: member.id,
-                                  checked: Array.isArray(_vm.fields.users)
-                                    ? _vm._i(_vm.fields.users, member.id) > -1
-                                    : _vm.fields.users
+                                  checked: Array.isArray(
+                                    _vm.groupAssignmentsFields.users
+                                  )
+                                    ? _vm._i(
+                                        _vm.groupAssignmentsFields.users,
+                                        member.id
+                                      ) > -1
+                                    : _vm.groupAssignmentsFields.users
                                 },
                                 on: {
                                   change: function($event) {
-                                    var $$a = _vm.fields.users,
+                                    var $$a = _vm.groupAssignmentsFields.users,
                                       $$el = $event.target,
                                       $$c = $$el.checked ? true : false
                                     if (Array.isArray($$a)) {
@@ -47855,14 +47889,14 @@ var render = function() {
                                       if ($$el.checked) {
                                         $$i < 0 &&
                                           _vm.$set(
-                                            _vm.fields,
+                                            _vm.groupAssignmentsFields,
                                             "users",
                                             $$a.concat([$$v])
                                           )
                                       } else {
                                         $$i > -1 &&
                                           _vm.$set(
-                                            _vm.fields,
+                                            _vm.groupAssignmentsFields,
                                             "users",
                                             $$a
                                               .slice(0, $$i)
@@ -47870,7 +47904,11 @@ var render = function() {
                                           )
                                       }
                                     } else {
-                                      _vm.$set(_vm.fields, "users", $$c)
+                                      _vm.$set(
+                                        _vm.groupAssignmentsFields,
+                                        "users",
+                                        $$c
+                                      )
                                     }
                                   }
                                 }
@@ -47909,8 +47947,8 @@ var render = function() {
                         {
                           name: "model",
                           rawName: "v-model",
-                          value: _vm.fields.max_assignees,
-                          expression: "fields.max_assignees"
+                          value: _vm.groupAssignmentsFields.max_assignees,
+                          expression: "groupAssignmentsFields.max_assignees"
                         }
                       ],
                       staticClass: "border p-2",
@@ -47920,14 +47958,16 @@ var render = function() {
                         min: "0",
                         name: "max_assignees"
                       },
-                      domProps: { value: _vm.fields.max_assignees },
+                      domProps: {
+                        value: _vm.groupAssignmentsFields.max_assignees
+                      },
                       on: {
                         input: function($event) {
                           if ($event.target.composing) {
                             return
                           }
                           _vm.$set(
-                            _vm.fields,
+                            _vm.groupAssignmentsFields,
                             "max_assignees",
                             $event.target.value
                           )

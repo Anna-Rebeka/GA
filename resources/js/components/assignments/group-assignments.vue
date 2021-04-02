@@ -10,8 +10,8 @@
             <div class="md:w-3/4 m-auto bg-white shadow border rounded py-6 px-8 mb-8">
                 <input type="hidden" name="_token" :value="csrf" /> 
                 
-                <div class="flex items-center justify-between w-full mb-4 p-2 bg-red-500 shadow text-white" v-if="errors.text">
-                    {{ errors.text[0] }}
+                <div class="flex items-center justify-between w-full mb-4 p-2 bg-red-500 shadow text-white" v-if="groupAssignmentsErrors.text">
+                    {{ groupAssignmentsErrors.text[0] }}
                 </div>
 
                 <div class="mx-auto w-full mb-10">
@@ -20,7 +20,7 @@
                         <br>
                         <input
                             id="name"
-                            v-model="fields.name"
+                            v-model="groupAssignmentsFields.name"
                             type="text"
                             name="name"
                             class="border w-full p-2"
@@ -32,7 +32,7 @@
                         <br>
                         <textarea name="description" placeholder="specify this task..."
                             class="w-full border p-2 h-24 resize-none focus:outline-none"
-                            v-model="fields.description" required
+                            v-model="groupAssignmentsFields.description" required
                         >
                         </textarea>
                     </p>
@@ -41,7 +41,7 @@
                         <br>
                         <input
                             id="due"
-                            v-model="fields.due"
+                            v-model="groupAssignmentsFields.due"
                             type="datetime-local"
                             name="due"
                             class="border p-2"
@@ -52,9 +52,9 @@
                         Do assignment :
                     </p>
                     <div class="mb-4">
-                        <input type="radio" v-model="fields.on_time" id="false" name="on_time" :value="false" required>
+                        <input type="radio" v-model="groupAssignmentsFields.on_time" id="false" name="on_time" :value="false" required>
                         <label for="false">before deadline</label><br>
-                        <input type="radio" v-model="fields.on_time" id="true" name="on_time" :value="true" required>
+                        <input type="radio" v-model="groupAssignmentsFields.on_time" id="true" name="on_time" :value="true" required>
                         <label for="true">on time</label><br>
                     </div>
 
@@ -62,9 +62,9 @@
                         <p class="text-sm text-gray-500">(optional)</p>
                         <p class=" uppercase font-bold text-sm">For how long :</p>
                         <label class="mb-2 text-md"  for="duration_hours">Hours</label>
-                        <input type="number" v-model="fields.duration_hours" id="duration_hours" name="duration_hours" min="0" class="border w-16 p-2">
+                        <input type="number" v-model="groupAssignmentsFields.duration_hours" id="duration_hours" name="duration_hours" min="0" class="border w-16 p-2">
                         <label class="mb-2 text-md" for="duration_minutes">Minutes</label>
-                        <input type="number" v-model="fields.duration_minutes" id="duration_minutes" name="duration_minutes" min="0" max="59" class="border w-16 p-2">
+                        <input type="number" v-model="groupAssignmentsFields.duration_minutes" id="duration_minutes" name="duration_minutes" min="0" max="59" class="border w-16 p-2">
                         <p class="text-sm">0h 0min = not set</p>
                     </div>
                     
@@ -75,7 +75,7 @@
                                 v-for="member in members" :key="member.id" 
                                 :value="member.id"
                             >
-                                <input type="checkbox" v-model="fields.users" :id="member.id" :name="member.id" :value="member.id">
+                                <input type="checkbox" v-model="groupAssignmentsFields.users" :id="member.id" :name="member.id" :value="member.id">
                                 <label :for="member.id"> {{ member.name }}</label><br>
                             </div>
                         </div>
@@ -83,7 +83,7 @@
                         <label class=" uppercase font-bold text-sm" for="quantity">Maximum number of assignees:</label>
                         <p class="text-sm">0 = not set</p>
                         <input 
-                            v-model="fields.max_assignees" 
+                            v-model="groupAssignmentsFields.max_assignees" 
                             type="number" id="max_assignees" min="0" name="max_assignees"
                             class="border p-2"
                         >
@@ -108,19 +108,19 @@ export default {
     data() {
         return {
             csrf: document.head.querySelector('meta[name="csrf-token"]').content,
-            fields: {},
-            errors: {},
+            groupAssignmentsFields: {},
+            groupAssignmentsErrors: {},
             createNewAssignment: false,
             newAssignmentCreated: false,
         };
     },
     mounted() {
-        this.fields.users = [];
+        this.groupAssignmentsFields.users = [];
     },
     methods: {
         submit() {
-            axios.post('/assignments', this.fields).then(response => {
-                this.fields = {};
+            axios.post('/assignments', this.groupAssignmentsFields).then(response => {
+                this.groupAssignmentsFields = {};
                 this.createNewAssignment = false;
                 this.newAssignmentCreated = true;
                 response.data.author = this.user;
