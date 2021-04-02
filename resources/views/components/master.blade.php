@@ -32,7 +32,7 @@
                         @endif
                     </div>
                     
-                    <div class="lg:w-4/6 pt-7 mx-7 mb-2 sm:mb-12 bg-white shadow-lg rounded-b pt-10 pb-4 px-7 border border-gray-200" >
+                    <div class="lg:w-4/6 pt-7 md:mx-7 -mx-8 mb-2 sm:mb-12 bg-white shadow-lg rounded-b pt-10 pb-4 md:px-7 px-4 border border-gray-200" >
                         
                         {{ $slot }}
 
