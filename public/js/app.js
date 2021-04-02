@@ -51545,7 +51545,7 @@ var render = function() {
                     }),
                     _vm._v(" "),
                     member.id == _vm.group.admin_id
-                      ? _c("p", { staticClass: "text-xs text-gray-600" }, [
+                      ? _c("p", { staticClass: "text-xs text-gray-600 ml-2" }, [
                           _vm._v(
                             "\n                        group admin\n                    "
                           )

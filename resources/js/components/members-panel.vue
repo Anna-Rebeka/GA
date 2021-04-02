@@ -15,7 +15,7 @@
                             :alt="member.name"
                         />
                         <p
-                            class="text-xs text-gray-600"
+                            class="text-xs text-gray-600 ml-2"
                             v-if="member.id == group.admin_id"
                         >
                             group admin
