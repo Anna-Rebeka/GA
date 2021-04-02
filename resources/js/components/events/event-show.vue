@@ -47,7 +47,7 @@
                     {{ host }}
                 </div>
             </div>
-            <div class="grid grid-cols-2 gap-2">
+            <div class="md:grid md:grid-cols-2 md:gap-2">
                 <div class="mb-2 rounded border-b border-gray-200 px-6 p-4">
                     <strong>When:</strong>
                     <p class="bg-white p-2 rounded">

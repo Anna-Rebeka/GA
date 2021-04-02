@@ -68,7 +68,7 @@
                     {{ shownAssignment.name }}
                 </h2>
             </div>
-            <div class="mt-7 grid grid-cols-2 gap-2">
+            <div class="mt-7 md:grid md:grid-cols-2 md:gap-2">
                 <div
                     class="py-2 px-6 mb-2 mr-2 border-b border-gray-200 rounded"
                 >
@@ -99,7 +99,7 @@
                     </p>
                 </div>
             </div>
-            <div class="grid grid-cols-2 gap-2">
+            <div class="md:grid md:grid-cols-2 md:gap-2">
                 <div
                     class="py-2 px-6 mb-2 mr-2 border-b border-gray-200 rounded"
                 >

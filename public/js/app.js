@@ -46703,7 +46703,7 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _c("div", { staticClass: "mt-7 grid grid-cols-2 gap-2" }, [
+        _c("div", { staticClass: "mt-7 md:grid md:grid-cols-2 md:gap-2" }, [
           _c(
             "div",
             {
@@ -46762,7 +46762,7 @@ var render = function() {
           )
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "grid grid-cols-2 gap-2" }, [
+        _c("div", { staticClass: "md:grid md:grid-cols-2 md:gap-2" }, [
           _c(
             "div",
             {
@@ -49427,7 +49427,7 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _c("div", { staticClass: "grid grid-cols-2 gap-2" }, [
+        _c("div", { staticClass: "md:grid md:grid-cols-2 md:gap-2" }, [
           _c(
             "div",
             { staticClass: "mb-2 rounded border-b border-gray-200 px-6 p-4" },
