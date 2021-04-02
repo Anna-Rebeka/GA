@@ -44,5 +44,9 @@ class Group extends Model
     public function whiteboard_posts(){
         return $this->hasMany(GroupWhiteboardPost::class);
     }
+
+    public function admin(){
+        return $this->hasOne(User::class, 'id', 'admin_id');
+    }
 }
 

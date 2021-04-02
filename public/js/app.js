@@ -6026,8 +6026,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["user", "members", "group"],
+  props: ["user", "members", "group", "admin"],
   data: function data() {
     return {
       visibleMembers: null
@@ -6039,8 +6045,10 @@ __webpack_require__.r(__webpack_exports__);
     });
 
     if (this.visibleMembers.length > 3) {
-      this.visibleMembers = this.visibleMembers.slice(0, 4);
+      this.visibleMembers = this.visibleMembers.slice(0, 3);
     }
+
+    this.visibleMembers.unshift(this.admin);
   },
   methods: {
     checkWithUserPanel: function checkWithUserPanel() {
@@ -51531,6 +51539,14 @@ var render = function() {
                       staticClass: "w-10 h-10 object-cover rounded-full",
                       attrs: { src: member.avatar, alt: member.name }
                     }),
+                    _vm._v(" "),
+                    member.id == _vm.group.admin_id
+                      ? _c("p", { staticClass: "text-xs text-gray-600" }, [
+                          _vm._v(
+                            "\n                        group admin\n                    "
+                          )
+                        ])
+                      : _vm._e(),
                     _vm._v(" "),
                     _c(
                       "p",

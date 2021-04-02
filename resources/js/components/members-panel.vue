@@ -15,6 +15,12 @@
                             :alt="member.name"
                         />
                         <p
+                            class="text-xs text-gray-600"
+                            v-if="member.id == group.admin_id"
+                        >
+                            group admin
+                        </p>
+                        <p
                             class="hover:underline ml-2 text-left font-semibold font-sans tracking-wide"
                         >
                             {{ member.name }}
@@ -52,7 +58,7 @@
 
 <script>
 export default {
-    props: ["user", "members", "group"],
+    props: ["user", "members", "group", "admin"],
 
     data() {
         return {
@@ -63,8 +69,9 @@ export default {
     mounted() {
         this.visibleMembers = this.members.sort(() => Math.random() - 0.5);
         if (this.visibleMembers.length > 3) {
-            this.visibleMembers = this.visibleMembers.slice(0, 4);
+            this.visibleMembers = this.visibleMembers.slice(0, 3);
         }
+        this.visibleMembers.unshift(this.admin);
     },
 
     methods: {
@@ -78,12 +85,18 @@ export default {
             }
         },
 
-        excludeUserFromGroupPanel(){
-            axios.delete("/groups/" + this.group.id + "/exclude-member/" + this.user.id).then((response) => {
-                window.location.href = "/dashboard";
-            });
+        excludeUserFromGroupPanel() {
+            axios
+                .delete(
+                    "/groups/" +
+                        this.group.id +
+                        "/exclude-member/" +
+                        this.user.id
+                )
+                .then((response) => {
+                    window.location.href = "/dashboard";
+                });
         },
-
     },
 };
 </script>
