@@ -24,7 +24,6 @@ class FromAllGroupsNotificationMail extends Mailable
     {
         $this->group = $group;
         $this->text = $text;
-        dd();
         $this->url = url()->current() . $url;
     }
 

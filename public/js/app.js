@@ -4905,8 +4905,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       csrf: document.head.querySelector('meta[name="csrf-token"]').content,
-      fields: {},
-      errors: {},
+      groupEventsFields: {},
+      groupEventsErrors: {},
       createNewEvent: false,
       newEventCreated: false,
       savedEvents: this.events,
@@ -4917,15 +4917,15 @@ __webpack_require__.r(__webpack_exports__);
     submit: function submit() {
       var _this = this;
 
-      if (this.fields.eventEnding) {
-        if (Date.parse(this.fields.eventTime) > Date.parse(this.fields.eventEnding)) {
+      if (this.groupEventsFields.eventEnding) {
+        if (Date.parse(this.groupEventsFields.eventTime) > Date.parse(this.groupEventsFields.eventEnding)) {
           this.wrongDatesError = true;
           return;
         }
       }
 
-      axios.post("/events", this.fields).then(function (response) {
-        _this.fields = {};
+      axios.post("/events", this.groupEventsFields).then(function (response) {
+        _this.groupEventsFields = {};
         _this.createNewEvent = false;
         _this.newEventCreated = true;
 
@@ -49983,7 +49983,7 @@ var render = function() {
                     domProps: { value: _vm.csrf }
                   }),
                   _vm._v(" "),
-                  _vm.errors.text
+                  _vm.groupEventsErrors.text
                     ? _c(
                         "div",
                         {
@@ -49993,7 +49993,7 @@ var render = function() {
                         [
                           _vm._v(
                             "\n                " +
-                              _vm._s(_vm.errors.text[0]) +
+                              _vm._s(_vm.groupEventsErrors.text[0]) +
                               "\n            "
                           )
                         ]
@@ -50018,8 +50018,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.fields.name,
-                            expression: "fields.name"
+                            value: _vm.groupEventsFields.name,
+                            expression: "groupEventsFields.name"
                           }
                         ],
                         staticClass: "border w-full p-2",
@@ -50029,13 +50029,17 @@ var render = function() {
                           name: "name",
                           required: ""
                         },
-                        domProps: { value: _vm.fields.name },
+                        domProps: { value: _vm.groupEventsFields.name },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.$set(_vm.fields, "name", $event.target.value)
+                            _vm.$set(
+                              _vm.groupEventsFields,
+                              "name",
+                              $event.target.value
+                            )
                           }
                         }
                       })
@@ -50062,8 +50066,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.fields.description,
-                            expression: "fields.description"
+                            value: _vm.groupEventsFields.description,
+                            expression: "groupEventsFields.description"
                           }
                         ],
                         staticClass:
@@ -50072,14 +50076,14 @@ var render = function() {
                           name: "description",
                           placeholder: "tell your group about this event..."
                         },
-                        domProps: { value: _vm.fields.description },
+                        domProps: { value: _vm.groupEventsFields.description },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
                             _vm.$set(
-                              _vm.fields,
+                              _vm.groupEventsFields,
                               "description",
                               $event.target.value
                             )
@@ -50105,8 +50109,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.fields.eventTime,
-                            expression: "fields.eventTime"
+                            value: _vm.groupEventsFields.eventTime,
+                            expression: "groupEventsFields.eventTime"
                           }
                         ],
                         staticClass: "border p-2",
@@ -50116,14 +50120,14 @@ var render = function() {
                           name: "event_time",
                           required: ""
                         },
-                        domProps: { value: _vm.fields.eventTime },
+                        domProps: { value: _vm.groupEventsFields.eventTime },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
                             _vm.$set(
-                              _vm.fields,
+                              _vm.groupEventsFields,
                               "eventTime",
                               $event.target.value
                             )
@@ -50153,8 +50157,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.fields.eventEnding,
-                            expression: "fields.eventEnding"
+                            value: _vm.groupEventsFields.eventEnding,
+                            expression: "groupEventsFields.eventEnding"
                           }
                         ],
                         staticClass: "border p-2",
@@ -50163,14 +50167,14 @@ var render = function() {
                           type: "datetime-local",
                           name: "event_ending"
                         },
-                        domProps: { value: _vm.fields.eventEnding },
+                        domProps: { value: _vm.groupEventsFields.eventEnding },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
                             _vm.$set(
-                              _vm.fields,
+                              _vm.groupEventsFields,
                               "eventEnding",
                               $event.target.value
                             )
@@ -50211,8 +50215,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.fields.eventPlace,
-                            expression: "fields.eventPlace"
+                            value: _vm.groupEventsFields.eventPlace,
+                            expression: "groupEventsFields.eventPlace"
                           }
                         ],
                         staticClass: "border w-full p-2",
@@ -50222,14 +50226,14 @@ var render = function() {
                           name: "event_place",
                           required: ""
                         },
-                        domProps: { value: _vm.fields.eventPlace },
+                        domProps: { value: _vm.groupEventsFields.eventPlace },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
                             _vm.$set(
-                              _vm.fields,
+                              _vm.groupEventsFields,
                               "eventPlace",
                               $event.target.value
                             )

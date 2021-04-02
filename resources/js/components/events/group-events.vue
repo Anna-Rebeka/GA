@@ -17,9 +17,9 @@
 
                 <div
                     class="flex items-center justify-between w-full mb-4 p-2 bg-red-500 shadow text-white"
-                    v-if="errors.text"
+                    v-if="groupEventsErrors.text"
                 >
-                    {{ errors.text[0] }}
+                    {{ groupEventsErrors.text[0] }}
                 </div>
 
                 <div class="mx-auto w-full mb-10">
@@ -28,7 +28,7 @@
                         <br />
                         <input
                             id="name"
-                            v-model="fields.name"
+                            v-model="groupEventsFields.name"
                             type="text"
                             name="name"
                             class="border w-full p-2"
@@ -45,7 +45,7 @@
                             name="description"
                             placeholder="tell your group about this event..."
                             class="w-full border p-2 h-24 resize-none focus:outline-none"
-                            v-model="fields.description"
+                            v-model="groupEventsFields.description"
                         >
                         </textarea>
                     </div>
@@ -54,7 +54,7 @@
                         <br />
                         <input
                             id="event_time"
-                            v-model="fields.eventTime"
+                            v-model="groupEventsFields.eventTime"
                             type="datetime-local"
                             name="event_time"
                             class="border p-2"
@@ -69,7 +69,7 @@
                         <br />
                         <input
                             id="event_ending"
-                            v-model="fields.eventEnding"
+                            v-model="groupEventsFields.eventEnding"
                             type="datetime-local"
                             name="event_ending"
                             class="border p-2"
@@ -83,7 +83,7 @@
                         <br />
                         <input
                             id="event_place"
-                            v-model="fields.eventPlace"
+                            v-model="groupEventsFields.eventPlace"
                             type="text"
                             name="event_place"
                             class="border w-full p-2"
@@ -118,8 +118,8 @@ export default {
         return {
             csrf: document.head.querySelector('meta[name="csrf-token"]')
                 .content,
-            fields: {},
-            errors: {},
+            groupEventsFields: {},
+            groupEventsErrors: {},
             createNewEvent: false,
             newEventCreated: false,
             savedEvents: this.events,
@@ -128,16 +128,16 @@ export default {
     },
     methods: {
         submit() {
-            if(this.fields.eventEnding){
-                if (Date.parse(this.fields.eventTime) > Date.parse(this.fields.eventEnding)) {
+            if(this.groupEventsFields.eventEnding){
+                if (Date.parse(this.groupEventsFields.eventTime) > Date.parse(this.groupEventsFields.eventEnding)) {
                     this.wrongDatesError = true;
                     return;
                 } 
             }
             axios
-                .post("/events", this.fields)
+                .post("/events", this.groupEventsFields)
                 .then((response) => {
-                    this.fields = {};
+                    this.groupEventsFields = {};
                     this.createNewEvent = false;
                     this.newEventCreated = true;
                     this.savedEvents.unshift(response.data);
