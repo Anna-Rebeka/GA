@@ -27,7 +27,7 @@ class InviteMemberMail extends Mailable
         $this->group = $group;
         $this->user = $user;
         $this->invite = $invite;
-        $this->url = 'http://127.0.0.1:8000/invite-member/' . $invite->token;
+        $this->url = env('APP_URL') . '/invite-member/' . $invite->token;
     }
 
     /**

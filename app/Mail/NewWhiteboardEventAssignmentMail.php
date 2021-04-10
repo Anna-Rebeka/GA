@@ -27,10 +27,10 @@ class NewWhiteboardEventAssignmentMail extends Mailable
         $this->what = $what;
         $this->the_new_thing = $the_new_thing;
         if($what == 'whiteboard posts'){
-            $this->url = 'http://127.0.0.1:8000/whiteboard';
+            $this->url = env('APP_URL') . '/whiteboard';
         }
         else{
-            $this->url = 'http://127.0.0.1:8000/' . $what . '/' . $the_new_thing->id;
+            $this->url = env('APP_URL') . '/' .  $what . '/' . $the_new_thing->id;
         }
     }
 

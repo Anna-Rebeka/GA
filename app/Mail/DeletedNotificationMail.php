@@ -26,7 +26,7 @@ class DeletedNotificationMail extends Mailable
         $this->group = $group;
         $this->text = $text;
         $this->user = $user;
-        $this->url = 'http://127.0.0.1:8000/' . $url;
+        $this->url = env('APP_URL') . '/' . $url;
     }
 
     /**
