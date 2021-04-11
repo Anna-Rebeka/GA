@@ -5460,7 +5460,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     avatarPath: function avatarPath(oldPath) {
       if (!oldPath) {
-        return '/img/default.jpg';
+        return '/img/default_avatar.png';
       }
 
       var index = oldPath.lastIndexOf("/") + 1;
@@ -48070,7 +48070,10 @@ var render = function() {
                         : _c("img", {
                             staticClass:
                               "rounded-full object-cover h-15 w-15 mr-2",
-                            attrs: { src: "img/default.jpg", alt: "avatar" }
+                            attrs: {
+                              src: "img/default_avatar.png",
+                              alt: "avatar"
+                            }
                           })
                     ]),
                     _vm._v(" "),
@@ -48320,7 +48323,10 @@ var render = function() {
                       : _c("img", {
                           staticClass:
                             "rounded-full object-cover h-15 w-15 mr-2 mb-3",
-                          attrs: { src: "/img/default.jpg", alt: "avatar" }
+                          attrs: {
+                            src: "/img/default_avatar.png",
+                            alt: "avatar"
+                          }
                         })
                   ]),
                   _vm._v(" "),
@@ -50424,9 +50430,7 @@ var render = function() {
                   {
                     staticClass:
                       "bg-white block w-32 h-8 shadow border border-gray-300 rounded-lg mx-auto mb-2 py-2 px-6 text-black text-xs hover:text-gray-500 hover:bg-gray-100",
-                    attrs: {
-                      href: "/groups/" + _vm.group.id + "/group-statistics"
-                    }
+                    attrs: { href: "/group-statistics" }
                   },
                   [_vm._v("Workload\n            ")]
                 )
@@ -51646,7 +51650,7 @@ var render = function() {
             {
               staticClass:
                 "bg-white w-24 float-left m-2 shadow border border-red-400 py-2 px-4 text-white text-xs bg-red-300 hover:bg-red-500 rounded-lg focus:outline-none",
-              attrs: { href: "/groups/" + _vm.group.id + "/group-statistics" },
+              attrs: { href: "/group-statistics" },
               on: {
                 click: function($event) {
                   return _vm.checkWithUserPanel()

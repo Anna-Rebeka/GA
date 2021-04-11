@@ -13,7 +13,7 @@ class CreateUsersAndGroupsTable extends Migration
      */
     public function up()
     {
-        Schema::disableForeignKeyConstraints();
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -32,12 +32,11 @@ class CreateUsersAndGroupsTable extends Migration
             $table->rememberToken();
             $table->foreignId('active_group')->nullable();
             $table->timestamps();
-            /*
+        
             $table->foreign('active_group')
             ->references('id')
             ->onDelete('set null')
             ->on('groups');
-            */
         });
 
         Schema::create('groups', function (Blueprint $table) {
@@ -54,7 +53,7 @@ class CreateUsersAndGroupsTable extends Migration
             ->onDelete('cascade');
         });
 
-        Schema::enableForeignKeyConstraints();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 
     /**
