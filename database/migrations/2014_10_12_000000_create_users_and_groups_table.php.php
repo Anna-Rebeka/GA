@@ -32,11 +32,12 @@ class CreateUsersAndGroupsTable extends Migration
             $table->rememberToken();
             $table->foreignId('active_group')->nullable();
             $table->timestamps();
-
+            /*
             $table->foreign('active_group')
             ->references('id')
             ->onDelete('set null')
             ->on('groups');
+            */
         });
 
         Schema::create('groups', function (Blueprint $table) {
