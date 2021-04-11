@@ -8,7 +8,6 @@ use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NewWhiteboardEventAssignmentMail;
 use App\Mail\FromAllGroupsNotificationMail;
-use ImageOptimizer;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Storage;

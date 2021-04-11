@@ -59,7 +59,6 @@ class MessagesController extends Controller
         }
         else {
             $attributes['image'] = $fields->image->store('photos');
-            ImageOptimizer::optimize('storage/' . $attributes['image']);
         }
         if(!isset($attributes['file']) || empty($attributes['file'])){
             $attributes['file'] = null;

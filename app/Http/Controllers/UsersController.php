@@ -10,9 +10,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-use ImageOptimizer;
-
-
 
 class UsersController extends Controller
 {
@@ -217,12 +214,10 @@ class UsersController extends Controller
 
         if(request('avatar')){
             $attributes['avatar'] = request('avatar')->store('/users/avatars');
-            ImageOptimizer::optimize('storage/' . $attributes['avatar']);
         }
 
         if(request('banner')){
             $attributes['banner'] = request('banner')->store('/users/banners');
-            ImageOptimizer::optimize('storage/' . $attributes['banner']);
         }
         
         $user->update($attributes);

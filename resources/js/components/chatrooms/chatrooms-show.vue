@@ -53,7 +53,7 @@
                         />
                         <img
                             v-else
-                            src="/img/default.jpg"
+                            src="/img/default_avatar.png"
                             alt="avatar"
                             class="rounded-full object-cover h-15 w-15 mr-2 mb-3"
                         />
