@@ -119,6 +119,7 @@ export default {
             if(oldPath.substring(oldPath.lastIndexOf("/") + 1) == "default_avatar.png"){
                 return '/img/default_avatar.png';
             }
+            console.log(oldPath);
             var newPath = '/storage/users/avatars/'.concat(oldPath.substring(index));
             return newPath;
         },
