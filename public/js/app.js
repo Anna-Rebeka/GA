@@ -7670,13 +7670,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["user", "new_whiteboard_notify", "new_assignment_notify", "new_event_notify"],
+  props: ["user"],
   data: function data() {
     return {
       fields: {},
-      whiteboard_posts: this.new_whiteboard_notify == 1,
-      assignments: this.new_assignment_notify == 1,
-      events: this.new_event_notify == 1,
+      whiteboard_posts: this.user.new_whiteboard_notify == 1,
+      assignments: this.user.new_assignment_notify == 1,
+      events: this.user.new_event_notify == 1,
       getting_assignment: this.user.got_assignment_notify == 1,
       assignment_mine: this.user.my_assignment_updated_notify == 1,
       event_joined: this.user.joined_event_updated_notify == 1,

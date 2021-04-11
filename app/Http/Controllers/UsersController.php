@@ -89,16 +89,13 @@ class UsersController extends Controller
         $new_event_notify = 0;
 
         if($user->group){
-            $new_whiteboard_notify = $user->groups()->where('groups.id', $group->id)->first()->pivot->new_whiteboard_notify;
-            $new_assignment_notify = $user->groups()->where('groups.id', $group->id)->first()->pivot->new_assignment_notify;
-            $new_event_notify = $user->groups()->where('groups.id', $group->id)->first()->pivot->new_event_notify;
+            $user->new_whiteboard_notify = $user->groups()->where('groups.id', $group->id)->first()->pivot->new_whiteboard_notify;
+            $user->new_assignment_notify = $user->groups()->where('groups.id', $group->id)->first()->pivot->new_assignment_notify;
+            $user->new_event_notify = $user->groups()->where('groups.id', $group->id)->first()->pivot->new_event_notify;
         }
 
         return view('profile.settings', [
             'user' => $user,
-            'new_whiteboard_notify' => $new_whiteboard_notify,
-            'new_assignment_notify' => $new_assignment_notify,
-            'new_event_notify' => $new_event_notify,
         ]);
     }
 
