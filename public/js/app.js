@@ -5459,7 +5459,8 @@ __webpack_require__.r(__webpack_exports__);
       this.pageOfItems = pageOfItems;
     },
     avatarPath: function avatarPath(oldPath) {
-      if (oldPath.substring(oldPath.lastIndexOf("/") + 1) == "default_avatar.png") {
+      if (oldPath.substring(oldPath.lastIndexOf("/") + 1) == "default_avatar.png") 
+      {
         return '/img/default_avatar.png';
       }
 
