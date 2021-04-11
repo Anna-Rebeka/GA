@@ -13,11 +13,14 @@ use Illuminate\Support\Facades\DB;
 
 class GroupStatisticsController extends Controller
 {
-    public function showStatistics(Group $group)
+    public function showStatistics()
     {
+        $group = Group::find(auth()->user()->active_group);
+
         if($group->admin_id != auth()->user()->id){
             Abort(401);
         }
+
         $users_with_assignments = DB::table('assignment_user')
             ->select('assignment_user.user_id')
             ->distinct()
@@ -25,9 +28,9 @@ class GroupStatisticsController extends Controller
             ->where('assignments.group_id', '=', $group->id)
             ->get();
 
+
         $users_with_assignments = $users_with_assignments->pluck('user_id');
         $users_with_no_assignments = $group->users->whereNotIn('id', $users_with_assignments)->flatten()->all();
-
         return view('groups.group-statistics', [
             'user' => auth()->user(),
             'group' => $group,
