@@ -6101,11 +6101,7 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
-    if (this.user.group) {
-      this.select = document.getElementById("groupSelect");
-      this.lastSelectValue = document.getElementById("groupSelect").value;
-      this.getUserGroups();
-    }
+    this.getUserGroups();
   },
   methods: {
     getUserGroups: function getUserGroups() {
@@ -6114,15 +6110,21 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/" + this.user.username + "/groups").then(function (response) {
         _this.groups = response.data;
 
-        _this.groups.unshift(_this.user.group);
+        if (_this.groups.length > 0) {
+          _this.select = document.getElementById("groupSelect");
+          _this.lastSelectValue = document.getElementById("groupSelect").value;
+        }
 
         if (_this.user.group) {
+          _this.groups.unshift(_this.user.group);
+
           _this.lastSelectValue = _this.user.group.id;
         }
       })["catch"](function (error) {
         if (error.response.status == 422) {
           _this.errors = error.response.data.errors;
           console.log(_this.errors);
+          console.log(_this.groups);
         }
 
         console.log(error.message);

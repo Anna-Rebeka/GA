@@ -253,7 +253,7 @@ class UsersController extends Controller
     
     public function getAllUsersGroups(User $user){
         if(!$user->group){
-            return [];
+            return $user->groups()->orderBy('name')->get();
         }
         return $user->groups()->orderBy('name')->get()->except($user->group->id);
     }

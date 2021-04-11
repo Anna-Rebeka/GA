@@ -24,11 +24,7 @@ export default {
     },
 
     mounted() {
-        if (this.user.group) {
-            this.select = document.getElementById("groupSelect");
-            this.lastSelectValue = document.getElementById("groupSelect").value;
-            this.getUserGroups();
-        }
+        this.getUserGroups();
     },
 
     methods: {
@@ -37,8 +33,14 @@ export default {
                 .get("/" + this.user.username + "/groups")
                 .then((response) => {
                     this.groups = response.data;
-                    this.groups.unshift(this.user.group);
+                    if (this.groups.length > 0) {
+                        this.select = document.getElementById("groupSelect");
+                        this.lastSelectValue = document.getElementById(
+                            "groupSelect"
+                        ).value;
+                    }
                     if (this.user.group) {
+                        this.groups.unshift(this.user.group);
                         this.lastSelectValue = this.user.group.id;
                     }
                 })
@@ -46,13 +48,14 @@ export default {
                     if (error.response.status == 422) {
                         this.errors = error.response.data.errors;
                         console.log(this.errors);
+                        console.log(this.groups);
                     }
                     console.log(error.message);
                 });
         },
 
         selected() {
-            if(this.lastSelectValue == null || this.select == null){
+            if (this.lastSelectValue == null || this.select == null) {
                 return;
             }
             if (this.lastSelectValue != this.select.value) {
