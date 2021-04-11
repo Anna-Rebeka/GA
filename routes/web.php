@@ -115,7 +115,7 @@ Route::middleware(['auth', 'can.see'])->group(function() {
     Route::post('/assignments/{assignment:id}/file-upload', [AssignmentsFilesController::class, 'store']);
     Route::delete('/assignments/file-delete/{id}', [AssignmentsFilesController::class, 'destroy']);
 
-    Route::get('/groups/{group:id}/group-statistics', [GroupStatisticsController::class, 'showStatistics']);
+    Route::get('/group-statistics', [GroupStatisticsController::class, 'showStatistics']);
     Route::get('/groups/{group:id}/get-assignments-statistic', [GroupStatisticsController::class, 'getAssignmentsStatistic']);
 
     Route::get('/chats', [ChatroomsController::class, 'index']);
