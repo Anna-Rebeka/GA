@@ -29,13 +29,7 @@ class CreateUsersAndGroupsTable extends Migration
             $table->boolean('created_by_me_assignment_updated_notify')->default(false);
             $table->boolean('created_by_me_event_updated_notify')->default(false);
             $table->rememberToken();
-            $table->foreignId('active_group')->nullable();
             $table->timestamps();
-        
-            /*$table->foreign('active_group')
-            ->references('id')
-            ->onDelete('set null')
-            ->on('groups');*/
         });
 
         Schema::create('groups', function (Blueprint $table) {
