@@ -94,6 +94,7 @@
                 </tbody>
             </table>
         </div>
+        
         <div class="mt-4 clear-both w-full text-center text-sm">
             <jw-pagination :items="filteredAssignments" @changePage="onChangePage" :pageSize="4"></jw-pagination>
         </div>
