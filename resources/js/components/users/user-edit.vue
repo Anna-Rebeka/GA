@@ -141,6 +141,7 @@
                     type="password"
                     name="password"
                     id="password"
+                    autocomplete="off"
                 />
             </div>
 
@@ -176,7 +177,7 @@
                     Submit
                 </button>
 
-                <a :href="user_path" class="hover:underline">Cancel</a>
+                <a :href="user_path" class="rounded shadow border border-gray-300 py-2 px-4 mr-2 text-black hover:text-gray-500 hover:bg-gray-100">Cancel</a>
             </div>
         </form>
     </div>

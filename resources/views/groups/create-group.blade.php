@@ -4,7 +4,7 @@
             <div class="font-bold text-lg mb-4 text-center">
                 Get connected!
             </div>
-            <p class="mb-4">Don't worry. You will be an administrator.</p>
+            <p class="mb-4">Create your own group. All you need is a name.</p>
             <form method="POST" action="/create-group">
                 @csrf
                 <div class="mb-4">

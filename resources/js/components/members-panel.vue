@@ -8,18 +8,18 @@
                 class="p-4 mb-1 flex justify-between items-center"
             >
                 <a :href="'/profile/' + member.username">
+                    <p
+                        class="text-xs text-gray-600 ml-4"
+                        v-if="member.id == group.admin_id"
+                    >
+                        group admin
+                    </p>
                     <div class="flex items-center">
                         <img
                             class="w-10 h-10 object-cover rounded-full"
                             :src="member.avatar"
                             :alt="member.name"
                         />
-                        <p
-                            class="text-xs text-gray-600 ml-2"
-                            v-if="member.id == group.admin_id"
-                        >
-                            group admin
-                        </p>
                         <p
                             class="hover:underline ml-2 text-left font-semibold font-sans tracking-wide"
                         >

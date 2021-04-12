@@ -43,8 +43,8 @@
                             required
                         />
                     </p>
-                    <p class="mb-1  uppercase font-bold text-sm">Do assignment :</p>
-                    <div class="mb-4">
+                    <p class="mb-1  uppercase font-bold text-sm">Type :</p>
+                    <div class="mb-6">
                         <input
                             type="radio"
                             v-model="onTime"
@@ -53,7 +53,7 @@
                             :value="false"
                             required
                         />
-                        <label for="false">before deadline</label><br />
+                        <label for="false">Deadline</label><br />
                         <input
                             type="radio"
                             v-model="onTime"
@@ -62,12 +62,12 @@
                             :value="true"
                             required
                         />
-                        <label for="true">on time</label><br />
+                        <label for="true">Appointment</label><br />
                     </div>
 
                     <div class="mb-6">
+                        <p class=" uppercase font-bold text-sm">Time estimate:</p>
                         <p class="text-sm text-gray-500">(optional)</p>
-                        <p class=" uppercase font-bold text-sm">For how long :</p>
                         <label class="mb-2 text-md" for="duration_hours"
                             >Hours</label
                         >
@@ -95,10 +95,10 @@
                     </div>
 
                     <div class="mb-4">
-                        <p class="text-sm text-gray-500">(optional)</p>
                         <label class="mb-2 uppercase font-bold text-sm" for="event_place"
                             >Assign this task to:</label
                         >
+                        <p class="text-sm text-gray-500">(optional)</p>
                         <div
                             v-for="assignee in assignees"
                             :key="assignee.id"
@@ -133,9 +133,9 @@
                             ><br />
                         </div>
                     </div>
-                    <p class="text-sm mt-2 text-gray-500">(optional)</p>
-                    <label class=" uppercase font-bold text-sm" for="quantity">Maximum number of assignees:</label>
-                    <p class="text-sm">0 = not set</p>
+                    
+                    <label class="mt-6 uppercase font-bold text-sm" for="quantity">Maximum number of assignees:</label>
+                    <p class="text-sm text-gray-500">(optional)</p>
                     <input
                         v-model="shownAssignment.max_assignees"
                         type="number"
@@ -144,6 +144,7 @@
                         name="max_assignees"
                         class="border p-2"
                     />
+                    <p class="text-sm">0 = not set</p>
                 </div>
                 <button
                     type="submit"
@@ -173,7 +174,7 @@ export default {
                 .content,
             users: this.assignment.users.map(u => u.id),
             pageOfItems: [],
-            errors: {},
+            asEditErrors: {},
         };
     },
 

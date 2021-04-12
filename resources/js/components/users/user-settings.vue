@@ -6,7 +6,7 @@
             >
                 Settings for e-mail notifications (for this group "{{
                     user.group.name
-                }}"" )
+                }}" )
             </p>
 
             <p
@@ -252,7 +252,7 @@ export default {
     ],
     data() {
         return {
-            fields: {},
+            userSettingsFields: {},
             whiteboard_posts: this.user.new_whiteboard_notify == 1,
             assignments: this.user.new_assignment_notify == 1,
             events: this.user.new_event_notify == 1,
@@ -263,7 +263,7 @@ export default {
                 this.user.created_by_me_assignment_updated_notify == 1,
             event_created_by_me:
                 this.user.created_by_me_event_updated_notify == 1,
-            errors: {},
+            userSettingsErrors: {},
             deletingAccount: false,
             settingsSubmitted: false,
         };
@@ -271,20 +271,20 @@ export default {
 
     methods: {
         submit() {
-            this.fields.new_whiteboard_notify = this.whiteboard_posts;
-            this.fields.new_assignment_notify = this.assignments;
-            this.fields.new_event_notify = this.events;
+            this.userSettingsFields.new_whiteboard_notify = this.whiteboard_posts;
+            this.userSettingsFields.new_assignment_notify = this.assignments;
+            this.userSettingsFields.new_event_notify = this.events;
 
-            this.fields.got_assignment_notify = this.getting_assignment;
-            this.fields.my_assignment_updated_notify = this.assignment_mine;
-            this.fields.joined_event_updated_notify = this.event_joined;
-            this.fields.created_by_me_assignment_updated_notify = this.assignment_created_by_me;
-            this.fields.created_by_me_event_updated_notify = this.event_created_by_me;
+            this.userSettingsFields.got_assignment_notify = this.getting_assignment;
+            this.userSettingsFields.my_assignment_updated_notify = this.assignment_mine;
+            this.userSettingsFields.joined_event_updated_notify = this.event_joined;
+            this.userSettingsFields.created_by_me_assignment_updated_notify = this.assignment_created_by_me;
+            this.userSettingsFields.created_by_me_event_updated_notify = this.event_created_by_me;
 
             axios
-                .post("/profile/" + this.user.id + "/settings", this.fields)
+                .post("/profile/" + this.user.id + "/settings", this.userSettingsFields)
                 .then((response) => {
-                    this.fields = {};
+                    this.userSettingsFields = {};
                     this.settingsSubmitted = true;
                 })
                 .catch((error) => {
@@ -312,8 +312,8 @@ export default {
                 })
                 .catch((error) => {
                     if (error.response.status == 422) {
-                        this.errors = error.response.data.errors;
-                        console.log(this.errors);
+                        this.userSettingsErrors = error.response.data.errors;
+                        console.log(this.userSettingsErrors);
                     }
                     console.log(error.message);
                 });

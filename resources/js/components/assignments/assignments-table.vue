@@ -39,7 +39,7 @@
         <p class="text-xs font-bold text-blue-500 float-left">Deadline</p>
         <p class="text-sm font-bold float-left ml-2 mr-2">/</p>
         <p class="float-left text-xs font-bold text-red-600 mb-4 mr-8">
-            On time
+            Appointment
         </p>
         <p class="text-xs px-1 font-medium bg-red-100 float-left">In progress</p>
         <p class="text-sm font-bold float-left ml-2 mr-2">/</p>
@@ -62,7 +62,7 @@
                                         scope="col"
                                         class="pl-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase"
                                     >
-                                        When
+                                        Date & Time
                                     </th>
                                     <th
                                         scope="col"
@@ -74,7 +74,7 @@
                                         scope="col"
                                         class="pl-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase"
                                     >
-                                        By who
+                                        By whom
                                     </th>
                                     <th
                                         scope="col"

@@ -1,5 +1,10 @@
 <template>
     <div>
+        <p
+            class="-ml-8 mt-4 block mb-5 font-bold text-lg text-center text-gray-700"
+        >
+            Edit "{{group.name}}" group 
+        </p>
         <div @submit.prevent="submit" enctype="multipart/form-data">
             <div class="mb-8">
                 <label
@@ -15,7 +20,7 @@
                     name="name"
                     id="name"
                     :placeholder="group.name"
-                    v-model="fields.name"
+                    v-model="groupEditFields.name"
                 />
             </div>
             <div class="mb-8">
@@ -61,7 +66,7 @@
                 <select
                     name="admin_id"
                     id="admin_id"
-                    v-model="fields.admin_id"
+                    v-model="groupEditFields.admin_id"
                     class="border-b border-gray-400"
                 >
                     <option :value="user.id">{{ user.name }}</option>
@@ -75,7 +80,7 @@
                 </select>
             </div>
 
-            <div v-if="fields.admin_id && fields.admin_id != user.id">
+            <div v-if="groupEditFields.admin_id && groupEditFields.admin_id != user.id">
                 <div
                     class="flex items-center justify-between w-full mb-4 p-2 bg-yellow-400 shadow text-white"
                 >
@@ -102,14 +107,14 @@
 
             <div
                 class="flex items-center justify-between w-full mb-10 p-2 bg-red-500 shadow text-white"
-                v-if="fields.admin_id != user.id && adminChangeFailed"
+                v-if="groupEditFields.admin_id != user.id && adminChangeFailed"
             >
                 Please type "yes" if you wish to pass your admin rights.
             </div>
 
             <div
                 class="flex items-center justify-between w-full mb-10 p-2 bg-red-500 shadow text-white"
-                v-if="!fields.admin_id && !fields.name && emptyEditSubmitted"
+                v-if="!groupEditFields.admin_id && !groupEditFields.name && emptyEditSubmitted"
             >
                 There are no changes to submit.
             </div>
@@ -170,7 +175,7 @@ export default {
     props: ["user", "group", "members"],
     data() {
         return {
-            fields: [],
+            groupEditFields: [],
             avatar: this.group.avatar,
             changedAvatar: false,
             emptyEditSubmitted: false,
@@ -194,9 +199,9 @@ export default {
 
         submit() {
             if (
-                !this.fields.name &&
+                !this.groupEditFields.name &&
                 !this.changedAvatar &&
-                !this.fields.admin_id
+                !this.groupEditFields.admin_id
             ) {
                 this.emptyEditSubmitted = true;
                 return;
@@ -205,12 +210,12 @@ export default {
             if (this.avatar != this.group.avatar) {
                 formData.append("avatar", this.$refs.avatar.files[0]);
             }
-            if (this.fields.name) {
-                formData.append("name", this.fields.name);
+            if (this.groupEditFields.name) {
+                formData.append("name", this.groupEditFields.name);
             } else {
                 formData.append("name", this.group.name);
             }
-            if (this.fields.admin_id && this.fields.admin_id != this.user.id) {
+            if (this.groupEditFields.admin_id && this.groupEditFields.admin_id != this.user.id) {
                 var checkAdminChange = document.getElementById(
                     "checkAdminChange"
                 ).value;
@@ -221,7 +226,7 @@ export default {
                     this.adminChangeFailed = true;
                     return;
                 }
-                formData.append("admin_id", this.fields.admin_id);
+                formData.append("admin_id", this.groupEditFields.admin_id);
             } else {
                 formData.append("admin_id", this.user.id);
             }

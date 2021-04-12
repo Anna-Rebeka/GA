@@ -1,5 +1,8 @@
 <template>
     <div class="mb-6">
+        <p class="-ml-8 block mb-5 font-bold text-lg text-center text-gray-700">
+            Events
+        </p>
         <div class="h-12">
             <button
                 @click="createNewEvent = !createNewEvent"
@@ -24,7 +27,11 @@
 
                 <div class="mx-auto w-full mb-10">
                     <p class="mb-4">
-                        <label class="mb-2 uppercase font-bold text-sm" for="name">Name:</label>
+                        <label
+                            class="mb-2 uppercase font-bold text-sm"
+                            for="name"
+                            >Name:</label
+                        >
                         <br />
                         <input
                             id="name"
@@ -36,11 +43,13 @@
                         />
                     </p>
                     <div class="mb-4">
-                        <p class="text-sm text-gray-500">(optional)</p>
-                        <label class="mb-2 uppercase font-bold text-sm" for="description"
+                        <label
+                            class="mb-2 uppercase font-bold text-sm"
+                            for="description"
                             >Description:</label
                         >
                         <br />
+                        <p class="text-sm text-gray-500">(optional)</p>
                         <textarea
                             name="description"
                             placeholder="tell your group about this event..."
@@ -50,7 +59,11 @@
                         </textarea>
                     </div>
                     <p class="mb-4">
-                        <label class="mb-2 uppercase font-bold text-sm" for="event_time">When:</label>
+                        <label
+                            class="mb-2 uppercase font-bold text-sm"
+                            for="event_time"
+                            >Start time:</label
+                        >
                         <br />
                         <input
                             id="event_time"
@@ -62,11 +75,13 @@
                         />
                     </p>
                     <div class="mb-6">
-                        <p class="text-sm text-gray-500">(optional)</p>
-                        <label class="mb-2 uppercase font-bold text-sm" for="event_ending"
-                            >Ending at:</label
+                        <label
+                            class="mb-2 uppercase font-bold text-sm"
+                            for="event_ending"
+                            >End time:</label
                         >
                         <br />
+                        <p class="text-sm text-gray-500">(optional)</p>
                         <input
                             id="event_ending"
                             v-model="groupEventsFields.eventEnding"
@@ -75,11 +90,18 @@
                             class="border p-2"
                         />
                     </div>
-                    <div class="flex items-center justify-between w-full mb-10 p-2 bg-red-500 shadow text-white" v-if="wrongDatesError">
-                        Oops. An event can not end before it starts. 
-                     </div>
+                    <div
+                        class="flex items-center justify-between w-full mb-10 p-2 bg-red-500 shadow text-white"
+                        v-if="wrongDatesError"
+                    >
+                        Oops. An event can not end before it starts.
+                    </div>
                     <p class="mb-4">
-                        <label class="mb-2 uppercase font-bold text-sm" for="event_place">Place:</label>
+                        <label
+                            class="mb-2 uppercase font-bold text-sm"
+                            for="event_place"
+                            >Location:</label
+                        >
                         <br />
                         <input
                             id="event_place"
@@ -107,7 +129,11 @@
             Your event was created! Check it out down below.
         </div>
 
-        <events-table :user="user" :group="group" :events="savedEvents"></events-table>
+        <events-table
+            :user="user"
+            :group="group"
+            :events="savedEvents"
+        ></events-table>
     </div>
 </template>
 
@@ -128,11 +154,14 @@ export default {
     },
     methods: {
         submit() {
-            if(this.groupEventsFields.eventEnding){
-                if (Date.parse(this.groupEventsFields.eventTime) > Date.parse(this.groupEventsFields.eventEnding)) {
+            if (this.groupEventsFields.eventEnding) {
+                if (
+                    Date.parse(this.groupEventsFields.eventTime) >
+                    Date.parse(this.groupEventsFields.eventEnding)
+                ) {
                     this.wrongDatesError = true;
                     return;
-                } 
+                }
             }
             axios
                 .post("/events", this.groupEventsFields)

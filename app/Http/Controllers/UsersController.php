@@ -74,6 +74,9 @@ class UsersController extends Controller
      */
     public function edit(User $user)
     {
+        if(auth()->user()->id != $user->id){
+            Abort(401);
+        }
         return view('profile.edit', [
             'user' => $user,
             'user_path' => $user->path(),
@@ -150,7 +153,9 @@ class UsersController extends Controller
         
         $user = DB::transaction(function () use(&$user, &$user_attributes, &$pivot_attributes){
             $user->update($user_attributes);
-            $user->groups()->updateExistingPivot($user->group->id, $pivot_attributes);
+            if($user->group){
+                $user->groups()->updateExistingPivot($user->group->id, $pivot_attributes);
+            }
             return $user;
         });
         return $user;

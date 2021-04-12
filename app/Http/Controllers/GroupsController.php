@@ -134,7 +134,7 @@ class GroupsController extends Controller
             $attributes['board'] = $group->board;
         }
         $group->update($attributes);
-        return back();
+        return route('dashboard');
     }
 
     public function updateBoard(Request $request, Group $group)

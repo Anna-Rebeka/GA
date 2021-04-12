@@ -6,9 +6,9 @@
 
                 <div
                     class="flex items-center justify-between w-full mb-4 p-2 bg-red-500 shadow text-white"
-                    v-if="errors.text"
+                    v-if="evEditErrors.text"
                 >
-                    {{ errors.text[0] }}
+                    {{ evEditErrors.text[0] }}
                 </div>
 
                 <div class="mx-auto w-full mb-10">
@@ -29,13 +29,13 @@
                         />
                     </p>
                     <div class="mb-4">
-                        <p class="text-sm text-gray-500">(optional)</p>
                         <label
                             class="mb-2 uppercase font-bold text-sm"
                             for="description"
                             >Description:</label
                         >
                         <br />
+                        <p class="text-sm text-gray-500">(optional)</p>
                         <textarea
                             name="description"
                             placeholder="tell your group about this event..."
@@ -60,14 +60,14 @@
                             required
                         />
                     </p>
-                    <div class="mb-6">
-                        <p class="text-sm text-gray-500">(optional)</p>
+                    <div class="mb-6 mt-5">
                         <label
                             class="mb-2 uppercase font-bold text-sm"
                             for="event_ending"
-                            >Ending at:</label
+                            >End time:</label
                         >
                         <br />
+                        <p class="text-sm text-gray-500">(optional)</p>
                         <input
                             id="event_ending"
                             v-model="eventEnding"
@@ -86,7 +86,7 @@
                         <label
                             class="mb-2 uppercase font-bold text-sm"
                             for="event_place"
-                            >Place:</label
+                            >Location:</label
                         >
                         <br />
                         <input
@@ -118,8 +118,8 @@ export default {
             editedEvent: this.event,
             csrf: document.head.querySelector('meta[name="csrf-token"]')
                 .content,
-            fields: {},
-            errors: {},
+            evEditFields: {},
+            evEditErrors: {},
             eventTime:
                 this.event.event_time.slice(
                     0,
@@ -149,24 +149,26 @@ export default {
     methods: {
         submit() {
             this.editedEvent.event_time = this.eventTime;
-            if(this.editedEvent.event_time.length == 16) {
+            if (this.editedEvent.event_time.length == 16) {
                 this.editedEvent.event_time += ":00";
             }
-            if(this.eventEnding){
+            if (this.eventEnding) {
                 this.editedEvent.event_ending = this.eventEnding;
-                if(this.editedEvent.event_ending.length == 16){
+                if (this.editedEvent.event_ending.length == 16) {
                     this.editedEvent.event_ending += ":00";
                 }
-            }
-            else{
+            } else {
                 this.editedEvent.event_ending = this.eventEnding;
             }
-            
-            if(this.editedEvent.event_ending){
-                if (Date.parse(this.editedEvent.event_time) > Date.parse(this.editedEvent.event_ending)) {
+
+            if (this.editedEvent.event_ending) {
+                if (
+                    Date.parse(this.editedEvent.event_time) >
+                    Date.parse(this.editedEvent.event_ending)
+                ) {
                     this.wrongDatesError = true;
                     return;
-                } 
+                }
             }
 
             axios

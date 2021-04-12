@@ -49,7 +49,7 @@ class MessagesController extends Controller
         $attributes = $fields->validate([
             'chatroom_id' => ['required'],
             'text' => ['nullable', 'max:1000'],
-            'image' => ['nullable', 'file', 'mimes:jpeg,jpg,png', 'max:500000'],
+            'image' => ['nullable', 'file', 'mimes:jpeg,jpg,png,gif', 'max:500000'],
             'file' => ['nullable', 'file', 'max:2500000'],
             'file_name' => ['nullable', 'string', 'max:1000'],
             ]);

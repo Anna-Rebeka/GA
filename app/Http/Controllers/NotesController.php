@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\DB;
 class NotesController extends Controller
 {
     public function index(User $user){
+        if(auth()->user()->id != $user->id){
+            Abort(401);
+        }
         return view('profile.notes', [
             'user' => $user
         ]);

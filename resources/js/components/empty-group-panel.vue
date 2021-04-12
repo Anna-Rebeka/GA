@@ -6,8 +6,19 @@
             >+
         </a>
         <div class="container text-center pt-4 pb-8">
-            <h2 class="font-bold text-2xl mb-6">Create a group</h2>
+            <h2 class="font-bold text-2xl mb-2">Create a group</h2>
         </div>
+        <p class="-mt-4">
+            Welcome to Radar, your personal group assistant.
+        </p>
+        <p class="mt-2">
+            Click on the "+" button above and create your
+            own group!
+        </p>
+        <p class="mt-2">
+            You can always come back to this page by clicking on the logo icon in the upper left corner.
+        </p>
+
     </div>
 </template>
 

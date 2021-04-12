@@ -229,7 +229,7 @@ class AssignmentsController extends Controller
             $attributes['max_assignees'] = null;
         }
         
-        $assignment = DB::transaction(function () use(&$assignment, &$attributes) {
+        $assignment = DB::transaction(function () use(&$assignment, &$attributes, &$request) {
             $user = auth()->user();
             $assignment->update($attributes);
             $users_before = $assignment->users;

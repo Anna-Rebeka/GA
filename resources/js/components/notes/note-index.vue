@@ -1,5 +1,6 @@
 <template>
     <div class="mb-6">
+        <h3 class="text-center font-bold text-lg mb-8 text-gray-700">Notes</h3>
         <form @submit.prevent="submit">
             <div class="bg-white shadow border rounded-lg py-6 px-8 mb-8">
                 <input type="hidden" name="_token" :value="csrf" /> 

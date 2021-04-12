@@ -45,7 +45,7 @@
                             @click="checkWithUser(shownAssignment, 'take')"
                             class="text-sm bg-blue-400 text-white rounded-lg w-16 py-2 hover:bg-blue-500 mr-3 focus:outline-none"
                         >
-                            Take
+                            Take on
                         </button>
                     </div>
                 </div>
@@ -93,7 +93,7 @@
                 <div
                     class="mb-2 rounded border-b border-gray-200 px-6 pl-6 pt-2 pb-2"
                 >
-                    <p class="mb-2"><strong>By Who</strong></p>
+                    <p class="mb-2"><strong>By Whom</strong></p>
                     <p class="bg-white p-2 rounded">
                         {{ author }}
                     </p>
@@ -104,7 +104,7 @@
                     class="py-2 px-6 mb-2 mr-2 border-b border-gray-200 rounded"
                 >
                     <p class="mb-2">
-                        <strong>For how long:</strong>
+                        <strong>Time estimate:</strong>
                     </p>
                     <div class="bg-white rounded mb-2 pl-2 pt-2 pb-2">
                         <p v-if="shownAssignment.duration">
@@ -147,7 +147,7 @@
                 v-if="shownAssignment.users"
                 class="mb-2 rounded border-b border-gray-200 px-6 pl-6 pt-2 pb-4"
             >
-                <p class="mb-2"><strong>For Who</strong></p>
+                <p class="mb-2"><strong>Assignees</strong></p>
                 <div class="bg-white p-2 rounded">
                     <p
                         v-for="assignee in shownAssignment.users"
@@ -158,7 +158,7 @@
                 </div>
             </div>
             <div class="py-4 px-6 mb-2 border-b border-gray-200 rounded">
-                <p class="mb-2"><strong>What about</strong></p>
+                <p class="mb-2"><strong>Description</strong></p>
                 <div class="bg-white rounded mb-2 pl-2 pt-2 pb-2">
                     {{ shownAssignment.description }}
                 </div>
@@ -167,7 +167,8 @@
                 v-if="user.id == assignment.author_id || assignment_users_ids.includes(user.id) || user.id == assignment.group.admin_id"
                 class="py-4 px-6 mb-2 border-b border-gray-200 rounded"
             >
-                <p class="mb-2"><strong>Author commented (privatly)</strong></p>
+                <p class="mb-2"><strong>Author's comment</strong></p>
+                <p class="text-xs text-gray-700">(visible only to assignees)</p>
                 <div class="bg-white rounded mb-2 pl-2 pt-2 pb-2">
                     <div
                         v-if="!editingComment"

@@ -140,6 +140,7 @@
                             id="image"
                             ref="image"
                             v-on:change="handleImageUpload()"
+                            accept=".jpg, .jpeg, .png, .gif"
                         />
                     </div>
                 </div>

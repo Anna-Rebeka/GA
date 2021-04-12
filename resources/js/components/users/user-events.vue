@@ -46,7 +46,7 @@
                         <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase">
                             Group
                         </th>
-                        <th scope="col" class="px-6 py-3 bg-gray-50">
+                        <th scope="col" class="w-24 px-6 py-3 bg-gray-50">
                         </th>
                     </tr>
                 </thead>
@@ -75,7 +75,7 @@
                                     {{ event.group_name }}
                             </div>
                         </td>
-                        <td> 
+                        <td class="w-24 pr-6 py-4"> 
                             <a 
                                 :href="'/events/' + event.id"
                                 class="shadow border border-gray-300 rounded-lg mr-6 py-2 px-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100">

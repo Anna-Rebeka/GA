@@ -1,5 +1,6 @@
 <template>
     <div class="border-bottom relative border-gray-300 rounded-lg mb-2">
+        <h3 class="text-center font-bold text-lg mb-5 text-gray-700">Chats</h3>
         <div class="relative inline-block w-44 h-10 mb-10">
             <input
                 id="memberInput"
@@ -9,7 +10,7 @@
                 class="rounded-lg bg-white border border-gray-300 text-gray-500 w-full h-full px-5 pr-10 rounded-lg text-sm focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500"
             />
         </div>
-        <div v-for="chat in chatrooms" :key="chat.id">
+        <div v-for="chat in pageOfItems" :key="chat.id">
             <a v-if="chat.latest_message" :href="'/chats/' + chat.id">
                 <div
                     class="flex p-4 border-b border-b-gray-400 hover:bg-gray-200"
@@ -87,6 +88,9 @@
                 </div>
             </a>
         </div>
+        <div class="mt-28 clear-both w-full text-center text-sm">
+            <jw-pagination :items="chatrooms" @changePage="onChangePage" :pageSize="50"></jw-pagination>
+        </div>
     </div>
 </template>
 
@@ -99,6 +103,7 @@ export default {
             members: [],
             lettersCounter: 0,
             shownChatroom: this.chatrooms,
+            pageOfItems: [],
         };
     },
 
@@ -118,6 +123,10 @@ export default {
     },
 
     methods: {
+        onChangePage(pageOfItems) {
+            this.pageOfItems = pageOfItems;
+        },
+        
         getLatestMessage(chatroom) {
             axios
                 .get("/chats/" + chatroom.id + "/latestMessage")

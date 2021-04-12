@@ -49,7 +49,7 @@
             </div>
             <div class="md:grid md:grid-cols-2 md:gap-2">
                 <div class="mb-2 rounded border-b border-gray-200 px-6 p-4">
-                    <strong>When:</strong>
+                    <strong>Start time:</strong>
                     <p class="bg-white p-2 rounded">
                         {{
                             new Date(event.event_time)
@@ -60,7 +60,7 @@
                 <div
                     class="mb-2 mr-2 rounded border-b border-gray-200 px-6 p-4"
                 >
-                    <strong>Event ends:</strong>
+                    <strong>End time:</strong>
                     <p v-if="event.event_ending" class="bg-white p-2 rounded">
                         {{
                             new Date(event.event_ending)
@@ -72,7 +72,7 @@
             </div>
 
             <div class="py-2 px-6 mb-2 mr-2 border-b border-gray-200 rounded">
-                <p class="mb-2"><strong>Where:</strong></p>
+                <p class="mb-2"><strong>Location:</strong></p>
                 <div class="bg-white rounded mb-2 pl-2 pt-2 pb-2">
                     {{ event.event_place }}
                 </div>

@@ -2113,6 +2113,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "assignment", "group", "free_members"],
   data: function data() {
@@ -2130,7 +2131,7 @@ __webpack_require__.r(__webpack_exports__);
         return u.id;
       }),
       pageOfItems: [],
-      errors: {}
+      asEditErrors: {}
     };
   },
   mounted: function mounted() {
@@ -2370,6 +2371,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -3102,8 +3104,97 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user', 'group', 'assignments', 'members'],
+  props: ["user", "group", "assignments", "members"],
   data: function data() {
     return {
       csrf: document.head.querySelector('meta[name="csrf-token"]').content,
@@ -3120,7 +3211,7 @@ __webpack_require__.r(__webpack_exports__);
     submit: function submit() {
       var _this = this;
 
-      axios.post('/assignments', this.groupAssignmentsFields).then(function (response) {
+      axios.post("/assignments", this.groupAssignmentsFields).then(function (response) {
         _this.groupAssignmentsFields = {};
         _this.createNewAssignment = false;
         _this.newAssignmentCreated = true;
@@ -3241,13 +3332,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "chatrooms"],
   data: function data() {
     return {
       members: [],
       lettersCounter: 0,
-      shownChatroom: this.chatrooms
+      shownChatroom: this.chatrooms,
+      pageOfItems: []
     };
   },
   mounted: function mounted() {
@@ -3264,6 +3360,9 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    onChangePage: function onChangePage(pageOfItems) {
+      this.pageOfItems = pageOfItems;
+    },
     getLatestMessage: function getLatestMessage(chatroom) {
       var _this2 = this;
 
@@ -3356,6 +3455,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -4070,6 +4170,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user"],
   data: function data() {
@@ -4261,8 +4372,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       editedEvent: this.event,
       csrf: document.head.querySelector('meta[name="csrf-token"]').content,
-      fields: {},
-      errors: {},
+      evEditFields: {},
+      evEditErrors: {},
       eventTime: this.event.event_time.slice(0, this.event.event_time.lastIndexOf(" ")) + "T" + this.event.event_time.slice(this.event.event_time.lastIndexOf(" ") + 1),
       eventEnding: this.event.event_ending,
       wrongDatesError: false
@@ -4900,6 +5011,32 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "group", "events"],
   data: function data() {
@@ -5242,11 +5379,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "group", "members"],
   data: function data() {
     return {
-      fields: [],
+      groupEditFields: [],
       avatar: this.group.avatar,
       changedAvatar: false,
       emptyEditSubmitted: false,
@@ -5270,7 +5412,7 @@ __webpack_require__.r(__webpack_exports__);
     submit: function submit() {
       var _this = this;
 
-      if (!this.fields.name && !this.changedAvatar && !this.fields.admin_id) {
+      if (!this.groupEditFields.name && !this.changedAvatar && !this.groupEditFields.admin_id) {
         this.emptyEditSubmitted = true;
         return;
       }
@@ -5281,13 +5423,13 @@ __webpack_require__.r(__webpack_exports__);
         formData.append("avatar", this.$refs.avatar.files[0]);
       }
 
-      if (this.fields.name) {
-        formData.append("name", this.fields.name);
+      if (this.groupEditFields.name) {
+        formData.append("name", this.groupEditFields.name);
       } else {
         formData.append("name", this.group.name);
       }
 
-      if (this.fields.admin_id && this.fields.admin_id != this.user.id) {
+      if (this.groupEditFields.admin_id && this.groupEditFields.admin_id != this.user.id) {
         var checkAdminChange = document.getElementById("checkAdminChange").value;
 
         if (checkAdminChange == null || checkAdminChange.trim().toLowerCase() != "yes") {
@@ -5295,7 +5437,7 @@ __webpack_require__.r(__webpack_exports__);
           return;
         }
 
-        formData.append("admin_id", this.fields.admin_id);
+        formData.append("admin_id", this.groupEditFields.admin_id);
       } else {
         formData.append("admin_id", this.user.id);
       }
@@ -5416,6 +5558,47 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "group", "stats", "free_users"],
   data: function data() {
@@ -5427,7 +5610,8 @@ __webpack_require__.r(__webpack_exports__);
       pageOfItems: [],
       allUsers: this.allUsers = this.free_users.concat(this.stats),
       shownUsers: this.allUsers = this.free_users.concat(this.stats),
-      lettersCounter: 0
+      lettersCounter: 0,
+      showInfo: false
     };
   },
   mounted: function mounted() {
@@ -5459,13 +5643,11 @@ __webpack_require__.r(__webpack_exports__);
       this.pageOfItems = pageOfItems;
     },
     avatarPath: function avatarPath(oldPath) {
-      if (oldPath.substring(oldPath.lastIndexOf("/") + 1) == "default_avatar.png") 
-      {
-        return '/img/default_avatar.png';
+      if (!oldPath || oldPath.substring(oldPath.lastIndexOf("/") + 1) == "default_avatar.png") {
+        return "/img/default_avatar.png";
       }
 
-      console.log(oldPath);
-      var newPath = '/storage/users/avatars/'.concat(oldPath.substring(index));
+      var newPath = "/storage/users/avatars/".concat(oldPath.substring(oldPath.lastIndexOf("/") + 1));
       return newPath;
     },
     autocomplete: function autocomplete(inp, members, counter) {
@@ -5529,6 +5711,15 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -6387,6 +6578,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['notes'],
   data: function data() {
@@ -6925,6 +7117,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -7674,7 +7867,7 @@ __webpack_require__.r(__webpack_exports__);
   props: ["user"],
   data: function data() {
     return {
-      fields: {},
+      userSettingsFields: {},
       whiteboard_posts: this.user.new_whiteboard_notify == 1,
       assignments: this.user.new_assignment_notify == 1,
       events: this.user.new_event_notify == 1,
@@ -7683,7 +7876,7 @@ __webpack_require__.r(__webpack_exports__);
       event_joined: this.user.joined_event_updated_notify == 1,
       assignment_created_by_me: this.user.created_by_me_assignment_updated_notify == 1,
       event_created_by_me: this.user.created_by_me_event_updated_notify == 1,
-      errors: {},
+      userSettingsErrors: {},
       deletingAccount: false,
       settingsSubmitted: false
     };
@@ -7692,16 +7885,16 @@ __webpack_require__.r(__webpack_exports__);
     submit: function submit() {
       var _this = this;
 
-      this.fields.new_whiteboard_notify = this.whiteboard_posts;
-      this.fields.new_assignment_notify = this.assignments;
-      this.fields.new_event_notify = this.events;
-      this.fields.got_assignment_notify = this.getting_assignment;
-      this.fields.my_assignment_updated_notify = this.assignment_mine;
-      this.fields.joined_event_updated_notify = this.event_joined;
-      this.fields.created_by_me_assignment_updated_notify = this.assignment_created_by_me;
-      this.fields.created_by_me_event_updated_notify = this.event_created_by_me;
-      axios.post("/profile/" + this.user.id + "/settings", this.fields).then(function (response) {
-        _this.fields = {};
+      this.userSettingsFields.new_whiteboard_notify = this.whiteboard_posts;
+      this.userSettingsFields.new_assignment_notify = this.assignments;
+      this.userSettingsFields.new_event_notify = this.events;
+      this.userSettingsFields.got_assignment_notify = this.getting_assignment;
+      this.userSettingsFields.my_assignment_updated_notify = this.assignment_mine;
+      this.userSettingsFields.joined_event_updated_notify = this.event_joined;
+      this.userSettingsFields.created_by_me_assignment_updated_notify = this.assignment_created_by_me;
+      this.userSettingsFields.created_by_me_event_updated_notify = this.event_created_by_me;
+      axios.post("/profile/" + this.user.id + "/settings", this.userSettingsFields).then(function (response) {
+        _this.userSettingsFields = {};
         _this.settingsSubmitted = true;
       })["catch"](function (error) {
         console.log(error.message);
@@ -7723,8 +7916,8 @@ __webpack_require__.r(__webpack_exports__);
         window.location.href = "/";
       })["catch"](function (error) {
         if (error.response.status == 422) {
-          _this2.errors = error.response.data.errors;
-          console.log(_this2.errors);
+          _this2.userSettingsErrors = error.response.data.errors;
+          console.log(_this2.userSettingsErrors);
         }
 
         console.log(error.message);
@@ -45977,10 +46170,10 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("p", { staticClass: "mb-1  uppercase font-bold text-sm" }, [
-              _vm._v("Do assignment :")
+              _vm._v("Type :")
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "mb-4" }, [
+            _c("div", { staticClass: "mb-6" }, [
               _c("input", {
                 directives: [
                   {
@@ -46004,9 +46197,7 @@ var render = function() {
                 }
               }),
               _vm._v(" "),
-              _c("label", { attrs: { for: "false" } }, [
-                _vm._v("before deadline")
-              ]),
+              _c("label", { attrs: { for: "false" } }, [_vm._v("Deadline")]),
               _c("br"),
               _vm._v(" "),
               _c("input", {
@@ -46032,17 +46223,17 @@ var render = function() {
                 }
               }),
               _vm._v(" "),
-              _c("label", { attrs: { for: "true" } }, [_vm._v("on time")]),
+              _c("label", { attrs: { for: "true" } }, [_vm._v("Appointment")]),
               _c("br")
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "mb-6" }, [
-              _c("p", { staticClass: "text-sm text-gray-500" }, [
-                _vm._v("(optional)")
+              _c("p", { staticClass: " uppercase font-bold text-sm" }, [
+                _vm._v("Time estimate:")
               ]),
               _vm._v(" "),
-              _c("p", { staticClass: " uppercase font-bold text-sm" }, [
-                _vm._v("For how long :")
+              _c("p", { staticClass: "text-sm text-gray-500" }, [
+                _vm._v("(optional)")
               ]),
               _vm._v(" "),
               _c(
@@ -46125,10 +46316,6 @@ var render = function() {
               "div",
               { staticClass: "mb-4" },
               [
-                _c("p", { staticClass: "text-sm text-gray-500" }, [
-                  _vm._v("(optional)")
-                ]),
-                _vm._v(" "),
                 _c(
                   "label",
                   {
@@ -46137,6 +46324,10 @@ var render = function() {
                   },
                   [_vm._v("Assign this task to:")]
                 ),
+                _vm._v(" "),
+                _c("p", { staticClass: "text-sm text-gray-500" }, [
+                  _vm._v("(optional)")
+                ]),
                 _vm._v(" "),
                 _vm._l(_vm.assignees, function(assignee) {
                   return _c(
@@ -46261,20 +46452,18 @@ var render = function() {
               2
             ),
             _vm._v(" "),
-            _c("p", { staticClass: "text-sm mt-2 text-gray-500" }, [
-              _vm._v("(optional)")
-            ]),
-            _vm._v(" "),
             _c(
               "label",
               {
-                staticClass: " uppercase font-bold text-sm",
+                staticClass: "mt-6 uppercase font-bold text-sm",
                 attrs: { for: "quantity" }
               },
               [_vm._v("Maximum number of assignees:")]
             ),
             _vm._v(" "),
-            _c("p", { staticClass: "text-sm" }, [_vm._v("0 = not set")]),
+            _c("p", { staticClass: "text-sm text-gray-500" }, [
+              _vm._v("(optional)")
+            ]),
             _vm._v(" "),
             _c("input", {
               directives: [
@@ -46305,7 +46494,9 @@ var render = function() {
                   )
                 }
               }
-            })
+            }),
+            _vm._v(" "),
+            _c("p", { staticClass: "text-sm" }, [_vm._v("0 = not set")])
           ]),
           _vm._v(" "),
           _c(
@@ -46657,7 +46848,7 @@ var render = function() {
                         },
                         [
                           _vm._v(
-                            "\n                        Take\n                    "
+                            "\n                        Take on\n                    "
                           )
                         ]
                       )
@@ -46894,6 +47085,10 @@ var render = function() {
               [
                 _vm._m(5),
                 _vm._v(" "),
+                _c("p", { staticClass: "text-xs text-gray-700" }, [
+                  _vm._v("(visible only to assignees)")
+                ]),
+                _vm._v(" "),
                 _c(
                   "div",
                   { staticClass: "bg-white rounded mb-2 pl-2 pt-2 pb-2" },
@@ -47032,14 +47227,14 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("p", { staticClass: "mb-2" }, [_c("strong", [_vm._v("By Who")])])
+    return _c("p", { staticClass: "mb-2" }, [_c("strong", [_vm._v("By Whom")])])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("p", { staticClass: "mb-2" }, [
-      _c("strong", [_vm._v("For how long:")])
+      _c("strong", [_vm._v("Time estimate:")])
     ])
   },
   function() {
@@ -47054,14 +47249,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("p", { staticClass: "mb-2" }, [_c("strong", [_vm._v("For Who")])])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("p", { staticClass: "mb-2" }, [
-      _c("strong", [_vm._v("What about")])
+      _c("strong", [_vm._v("Assignees")])
     ])
   },
   function() {
@@ -47069,7 +47258,15 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("p", { staticClass: "mb-2" }, [
-      _c("strong", [_vm._v("Author commented (privatly)")])
+      _c("strong", [_vm._v("Description")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", { staticClass: "mb-2" }, [
+      _c("strong", [_vm._v("Author's comment")])
     ])
   }
 ]
@@ -47140,7 +47337,7 @@ var render = function() {
     _c(
       "p",
       { staticClass: "float-left text-xs font-bold text-red-600 mb-4 mr-8" },
-      [_vm._v("\n        On time\n    ")]
+      [_vm._v("\n        Appointment\n    ")]
     ),
     _vm._v(" "),
     _c("p", { staticClass: "text-xs px-1 font-medium bg-red-100 float-left" }, [
@@ -47388,7 +47585,7 @@ var staticRenderFns = [
           },
           [
             _vm._v(
-              "\n                                    When\n                                "
+              "\n                                    Date & Time\n                                "
             )
           ]
         ),
@@ -47416,7 +47613,7 @@ var staticRenderFns = [
           },
           [
             _vm._v(
-              "\n                                    By who\n                                "
+              "\n                                    By whom\n                                "
             )
           ]
         ),
@@ -47454,6 +47651,15 @@ var render = function() {
     "div",
     { staticClass: "mb-6" },
     [
+      _c(
+        "p",
+        {
+          staticClass:
+            "-ml-8 block mb-5 font-bold text-lg text-center text-gray-700"
+        },
+        [_vm._v("\n        Assignments\n    ")]
+      ),
+      _vm._v(" "),
       _c("div", { staticClass: "h-12" }, [
         _c(
           "button",
@@ -47648,12 +47854,8 @@ var render = function() {
                     _vm._v(" "),
                     _c(
                       "p",
-                      { staticClass: "mb-1  uppercase font-bold text-sm" },
-                      [
-                        _vm._v(
-                          "\n                    Do assignment :\n                "
-                        )
-                      ]
+                      { staticClass: "mb-1 uppercase font-bold text-sm" },
+                      [_vm._v("Type :")]
                     ),
                     _vm._v(" "),
                     _c("div", { staticClass: "mb-4" }, [
@@ -47691,7 +47893,7 @@ var render = function() {
                       }),
                       _vm._v(" "),
                       _c("label", { attrs: { for: "false" } }, [
-                        _vm._v("before deadline")
+                        _vm._v("Deadline")
                       ]),
                       _c("br"),
                       _vm._v(" "),
@@ -47729,18 +47931,20 @@ var render = function() {
                       }),
                       _vm._v(" "),
                       _c("label", { attrs: { for: "true" } }, [
-                        _vm._v("on time")
+                        _vm._v("Appointment")
                       ]),
                       _c("br")
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "mb-6" }, [
-                      _c("p", { staticClass: "text-sm text-gray-500" }, [
-                        _vm._v("(optional)")
+                      _c("p", { staticClass: "uppercase font-bold text-sm" }, [
+                        _vm._v(
+                          "\n                        Time estimate:\n                    "
+                        )
                       ]),
                       _vm._v(" "),
-                      _c("p", { staticClass: " uppercase font-bold text-sm" }, [
-                        _vm._v("For how long :")
+                      _c("p", { staticClass: "text-sm text-gray-500" }, [
+                        _vm._v("(optional)")
                       ]),
                       _vm._v(" "),
                       _c(
@@ -47838,10 +48042,6 @@ var render = function() {
                       "div",
                       { staticClass: "mb-4" },
                       [
-                        _c("p", { staticClass: "text-sm text-gray-500" }, [
-                          _vm._v("(optional)")
-                        ]),
-                        _vm._v(" "),
                         _c(
                           "label",
                           {
@@ -47850,6 +48050,10 @@ var render = function() {
                           },
                           [_vm._v("Assign this task to:")]
                         ),
+                        _vm._v(" "),
+                        _c("p", { staticClass: "text-sm text-gray-500" }, [
+                          _vm._v("(optional)")
+                        ]),
                         _vm._v(" "),
                         _vm._l(_vm.members, function(member) {
                           return _c(
@@ -47928,18 +48132,18 @@ var render = function() {
                       2
                     ),
                     _vm._v(" "),
-                    _c("p", { staticClass: "text-sm mt-2 text-gray-500" }, [
-                      _vm._v("(optional)")
-                    ]),
-                    _vm._v(" "),
                     _c(
                       "label",
                       {
-                        staticClass: " uppercase font-bold text-sm",
+                        staticClass: "uppercase font-bold text-sm",
                         attrs: { for: "quantity" }
                       },
                       [_vm._v("Maximum number of assignees:")]
                     ),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "text-sm text-gray-500" }, [
+                      _vm._v("(optional)")
+                    ]),
                     _vm._v(" "),
                     _c("p", { staticClass: "text-sm" }, [
                       _vm._v("0 = not set")
@@ -48007,7 +48211,7 @@ var render = function() {
             },
             [
               _vm._v(
-                "\n                Your assignment was created! Check it out down below.\n    "
+                "\n        Your assignment was created! Check it out down below.\n    "
               )
             ]
           )
@@ -48050,9 +48254,15 @@ var render = function() {
     "div",
     { staticClass: "border-bottom relative border-gray-300 rounded-lg mb-2" },
     [
+      _c(
+        "h3",
+        { staticClass: "text-center font-bold text-lg mb-5 text-gray-700" },
+        [_vm._v("Chats")]
+      ),
+      _vm._v(" "),
       _vm._m(0),
       _vm._v(" "),
-      _vm._l(_vm.chatrooms, function(chat) {
+      _vm._l(_vm.pageOfItems, function(chat) {
         return _c("div", { key: chat.id }, [
           chat.latest_message
             ? _c("a", { attrs: { href: "/chats/" + chat.id } }, [
@@ -48186,7 +48396,19 @@ var render = function() {
               ])
             : _vm._e()
         ])
-      })
+      }),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "mt-28 clear-both w-full text-center text-sm" },
+        [
+          _c("jw-pagination", {
+            attrs: { items: _vm.chatrooms, pageSize: 50 },
+            on: { changePage: _vm.onChangePage }
+          })
+        ],
+        1
+      )
     ],
     2
   )
@@ -48534,7 +48756,11 @@ var render = function() {
                     [
                       _c("input", {
                         ref: "image",
-                        attrs: { type: "file", id: "image" },
+                        attrs: {
+                          type: "file",
+                          id: "image",
+                          accept: ".jpg, .jpeg, .png, .gif"
+                        },
                         on: {
                           change: function($event) {
                             return _vm.handleImageUpload()
@@ -48707,7 +48933,7 @@ var render = function() {
               attrs: {
                 id: "commentArea",
                 name: "text",
-                placeholder: "Write a comment..."
+                placeholder: "Press enter to send..."
               }
             })
           ]
@@ -48852,7 +49078,7 @@ var render = function() {
               attrs: {
                 id: "commentArea",
                 name: "text",
-                placeholder: "Write a comment..."
+                placeholder: "Press enter to send..."
               }
             })
           ]
@@ -48985,9 +49211,27 @@ var staticRenderFns = [
       ),
       _vm._v(" "),
       _c("div", { staticClass: "container text-center pt-4 pb-8" }, [
-        _c("h2", { staticClass: "font-bold text-2xl mb-6" }, [
+        _c("h2", { staticClass: "font-bold text-2xl mb-2" }, [
           _vm._v("Create a group")
         ])
+      ]),
+      _vm._v(" "),
+      _c("p", { staticClass: "-mt-4" }, [
+        _vm._v(
+          "\n        Welcome to Radar, your personal group assistant.\n    "
+        )
+      ]),
+      _vm._v(" "),
+      _c("p", { staticClass: "mt-2" }, [
+        _vm._v(
+          '\n        Click on the "+" button above and create your\n        own group!\n    '
+        )
+      ]),
+      _vm._v(" "),
+      _c("p", { staticClass: "mt-2" }, [
+        _vm._v(
+          "\n        You can always come back to this page by clicking on the logo icon in the upper left corner.\n    "
+        )
       ])
     ])
   }
@@ -49031,7 +49275,7 @@ var render = function() {
             domProps: { value: _vm.csrf }
           }),
           _vm._v(" "),
-          _vm.errors.text
+          _vm.evEditErrors.text
             ? _c(
                 "div",
                 {
@@ -49041,7 +49285,7 @@ var render = function() {
                 [
                   _vm._v(
                     "\n                " +
-                      _vm._s(_vm.errors.text[0]) +
+                      _vm._s(_vm.evEditErrors.text[0]) +
                       "\n            "
                   )
                 ]
@@ -49085,10 +49329,6 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "mb-4" }, [
-              _c("p", { staticClass: "text-sm text-gray-500" }, [
-                _vm._v("(optional)")
-              ]),
-              _vm._v(" "),
               _c(
                 "label",
                 {
@@ -49099,6 +49339,10 @@ var render = function() {
               ),
               _vm._v(" "),
               _c("br"),
+              _vm._v(" "),
+              _c("p", { staticClass: "text-sm text-gray-500" }, [
+                _vm._v("(optional)")
+              ]),
               _vm._v(" "),
               _c("textarea", {
                 directives: [
@@ -49171,21 +49415,21 @@ var render = function() {
               })
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "mb-6" }, [
-              _c("p", { staticClass: "text-sm text-gray-500" }, [
-                _vm._v("(optional)")
-              ]),
-              _vm._v(" "),
+            _c("div", { staticClass: "mb-6 mt-5" }, [
               _c(
                 "label",
                 {
                   staticClass: "mb-2 uppercase font-bold text-sm",
                   attrs: { for: "event_ending" }
                 },
-                [_vm._v("Ending at:")]
+                [_vm._v("End time:")]
               ),
               _vm._v(" "),
               _c("br"),
+              _vm._v(" "),
+              _c("p", { staticClass: "text-sm text-gray-500" }, [
+                _vm._v("(optional)")
+              ]),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -49236,7 +49480,7 @@ var render = function() {
                   staticClass: "mb-2 uppercase font-bold text-sm",
                   attrs: { for: "event_place" }
                 },
-                [_vm._v("Place:")]
+                [_vm._v("Location:")]
               ),
               _vm._v(" "),
               _c("br"),
@@ -49441,7 +49685,7 @@ var render = function() {
             "div",
             { staticClass: "mb-2 rounded border-b border-gray-200 px-6 p-4" },
             [
-              _c("strong", [_vm._v("When:")]),
+              _c("strong", [_vm._v("Start time:")]),
               _vm._v(" "),
               _c("p", { staticClass: "bg-white p-2 rounded" }, [
                 _vm._v(
@@ -49464,7 +49708,7 @@ var render = function() {
               staticClass: "mb-2 mr-2 rounded border-b border-gray-200 px-6 p-4"
             },
             [
-              _c("strong", [_vm._v("Event ends:")]),
+              _c("strong", [_vm._v("End time:")]),
               _vm._v(" "),
               _vm.event.event_ending
                 ? _c("p", { staticClass: "bg-white p-2 rounded" }, [
@@ -49599,7 +49843,9 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("p", { staticClass: "mb-2" }, [_c("strong", [_vm._v("Where:")])])
+    return _c("p", { staticClass: "mb-2" }, [
+      _c("strong", [_vm._v("Location:")])
+    ])
   },
   function() {
     var _vm = this
@@ -49992,6 +50238,15 @@ var render = function() {
     "div",
     { staticClass: "mb-6" },
     [
+      _c(
+        "p",
+        {
+          staticClass:
+            "-ml-8 block mb-5 font-bold text-lg text-center text-gray-700"
+        },
+        [_vm._v("\n        Events\n    ")]
+      ),
+      _vm._v(" "),
       _c("div", { staticClass: "h-12" }, [
         _c(
           "button",
@@ -50095,10 +50350,6 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "mb-4" }, [
-                      _c("p", { staticClass: "text-sm text-gray-500" }, [
-                        _vm._v("(optional)")
-                      ]),
-                      _vm._v(" "),
                       _c(
                         "label",
                         {
@@ -50109,6 +50360,10 @@ var render = function() {
                       ),
                       _vm._v(" "),
                       _c("br"),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "text-sm text-gray-500" }, [
+                        _vm._v("(optional)")
+                      ]),
                       _vm._v(" "),
                       _c("textarea", {
                         directives: [
@@ -50148,7 +50403,7 @@ var render = function() {
                           staticClass: "mb-2 uppercase font-bold text-sm",
                           attrs: { for: "event_time" }
                         },
-                        [_vm._v("When:")]
+                        [_vm._v("Start time:")]
                       ),
                       _vm._v(" "),
                       _c("br"),
@@ -50186,20 +50441,20 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "mb-6" }, [
-                      _c("p", { staticClass: "text-sm text-gray-500" }, [
-                        _vm._v("(optional)")
-                      ]),
-                      _vm._v(" "),
                       _c(
                         "label",
                         {
                           staticClass: "mb-2 uppercase font-bold text-sm",
                           attrs: { for: "event_ending" }
                         },
-                        [_vm._v("Ending at:")]
+                        [_vm._v("End time:")]
                       ),
                       _vm._v(" "),
                       _c("br"),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "text-sm text-gray-500" }, [
+                        _vm._v("(optional)")
+                      ]),
                       _vm._v(" "),
                       _c("input", {
                         directives: [
@@ -50241,7 +50496,7 @@ var render = function() {
                           },
                           [
                             _vm._v(
-                              "\n                    Oops. An event can not end before it starts. \n                 "
+                              "\n                    Oops. An event can not end before it starts.\n                "
                             )
                           ]
                         )
@@ -50254,7 +50509,7 @@ var render = function() {
                           staticClass: "mb-2 uppercase font-bold text-sm",
                           attrs: { for: "event_place" }
                         },
-                        [_vm._v("Place:")]
+                        [_vm._v("Location:")]
                       ),
                       _vm._v(" "),
                       _c("br"),
@@ -50471,6 +50726,15 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c(
+      "p",
+      {
+        staticClass:
+          "-ml-8 mt-4 block mb-5 font-bold text-lg text-center text-gray-700"
+      },
+      [_vm._v('\n        Edit "' + _vm._s(_vm.group.name) + '" group \n    ')]
+    ),
+    _vm._v(" "),
+    _c(
       "div",
       {
         attrs: { enctype: "multipart/form-data" },
@@ -50498,8 +50762,8 @@ var render = function() {
               {
                 name: "model",
                 rawName: "v-model",
-                value: _vm.fields.name,
-                expression: "fields.name"
+                value: _vm.groupEditFields.name,
+                expression: "groupEditFields.name"
               }
             ],
             staticClass:
@@ -50510,13 +50774,13 @@ var render = function() {
               id: "name",
               placeholder: _vm.group.name
             },
-            domProps: { value: _vm.fields.name },
+            domProps: { value: _vm.groupEditFields.name },
             on: {
               input: function($event) {
                 if ($event.target.composing) {
                   return
                 }
-                _vm.$set(_vm.fields, "name", $event.target.value)
+                _vm.$set(_vm.groupEditFields, "name", $event.target.value)
               }
             }
           })
@@ -50597,8 +50861,8 @@ var render = function() {
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.fields.admin_id,
-                      expression: "fields.admin_id"
+                      value: _vm.groupEditFields.admin_id,
+                      expression: "groupEditFields.admin_id"
                     }
                   ],
                   staticClass: "border-b border-gray-400",
@@ -50614,7 +50878,7 @@ var render = function() {
                           return val
                         })
                       _vm.$set(
-                        _vm.fields,
+                        _vm.groupEditFields,
                         "admin_id",
                         $event.target.multiple
                           ? $$selectedVal
@@ -50647,7 +50911,8 @@ var render = function() {
             ])
           : _vm._e(),
         _vm._v(" "),
-        _vm.fields.admin_id && _vm.fields.admin_id != _vm.user.id
+        _vm.groupEditFields.admin_id &&
+        _vm.groupEditFields.admin_id != _vm.user.id
           ? _c("div", [
               _c(
                 "div",
@@ -50666,7 +50931,7 @@ var render = function() {
             ])
           : _vm._e(),
         _vm._v(" "),
-        _vm.fields.admin_id != _vm.user.id && _vm.adminChangeFailed
+        _vm.groupEditFields.admin_id != _vm.user.id && _vm.adminChangeFailed
           ? _c(
               "div",
               {
@@ -50681,7 +50946,9 @@ var render = function() {
             )
           : _vm._e(),
         _vm._v(" "),
-        !_vm.fields.admin_id && !_vm.fields.name && _vm.emptyEditSubmitted
+        !_vm.groupEditFields.admin_id &&
+        !_vm.groupEditFields.name &&
+        _vm.emptyEditSubmitted
           ? _c(
               "div",
               {
@@ -50852,9 +51119,11 @@ var render = function() {
     _c(
       "div",
       [
-        _c("h3", { staticClass: "text-center font-bold text-lg mb-3" }, [
-          _vm._v("Team Workload")
-        ]),
+        _c(
+          "h3",
+          { staticClass: "text-center font-bold text-lg mb-5 text-gray-700" },
+          [_vm._v("\n            Team Workload\n        ")]
+        ),
         _vm._v(" "),
         _vm._m(0),
         _vm._v(" "),
@@ -50875,12 +51144,44 @@ var render = function() {
         _c(
           "p",
           {
-            staticClass: "float-left text-xs font-bold text-red-600 mb-4 mr-8"
+            staticClass: "float-left text-xs font-bold text-red-600 mb-4 mr-3"
           },
           [_vm._v("\n            all assignments\n        ")]
         ),
         _vm._v(" "),
-        _c("div", { staticClass: "clear-both mb-6" }),
+        _c(
+          "button",
+          {
+            staticClass:
+              "float-left bg-white mb-2 -mt-1 rounded-full border border-gray-300 py-1 px-2 font-bold text-black text-xs hover:text-gray-500 hover:bg-gray-100",
+            on: {
+              click: function($event) {
+                _vm.showInfo = !_vm.showInfo
+              }
+            }
+          },
+          [_vm._v("\n            ?\n        ")]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "clear-both mb-2" }),
+        _vm._v(" "),
+        _vm.showInfo
+          ? _c("div", { staticClass: "text-sm mb-6 text-gray-500 mx-5" }, [
+              _c("p", [
+                _vm._v(
+                  "\n                This statistics is here to help you keeping your teams work\n                balanced.\n            "
+                )
+              ]),
+              _vm._v(" "),
+              _c("p", [
+                _vm._v(
+                  "\n                Members are sorted by number of their assignments in\n                ascending order.\n            "
+                )
+              ])
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _c("div", { staticClass: "clear-both" }),
         _vm._v(" "),
         _vm._l(_vm.pageOfItems, function(statUser) {
           return _c(
@@ -51039,6 +51340,19 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _c(
+      "p",
+      {
+        staticClass:
+          "-ml-8 block mb-5 font-bold text-lg text-center text-gray-700"
+      },
+      [_vm._v("\n        Whiteboard\n    ")]
+    ),
+    _vm._v(" "),
+    _c("p", { staticClass: "text-sm text-gray-500 mb-1" }, [
+      _vm._v("editable by admin")
+    ]),
+    _vm._v(" "),
     !_vm.editingBoard
       ? _c(
           "div",
@@ -51419,7 +51733,11 @@ var render = function() {
                   [
                     _c("input", {
                       ref: "image",
-                      attrs: { type: "file", id: "image" },
+                      attrs: {
+                        type: "file",
+                        id: "image",
+                        accept: ".jpg, .jpeg, .png, .gif"
+                      },
                       on: {
                         change: function($event) {
                           return _vm.handleImageUpload()
@@ -51585,19 +51903,19 @@ var render = function() {
               },
               [
                 _c("a", { attrs: { href: "/profile/" + member.username } }, [
+                  member.id == _vm.group.admin_id
+                    ? _c("p", { staticClass: "text-xs text-gray-600 ml-4" }, [
+                        _vm._v(
+                          "\n                    group admin\n                "
+                        )
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
                   _c("div", { staticClass: "flex items-center" }, [
                     _c("img", {
                       staticClass: "w-10 h-10 object-cover rounded-full",
                       attrs: { src: member.avatar, alt: member.name }
                     }),
-                    _vm._v(" "),
-                    member.id == _vm.group.admin_id
-                      ? _c("p", { staticClass: "text-xs text-gray-600 ml-2" }, [
-                          _vm._v(
-                            "\n                        group admin\n                    "
-                          )
-                        ])
-                      : _vm._e(),
                     _vm._v(" "),
                     _c(
                       "p",
@@ -51886,6 +52204,12 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "mb-6" }, [
+    _c(
+      "h3",
+      { staticClass: "text-center font-bold text-lg mb-8 text-gray-700" },
+      [_vm._v("Notes")]
+    ),
+    _vm._v(" "),
     _c(
       "form",
       {
@@ -52386,7 +52710,7 @@ var render = function() {
     _c(
       "p",
       { staticClass: "float-left text-xs font-bold text-red-600 mb-4 mr-8" },
-      [_vm._v(" On time")]
+      [_vm._v("Appointment")]
     ),
     _vm._v(" "),
     _c(
@@ -52402,7 +52726,7 @@ var render = function() {
     _c(
       "p",
       { staticClass: "text-xs px-2 font-medium bg-green-100 float-left" },
-      [_vm._v(" done")]
+      [_vm._v(" Done")]
     ),
     _vm._v(" "),
     _c("div", { staticClass: "flex flex-col clear-both" }, [
@@ -52557,7 +52881,7 @@ var render = function() {
                               ]
                             ),
                             _vm._v(" "),
-                            _c("td", { staticClass: "pr-6 py-4" }, [
+                            _c("td", { staticClass: "w-24 pr-6 py-4" }, [
                               _c(
                                 "a",
                                 {
@@ -52678,7 +53002,7 @@ var staticRenderFns = [
           },
           [
             _vm._v(
-              "\r\n                            When\r\n                        "
+              "\r\n                            Date & Time\r\n                        "
             )
           ]
         ),
@@ -52706,7 +53030,7 @@ var staticRenderFns = [
           },
           [
             _vm._v(
-              "\r\n                            By who\r\n                        "
+              "\r\n                            By whom\r\n                        "
             )
           ]
         ),
@@ -52726,7 +53050,7 @@ var staticRenderFns = [
         ),
         _vm._v(" "),
         _c("th", {
-          staticClass: "px-6 py-3 bg-gray-50",
+          staticClass: "w-24 px-6 py-3 bg-gray-50",
           attrs: { scope: "col" }
         })
       ])
@@ -53010,7 +53334,12 @@ var render = function() {
               }
             ],
             staticClass: "border-b border-gray-400 p-2 w-full",
-            attrs: { type: "password", name: "password", id: "password" },
+            attrs: {
+              type: "password",
+              name: "password",
+              id: "password",
+              autocomplete: "off"
+            },
             domProps: { value: _vm.newPassword },
             on: {
               input: function($event) {
@@ -53085,7 +53414,11 @@ var render = function() {
           _vm._v(" "),
           _c(
             "a",
-            { staticClass: "hover:underline", attrs: { href: _vm.user_path } },
+            {
+              staticClass:
+                "rounded shadow border border-gray-300 py-2 px-4 mr-2 text-black hover:text-gray-500 hover:bg-gray-100",
+              attrs: { href: _vm.user_path }
+            },
             [_vm._v("Cancel")]
           )
         ])
@@ -53278,7 +53611,7 @@ var render = function() {
                             ]
                           ),
                           _vm._v(" "),
-                          _c("td", [
+                          _c("td", { staticClass: "w-24 pr-6 py-4" }, [
                             _c(
                               "a",
                               {
@@ -53442,7 +53775,7 @@ var staticRenderFns = [
         ),
         _vm._v(" "),
         _c("th", {
-          staticClass: "px-6 py-3 bg-gray-50",
+          staticClass: "w-24 px-6 py-3 bg-gray-50",
           attrs: { scope: "col" }
         })
       ])
@@ -53483,7 +53816,7 @@ var render = function() {
               _vm._v(
                 '\n            Settings for e-mail notifications (for this group "' +
                   _vm._s(_vm.user.group.name) +
-                  '"" )\n        '
+                  '" )\n        '
               )
             ]
           ),

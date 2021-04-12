@@ -24,8 +24,8 @@
                 </button>
             </div>
         </div>
-        <p class="ml-2 text-xs font-bold text-blue-500 float-left">Deadline </p> <p class="text-sm font-bold float-left ml-2 mr-2">/</p> <p class="float-left text-xs font-bold text-red-600 mb-4 mr-8"> On time</p>
-        <p class="ml-2 text-xs px-1 font-medium bg-red-100 float-left">In progress</p> <p class="text-sm font-bold float-left ml-2 mr-2">/</p> <p class="text-xs px-2 font-medium bg-green-100 float-left"> done</p>
+        <p class="ml-2 text-xs font-bold text-blue-500 float-left">Deadline </p> <p class="text-sm font-bold float-left ml-2 mr-2">/</p> <p class="float-left text-xs font-bold text-red-600 mb-4 mr-8">Appointment</p>
+        <p class="ml-2 text-xs px-1 font-medium bg-red-100 float-left">In progress</p> <p class="text-sm font-bold float-left ml-2 mr-2">/</p> <p class="text-xs px-2 font-medium bg-green-100 float-left"> Done</p>
         <div class="flex flex-col clear-both">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -34,18 +34,18 @@
                 <thead>
                     <tr>
                         <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase">
-                            When
+                            Date & Time
                         </th>
                         <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase">
                             What
                         </th>
                         <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase">
-                            By who
+                            By whom
                         </th>
                         <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase">
                             Group
                         </th>
-                        <th scope="col" class="px-6 py-3 bg-gray-50">
+                        <th scope="col" class="w-24 px-6 py-3 bg-gray-50">
                         </th>
                     </tr>
                 </thead>
@@ -83,7 +83,7 @@
                                     {{ assignment.group_name }}
                             </div>
                         </td>
-                        <td class="pr-6 py-4">  
+                        <td class="w-24 pr-6 py-4">  
                             <a 
                                 :href="'/assignments/' + assignment.id"
                                 class="bg-white shadow border border-gray-300 rounded-lg py-2 px-2 text-black text-xs hover:text-gray-500 hover:bg-gray-100">

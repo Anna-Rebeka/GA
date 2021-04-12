@@ -7,7 +7,7 @@
                 <textarea
                     id="commentArea"
                     name="text"
-                    placeholder="Write a comment..."
+                    placeholder="Press enter to send..."
                     class="w-full resize-none focus:outline-none"
                 >
                 </textarea>

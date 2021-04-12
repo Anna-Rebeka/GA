@@ -83,7 +83,7 @@ Route::middleware(['auth', 'can.see'])->group(function() {
     Route::get('/events/{group:id}/loadOlderEvents/{howManyDisplayed}', [EventsController::class, 'loadOlderEvents']);
 
     Route::get('/events/{event:id}/edit', [EventsController::class, 'edit']);
-    Route::patch('/events/{event:id}/edit', [EventsController::class, 'update']);
+    Route::patch('/events/{event:id}/edit', [EventsController::class, 'update'])->withoutMiddleware(['can.see']);
     Route::delete('/events/{event:id}', [EventsController::class, 'destroy']);
     Route::post('/events/{event:id}/join', [EventsController::class, 'join']);
     Route::post('/events/{event:id}/leave', [EventsController::class, 'leave']);
@@ -101,7 +101,7 @@ Route::middleware(['auth', 'can.see'])->group(function() {
 
     Route::delete('/assignments/{assignment:id}', [AssignmentsController::class, 'destroy']);
     Route::get('/assignments/{assignment:id}/edit', [AssignmentsController::class, 'edit']);
-    Route::patch('/assignments/{assignment:id}/edit', [AssignmentsController::class, 'update']);
+    Route::patch('/assignments/{assignment:id}/edit', [AssignmentsController::class, 'update'])->withoutMiddleware(['can.see']);
     Route::patch('/assignments/{assignment:id}/take', [AssignmentsController::class, 'take']);
     Route::patch('/assignments/{assignment:id}/done', [AssignmentsController::class, 'done']);
     Route::patch('/assignments/{assignment:id}/edit-comment', [AssignmentsController::class, 'updateComment']);

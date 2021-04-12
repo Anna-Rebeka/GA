@@ -1,5 +1,11 @@
 <template>
     <div>
+        <p
+            class="-ml-8 block mb-5 font-bold text-lg text-center text-gray-700"
+        >
+            Whiteboard
+        </p>
+        <p class="text-sm text-gray-500 mb-1">editable by admin</p>
         <div
             v-if="!editingBoard"
             class="relative bg-purple-100 border-gray-300 rounded-lg p-5 mb-5"
@@ -134,7 +140,9 @@
                             </div>
                         </div>
 
-                        <p class="text-xs md:float-right md:relative md:mb-2 absolute top-0 left-1">
+                        <p
+                            class="text-xs md:float-right md:relative md:mb-2 absolute top-0 left-1"
+                        >
                             {{
                                 new Date(post.created_at)
                                     | dateFormat("HH:mm , DD.MM.YYYY")
@@ -187,6 +195,7 @@
                             type="file"
                             id="image"
                             ref="image"
+                            accept=".jpg, .jpeg, .png, .gif"
                             v-on:change="handleImageUpload()"
                         />
                     </div>
