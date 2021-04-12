@@ -47106,6 +47106,7 @@ var render = function() {
                               ? _c("p", [_vm._v(_vm._s(_vm.authorComment))])
                               : _vm._e(),
                             _vm._v(" "),
+                            _vm.user.id == _vm.assignment.author_id ||
                             _vm.assignment.group.admin_id == _vm.user.id
                               ? _c(
                                   "div",

@@ -176,7 +176,7 @@
                     >
                         <p v-if="authorComment">{{ authorComment }}</p>
                         <div
-                            v-if="assignment.group.admin_id == user.id"
+                            v-if="user.id == assignment.author_id || assignment.group.admin_id == user.id"
                             class="absolute top-1 right-1"
                         >
                             <button
