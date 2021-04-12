@@ -52881,7 +52881,7 @@ var render = function() {
                               ]
                             ),
                             _vm._v(" "),
-                            _c("td", { staticClass: "w-24 pr-6 py-4" }, [
+                            _c("td", { staticClass: "pr-6 py-4" }, [
                               _c(
                                 "a",
                                 {
@@ -53050,7 +53050,7 @@ var staticRenderFns = [
         ),
         _vm._v(" "),
         _c("th", {
-          staticClass: "w-24 px-6 py-3 bg-gray-50",
+          staticClass: "px-6 py-3 bg-gray-50",
           attrs: { scope: "col" }
         })
       ])
@@ -53599,7 +53599,7 @@ var render = function() {
                             [
                               _c(
                                 "div",
-                                { staticClass: "w-24 text-sm text-gray-900" },
+                                { staticClass: "text-sm text-gray-900" },
                                 [
                                   _vm._v(
                                     "\r\n                                    " +
@@ -53775,7 +53775,7 @@ var staticRenderFns = [
         ),
         _vm._v(" "),
         _c("th", {
-          staticClass: "w-24 px-6 py-3 bg-gray-50",
+          staticClass: "px-6 py-3 bg-gray-50",
           attrs: { scope: "col" }
         })
       ])

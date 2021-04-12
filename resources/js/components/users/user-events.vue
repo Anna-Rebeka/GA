@@ -46,7 +46,7 @@
                         <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase">
                             Group
                         </th>
-                        <th scope="col" class="w-24 px-6 py-3 bg-gray-50">
+                        <th scope="col" class="px-6 py-3 bg-gray-50">
                         </th>
                     </tr>
                 </thead>
@@ -71,7 +71,7 @@
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="w-24 text-sm text-gray-900">
+                            <div class="text-sm text-gray-900">
                                     {{ event.group_name }}
                             </div>
                         </td>
