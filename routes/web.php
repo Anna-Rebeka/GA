@@ -104,7 +104,7 @@ Route::middleware(['auth', 'can.see'])->group(function() {
     Route::patch('/assignments/{assignment:id}/edit', [AssignmentsController::class, 'update'])->withoutMiddleware(['can.see']);
     Route::patch('/assignments/{assignment:id}/take', [AssignmentsController::class, 'take']);
     Route::patch('/assignments/{assignment:id}/done', [AssignmentsController::class, 'done']);
-    Route::patch('/assignments/{assignment:id}/edit-comment', [AssignmentsController::class, 'updateComment']);
+    Route::patch('/assignments/{assignment:id}/edit-comment', [AssignmentsController::class, 'updateComment'])->withoutMiddleware(['can.see']);
 
 
     Route::get('/assignments/{assignment:id}/comments', [AssignmentsCommentsController::class, 'index']);
