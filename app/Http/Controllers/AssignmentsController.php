@@ -308,7 +308,7 @@ class AssignmentsController extends Controller
 
     public function updateComment(Request $request, Assignment $assignment)
     {
-        if($assignment->group->admin_id != auth()->user()->id || $assignment->author_id != auth()->user()->id){
+        if($assignment->group->admin_id != auth()->user()->id && $assignment->author_id != auth()->user()->id){
             Abort(401);
         }
         $attributes = request()->validate([
