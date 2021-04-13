@@ -3,7 +3,7 @@
         <div class="relative -mx-8 mb-4">
             <img
                 :src="user.banner"
-                :alt="user.username"
+                alt="banner"
                 class="h-40 w-full px-1 mb-2 object-cover overflow-hidden"
             />
             <img

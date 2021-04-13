@@ -47197,7 +47197,7 @@ var render = function() {
                                           "w-9 border border-gray-300 rounded-full",
                                         attrs: {
                                           src: "/img/cancel.png",
-                                          alt: "edit"
+                                          alt: "cancel"
                                         }
                                       })
                                     ]
@@ -47565,7 +47565,7 @@ var staticRenderFns = [
                 src: "/img/search.png",
                 width: "20",
                 height: "20",
-                alt: "submit"
+                alt: "search"
               }
             })
           ]
@@ -49797,7 +49797,7 @@ var render = function() {
                             _c("img", {
                               staticClass:
                                 "w-10 h-10 object-cover rounded-full mr-2",
-                              attrs: { src: goingUser.avatar, alt: "" }
+                              attrs: { src: goingUser.avatar, alt: "avatar" }
                             }),
                             _vm._v(
                               "\n                            " +
@@ -51201,7 +51201,7 @@ var render = function() {
                       "rounded-full shadow-sm mx-auto mb-1 w-20 h-20 object-cover border-8 border-green-400 border-opacity-30",
                     attrs: {
                       src: _vm.avatarPath(statUser.avatar),
-                      alt: "userAvatar"
+                      alt: "avatar"
                     }
                   })
                 : _c("img", {
@@ -51213,7 +51213,7 @@ var render = function() {
                       " , 0, 0.3)",
                     attrs: {
                       src: _vm.avatarPath(statUser.avatar),
-                      alt: "userAvatar"
+                      alt: "avatar"
                     }
                   }),
               _vm._v(" "),
@@ -51688,7 +51688,7 @@ var render = function() {
           [
             _c("img", {
               staticClass: "h-16",
-              attrs: { src: "/img/image.png", alt: "", srcset: "" }
+              attrs: { src: "/img/image.png", alt: "icon", srcset: "" }
             })
           ]
         ),
@@ -51706,7 +51706,7 @@ var render = function() {
           [
             _c("img", {
               staticClass: "h-16",
-              attrs: { src: "/img/file.png", alt: "", srcset: "" }
+              attrs: { src: "/img/file.png", alt: "icon", srcset: "" }
             })
           ]
         ),
@@ -51917,7 +51917,7 @@ var render = function() {
                   _c("div", { staticClass: "flex items-center" }, [
                     _c("img", {
                       staticClass: "w-10 h-10 object-cover rounded-full",
-                      attrs: { src: member.avatar, alt: member.name }
+                      attrs: { src: member.avatar, alt: "avatar" }
                     }),
                     _vm._v(" "),
                     _c(
@@ -52421,7 +52421,7 @@ var render = function() {
                   [
                     _c("img", {
                       staticClass: "lg:w-40 lg:h-40 w-20 h-20 object-cover",
-                      attrs: { src: user.avatar, alt: user.username }
+                      attrs: { src: user.avatar, alt: "avatar" }
                     }),
                     _vm._v(" "),
                     _c("div", { staticClass: "px-6 py-2 text-center" }, [
@@ -54478,7 +54478,7 @@ var render = function() {
     _c("div", { staticClass: "relative -mx-8 mb-4" }, [
       _c("img", {
         staticClass: "h-40 w-full px-1 mb-2 object-cover overflow-hidden",
-        attrs: { src: _vm.user.banner, alt: _vm.user.username }
+        attrs: { src: _vm.user.banner, alt: "banner" }
       }),
       _vm._v(" "),
       _c("img", {

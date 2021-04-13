@@ -18,7 +18,7 @@
                         <img
                             class="w-10 h-10 object-cover rounded-full"
                             :src="member.avatar"
-                            :alt="member.name"
+                            alt="avatar"
                         />
                         <p
                             class="hover:underline ml-2 text-left font-semibold font-sans tracking-wide"

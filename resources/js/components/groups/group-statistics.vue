@@ -65,13 +65,13 @@
                     v-if="!statUser.user_to_all"
                     class="rounded-full shadow-sm mx-auto mb-1 w-20 h-20 object-cover border-8 border-green-400 border-opacity-30"
                     :src="avatarPath(statUser.avatar)"
-                    alt="userAvatar"
+                    alt="avatar"
                 />
                 <img
                     v-else
                     class="rounded-full shadow-sm mx-auto mb-1 w-20 h-20 object-cover border-8"
                     :src="avatarPath(statUser.avatar)"
-                    alt="userAvatar"
+                    alt="avatar"
                     :style="
                         'border-color: rgba(0, ' +
                         (220 - Math.ceil(130 * statUser.user_to_all)) +

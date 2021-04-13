@@ -31,7 +31,7 @@
                         src="/img/search.png"
                         width="20"
                         height="20"
-                        alt="submit"
+                        alt="search"
                     />
                 </button>
             </div>

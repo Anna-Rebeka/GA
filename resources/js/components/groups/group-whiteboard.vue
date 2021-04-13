@@ -177,10 +177,10 @@
                 </div>
             </div>
             <button @click="uploadImage = !uploadImage" class="relative">
-                <img class="h-16" src="/img/image.png" alt="" srcset="" />
+                <img class="h-16" src="/img/image.png" alt="icon" srcset="" />
             </button>
             <button @click="uploadFile = !uploadFile" class="relative mb-5">
-                <img class="h-16" src="/img/file.png" alt="" srcset="" />
+                <img class="h-16" src="/img/file.png" alt="icon" srcset="" />
             </button>
             <div v-if="uploadImage" class="mb-6">
                 <div class="relative">

@@ -221,7 +221,7 @@
                                 <img
                                     class="w-9 border border-gray-300 rounded-full"
                                     src="/img/cancel.png"
-                                    alt="edit"
+                                    alt="cancel"
                                 />
                             </button>
                         </div>
