@@ -25,8 +25,16 @@ class EventsController extends Controller
             Abort('401');
         }
         $group = auth()->user()->group;
-        $events = $group->events()->with('users')->with('host')->orderBy('event_time')->where('events.event_time', '>=', now())->get();
-
+        $events = $group->events()
+            ->with('users')
+            ->with('host')
+            ->orderBy('event_time')
+            ->where([
+                ['events.event_time', '>=', now()],
+                ['events.event_ending', null],
+            ])
+            ->orWhere('events.event_ending', '>=', now())
+            ->get();
         return view('groups.events', [
             'user' => auth()->user(),
             'group' => $group,

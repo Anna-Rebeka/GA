@@ -87,7 +87,7 @@
             </table>
         </div>
         <div class="mt-4 clear-both w-full text-center text-sm">
-            <jw-pagination :items="filteredEvents" @changePage="onChangePage" :pageSize="4"></jw-pagination>
+            <jw-pagination :items="filteredEvents" @changePage="onChangePage" :pageSize="5"></jw-pagination>
         </div>
         </div>
         </div>

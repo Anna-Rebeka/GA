@@ -76,7 +76,7 @@
             </table>
         </div>
         <div class="mt-10 clear-both w-full text-center text-sm">
-            <jw-pagination :items="savedEvents" @changePage="onChangePage" :pageSize="5"></jw-pagination>
+            <jw-pagination :items="savedEvents" @changePage="onChangePage" :pageSize="15"></jw-pagination>
         </div>
         <button 
             v-on:click="loadOlderEvents()"

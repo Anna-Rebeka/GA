@@ -266,7 +266,11 @@ class UsersController extends Controller
             ->join('groups', 'group_user.group_id', '=', 'groups.id')
             ->join('events', 'groups.id', '=', 'events.group_id')
             ->select('events.*', 'groups.name as group_name')
-            ->where('events.event_time', '>=', now())
+            ->where([
+                ['events.event_time', '>=', now()],
+                ['events.event_ending', null],
+            ])
+            ->orWhere('events.event_ending', '>=', now())
             ->orderBy('events.event_time')
             ->get();
         return $user_with_events;

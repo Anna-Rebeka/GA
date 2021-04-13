@@ -143,7 +143,7 @@
                         <jw-pagination
                             :items="savedAssignments"
                             @changePage="onChangePage"
-                            :pageSize="5"
+                            :pageSize="15"
                         ></jw-pagination>
                     </div>
                     <button

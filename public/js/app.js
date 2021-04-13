@@ -47503,7 +47503,7 @@ var render = function() {
               { staticClass: "mt-10 clear-both w-full text-center text-sm" },
               [
                 _c("jw-pagination", {
-                  attrs: { items: _vm.savedAssignments, pageSize: 5 },
+                  attrs: { items: _vm.savedAssignments, pageSize: 15 },
                   on: { changePage: _vm.onChangePage }
                 })
               ],
@@ -50076,7 +50076,7 @@ var render = function() {
               { staticClass: "mt-10 clear-both w-full text-center text-sm" },
               [
                 _c("jw-pagination", {
-                  attrs: { items: _vm.savedEvents, pageSize: 5 },
+                  attrs: { items: _vm.savedEvents, pageSize: 15 },
                   on: { changePage: _vm.onChangePage }
                 })
               ],
@@ -52916,7 +52916,7 @@ var render = function() {
               { staticClass: "mt-4 clear-both w-full text-center text-sm" },
               [
                 _c("jw-pagination", {
-                  attrs: { items: _vm.filteredAssignments, pageSize: 4 },
+                  attrs: { items: _vm.filteredAssignments, pageSize: 5 },
                   on: { changePage: _vm.onChangePage }
                 })
               ],
@@ -53643,7 +53643,7 @@ var render = function() {
               { staticClass: "mt-4 clear-both w-full text-center text-sm" },
               [
                 _c("jw-pagination", {
-                  attrs: { items: _vm.filteredEvents, pageSize: 4 },
+                  attrs: { items: _vm.filteredEvents, pageSize: 5 },
                   on: { changePage: _vm.onChangePage }
                 })
               ],
