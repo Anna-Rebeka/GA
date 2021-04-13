@@ -1,3 +1,3 @@
 <x-master>
-    <group-members :users="{{ $users }}" :group="{{ $group }}"></group-members>
+    <group-members :auth="{{ $auth }}" :users="{{ $users }}" :group="{{ $group }}"></group-members>
 </x-master>

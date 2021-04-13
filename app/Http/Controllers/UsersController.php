@@ -23,6 +23,7 @@ class UsersController extends Controller
     {   
         $users = $group->users()->orderBy('name')->where('users.id', '!=', auth()->user()->id)->get();
         return view('profile.index', [
+            'auth' => auth()->user(),
             'users' => $users,
             'group' => $group
         ]);

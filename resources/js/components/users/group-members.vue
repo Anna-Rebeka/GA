@@ -16,16 +16,18 @@
                 class="inline float-left mr-4"
             >
                 <div class="relative">
-                    <button
-                        @click="checkWithUser(user)"
-                        class="absolute top-0 right-0 rounded-full border"
-                    >
-                        <img
-                            class="object-cover rounded-full h-8 w-8"
-                            src="/img/cancel.png"
-                            alt="exclude"
-                        />
-                    </button>
+                    <div v-if="group.admin_id == auth.id">
+                        <button
+                            @click="checkWithUser(user)"
+                            class="absolute top-0 right-0 rounded-full border"
+                        >
+                            <img
+                                class="object-cover rounded-full h-8 w-8"
+                                src="/img/cancel.png"
+                                alt="exclude"
+                            />
+                        </button>
+                    </div>
                     <a :href="'/profile/' + user.username">
                         <div
                             class="max-w-xs lg:w-40 lg:h-60 w-20 h-30 rounded overflow-hidden shadow-lg mb-4"
@@ -63,7 +65,7 @@
 
 <script>
 export default {
-    props: ["users", "group"],
+    props: ["auth", "users", "group"],
     data() {
         return {
             pageOfItems: [],

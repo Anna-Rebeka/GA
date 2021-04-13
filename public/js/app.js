@@ -6700,8 +6700,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["users", "group"],
+  props: ["auth", "users", "group"],
   data: function data() {
     return {
       pageOfItems: [],
@@ -52393,23 +52395,28 @@ var render = function() {
           { key: user.id, staticClass: "inline float-left mr-4" },
           [
             _c("div", { staticClass: "relative" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "absolute top-0 right-0 rounded-full border",
-                  on: {
-                    click: function($event) {
-                      return _vm.checkWithUser(user)
-                    }
-                  }
-                },
-                [
-                  _c("img", {
-                    staticClass: "object-cover rounded-full h-8 w-8",
-                    attrs: { src: "/img/cancel.png", alt: "exclude" }
-                  })
-                ]
-              ),
+              _vm.group.admin_id == _vm.auth.id
+                ? _c("div", [
+                    _c(
+                      "button",
+                      {
+                        staticClass:
+                          "absolute top-0 right-0 rounded-full border",
+                        on: {
+                          click: function($event) {
+                            return _vm.checkWithUser(user)
+                          }
+                        }
+                      },
+                      [
+                        _c("img", {
+                          staticClass: "object-cover rounded-full h-8 w-8",
+                          attrs: { src: "/img/cancel.png", alt: "exclude" }
+                        })
+                      ]
+                    )
+                  ])
+                : _vm._e(),
               _vm._v(" "),
               _c("a", { attrs: { href: "/profile/" + user.username } }, [
                 _c(
