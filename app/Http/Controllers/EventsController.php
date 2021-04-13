@@ -32,8 +32,12 @@ class EventsController extends Controller
             ->where([
                 ['events.event_time', '>=', now()],
                 ['events.event_ending', null],
+                ['events.group_id', $group->id]
             ])
-            ->orWhere('events.event_ending', '>=', now())
+            ->orWhere(function($query) use ($group) {
+                $query->where('events.event_ending',  '>=', now())
+                      ->where('events.group_id', $group->id);
+            })
             ->get();
         return view('groups.events', [
             'user' => auth()->user(),
