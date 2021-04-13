@@ -201,7 +201,7 @@
                         >
                         </textarea>
                         <div
-                            v-if="assignment.group.admin_id == user.id"
+                            v-if="user.id == assignment.author_id || assignment.group.admin_id == user.id"
                             class="absolute z-40 top-1 right-1"
                         >
                             <button
