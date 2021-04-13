@@ -46,6 +46,7 @@ class GroupStatisticsController extends Controller
             ->select(DB::raw('assignment_user.user_id as id, users.name, users.username, users.avatar, count(*) / ' . $all_assignments . ' as user_to_all'))
             ->join('assignment_user', 'assignment_user.assignment_id', '=', 'assignments.id')
             ->join('users', 'assignment_user.user_id', '=', 'users.id')
+            ->where('assignments.group_id', '=', $group->id)
             ->groupBy('assignment_user.user_id', 'users.name', 'users.username', 'users.avatar')
             ->orderBy('user_to_all')
             ->get();
