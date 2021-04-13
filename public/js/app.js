@@ -47153,6 +47153,7 @@ var render = function() {
                             }
                           }),
                           _vm._v(" "),
+                          _vm.user.id == _vm.assignment.author_id ||
                           _vm.assignment.group.admin_id == _vm.user.id
                             ? _c(
                                 "div",
