@@ -448,7 +448,6 @@ export default {
                     this.posts = this.posts.filter(function (p) {
                         return p != post;
                     });
-                    console.log(response);
                 })
                 .catch((error) => {
                     if (error.response.status == 422) {

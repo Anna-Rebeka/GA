@@ -313,7 +313,6 @@ export default {
                 .catch((error) => {
                     if (error.response.status == 422) {
                         this.userSettingsErrors = error.response.data.errors;
-                        console.log(this.userSettingsErrors);
                     }
                     console.log(error.message);
                 });

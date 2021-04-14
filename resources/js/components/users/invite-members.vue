@@ -77,12 +77,10 @@ export default {
         addField() {
             this.aiId += 1;
             this.fields.push({ id: this.aiId, email: "" });
-            console.log(this.fields);
         },
 
         removeField(fieldId) {
             this.fields = this.fields.filter((field) => field.id != fieldId);
-            console.log(this.fields);
         },
 
         submit() {

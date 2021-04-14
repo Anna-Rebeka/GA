@@ -3336,6 +3336,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "chatrooms"],
   data: function data() {
@@ -3352,12 +3356,16 @@ __webpack_require__.r(__webpack_exports__);
     if (this.user.group) {
       this.getGroupMembers();
       this.autocomplete(document.getElementById("memberInput"), this.members, this.lettersCounter);
-      this.shownChatroom.forEach(function (chatroom) {
-        window.Echo["private"]("chatrooms." + chatroom.id).listen("MessageSent", function (e) {
-          _this.getLatestMessage(chatroom);
-        });
-      });
     }
+
+    this.shownChatroom = this.shownChatroom.sort(function (a, b) {
+      return new Date(b.latest_message.created_at) - new Date(a.latest_message.created_at);
+    });
+    this.shownChatroom.forEach(function (chatroom) {
+      window.Echo["private"]("chatrooms." + chatroom.id).listen("MessageSent", function (e) {
+        _this.getLatestMessage(chatroom);
+      });
+    });
   },
   methods: {
     onChangePage: function onChangePage(pageOfItems) {
@@ -3369,6 +3377,9 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/chats/" + chatroom.id + "/latestMessage").then(function (response) {
         chatroom.latest_message = response.data;
         chatroom.latest_message.sender_id = chatroom.latest_message.sender.id;
+        _this2.shownChatroom = _this2.shownChatroom.sort(function (a, b) {
+          return new Date(b.latest_message.created_at) - new Date(a.latest_message.created_at);
+        });
       })["catch"](function (error) {
         if (error.response.status == 422) {
           _this2.errors = error.response.data.errors;
@@ -6142,7 +6153,6 @@ __webpack_require__.r(__webpack_exports__);
         _this7.posts = _this7.posts.filter(function (p) {
           return p != post;
         });
-        console.log(response);
       })["catch"](function (error) {
         if (error.response.status == 422) {
           _this7.errors = error.response.data.errors;
@@ -6876,13 +6886,11 @@ __webpack_require__.r(__webpack_exports__);
         id: this.aiId,
         email: ""
       });
-      console.log(this.fields);
     },
     removeField: function removeField(fieldId) {
       this.fields = this.fields.filter(function (field) {
         return field.id != fieldId;
       });
-      console.log(this.fields);
     },
     submit: function submit() {
       var _this = this;
@@ -7920,7 +7928,6 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         if (error.response.status == 422) {
           _this2.userSettingsErrors = error.response.data.errors;
-          console.log(_this2.userSettingsErrors);
         }
 
         console.log(error.message);
@@ -48408,7 +48415,7 @@ var render = function() {
         { staticClass: "mt-28 clear-both w-full text-center text-sm" },
         [
           _c("jw-pagination", {
-            attrs: { items: _vm.chatrooms, pageSize: 50 },
+            attrs: { items: _vm.shownChatroom, pageSize: 50 },
             on: { changePage: _vm.onChangePage }
           })
         ],

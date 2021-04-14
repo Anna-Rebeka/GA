@@ -89,7 +89,11 @@
             </a>
         </div>
         <div class="mt-28 clear-both w-full text-center text-sm">
-            <jw-pagination :items="chatrooms" @changePage="onChangePage" :pageSize="50"></jw-pagination>
+            <jw-pagination
+                :items="shownChatroom"
+                @changePage="onChangePage"
+                :pageSize="50"
+            ></jw-pagination>
         </div>
     </div>
 </template>
@@ -110,23 +114,33 @@ export default {
     mounted() {
         if (this.user.group) {
             this.getGroupMembers();
-            this.autocomplete(document.getElementById("memberInput"), this.members, this.lettersCounter);
-            this.shownChatroom.forEach((chatroom) => {
-                window.Echo.private("chatrooms." + chatroom.id).listen(
-                    "MessageSent",
-                    (e) => {
-                        this.getLatestMessage(chatroom);
-                    }
-                );
-            });
+            this.autocomplete(
+                document.getElementById("memberInput"),
+                this.members,
+                this.lettersCounter
+            );
         }
+        this.shownChatroom = this.shownChatroom.sort(function (a, b) {
+            return (
+                new Date(b.latest_message.created_at) -
+                new Date(a.latest_message.created_at)
+            );
+        });
+        this.shownChatroom.forEach((chatroom) => {
+            window.Echo.private("chatrooms." + chatroom.id).listen(
+                "MessageSent",
+                (e) => {
+                    this.getLatestMessage(chatroom);
+                }
+            );
+        });
     },
 
     methods: {
         onChangePage(pageOfItems) {
             this.pageOfItems = pageOfItems;
         },
-        
+
         getLatestMessage(chatroom) {
             axios
                 .get("/chats/" + chatroom.id + "/latestMessage")
@@ -134,6 +148,15 @@ export default {
                     chatroom.latest_message = response.data;
                     chatroom.latest_message.sender_id =
                         chatroom.latest_message.sender.id;
+                    this.shownChatroom = this.shownChatroom.sort(function (
+                        a,
+                        b
+                    ) {
+                        return (
+                            new Date(b.latest_message.created_at) -
+                            new Date(a.latest_message.created_at)
+                        );
+                    });
                 })
                 .catch((error) => {
                     if (error.response.status == 422) {
