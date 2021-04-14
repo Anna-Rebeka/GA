@@ -27,7 +27,7 @@ class NewWhiteboardEventAssignmentMail extends Mailable
         $this->what = $what;
         $this->the_new_thing = $the_new_thing;
         if($what == 'whiteboard posts'){
-            $this->url = env('APP_URL') . '/whiteboard';
+            $this->url = env('APP_URL') . '/groups/' . $group->id . '/whiteboard';
         }
         else{
             $this->url = env('APP_URL') . '/' .  $what . '/' . $the_new_thing->id;
@@ -42,6 +42,6 @@ class NewWhiteboardEventAssignmentMail extends Mailable
     public function build()
     {
         return $this->markdown('emails.notify-about-new-thing')
-            ->subject($this->group . ': there is a new ' . substr($this->what, 0, -1));
+            ->subject($this->group->name . ': there is a new ' . substr($this->what, 0, -1));
     }
 }

@@ -111,7 +111,7 @@ class AssignmentsController extends Controller
         $notify_assignees = $assignment->users()->select('email')->where('got_assignment_notify', true)->where('users.id', '!=', auth()->user()->id)->get();
         
         Mail::to($notify_members)
-                ->send(new NewWhiteboardEventAssignmentMail($assignment->group->name, 'assignments', $assignment))
+                ->send(new NewWhiteboardEventAssignmentMail($assignment->group, 'assignments', $assignment))
         ;
         Mail::to($notify_assignees)
                 ->send(new FromAllGroupsNotificationMail($assignment->group->name, 'You have a new assignment', 'assignments/' . $assignment->id))

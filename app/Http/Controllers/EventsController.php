@@ -105,7 +105,7 @@ class EventsController extends Controller
     public function newEventNotifyUsers(Event $event){
         $notify_members = $event->group->users()->select('email')->where('new_event_notify', true)->where('users.id', '!=', auth()->user()->id)->get();
         Mail::to($notify_members)
-                ->send(new NewWhiteboardEventAssignmentMail($event->group->name, 'events', $event))
+                ->send(new NewWhiteboardEventAssignmentMail($event->group, 'events', $event))
         ;
         return;
     }
@@ -129,7 +129,7 @@ class EventsController extends Controller
         Mail::to($notify_joined_users)
             ->send(new FromAllGroupsNotificationMail($event->group->name, 'Update on the "' . $event->name . '" event', 'events/' . $event->id))
         ;
-        return;
+        return; 
     }
 
 
