@@ -89,7 +89,7 @@ class GroupWhiteboardPostsController extends Controller
 
 
     public function notifyUsers(GroupWhiteboardPost $post){
-        $notify_users = $post->group->users()->where('new_whiteboard_notify', true)->get();
+        $notify_users = $post->group->users()->where('new_whiteboard_notify', true)->where('users.id', '!=', auth()->user()->id)->get();
         foreach($notify_users as $notify_user){
             Mail::to($notify_user->email)
                 ->send(new NewWhiteboardEventAssignmentMail($post->group, 'whiteboard posts', $post))
