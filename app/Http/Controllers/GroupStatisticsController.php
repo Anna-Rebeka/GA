@@ -43,7 +43,7 @@ class GroupStatisticsController extends Controller
     {
         $all_assignments = Assignment::where('group_id', $group->id)->count();
         $assignments_per_user = DB::table('assignments')
-            ->select(DB::raw('assignment_user.user_id as id, users.name, users.username, users.avatar, count(*) / ' . $all_assignments . ' as user_to_all'))
+            ->select(DB::raw('assignment_user.user_id as id, users.name, users.username, users.avatar, count(*) / ' . $all_assignments . '::float as user_to_all'))
             ->join('assignment_user', 'assignment_user.assignment_id', '=', 'assignments.id')
             ->join('users', 'assignment_user.user_id', '=', 'users.id')
             ->where('assignments.group_id', '=', $group->id)
